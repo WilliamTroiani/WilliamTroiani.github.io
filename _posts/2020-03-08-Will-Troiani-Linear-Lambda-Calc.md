@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "A passer for the Linear Lambda Calculus"
+title: "A parser for the Linear Lambda Calculus"
 date: 2014-04-30
 ---
 
