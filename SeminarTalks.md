@@ -22,3 +22,5 @@ Topological Quantum Computing (2019):
 Graduate Topology Seminar (2019):
 - "Arithmetisation and localisation", <a href = "https://williamtroiani.github.io/pdfs/Arithmetisation and Localisation">Notes</a>
 
+Deep Learning (2019):
+- "Approximation of Continuous Functions by ReLU Nets", <a href = "https://williamtroiani.github.io/pdfs/Approximation_of_Continuous_Functions_by_ReLU_Nets">Notes</a>
