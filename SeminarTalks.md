@@ -21,7 +21,7 @@ Topological Quantum Computing (2019):
 - "A crash course in simplicial cohomology with coefficients in Z mod 2", <a href = "http://therisingsea.org/notes/talk-will-homology.pdf">Notes</a>
 
 Graduate Topology Seminar:
-- "Arithmetisation and localisation", <a href = "https://williamtroiani.github.io/pdfs/ArithmetisationandLocalisation.pdf">Notes</a>
+- "Arithmetisation and localisation", <a href = "https://williamtroiani.github.io/pdfs/ArithmetisationandInteraction.pdf">Notes</a>
 
 Deep Learning:
 - "Approximation of Continuous Functions by ReLU Nets", <a href = "https://williamtroiani.github.io/pdfs/Approximation_of_Continuous_Functions_by_ReLU_Nets.pdf">Notes</a>
