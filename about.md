@@ -3,7 +3,7 @@ layout: post
 title: About
 ---
 
-The collision of mathematics, logic, and computer science has captured my fascination ever since I began having conversations with <a href = "http://www.therisingsea.org/">Daniel Murfet</a> (University of Melbourne) in the 2016, the final year of my undergraduate studies (Bachelor of Science (Mathematics and Statistics), University of Melbourne).
+The collision of mathematics, logic, and computer science has captured my fascination ever since I began having conversations with <a href = "http://www.therisingsea.org/">Daniel Murfet</a> (University of Melbourne) in 2016, the final year of my undergraduate studies (Bachelor of Science (Mathematics and Statistics) at the University of Melbourne).
 
 At the time I had just finished a <a href = "https://ms.unimelb.edu.au/engage/vacation-scholarships">vacation scholarship</a> project sponsored by <a href = "https://researchers.ms.unimelb.edu.au/~pjforr@unimelb/">Peter Forrester</a> (University of Melbourne) and was curious if the same kind of coupling which exists between Physics and Mathematics also existed between Computer Science and Mathematics.
 
