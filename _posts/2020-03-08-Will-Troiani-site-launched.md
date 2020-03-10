@@ -1,7 +1,8 @@
 ---
 layout: post
-title: "Hank Quinlan, Horrible Cop, Launches Site"
+title: "A passer for the Linear Lambda Calculus"
 date: 2014-04-30
 ---
 
-Well. Finally got around to putting this old website together. Neat thing about it - powered by [Jekyll](http://jekyllrb.com) and I can use Markdown to author my posts. It actually is a lot easier than I thought it was going to be.
+In the December of 2015 I was fortunate enough to be rewarded an <a href = "https://vrs.amsi.org.au/about/"> AMSI vacation research scholarship</a>, where I was supervised by <a href = "http://www.therisingsea.org/">Daniel Murfet</a> to work on a project whose description can be found <a href = >
+
