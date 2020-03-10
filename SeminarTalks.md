@@ -19,8 +19,8 @@ Topological Quantum Computing (2019):
 - "Reversible Turing Machines", <a href = "http://therisingsea.org/notes/talk-will-reversible.pdf">Notes</a>
 - "A crash course in simplicial cohomology with coefficients in Z mod 2", <a href = "http://therisingsea.org/notes/talk-will-homology.pdf">Notes</a>
 
-Graduate Topology Seminar (2019):
+Graduate Topology Seminar:
 - "Arithmetisation and localisation", <a href = "https://williamtroiani.github.io/pdfs/Arithmetisation and Localisation">Notes</a>
 
-Deep Learning (2019):
+Deep Learning:
 - "Approximation of Continuous Functions by ReLU Nets", <a href = "https://williamtroiani.github.io/pdfs/Approximation_of_Continuous_Functions_by_ReLU_Nets">Notes</a>
