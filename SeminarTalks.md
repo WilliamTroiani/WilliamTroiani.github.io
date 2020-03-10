@@ -6,7 +6,7 @@ title: Seminar Talks
 Curry-Howard Correspondence (2016):
 - (14/7) "The Church-Rosser Theorem", <a href = "http://therisingsea.org/notes/talk-will-churchrosser.pdf">Notes</a>, <a href = "https://williamtroiani.github.io/pdfs/ChurchRosserTheorem.pdf">Improved notes</a>
 - (2/8) "Introduction to Lambda-Calculus", <a href = "http://therisingsea.org/notes/talk-will-lambda.pdf">Notes</a>
-- (18/10) "System F in the real world: Haskell and functional programming", <a hres = "http://therisingsea.org/notes/talk-will-haskell.pdf">Notes</a>, the referenced talk by Rich Hickey is <a href = "https://www.infoq.com/presentations/Simple-Made-Easy/">Simple made easy</a>
+- (18/10) "System F in the real world: Haskell and functional programming", <a href = "http://therisingsea.org/notes/talk-will-haskell.pdf">Notes</a>, the referenced talk by Rich Hickey is <a href = "https://www.infoq.com/presentations/Simple-Made-Easy/">Simple made easy</a>
 
 DST Seminar:
 - "Monads and Programs" (2017), <a href = "Http://williamtroiani.github.io/pdfs/MonadsandPrograms.pdf">Slides</a>.
