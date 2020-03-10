@@ -4,7 +4,7 @@ title: "A proof tree constructor for the Linear Lambda Calculus"
 date: 2017-01-01
 ---
 
-In the December of 2015 I was fortunate enough to be rewarded an <a href = "https://vrs.amsi.org.au/about/"> AMSI vacation research scholarship</a>, where I was supervised by <a href = "http://www.therisingsea.org/">Daniel Murfet</a> to work on a project whose description can be found <a href = "https://WilliamTroiani.github.io/pdfs/ResearchProject.pdf">here</a>.
+In the December of 2016 I was fortunate enough to be rewarded an <a href = "https://vrs.amsi.org.au/about/"> AMSI vacation research scholarship</a>, where I was supervised by <a href = "http://www.therisingsea.org/">Daniel Murfet</a> to work on a project whose description can be found <a href = "https://WilliamTroiani.github.io/pdfs/ResearchProject.pdf">here</a>.
 
 We did not come close to fulfilling this dream, however what we did achieve is explained in this <a href = "https://WilliamTroiani.github.io/pdfs/Poster.pdf">poster</a>.
 
