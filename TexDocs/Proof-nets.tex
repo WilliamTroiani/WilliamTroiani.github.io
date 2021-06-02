@@ -667,6 +667,8 @@ where elements from the first copy are the \textbf{up elements}, and elements fr
     \end{itemize}
     (see Figure \ref{fig:parrswitching})
 \end{enumerate}
+
+\end{defn}
 \begin{figure}[h]
     \centering
     \includegraphics[width = 0.8\textwidth]{TensorSwitching.png}
@@ -686,7 +688,26 @@ A \textbf{trip} of $\pi$ with respect to $S$ is an equivalence class of pretrips
 
 A \textbf{short pretrip} is a choice of representative for a pretrip, and a \textbf{long pretrip} is a choice of representatitive of a long trip.
 \end{defn}
+\begin{defn}\label{def:pretrip_from_A}
+Let $\pi$ be a proof-structure satisfying the long trip condition, $S$ a switching of $\pi$, and $A$ an occurrence of a formula in $\pi$. Consider the long pretrip $(x_1,...,x_n)$ satisfying $x_1 = \uparrow A$. We denote by
+\begin{equation}
+    \operatorname{PTrip}(\pi,S,A,\uparrow)
+\end{equation}
+the subsequence $(x_1,...,x_m)$ of $(x_1,...,x_n)$ satisfying $x_m = \uparrow A$. We define
+\begin{equation}
+    \operatorname{PTrip}(\pi, S, A, \downarrow)
+\end{equation}
+similarly.
 
+Also, for $a \in \lbrace \uparrow,\downarrow\rbrace $ we define the following set
+\begin{equation}
+    \operatorname{Visit}_S(A,a) := \lbrace C \in \call{O}(\pi) \mid \uparrow C, C\downarrow \text{ occur in } \operatorname{PTrip}(\pi,S,A,a)\rbrace
+\end{equation}
+The \textbf{up empire of $A$} is the following set:
+\begin{equation}
+    \operatorname{Emp}_{\uparrow}A := \lbrace C \in \call{O}(\pi) \mid \text{For all switchings }S\text{ we have } \uparrow C, C\downarrow \text{ occur in } \operatorname{PTrip}(\pi,S, A,\uparrow)\rbrace
+\end{equation}
+The \textbf{down empire of $A$} is defined symmetrically.
 \end{defn}
 Given a proof-structure $\pi$ satisfying the long trip condition and a tensor link $\tau := (A,i,B,j, A \otimes B,k)$ of $\pi$, let $S$ be a switching of $\pi$ and $t := (x_1,...,x_n)$ be the long pretrip of $\pi$ satisfying $x_1 =A\downarrow$. Since $\pi$ satisfies the long trip condition, it must be the case that $\uparrow (A \otimes B)$ and $B\downarrow$ occur somewhere in $t$, can we determine which occurs earlier? Let $m,l > 0$ be such that $x_m = \uparrow (A \otimes B), x_l = B\downarrow$ and assume $l < m$. Say $S(\tau) = L$, then $t$ has the shape
 \begin{equation}\label{eq:sequence_left_switch_tensor}
@@ -759,28 +780,6 @@ The situation is a bit different for par links; we visit the premises before ret
 \end{figure}
 \end{remark}
 Loosely speaking, for a proof-structure $\pi$ satisfying the long trip condition to ``split" at a tensor link $\tau := (A,i,B,j,A\otimes B,k)$ into two distinct proof-structures $\pi_1,\pi_2$ each satisfying the long trip condition, it would necessarily be the case that any pretrip $\sigma$ of $\pi$ starting at $\uparrow A$ visits the entirety of $\call{U}(\pi_1)$ before returning to the tensor link $\tau$, lest $\pi_1$ admit a short trip. Moreover, it must be the case that $\sigma$ admits no occurrence of formulas in $\pi_2$ lest the result of removing the tensor link $\tau$ not result in disjoint proof-structures. Thus, if such a link $\tau$ exists, it is \emph{maximal} in the sense that there is no other tensor link $\tau' := (A',i',B',j',A' \otimes B',k')$ where a pretrip starting at $A'$ contains the entirety of any pretrip starting at $A$. The remainder of this Section will amount to proving the converse, that any such maximal tensor link ``splits" $\pi$.
-\begin{defn}\label{def:pretrip_from_A}
-Let $\pi$ be a proof-structure satisfying the long trip condition, $S$ a switching of $\pi$, and $A$ an occurrence of a formula in $\pi$. Consider the long pretrip $(x_1,...,x_n)$ satisfying $x_1 = \uparrow A$. We denote by
-\begin{equation}
-    \operatorname{PTrip}(\pi,S,A,\uparrow)
-\end{equation}
-the subsequence $(x_1,...,x_m)$ of $(x_1,...,x_n)$ satisfying $x_m = \uparrow A$. We define
-\begin{equation}
-    \operatorname{PTrip}(\pi, S, A, \downarrow)
-\end{equation}
-similarly.
-
-Also, for $a \in \lbrace \uparrow,\downarrow\rbrace $ we define the following set
-\begin{equation}
-    \operatorname{Visit}_S(A,a) := \lbrace C \in \call{O}(\pi) \mid \uparrow C, C\downarrow \text{ occur in } \operatorname{PTrip}(\pi,S,A,a)\rbrace
-\end{equation}
-The \textbf{up empire of $A$} is the following set:
-\begin{equation}
-    \operatorname{Emp}_{\uparrow}A := \lbrace C \in \call{O}(\pi) \mid \text{For all switchings }S\text{ we have } \uparrow C, C\downarrow \text{ occur in } \operatorname{PTrip}(\pi,S, A,\uparrow)\rbrace
-\end{equation}
-The \textbf{down empire of $A$} is defined symmetrically.
-\end{defn}
-With this new terminology we now have some corollaries of Lemmas \ref{lem:stays_contained_tensor} and \ref{lem:stays_contained_par}:
 \begin{cor}\label{cor:pretrip_innards}
 Let $\pi$ be a proof-structure satisfying the long trip condition, and let $S$ be a switching of $\pi$, for a formula $A$ and $a \in \lbrace \uparrow, \downarrow\rbrace$, denote $\operatorname{PTrip}(\pi,S, A, a)$ by $\operatorname{PTrip}(A,a)$:
 \begin{enumerate}
