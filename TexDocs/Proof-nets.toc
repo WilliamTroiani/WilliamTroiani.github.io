@@ -1,0 +1,5 @@
+\contentsline {section}{\numberline {1}Multiplicatives}{1}{section.1}%
+\contentsline {section}{\numberline {2}The Sequentialisation Theorem}{7}{section.2}%
+\contentsline {section}{\numberline {3}Cut}{16}{section.3}%
+\contentsline {section}{\numberline {4}Orthogonality}{18}{section.4}%
+\contentsline {section}{\numberline {5}Geometry of Interaction}{19}{section.5}%
