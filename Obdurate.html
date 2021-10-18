@@ -59,14 +59,14 @@
 }
 
 /* Clear floats after the columns */
-.row:after {
+.row::after {
   content: "";
-  display: table;
   clear: both;
+  display: table;
 }
 
 /* Responsive layout - makes the three columns stack on top of each other instead of next to each other */
-@media screen and (max-width:1000px) {
+@media screen and (max-width:600px) {
   .column.side, .column.middle {
     width: 100%;
   }
@@ -116,7 +116,7 @@ ul.posts li {
   <a href="https://www.youtube.com/channel/UCswxGOfjU3AfGkvarQY1QDg">YouTube</a>
   <a href="https://www.instagram.com/obdurate.fleet/">Instagram</a>
       </div>
-        <center><p><i>
+        <center>
           
           
           <div class="row">
@@ -144,7 +144,7 @@ ul.posts li {
 <br>This patience is demanded, it takes time to reach planets
 <br>Perpetually debilitating the love I love most
 <br>I love you, I'm sorry, I'm trying to leave you
-<br>Process of elimination removes me completely
+<br>Process of elimination removes me completely</i></p>
   </div>
   
   <div class="column middle">
