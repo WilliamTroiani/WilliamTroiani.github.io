@@ -3,7 +3,7 @@ title: Blog
 layout: default
 ---
 
-
+<!--
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html>
 <head>
@@ -17,9 +17,26 @@ layout: default
     </style>
     <link rel="stylesheet" href="css/main.css">
 </head>
-<body>
+<body> -->
 <h1><b>Will Troiani</b></h1>
 <p>"As humans we could never be content with knowing all, yet we can't be content with the fact that our brains will never know."<a href="https://www.youtube.com/watch?v=OwK4MKYxbZE"> ~ Tommy Rogers</a></p>
   <center><img src = "Will.png" alt = "Will" style="width:707.5px;height:226px;"></center>
+
+<div class="posts">
+{% for post in site.posts %}
+
+  <article class="post">
+    <h1><a href="{{ site.baseurl }}{{ post.url }}">{{ post.title }}</a></h1>
+    <div class="entry">
+      {{ post.excerpt }}
+    </div>
+
+    <a href="{{ site.baseurl }}{{ post.url }}" class="read-more">Read More</a>
+  </article>
+  {% endfor %}
+</div>
+
+<!--
 </body>
 </html>
+-->
