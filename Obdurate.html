@@ -9,14 +9,14 @@
   <center><img src="Logo.png" alt="Obdurate" class="inline" style="width:980px;height:220px;"/></center>
 </div>
       
-      <div class="topnav">
-  <a href="https://obduratefleet.bandcamp.com/album/obdurate">Bandcamp</a>
-  <a href="https://www.youtube.com/channel/UCswxGOfjU3AfGkvarQY1QDg">YouTube</a>
-  <a href="https://www.instagram.com/obdurate.fleet/">Instagram</a>
-      </div>
-        <center>
-          
-          
+<div class="topnav">
+<a href="https://obduratefleet.bandcamp.com/album/obdurate">Bandcamp</a>
+<a href="https://www.youtube.com/channel/UCswxGOfjU3AfGkvarQY1QDg">YouTube</a>
+<a href="https://www.instagram.com/obdurate.fleet/">Instagram</a>
+</div>
+
+      
+      <center>    
           <div class="row">
   <div class="column side">
     <p><i>Tear ducts will push an eyelash away
@@ -73,27 +73,21 @@
   </div>
 </div>  
         
-        
         </center>
-
           
-          <div class="posts">
-  {% for post in site.posts %}
-    <article class="post">
+<div class="posts">
+{% for post in site.posts %}
 
-      <h1><a href="{{ site.baseurl }}{{ post.url }}">{{ post.title }}</a></h1>
+  <article class="post">
+    <h1><a href="{{ site.baseurl }}{{ post.url }}">{{ post.title }}</a></h1>
+    <div class="entry">
+      {{ post.excerpt }}
+    </div>
 
-      <div class="entry">
-        {{ post.excerpt }}
-      </div>
-
-      <a href="{{ site.baseurl }}{{ post.url }}" class="read-more">Read More</a>
-    </article>
+    <a href="{{ site.baseurl }}{{ post.url }}" class="read-more">Read More</a>
+  </article>
   {% endfor %}
 </div>
-        </body>
-        </html>
-          
-          
-          
-          
+
+  </body>  
+</html>
