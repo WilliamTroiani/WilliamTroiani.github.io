@@ -1,55 +1,102 @@
----
-title: Mathematics
-layout: default
----
-
 <html>
 <head>
+<link rel="stylesheet" href="css/main.css">
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
   <meta http-equiv="Content-Style-Type" content="text/css">
-  <title></title>
+  <title>{{ page.title }}</title>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <link rel="stylesheet" href="css/main.css">
 </head>
 <body>
+    <nav>
+	   <ul>
+	       <li><a href="/">Home</a></li>
+	       <li><a href="https://williamtroiani.github.io/pdfs/resume.pdf">CV</a></li>
+           <li><a href="/Mathematics.html">Mathematics</a></li>
+            <li><a href="/Obdurate.html">Obdurate</a></li>
+	   </ul>
+    </nav>
+    
+    <div class="header">
+  <center><img src="bandlogo.png" class="inline" style="width:980px;height:220px;"/></center>
+</div>
+    
     <center>
     <iframe width="800" height="500" src="https://www.youtube.com/embed/jcqTq4a1kjY" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
     </center>
-<h2><b>Projects</b></h2>
-<p><b>2020:</b> <a href="https://arxiv.org/abs/2008.10131">Gentzen-Mints-Zucker Duality</a></p>
-    <p><b>2019</b>: <a href="http://williamtroiani.github.io/pdfs/FiniteSimplicialSetsareAlgorithms.pdf">(Finite) simplicial sets are algorithms</a>, and an update <a href = "http://williamtroiani.github.io/pdfs/FiniteColimitsInternalLanguage.pdf">Internal Logic and Topoi</a></p>
-<p><b>2017</b>: <a href="https://github.com/WilliamTroiani/linearlambdacalculus/tree/master/Working%20code"><span class="s2">A proof tree constructor for the Linear Lambda Calculus</span></a></p>
+    <p><b>2022</b>: <a href="http://williamtroiani.github.io/pdfs/FiniteColimitsInternalLanguageTaAC.pdf">The internal logic and topoi.</a> Topoi are often described as “generalised theories of sets”, but are they? This description is often given to topoi due to the similarities of the internal logic with ZF set theory. However, there are important differences, which extend further than just the fact that the internal language of a topos is an <em>intuitionistic</em> logic (and ZF <em>classical</em>). Even in Boolean topoi, where the law of exluded middle holds, <em>still</em> there is the following difference between the theories: the existence of the union of an arbitrary collection of sets is an axiom of ZF, and the product is intrinsically defined, but in the internal language this is reverseed; there is a product type constructor, and the union of two subobjects only makes sense in the context of a common parent object. This difference is not visible in ZF set theory during usual mathematical discorse, but when importing the usual set theoretic definitions of mathematical objects into the internal language, this distinction becomes significant. How these hurdles arrise and how they are solved is the content of this document.
+<p><b>2020:</b> <a href="https://arxiv.org/abs/2008.10131">Gentzen-Mints-Zucker Duality.</a> A duality consists of two different points of view on the same object. The greater the difference between the two points of view, the more informative is the duality which relates them. Such correspondences are important because two independent discoveries of the same structure is strong evidence that the structure is natural. The duality between the simply typed λ-calculus (without product types) and the intuitionistic sequent calculus is the content of this document, and is interesting precisely because sequent calculus proofs and lambda terms are not tautologically the same thing: for example the cut-elimination relations are fundamentally local
+while the β-equivalence relation is global (see Section 4.3). In this sense sequent calculus and λ-calculus are respectively local and global points of view on a common logicocomputational mathematical structure.</p>
+<p><b>2017</b>: <a href="https://github.com/WilliamTroiani/linearlambdacalculus/tree/master/Working%20code"><span class="s2">A proof tree constructor for the Linear Lambda Calculus.</span></a> The λ-lambda calculus is a syntactic system designed with Girard's linear logic in sight. The idea is simple: since the Curry-Howard correspondence holds between intuitionistic natural deduction and the simply typed λ-calculus, and since the intuitionistic sequent calculus embeds into the linear logic sequent calculus, one may conjecture the existence of a "linear λ-calculus". Such a system has been designed, and the content of this document is a passer which takes as input a term in the linear λ-calculus and provides html code which displays the (necessarily unique) term-constructing tree corresponding to this term. For example, the term \( \lambda q \lambda p. \texttt{copy } q \texttt{ as } r, s \texttt{ in } \lambda z \texttt{derelict}(p)(\texttt{derelict}(s)(\texttt{derelict}(r)z)) \) has the following diagram associated to it.
+    <center>
+    <img src="d3.png" style="width:100%;height:350px;">
+    </center></p>
 <h1><b>Notes</b></h1>
 <h2><b>Algebra</b></h2>
-<p><a href="https://williamtroiani.github.io/pdfs/CommutativeAlgebraWithLin.pdf">Commutative algebra collection</a></p>
-<p><a href="https://williamtroiani.github.io/pdfs/Completion.pdf">Completion</a> (Hensel's Lemma)</p>
-<p><a href="https://williamtroiani.github.io/pdfs/Varieties.pdf">Varieties </a></p>
-<p><a href="https://williamtroiani.github.io/pdfs/HartshorneSolutions.pdf">Selected Hartshorne Solutions</a></p>
-<h2><b>Logic</b></h2>
-<p><a href="https://williamtroiani.github.io/pdfs/LinearLogic.pdf">Linear Logic</a></p>
+<p><a href="https://williamtroiani.github.io/pdfs/CommutativeAlgebraWithLin.pdf">Commutative algebra collection</a>
+<br><a href="https://williamtroiani.github.io/pdfs/Completion.pdf">Completion</a> (Hensel's Lemma)
+<br><a href="https://williamtroiani.github.io/pdfs/Varieties.pdf">Varieties </a>
+<br><a href="https://williamtroiani.github.io/pdfs/HartshorneSolutions.pdf">Selected Hartshorne Solutions</a></p>
+<h2><b>Logic/computation</b></h2>
+<p><a href="https://williamtroiani.github.io/MathNotes/LinearLogic.pdf">Linear Logic</a>
+    <iframe src="MathNotes/LinearLogic.pdf" width="100%" height="500px">
+    </iframe>
+    <br>
+    <br>
+    <a href="https://williamtroiani.github.io/MathNotes/QuantumComputation.pdf">Quantum Computing</a>
+    <iframe src="MathNotes/QuantumComputing.pdf" width="100%" height="500px">
+    </iframe>
+<br>
+<br>
+    <a href="https://williamtroiani.github.io/MathNotes/FirstIncompletenessTheorem.tex.pdf">G&#246;del's First Incompleteness Theorem</a>
+    <iframe src="MathNotes/FirstIncompletenessTheorem.tex.pdf" width="100%" height="500px">
+    </iframe>
+</p>
 <h1><b>Seminars</b></h1>
-<h3><b>Institut de Mathématiques de Marseille, Logic and Interactions (2022)</b></h3>    <p>"Proofs, rings, and ideals", <a href="https://williamtroiani.github.io/pdfs/AlgPntSlides.pdf">Slides</a></p>
+    <p>Some of the following seminars took place at <a hre="https://metauni.org/">metauni</a>, a virtual and free-to-access campus. Come and join us on <a href="https://discord.com/invite/9yBaAxPSK8">discord</a>
+    </p>
+    <center>
+        <img src="foundations-shot1.png">
+        </center>
+<h3>Foundations</h3>
+<p>G&#246;del's First Incompleteness Theorem <a href="https://www.youtube.com/watch?v=TRhR88anv3M">link to first video</a>
+</p>
+<h3><b>Group de travail cat&eacute;gories (2022)</b></h3>
+<p>Introduction to Category Theory
+<br>Topoi and logic 1
+<br>Topoi and logic 2
+<br>Elimination theory and cut elimination</p>
+<h3><b>Institut de Mathématiques de Marseille, Logic and Interactions (2022)</b></h3>
+<p>Proofs, rings, and ideals, <a href="https://williamtroiani.github.io/pdfs/AlgPntSlides.pdf">slides</a></p>
 <h3><b>Computation, Geometry, Logic (2021)</b></h3>
-<p>Proof nets 6/5</p><a href="https://www.youtube.com/watch?v=OscoUN_kWUE">video</a>
-<p></p>
-<p>The Sequentialisation Theorem</p><a href="https://www.youtube.com/watch?v=OscoUN_kWUE">video</a>
-<p>Geometry of Interaction Zero, proofs as permutations</p><a href="https://www.youtube.com/watch?v=jcqTq4a1kjY">video</a>
+<p>Proof nets <a href="https://www.youtube.com/watch?v=OscoUN_kWUE">video</a>
+<br>The Sequentialisation Theorem <a href="https://www.youtube.com/watch?v=OscoUN_kWUE">video</a>
+<br>Geometry of Interaction Zero, proofs as permutations <a href="https://www.youtube.com/watch?v=jcqTq4a1kjY">video</a>
 <h3><b>Melbourne Haskell Group (2020)</b></h3>
 <p>"Gentzen-Mints-Zucker Duality", <a href="https://www.youtube.com/watch?v=TEkQHyTBL54&amp;t">video</a></p>
 <h3><b>Topological Quantum Computing (2019)</b></h3>
-<p><span class="s1">"Reversible Turing Machines", <a href="http://therisingsea.org/notes/talk-will-reversible.pdf"><span class="s2">Notes</span></a></span></p>
-<p>"A crash course in simplicial cohomology with coefficients in Z mod 2", <a href="http://therisingsea.org/notes/talk-will-homology.pdf">Notes</a></p>
+<p>Reversible Turing Machines", <a href="http://therisingsea.org/notes/talk-will-reversible.pdf">notes</a>
+<br>"A crash course in simplicial cohomology with coefficients in Z mod 2", <a href="http://therisingsea.org/notes/talk-will-homology.pdf">notes</a></p>
 <h3><b>Graduate Topology Seminar</b></h3>
-<p>"Arithmetisation and localisation", <a href="https://williamtroiani.github.io/pdfs/ArithmetisationandInteraction.pdf">Notes</a></p>
+<p>Arithmetisation and localisation, <a href="https://williamtroiani.github.io/pdfs/ArithmetisationandInteraction.pdf">notes</a></p>
 <h3><b>Deep Learning</b></h3>
-<p>"Approximation of Continuous Functions by ReLU Nets", <a href="https://williamtroiani.github.io/pdfs/Approximation_of_Continuous_Functions_by_ReLU_Nets.pdf">Notes</a></p>
+<p>Approximation of Continuous Functions by ReLU Nets, <a href="https://williamtroiani.github.io/pdfs/Approximation_of_Continuous_Functions_by_ReLU_Nets.pdf">notes</a></p>
 <h3><b>Topos Theory and Categorical Logic (2018)</b></h3>
-<p>"Monads and programs", <a href="http://therisingsea.org/notes/ch2018-lecture3.pdf">Notes</a>, <a href="https://vimeo.com/261278443">Video</a></p>
-<p>"Higher-order Logic and Topoi", <a href="http://therisingsea.org/notes/ch2018-lecture8.pdf">Notes</a>, <a href="https://vimeo.com/269326119">Video</a></p>
-<p>"The Classifying Space of Rings", <a href="http://therisingsea.org/notes/ch2018-lecture14.pdf">Notes</a></p>
+<p>Monads and programs, <a href="http://therisingsea.org/notes/ch2018-lecture3.pdf">notes</a>, <a href="https://vimeo.com/261278443">video</a>
+<br>Higher-order Logic and Topoi, <a href="http://therisingsea.org/notes/ch2018-lecture8.pdf">notes</a>, <a href="https://vimeo.com/269326119">video</a>
+<br>The Classifying Space of Rings, <a href="http://therisingsea.org/notes/ch2018-lecture14.pdf">notes</a></p>
 <h3><b>DST Seminar (2017)</b></h3>
-<p>"Monads and Programs", <a href="http://williamtroiani.github.io/pdfs/MonadsinCategoryTheoryandComputerScience.pdf">Slides</a></p>
+<p>Monads and Programs, <a href="http://williamtroiani.github.io/pdfs/MonadsinCategoryTheoryandComputerScience.pdf">slides</a></p>
 <h3><b>Curry-Howard Correspondence (2016)</b></h3>
-<p>"The Church-Rosser Theorem", <a href="http://therisingsea.org/notes/talk-will-churchrosser.pdf">Notes</a>, <a href="https://williamtroiani.github.io/pdfs/ChurchRosserTheorem.pdf">Improved notes</a></p>
-<p>"Introduction to Lambda-Calculus", <a href="http://therisingsea.org/notes/talk-will-lambda.pdf">Notes</a></p>
-<p>"System F in the real world: Haskell and functional programming", <a href="http://therisingsea.org/notes/talk-will-haskell.pdf">Notes</a>, the referenced talk by Rich Hickey is <a href="https://www.infoq.com/presentations/Simple-Made-Easy/">Simple made easy</a></p>
+<p>The Church-Rosser Theorem, <a href="http://therisingsea.org/notes/talk-will-churchrosser.pdf">notes</a>, <a href="https://williamtroiani.github.io/pdfs/ChurchRosserTheorem.pdf">improved notes</a>
+<br>Introduction to Lambda-Calculus, <a href="http://therisingsea.org/notes/talk-will-lambda.pdf">notes</a>
+<br>System F in the real world: Haskell and functional programming, <a href="http://therisingsea.org/notes/talk-will-haskell.pdf">notes</a>, the referenced talk by Rich Hickey is <a href="https://www.infoq.com/presentations/Simple-Made-Easy/">Simple made easy</a></p>
+    
+    <footer>
+	    		<ul>
+	        		<li><a href="mailto:william.a.troiani@gmail.com">email</a></li>
+	        		<li><a href="https://github.com/WilliamTroiani">github.com/WilliamTroiani</a></li>
+				</ul>
+			</footer>
     </body>

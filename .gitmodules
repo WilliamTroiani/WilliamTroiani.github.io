@@ -1,0 +1,3 @@
+[submodule "MathNotes"]
+	path = MathNotes
+	url = https://github.com/WilliamTroiani/MathNotes.git
