@@ -1,0 +1,1396 @@
+\documentclass{beamer}
+\usefonttheme[onlymath]{serif}
+%Information to be included in the title page:
+\title{Proofs, rings, and ideals}
+\author{Daniel Murfet, William Troiani}
+\institute{University of Melbourne, University of Sorbonne Paris Nord}
+\date{2022}
+
+\usepackage{amsthm}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{mathrsfs}
+\usepackage{array}
+\usepackage{amssymb}
+\usepackage{units}
+\usepackage{graphicx}
+\usepackage{tikz-cd}
+\usepackage{nicefrac}
+\usepackage{hyperref}
+\usepackage{bbm}
+\usepackage{color}
+\usepackage{tensor}
+\usepackage{tipa}
+\usepackage{bussproofs}
+\usepackage{ stmaryrd }
+\usepackage{ textcomp }
+\usepackage{leftidx}
+\usepackage{afterpage}
+\usepackage{varwidth}
+\usepackage{tasks}
+\usepackage{ cmll }
+\usepackage{makecell}
+\usepackage{MnSymbol}
+\usepackage{quiver}
+\usepackage{adjustbox}
+\usepackage{multirow}
+\usepackage{booktabs}
+\usepackage{xparse}
+\usepackage{calc}
+
+\newcommand\blankpage{
+	\null
+	\thispagestyle{empty}
+	\addtocounter{page}{-1}
+	\newpage
+}
+
+\graphicspath{ {images/} }
+
+\theoremstyle{plain}
+\newtheorem{thm}{Theorem}[subsection] % reset theorem numbering for each chapter
+\newtheorem{proposition}[thm]{Proposition}
+%\newtheorem{lemma}[thm]{Lemma}
+%\newtheorem{fact}[thm]{Fact}
+\newtheorem{cor}[thm]{Corollary}
+
+\theoremstyle{definition}
+\newtheorem{defn}[thm]{Definition} % definition numbers are dependent on theorem numbers
+\newtheorem{exmp}[thm]{Example} % same for example numbers
+\newtheorem{notation}[thm]{Notation}
+\newtheorem{remark}[thm]{Remark}
+\newtheorem{condition}[thm]{Condition}
+\newtheorem{question}[thm]{Question}
+\newtheorem{construction}[thm]{Construction}
+\newtheorem{exercise}[thm]{Exercise}
+%\newtheorem{example}[thm]{Example}
+\newtheorem{aside}[thm]{Aside}
+\newtheorem{algorithm}[thm]{Algorithm}
+
+\def\doubleunderline#1{\underline{\underline{#1}}}
+\newcommand{\bb}[1]{\mathbb{#1}}
+\newcommand{\scr}[1]{\mathscr{#1}}
+\newcommand{\call}[1]{\mathcal{#1}}
+\newcommand{\psheaf}{\text{\underline{Set}}^{\scr{C}^{\text{op}}}}
+\newcommand{\und}[1]{\underline{\hspace{#1 cm}}}
+\newcommand{\adj}[1]{\text{\textopencorner}{#1}\text{\textcorner}}
+\newcommand{\comment}[1]{}
+\newcommand{\lto}{\longrightarrow}
+\newcommand{\rone}{(\operatorname{R}\bold{1})}
+\newcommand{\lone}{(\operatorname{L}\bold{1})}
+\newcommand{\rimp}{(\operatorname{R} \multimap)}
+\newcommand{\limp}{(\operatorname{L} \multimap)}
+\newcommand{\rtensor}{(\operatorname{R}\otimes)}
+\newcommand{\ltensor}{(\operatorname{L}\otimes)}
+\newcommand{\rtrue}{(\operatorname{R}\top)}
+\newcommand{\rwith}{(\operatorname{R}\\&)}
+\newcommand{\lwithleft}{(\operatorname{L}\\&)_{\operatorname{left}}}
+\newcommand{\lwithright}{(\operatorname{L}\\&)_{\operatorname{right}}}
+\newcommand{\rplusleft}{(\operatorname{R}\oplus)_{\operatorname{left}}}
+\newcommand{\rplusright}{(\operatorname{R}\oplus)_{\operatorname{right}}}
+\newcommand{\lplus}{(\operatorname{L}\oplus)}
+\newcommand{\prom}{(\operatorname{prom})}
+\newcommand{\ctr}{(\operatorname{ctr})}
+\newcommand{\der}{(\operatorname{der})}
+\newcommand{\weak}{(\operatorname{weak})}
+\newcommand{\exi}{(\operatorname{exists})}
+\newcommand{\fa}{(\operatorname{for\text{ }all})}
+\newcommand{\ex}{(\operatorname{ex})}
+\newcommand{\cut}{(\operatorname{cut})}
+\newcommand{\ax}{(\operatorname{ax})}
+\newcommand{\negation}{\sim}
+\newcommand{\true}{\top}
+\newcommand{\false}{\bot}
+\DeclareRobustCommand{\diamondtimes}{%
+	\mathbin{\text{\rotatebox[origin=c]{45}{$\boxplus$}}}%
+}
+\newcommand{\tagarray}{\mbox{}\refstepcounter{equation}$(\theequation)$}
+\newcommand{\startproof}[1]{
+	\AxiomC{#1}
+	\noLine
+	\UnaryInfC{$\vdots$}
+}
+\newenvironment{scprooftree}[1]%
+{\gdef\scalefactor{#1}\begin{center}\proofSkipAmount \leavevmode}%
+	{\scalebox{\scalefactor}{\DisplayProof}\proofSkipAmount \end{center} }
+
+% https://tex.stackexchange.com/questions/63355/wrapping-cmidrule-in-a-macro
+\ExplSyntaxOn
+\makeatletter
+\newcommand{\CMidRule}{\noalign\bgroup\@CMidRule{}}
+\NewDocumentCommand{\@CMidRule}{
+	m % Material to reinsert before cmidrule.
+	O{0.0ex} % #1 = left adjust
+	O{0.0ex} % #1 = right adjust
+	m  %       #3 = columns to span
+}{
+	\peek_meaning_remove_ignore_spaces:NTF \CMidRule
+	{ \@CMidRule { #1 \cmidrule[\cmidrulewidth](l{#2}r{#3}){#4} } }
+	{ \egroup #1 \cmidrule[\cmidrulewidth](l{#2}r{#3}){#4} }
+}
+\makeatother
+\ExplSyntaxOff
+
+\newcommand{\PhantC}{\phantom{\colon}}%
+\newcommand{\PhantSQ}{\phantom{\sqrt{\hspace{0.3ex}}}}
+
+\newcommand\showdiv[1]{\overline{\smash{)}#1}}
+
+
+\begin{document}
+	
+	\frame{\titlepage}
+	
+	\begin{frame}
+		\frametitle{Geometry of Interaction}
+			\begin{equation*}\adjustbox{scale=0.7}{\label{eq:standard_example}
+			\begin{tikzcd}[ampersand replacement = \&, column sep = small, row sep = small]
+				\& \ax \&\&\&\& \ax \&\&\& \ax \\
+				{\neg X} \&\& X \&\& {\neg X} \&\& X \& {\neg X} \&\& X \\
+				{\operatorname{c}} \&\&\& \otimes \&\&\& {\operatorname{c}} \&\& \parr \\
+				\&\&\& {X \otimes \neg X} \&\&\&\&\& {\neg X \parr X} \\
+				\&\&\&\&\& \cut
+				\arrow[curve={height=12pt}, from=4-4, to=5-6]
+				\arrow[curve={height=-12pt}, from=4-9, to=5-6]
+				\arrow[no head, from=3-9, to=4-9]
+				\arrow[curve={height=-12pt}, from=2-10, to=3-9]
+				\arrow[curve={height=12pt}, from=2-8, to=3-9]
+				\arrow[curve={height=-12pt}, no head, from=1-9, to=2-10]
+				\arrow[curve={height=12pt}, no head, from=1-9, to=2-8]
+				\arrow[curve={height=12pt}, no head, from=1-6, to=2-5]
+				\arrow[curve={height=-12pt}, no head, from=1-6, to=2-7]
+				\arrow[from=2-7, to=3-7]
+				\arrow[curve={height=-12pt}, from=2-5, to=3-4]
+				\arrow[curve={height=12pt}, from=2-3, to=3-4]
+				\arrow[curve={height=-12pt}, no head, from=1-2, to=2-3]
+				\arrow[curve={height=12pt}, no head, from=1-2, to=2-1]
+				\arrow[from=2-1, to=3-1]
+				\arrow[no head, from=3-4, to=4-4]
+			\end{tikzcd}}
+		\end{equation*}
+	\begin{center}
+		\begin{tabular}{ | c | c | c |}
+			\hline
+			\textbf{Permutations} & \textbf{Operators} & \textbf{Rings}\\
+			\hline
+			$(12)(34)(56)$ & $
+				\llbracket \pi \rrbracket =
+				\begin{pmatrix}
+					0 & 0 & p & q\\
+					0 & qp^\ast + qp^\ast & 0 & 0\\
+					p^\ast & 0 & 0 & 0\\
+					q^\ast & 0 & 0 & 0
+				\end{pmatrix}
+			$ & ?\\
+			\hline
+			\end{tabular}
+		\end{center}
+	\end{frame}
+
+\begin{frame}
+	\frametitle{Formulas}
+	\begin{defn}[Formulas]\label{def:formulas}
+		\begin{itemize}
+			\item \emph{Unoriented atoms} $X,Y,Z,...$
+			\item \emph{An oriented atom} (or \emph{atomic proposition}) is a pair $(X,+)$ or $(X,-)$ where $X$ is an unoriented atom.
+			\end{itemize}
+	 \emph{Pre-formulas}:
+	\begin{itemize}
+		\item Any atomic proposition is a preformula.
+		\item If $A,B$ are pre-formulas then so are $A \otimes B$, $A \parr B$.
+		\item If $A$ is a pre-formula then so is $\neg A$.
+	\end{itemize}
+	\emph{Formulas}: quotient of pre-formulas:
+	\begin{equation*}
+		\neg (A \otimes B) \sim \neg B \parr \neg A \qquad \neg (A \parr B) \sim \neg B \otimes \neg A
+		\end{equation*}
+	\begin{equation*}
+		\neg (X, +) \sim (X, -)\qquad \neg (X,-) \sim (X,+)
+		\end{equation*}
+	\end{defn}
+	\end{frame}
+
+\begin{frame}
+	\frametitle{Polynomial ring of a proof structure}
+	\begin{defn}[Sequence of (un)oriented atoms]\label{def:seq_set}
+		Let $A$ be a formula with sequence of oriented atoms $\big((X_1,x_1),...,(X_n,x_n)\big)$. The \emph{sequence of unoriented atoms} of $A$ is $(X_1,...,X_n)$ and the \emph{set of unoriented atoms} of $A$ is the disjoint union $\lbrace X_1 \rbrace \coprod \hdots \coprod \lbrace X_n \rbrace$.
+	\end{defn}
+\begin{defn}[Polynomial ring $P_A$ of a formula $A$]
+	$P_A$ is the free commutative $k$-algebra on the set of unoriented atoms of $A$:
+	\begin{equation*}
+		P_A = k[X_1,...,X_n]
+		\end{equation*}
+	Let $\pi$ be a proof structure with edge set $E$ and denote by $A_e$ the formula labelling edge $e \in E$. The \emph{polynomial ring} of $\pi$, denoted $P_\pi$ is the following, where $U_e$ is the set of unoriented atoms of $A_e$.
+	\begin{equation*}
+		P_\pi := \bigotimes_{e \in E}P_{A_e}\cong k[\coprod_{e \in E}U_e]
+	\end{equation*}
+\end{defn}
+	\end{frame}
+
+\begin{frame}
+	\frametitle{Polynomial ring example}
+	Let $\pi$ denote the following proof net.
+	% https://q.uiver.app/?q=WzAsMTEsWzAsMSwiKFggLCspIFxcb3RpbWVzIChZLC0pIl0sWzIsMSwiKFgsIC0pIFxccGFyciAoWSwrKSJdLFsxLDAsIlxcYXgiXSxbNSwwLCJcXGF4Il0sWzQsMSwiKFgsKykiXSxbNiwxLCIoWSwtKSJdLFszLDIsIlxcb3RpbWVzIl0sWzMsMywiKChYLC0pXFxwYXJyKFksKykpXFxvdGltZXMgKFgsKykiXSxbMCwyLCJcXG9wZXJhdG9ybmFtZXtjfSJdLFs2LDIsIlxcb3BlcmF0b3JuYW1le2N9Il0sWzMsNCwiXFxvcGVyYXRvcm5hbWV7Y30iXSxbMiwxLCIiLDAseyJjdXJ2ZSI6LTIsInN0eWxlIjp7ImhlYWQiOnsibmFtZSI6Im5vbmUifX19XSxbMiwwLCIiLDIseyJjdXJ2ZSI6Miwic3R5bGUiOnsiaGVhZCI6eyJuYW1lIjoibm9uZSJ9fX1dLFszLDQsIiIsMCx7ImN1cnZlIjoyLCJzdHlsZSI6eyJoZWFkIjp7Im5hbWUiOiJub25lIn19fV0sWzMsNSwiIiwyLHsiY3VydmUiOi0yLCJzdHlsZSI6eyJoZWFkIjp7Im5hbWUiOiJub25lIn19fV0sWzYsNywiIiwyLHsic3R5bGUiOnsiaGVhZCI6eyJuYW1lIjoibm9uZSJ9fX1dLFs0LDYsIiIsMSx7ImN1cnZlIjotMn1dLFsxLDYsIiIsMSx7ImN1cnZlIjoyfV0sWzcsMTBdLFs1LDldLFswLDhdXQ==
+	\begin{equation*}\adjustbox{scale = 0.8}{\begin{tikzcd}[column sep = tiny, row sep = small, ampersand replacement=\&]
+		\& \ax \&\&\&\& \ax \\
+		{X_1 \otimes \neg Y_2} \&\& {\neg X_3 \parr Y_4} \&\& {X_5} \&\& {\neg Y_6} \\
+		{\operatorname{c}} \&\&\& \otimes \&\&\& {\operatorname{c}} \\
+		\&\&\& {(\neg X_7\parr Y_8)\otimes X_9} \\
+		\&\&\& {\operatorname{c}}
+		\arrow[curve={height=-12pt}, no head, from=1-2, to=2-3]
+		\arrow[curve={height=12pt}, no head, from=1-2, to=2-1]
+		\arrow[curve={height=12pt}, no head, from=1-6, to=2-5]
+		\arrow[curve={height=-12pt}, no head, from=1-6, to=2-7]
+		\arrow[no head, from=3-4, to=4-4]
+		\arrow[curve={height=-12pt}, from=2-5, to=3-4]
+		\arrow[curve={height=12pt}, from=2-3, to=3-4]
+		\arrow[from=4-4, to=5-4]
+		\arrow[from=2-7, to=3-7]
+		\arrow[from=2-1, to=3-1]
+	\end{tikzcd}}
+\end{equation*}
+	\begin{align*}
+		&P_\pi = \\
+		&k\Big[\lbrace X \rbrace \coprod \lbrace Y \rbrace \coprod \lbrace X \rbrace \coprod \lbrace Y \rbrace \coprod \lbrace X \rbrace \coprod \lbrace Y \rbrace \coprod \lbrace X \rbrace \coprod \lbrace Y \rbrace \coprod \lbrace X \rbrace\Big]\\
+		&= k[X_1,Y_2,X_3,Y_4,X_5,Y_6, X_7, Y_8, X_9]
+	\end{align*}
+But what about the links?
+	\end{frame}
+
+\begin{frame}
+	\frametitle{Links}
+	\begin{defn}[Link ideal $I_l$, link coordinate ring $R_l$]\label{def:coordinate_ring}
+		\begin{center}
+			\begin{tabular}{c c c}
+				Axiom/Cut link $l$:
+				&
+				$
+				\adjustbox{scale=0.8}{\begin{tikzcd}[column sep = small, row sep = small, ampersand replacement=\&]
+					\& \ax\arrow[dl,bend right, dash]\arrow[dr,bend left, dash]\\
+					\neg A\arrow[d] \& \& A\arrow[d]\\
+					\vdots \& \& \vdots
+				\end{tikzcd}}$
+				&
+				$
+				\adjustbox{scale = 0.8}{\begin{tikzcd}[column sep = small, row sep = small, ampersand replacement=\&]
+					\vdots\arrow[d, dash] \& \& \vdots\arrow[d, dash]\\
+					\neg A\arrow[dr,bend right] \& \& A\arrow[dl, bend left]\\
+					\& \cut
+				\end{tikzcd}}$
+			\end{tabular}
+		\end{center}
+	$\big((X_1,x_1),...,(X_n,x_n)\big)$ is the sequence of oriented atoms of $A$, and $\big((Y_1,y_1),...,(Y_m,y_m)\big)$ is that of $B$.
+\begin{center}
+\begin{tabular}{ c c }
+	\makecell{$
+		I_l\subseteq P_A \otimes P_{\neg A}$\\ $
+		I_l = (X_i - X_i')_{i = 1}^n
+		= (X_i \otimes 1 - 1 \otimes X_i)_{i = 1}^n$}
+	&
+	$R_l := P_A \otimes P_{\neg A}/I_l$
+\end{tabular}
+\end{center}
+	\end{defn}
+	\end{frame}
+
+\begin{frame}
+	\frametitle{Tensor/Par links}
+	\begin{center}
+		\begin{tabular}{ c c c }
+			
+			Tensor/Par link $l$:
+			&
+			% https://q.uiver.app/?q=WzAsNyxbMCwwLCJcXHZkb3RzIl0sWzAsMSwiQSJdLFsyLDEsIkIiXSxbMSwyLCJcXG90aW1lcyJdLFsxLDMsIkEgXFxvdGltZXMgQiJdLFsxLDQsIlxcdmRvdHMiXSxbMiwwLCJcXHZkb3RzIl0sWzQsNV0sWzIsMywiIiwwLHsiY3VydmUiOi0yfV0sWzEsMywiIiwyLHsiY3VydmUiOjJ9XSxbMyw0LCIiLDIseyJzdHlsZSI6eyJoZWFkIjp7Im5hbWUiOiJub25lIn19fV0sWzYsMiwiIiwwLHsic3R5bGUiOnsiaGVhZCI6eyJuYW1lIjoibm9uZSJ9fX1dLFswLDEsIiIsMix7InN0eWxlIjp7ImhlYWQiOnsibmFtZSI6Im5vbmUifX19XV0=
+			$\adjustbox{scale=0.7}{\begin{tikzcd}[column sep = small, row sep = small,ampersand replacement=\&]
+				\vdots \&\& \vdots \\
+				A \&\& B \\
+				\& \otimes \\
+				\& {A \otimes B} \\
+				\& \vdots
+				\arrow[from=4-2, to=5-2]
+				\arrow[curve={height=-12pt}, from=2-3, to=3-2]
+				\arrow[curve={height=12pt}, from=2-1, to=3-2]
+				\arrow[no head, from=3-2, to=4-2]
+				\arrow[no head, from=1-3, to=2-3]
+				\arrow[no head, from=1-1, to=2-1]
+			\end{tikzcd}}$
+			&
+			% https://q.uiver.app/?q=WzAsNyxbMCwwLCJcXHZkb3RzIl0sWzAsMSwiQSJdLFsyLDEsIkIiXSxbMSwyLCJcXHBhcnIiXSxbMSwzLCJBIFxccGFyciBCIl0sWzEsNCwiXFx2ZG90cyJdLFsyLDAsIlxcdmRvdHMiXSxbNCw1XSxbMiwzLCIiLDAseyJjdXJ2ZSI6LTJ9XSxbMSwzLCIiLDIseyJjdXJ2ZSI6Mn1dLFszLDQsIiIsMix7InN0eWxlIjp7ImhlYWQiOnsibmFtZSI6Im5vbmUifX19XSxbNiwyLCIiLDAseyJzdHlsZSI6eyJoZWFkIjp7Im5hbWUiOiJub25lIn19fV0sWzAsMSwiIiwyLHsic3R5bGUiOnsiaGVhZCI6eyJuYW1lIjoibm9uZSJ9fX1dXQ==
+			$\adjustbox{scale=0.7}{\begin{tikzcd}[column sep = small, row sep = small, ampersand replacement=\&]
+				\vdots \&\& \vdots \\
+				A \&\& B \\
+				\& \parr \\
+				\& {A \parr B} \\
+				\& \vdots
+				\arrow[from=4-2, to=5-2]
+				\arrow[curve={height=-12pt}, from=2-3, to=3-2]
+				\arrow[curve={height=12pt}, from=2-1, to=3-2]
+				\arrow[no head, from=3-2, to=4-2]
+				\arrow[no head, from=1-3, to=2-3]
+				\arrow[no head, from=1-1, to=2-1]
+			\end{tikzcd}}$
+		\end{tabular}
+	\end{center}
+	Let $\boxtimes = \otimes$ if $l$ is a tensor link, and $\boxtimes = \parr$ if $l$ is a par link.
+	\begin{center}
+		\begin{tabular}{ c}
+			\makecell{$ I_l \subseteq P_A \otimes P_B \otimes P_{A \boxtimes B}$ \\ $I_l = (\lbrace X_i - X_i'\rbrace_{i = 1}^n \cup \lbrace Y_j - Y_j' \rbrace_{j = 1}^m)$ \\ $ = (\lbrace X_i \otimes 1 \otimes 1 - 1 \otimes 1 \otimes X_i\rbrace _{i = 1}^n \cup \lbrace 1 \otimes Y_j \otimes 1 - 1 \otimes 1 \otimes Y_j\rbrace_{j = 1}^m)$}
+			\\
+			\\
+			$R_l = P_A \otimes P_B \otimes P_{A \boxtimes B}/I_l$
+		\end{tabular}
+	\end{center}
+\begin{defn}[Defining ideal $I_\pi$, coordinate ring $R_\pi$]
+	$I_\pi := \sum_{l}I_l \subseteq P_\pi$ where $l$ ranges over all links of $\pi$. $R_\pi := P_\pi/I_\pi$.
+\end{defn}
+	\end{frame}
+
+\begin{frame}
+	\frametitle{Example of coordinate ring of a link}
+	Let $A := (\neg X_2 \otimes Y_3) \parr (\neg Z_6 \otimes W_7)$.
+	%) https://q.uiver.app/?q=WzAsMjMsWzEsMCwiXFxheCJdLFswLDEsIlgiXSxbMiwxLCJcXG5lZyBYIl0sWzMsMiwiXFxvdGltZXMiXSxbNCwxLCJZIl0sWzUsMCwiXFxheCJdLFs2LDEsIlxcbmVnIFkiXSxbMywzLCJcXG5lZyBYIFxcb3RpbWVzIFgiXSxbNywxLCJaIl0sWzgsMCwiXFxheCJdLFs5LDEsIlxcbmVnIFoiXSxbMTAsMiwiXFxvdGltZXMiXSxbMTEsMSwiVyJdLFsxMiwwLCJcXGF4Il0sWzEzLDEsIlxcbmVnIFciXSxbMTAsMywiXFxuZWcgWiBcXG90aW1lcyBXIl0sWzYsNCwiXFxwYXJyIl0sWzYsNSwiQSJdLFs2LDYsIlxcb3BlcmF0b3JuYW1le2N9Il0sWzAsMiwiXFxvcGVyYXRvcm5hbWV7Y30iXSxbNiwyLCJcXG9wZXJhdG9ybmFtZXtjfSJdLFs3LDIsIlxcb3BlcmF0b3JuYW1le2N9Il0sWzEzLDIsIlxcb3BlcmF0b3JuYW1le2N9Il0sWzUsNCwiIiwwLHsiY3VydmUiOjIsInN0eWxlIjp7ImhlYWQiOnsibmFtZSI6Im5vbmUifX19XSxbNSw2LCIiLDIseyJjdXJ2ZSI6LTIsInN0eWxlIjp7ImhlYWQiOnsibmFtZSI6Im5vbmUifX19XSxbNCwzLCIiLDAseyJjdXJ2ZSI6LTJ9XSxbMiwzLCIiLDIseyJjdXJ2ZSI6Mn1dLFswLDIsIiIsMix7ImN1cnZlIjotMiwic3R5bGUiOnsiaGVhZCI6eyJuYW1lIjoibm9uZSJ9fX1dLFswLDEsIiIsMCx7ImN1cnZlIjoyLCJzdHlsZSI6eyJoZWFkIjp7Im5hbWUiOiJub25lIn19fV0sWzMsNywiIiwwLHsic3R5bGUiOnsiaGVhZCI6eyJuYW1lIjoibm9uZSJ9fX1dLFs3LDE2LCIiLDAseyJjdXJ2ZSI6Mn1dLFsxNSwxNiwiIiwyLHsiY3VydmUiOi0yfV0sWzE2LDE3LCIiLDIseyJzdHlsZSI6eyJoZWFkIjp7Im5hbWUiOiJub25lIn19fV0sWzE3LDE4XSxbMSwxOV0sWzYsMjBdLFs4LDIxXSxbOSw4LCIiLDIseyJjdXJ2ZSI6Miwic3R5bGUiOnsiaGVhZCI6eyJuYW1lIjoibm9uZSJ9fX1dLFs5LDEwLCIiLDAseyJjdXJ2ZSI6LTIsInN0eWxlIjp7ImhlYWQiOnsibmFtZSI6Im5vbmUifX19XSxbMTAsMTEsIiIsMCx7ImN1cnZlIjoyfV0sWzEyLDExLCIiLDIseyJjdXJ2ZSI6LTJ9XSxbMTEsMTUsIiIsMix7InN0eWxlIjp7ImhlYWQiOnsibmFtZSI6Im5vbmUifX19XSxbMTMsMTIsIiIsMix7ImN1cnZlIjoyLCJzdHlsZSI6eyJoZWFkIjp7Im5hbWUiOiJub25lIn19fV0sWzEzLDE0LCIiLDAseyJjdXJ2ZSI6LTIsInN0eWxlIjp7ImhlYWQiOnsibmFtZSI6Im5vbmUifX19XSxbMTQsMjJdXQ==
+	\begin{equation*}\adjustbox{scale=0.6}{\label{eq:link_ideal_example}
+		\begin{tikzcd}[column sep = tiny, row sep = small, ampersand replacement=\&]
+			\& \textcolor{red}{\ax} \&\&\&\& \ax \&\&\& \ax \&\&\&\& \ax \\
+			X_1 \&\& {\neg X_2} \&\& Y_3 \&\& {\neg Y_4} \& Z_5 \&\& {\neg Z_6} \&\& W_7 \&\& {\neg W_8} \\
+			{\operatorname{c}} \&\&\& \otimes \&\&\& {\operatorname{c}} \& {\operatorname{c}} \&\&\& \otimes \&\&\& {\operatorname{c}} \\
+			\&\&\& {\neg X_2 \otimes Y_3} \&\&\&\&\&\&\& {\neg Z_6 \otimes W_7} \\
+			\&\&\&\&\&\& \parr \\
+			\&\&\&\&\&\& A \\
+			\&\&\&\&\&\& {\operatorname{c}}
+			\arrow[curve={height=12pt}, no head, from=1-6, to=2-5]
+			\arrow[curve={height=-12pt}, no head, from=1-6, to=2-7]
+			\arrow[curve={height=-12pt}, from=2-5, to=3-4]
+			\arrow[curve={height=12pt}, from=2-3, to=3-4,red]
+			\arrow[curve={height=-12pt}, no head, from=1-2, to=2-3,red]
+			\arrow[curve={height=12pt}, no head, from=1-2, to=2-1,red]
+			\arrow[no head, from=3-4, to=4-4]
+			\arrow[curve={height=12pt}, from=4-4, to=5-7, blue]
+			\arrow[curve={height=-12pt}, from=4-11, to=5-7, blue]
+			\arrow[no head, from=5-7, to=6-7,blue]
+			\arrow[from=6-7, to=7-7,blue]
+			\arrow[from=2-1, to=3-1,red]
+			\arrow[from=2-7, to=3-7]
+			\arrow[from=2-8, to=3-8]
+			\arrow[curve={height=12pt}, no head, from=1-9, to=2-8]
+			\arrow[curve={height=-12pt}, no head, from=1-9, to=2-10]
+			\arrow[curve={height=12pt}, from=2-10, to=3-11]
+			\arrow[curve={height=-12pt}, from=2-12, to=3-11]
+			\arrow[no head, from=3-11, to=4-11]
+			\arrow[curve={height=12pt}, no head, from=1-13, to=2-12]
+			\arrow[curve={height=-12pt}, no head, from=1-13, to=2-14]
+			\arrow[from=2-14, to=3-14]
+		\end{tikzcd}}
+	\end{equation*}
+Let $l$ denote the red axiom link, and $l'$ denote the blue par link.
+\scalebox{0.8}{\parbox{.5\linewidth}{\begin{align*}
+	I_l &= (X_1 - X_2) \subseteq k[X_1, X_2] & R_l &= k[X_1,X_2]/I_l \\
+	& & & \cong k[X_1]\\
+	I_{l'} &= (X_2 - X_2', Y_3 - Y_3', Z_6 - Z_6', W_7 - W_7') &
+	R_{l'} &= k[X_2, X_2', Y_3, Y_3', Z_6, Z_6', W_7, W_7']/I_{l'}\\
+	& & & \cong k[X_2,Y_3,Z_6,W_7]
+\end{align*}}}
+	\end{frame}
+
+\begin{frame}
+	\frametitle{Example of coordinate ring of a proof structure}
+	$A := (\neg X_2 \otimes Y_3) \parr (\neg Z_6 \otimes W_7)$
+	\begin{equation*}\adjustbox{scale=0.6}{\label{eq:link_ideal_example}
+			\begin{tikzcd}[column sep = tiny, row sep = small, ampersand replacement=\&]
+				\& \ax \&\&\&\& \ax \&\&\& \ax \&\&\&\& \ax \\
+				X_1 \&\& {\neg X_2} \&\& Y_3 \&\& {\neg Y_4} \& Z_5 \&\& {\neg Z_6} \&\& W_7 \&\& {\neg W_8} \\
+				{\operatorname{c}} \&\&\& \otimes \&\&\& {\operatorname{c}} \& {\operatorname{c}} \&\&\& \otimes \&\&\& {\operatorname{c}} \\
+				\&\&\& {\neg X_2 \otimes Y_3} \&\&\&\&\&\&\& {\neg Z_6 \otimes W_7} \\
+				\&\&\&\&\&\& \parr \\
+				\&\&\&\&\&\& A \\
+				\&\&\&\&\&\& {\operatorname{c}}
+				\arrow[curve={height=12pt}, no head, from=1-6, to=2-5]
+				\arrow[curve={height=-12pt}, no head, from=1-6, to=2-7]
+				\arrow[curve={height=-12pt}, from=2-5, to=3-4]
+				\arrow[curve={height=12pt}, from=2-3, to=3-4]
+				\arrow[curve={height=-12pt}, no head, from=1-2, to=2-3]
+				\arrow[curve={height=12pt}, no head, from=1-2, to=2-1]
+				\arrow[no head, from=3-4, to=4-4]
+				\arrow[curve={height=12pt}, from=4-4, to=5-7]
+				\arrow[curve={height=-12pt}, from=4-11, to=5-7]
+				\arrow[no head, from=5-7, to=6-7]
+				\arrow[from=6-7, to=7-7]
+				\arrow[from=2-1, to=3-1]
+				\arrow[from=2-7, to=3-7]
+				\arrow[from=2-8, to=3-8]
+				\arrow[curve={height=12pt}, no head, from=1-9, to=2-8]
+				\arrow[curve={height=-12pt}, no head, from=1-9, to=2-10]
+				\arrow[curve={height=12pt}, from=2-10, to=3-11]
+				\arrow[curve={height=-12pt}, from=2-12, to=3-11]
+				\arrow[no head, from=3-11, to=4-11]
+				\arrow[curve={height=12pt}, no head, from=1-13, to=2-12]
+				\arrow[curve={height=-12pt}, no head, from=1-13, to=2-14]
+				\arrow[from=2-14, to=3-14]
+		\end{tikzcd}}
+	\end{equation*}
+\begin{align*}
+	P_{\pi} &= k[X_1,X_2,X_2',X_2'',Y_3,Y_3',Y_3'',Y_4,Z_5,Z_6,Z_6',Z_6'',W_7,W_7',W_7'',W_8]\\
+	I_\pi &= (X_1 - X_2) + (Y_3 - Y_4) + (Z_5 - Z_6) + (W_7 - W_8)\\
+	&+(X_2 - X_2', Y_3 - Y_3') + (Z_6 - Z_6', W_7 - W_7')\\
+	&+(X_2' - X_2'', Y_3' - Y_3'', Z_6' - Z_6'', W_7' - W_7'')\\
+	R_\pi &= P_\pi/I_\pi \cong k[X,Y,Z,W]
+\end{align*}
+	\end{frame}
+
+\begin{frame}
+	\frametitle{Persistent walks}
+	% https://q.uiver.app/?q=WzAsMTQsWzEsMCwiXFxheCJdLFswLDEsIkEiXSxbMiwxLCJcXG5lZyBBIl0sWzAsMiwiXFx2ZG90cyJdLFsyLDIsIlxcdmRvdHMiXSxbMCwzLCJYXzEgXFxjb3Byb2QgXFxoZG90cyBcXGNvcHJvZCBYX24iXSxbMiwzLCJZXzEgXFxjb3Byb2QgXFxoZG90cyBcXGNvcHJvZCBZX24iXSxbNCwzLCJcXGN1dCJdLFszLDIsIkEiXSxbNSwyLCJcXG5lZyBBIl0sWzUsMSwiXFx2ZG90cyJdLFszLDEsIlxcdmRvdHMiXSxbMywwLCJYXzEgXFxjb3Byb2QgXFxoZG90cyBcXGNvcHJvZCBYX24iXSxbNSwwLCJZXzEgXFxjb3Byb2QgXFxoZG90cyBcXGNvcHJvZCBZX24iXSxbMCwxLCIiLDAseyJjdXJ2ZSI6Miwic3R5bGUiOnsiaGVhZCI6eyJuYW1lIjoibm9uZSJ9fX1dLFsxLDNdLFswLDIsIiIsMix7ImN1cnZlIjotMiwic3R5bGUiOnsiaGVhZCI6eyJuYW1lIjoibm9uZSJ9fX1dLFsyLDRdLFs1LDYsIkkiLDAseyJjb2xvdXIiOlsyNDAsNjAsNjBdLCJzdHlsZSI6eyJ0YWlsIjp7Im5hbWUiOiJhcnJvd2hlYWQifX19LFsyNDAsNjAsNjAsMV1dLFs3LDksIiIsMCx7ImN1cnZlIjoyLCJzdHlsZSI6eyJoZWFkIjp7Im5hbWUiOiJub25lIn19fV0sWzksMTBdLFs3LDgsIiIsMix7ImN1cnZlIjotMiwic3R5bGUiOnsiaGVhZCI6eyJuYW1lIjoibm9uZSJ9fX1dLFs4LDExXSxbMTIsMTMsIkkiLDAseyJjb2xvdXIiOlsyNDAsNjAsNjBdLCJzdHlsZSI6eyJ0YWlsIjp7Im5hbWUiOiJhcnJvd2hlYWQifX19LFsyNDAsNjAsNjAsMV1dXQ==
+	\[\adjustbox{scale=0.7}{\begin{tikzcd}[ampersand replacement=\&, column sep = small, row sep = small]
+		\& \ax \&\& {X_1 \coprod \hdots \coprod X_n} \&\& {Y_1 \coprod \hdots \coprod Y_n} \\
+		A \&\& {\neg A} \& \vdots \&\& \vdots \\
+		\vdots \&\& \vdots \& A \&\& {\neg A} \\
+		{X_1 \coprod \hdots \coprod X_n} \&\& {Y_1 \coprod \hdots \coprod Y_n} \&\& \cut
+		\arrow[curve={height=12pt}, no head, from=1-2, to=2-1]
+		\arrow[from=2-1, to=3-1]
+		\arrow[curve={height=-12pt}, no head, from=1-2, to=2-3]
+		\arrow[from=2-3, to=3-3]
+		\arrow["J", color={rgb,255:red,92;green,92;blue,214}, tail reversed, from=4-1, to=4-3]
+		\arrow[curve={height=12pt}, no head, from=4-5, to=3-6]
+		\arrow[from=3-6, to=2-6]
+		\arrow[curve={height=-12pt}, no head, from=4-5, to=3-4]
+		\arrow[from=3-4, to=2-4]
+		\arrow["J", color={rgb,255:red,92;green,92;blue,214}, tail reversed, from=1-4, to=1-6]
+	\end{tikzcd}}\]
+
+% https://q.uiver.app/?q=WzAsMTAsWzIsMiwiXFxib3h0aW1lcyJdLFsxLDEsIkEiXSxbMywxLCJCIl0sWzIsMywiQSBcXGJveHRpbWVzIEIiXSxbMiw0LCJcXHZkb3RzIl0sWzEsMCwiXFx2ZG90cyJdLFszLDAsIlxcdmRvdHMiXSxbMCwxLCJYXzEgXFxjb3Byb2QgXFxoZG90cyBcXGNvcHJvZCBYX24iXSxbNCwxLCJZXzEgXFxjb3Byb2QgXFxoZG90cyBcXGNvcHJvZCBZX20iXSxbMiw1LCJYXzEgXFxjb3Byb2QgXFxoZG90cyBcXGNvcHJvZCBYX24gXFxjb3Byb2QgWV8xIFxcY29wcm9kIFxcaGRvdHMgXFxjb3Byb2QgWV9tIl0sWzIsMCwiIiwwLHsiY3VydmUiOi0yfV0sWzEsMCwiIiwyLHsiY3VydmUiOjJ9XSxbMCwzLCIiLDIseyJzdHlsZSI6eyJoZWFkIjp7Im5hbWUiOiJub25lIn19fV0sWzMsNF0sWzYsMiwiIiwwLHsic3R5bGUiOnsiaGVhZCI6eyJuYW1lIjoibm9uZSJ9fX1dLFs1LDEsIiIsMix7InN0eWxlIjp7ImhlYWQiOnsibmFtZSI6Im5vbmUifX19XSxbOCw5LCJJXjIiLDIseyJjb2xvdXIiOlsyNDAsNjAsNjBdfSxbMjQwLDYwLDYwLDFdXSxbNyw5LCJJXjEiLDAseyJjb2xvdXIiOlsyNDAsNjAsNjBdfSxbMjQwLDYwLDYwLDFdXV0=
+\[\adjustbox{scale=0.7}{\begin{tikzcd}[ampersand replacement=\&, column sep = small, row sep = small]
+	\& \vdots \&\& \vdots \\
+	{X_1 \coprod \hdots \coprod X_n} \& A \&\& B \& {Y_1 \coprod \hdots \coprod Y_m} \\
+	\&\& \boxtimes \\
+	\&\& {A \boxtimes B} \\
+	\&\& \vdots \\
+	\&\& {X_1 \coprod \hdots \coprod X_n \coprod Y_1 \coprod \hdots \coprod Y_m}
+	\arrow[curve={height=-12pt}, from=2-4, to=3-3]
+	\arrow[curve={height=12pt}, from=2-2, to=3-3]
+	\arrow[no head, from=3-3, to=4-3]
+	\arrow[from=4-3, to=5-3]
+	\arrow[no head, from=1-4, to=2-4]
+	\arrow[no head, from=1-2, to=2-2]
+	\arrow["{I^2}"', color={rgb,255:red,92;green,92;blue,214}, from=2-5, to=6-3]
+	\arrow["{I^1}", color={rgb,255:red,92;green,92;blue,214}, from=2-1, to=6-3]
+\end{tikzcd}}\]
+
+	\end{frame}
+
+\begin{frame}
+	\frametitle{Persistent walks}
+	% https://q.uiver.app/?q=WzAsOCxbMCwxLCJYXzEgXFxjb3Byb2QgXFxoZG90cyBcXGNvcHJvZCBYX24iXSxbMiwxLCJZXzEgXFxjb3Byb2QgXFxoZG90cyBcXGNvcHJvZCBZX24iXSxbNCwxLCJYXzEgXFxjb3Byb2QgXFxoZG90cyBcXGNvcHJvZCBYX24gXFxjb3Byb2QgWV8xIFxcY29wcm9kIFxcaGRvdHMgXFxjb3Byb2QgWV9tIl0sWzMsMCwiWF8xIFxcY29wcm9kIFxcaGRvdHMgXFxjb3Byb2QgWF9uIl0sWzUsMCwiWV8xIFxcY29wcm9kIFxcaGRvdHMgXFxjb3Byb2QgWV9tIl0sWzEsMCwiXFxheCJdLFsxLDIsIlxcY3V0Il0sWzQsMCwiXFxvdGltZXMsIFxccGFyciJdLFswLDEsIkoiLDAseyJjb2xvdXIiOlsyNDAsNjAsNjBdLCJzdHlsZSI6eyJ0YWlsIjp7Im5hbWUiOiJhcnJvd2hlYWQifX19LFsyNDAsNjAsNjAsMV1dLFszLDIsIkleMSIsMCx7ImNvbG91ciI6WzI0MCw2MCw2MF19LFsyNDAsNjAsNjAsMV1dLFs0LDIsIkleMiIsMix7ImNvbG91ciI6WzI0MCw2MCw2MF19LFsyNDAsNjAsNjAsMV1dXQ==
+	\[\adjustbox{scale=0.6}{\begin{tikzcd}[column sep = tiny, row sep = tiny, ampersand replacement=\&]
+		\& \ax, \cut \&\& {X_1 \coprod \hdots \coprod X_n} \& {\otimes, \parr} \& {Y_1 \coprod \hdots \coprod Y_m} \\
+		{X_1 \coprod \hdots \coprod X_n} \&\& {Y_1 \coprod \hdots \coprod Y_n} \&\& {X_1 \coprod \hdots \coprod X_n \coprod Y_1 \coprod \hdots \coprod Y_m}
+		\arrow["J", color={rgb,255:red,92;green,92;blue,214}, tail reversed, from=2-1, to=2-3]
+		\arrow["{I^1}", color={rgb,255:red,92;green,92;blue,214}, from=1-4, to=2-5]
+		\arrow["{I^2}"', color={rgb,255:red,92;green,92;blue,214}, from=1-6, to=2-5]
+	\end{tikzcd}}\]
+		\begin{defn}\label{def:persistent_walk}
+		Let $\pi$ be a proof structure admitting a conclusion $A$. Choose also an unoriented atom $X$ in $A$. A \textbf{persistent walk} of $X$ is a walk $\nu$ in $\pi$ satisfying the following conditions.
+		\begin{enumerate}
+			\item\label{def:pers_walk_e_1} The formula $A$ labels some edge $e$, the first edge $e_1$ of $\nu$ is $e$.
+			\item\label{def:pers_walk_e_i} If $i  > 1$ then $X$ uniquely determines an edge $e_{i} \neq e_{i-1}$ adjacent with $e_{i-1}$ via $J,I^1,I^2$.
+		\end{enumerate}
+	\end{defn}
+	\begin{thm}
+		The coordinate ring of a proof structure $\pi$ is isomorphic to a polynomial ring in $n$ indeterminants, where the number of persistent walks in $\pi$ is equal to $2n$.
+	\end{thm}
+	\end{frame}
+
+\begin{frame}
+	\frametitle{Cut reduction}
+	$a$-redexes:
+	\begin{center}
+		\begin{tabular}{ c c c }
+			$
+			\adjustbox{scale=0.55}{\begin{tikzcd}[column sep = small, row sep = small, ampersand replacement=\&]
+				\& \ax\arrow[dr,bend left, dash]\arrow[dl,bend right, dash] \&\&\& \vdots\arrow[d,dash]\\
+				\neg A\arrow[d] \&\& A\arrow[dr,bend right] \&\& \neg A\arrow[dl,bend left]\\
+				\vdots\&\&\&\cut
+			\end{tikzcd}}
+			$
+			&
+			$\longrightarrow$
+			&
+			$
+			\adjustbox{scale=0.55}{\begin{tikzcd}[column sep = small, row sep = small]
+				\vdots\arrow[d,dash]\\
+				\neg A\arrow[d]\\
+				\vdots
+			\end{tikzcd}}
+			$
+			\\
+			$
+			\adjustbox{scale=0.55}{\begin{tikzcd}[column sep = small, row sep = small,ampersand replacement=\&]
+				\vdots\arrow[d,dash] \&\&\& \ax\arrow[dl, bend right, dash]\arrow[dr,dash, bend left]\\
+				A\arrow[dr, bend right] \&\& \neg A\arrow[dl,bend left] \&\& A\arrow[d]\\
+				\& \cut \&\&\& \vdots
+			\end{tikzcd}}
+			$
+			&
+			$\lto$
+			&
+			$
+			\adjustbox{scale=0.55}{\begin{tikzcd}[column sep = small, row sep = small]
+				\vdots\arrow[d,dash]\\
+				A\arrow[d]\\
+				\vdots
+			\end{tikzcd}}
+			$
+		\end{tabular}
+	\end{center}
+	$m$-redex:
+	\begin{center}
+		\begin{tabular}{ c c c }
+			$\adjustbox{scale=0.55}{\begin{tikzcd}[column sep = small, row sep = small, ampersand replacement=\&]
+				\vdots \&\& \vdots \&\& \vdots \&\& \vdots \\
+				A \&\& B \&\& {\neg A} \&\& {\neg B} \\
+				\& \otimes \&\&\&\& \parr \\
+				\& {A \otimes B} \&\&\&\& {\neg A \parr \neg B} \\
+				\&\&\& \cut
+				%			\arrow[curve={height=12pt}, from=4-2, to=5-4]
+				%			\arrow[curve={height=-12pt}, from=4-6, to=5-4]
+				\arrow[from=2-5, to=3-6,bend right]
+				\arrow[from=2-7, to=3-6, bend left]
+				\arrow[from=3-6, to=4-6, dash]
+				\arrow[from=3-2, to=4-2, dash]
+				\arrow[from=2-1, to=3-2, bend right]
+				\arrow[from=2-3, to=3-2, bend left]
+				\arrow[from=1-1, to=2-1, dash]
+				\arrow[from=1-3, to=2-3, dash]
+				\arrow[from=1-5, to=2-5, dash]
+				\arrow[from=1-7, to=2-7, dash]
+				\arrow[from=4-2, to=5-4, bend right]
+				\arrow[from=4-6, to=5-4, bend left]
+			\end{tikzcd}}$
+		&
+		$\lto$
+		&
+			$\adjustbox{scale=0.55}{\begin{tikzcd}[column sep = small, row sep = small, ampersand replacement=\&]
+				\vdots \&\& \vdots \&\& \vdots \&\& \vdots \\
+				A \&\& B \&\& {\neg A} \&\& {\neg B} \\
+				\& \cut \&\&\&\& \cut
+				\arrow[from=1-1, to=2-1, dash]
+				\arrow[from=1-3, to=2-3, dash]
+				\arrow[from=1-5, to=2-5, dash]
+				\arrow[from=1-7, to=2-7, dash]
+				\arrow[from=2-1, to=3-2, bend right]
+				\arrow[from=2-5, to=3-2, bend left]
+				\arrow[from=2-3, to=3-6, bend right]
+				\arrow[from=2-7, to=3-6, bend left]
+			\end{tikzcd}}$
+		\end{tabular}
+	\end{center}
+	\end{frame}
+
+\begin{frame}
+	\frametitle{Modelling cut-reduction}
+	\begin{defn}\label{def:morphisms}
+		Let $\gamma: \pi \lto \pi'$ be a reduction, there exists homomorphisms.
+		\begin{equation*}
+			\begin{tikzcd}[ampersand replacement=\&]
+				P_{\pi'}\arrow[r,bend left, "{T_\gamma}"] \& P_{\pi}\arrow[l, bend left, "{S_\gamma}"]
+			\end{tikzcd}
+		\end{equation*}
+	$T_\gamma$, $\gamma$ reducing an $a$-redex:
+		% https://q.uiver.app/?q=WzAsOCxbMiwwLCJcXHZkb3RzIl0sWzIsMSwiXFxuZWcgQSJdLFsyLDIsIlxcdmRvdHMiXSxbMiw0LCJBIl0sWzQsNCwiXFxuZWcgQSJdLFswLDQsIlxcbmVnIEEiXSxbMyw1LCJcXGN1dCJdLFsxLDMsIlxcYXgiXSxbNyw1XSxbNywzXSxbMyw2XSxbNCw2XSxbMSw1XV0=
+		\begin{equation*}\adjustbox{scale=0.7}{\label{eq:T_a}
+			\begin{tikzcd}[column sep = small, row sep = small, ampersand replacement=\&]
+				\&\& \vdots \\
+				\&\& {\neg A} \\
+				\&\& \vdots \\
+				{}\& \ax  \&\&\& \vdots\arrow[d,dash]\\
+				{\neg A}\arrow[d] \&\& A \&\& {\neg A} \\
+				{\vdots}\&\&\& \cut
+				\arrow[from=1-3, to=2-3, dash]
+				\arrow[from=2-3, to=3-3]
+				\arrow[from=4-2, to=5-1, bend right, dash]
+				\arrow[from=4-2, to=5-3, bend left, dash]
+				\arrow[from=5-3, to=6-4, bend right]
+				\arrow[from=5-5, to=6-4, bend left]
+				\arrow[from=2-3, to=4-1, thick, blue, bend right]
+			\end{tikzcd}}
+			%
+			\qquad
+			% https://q.uiver.app/?q=WzAsOCxbMiwwLCJcXHZkb3RzIl0sWzIsMSwiQSJdLFsyLDIsIlxcdmRvdHMiXSxbMiw0LCJcXG5lZyBBIl0sWzQsNCwiQSJdLFswLDQsIkEiXSxbMSw1LCJcXGN1dCJdLFszLDMsIlxcYXgiXSxbNyw0XSxbNywzXSxbNSw2XSxbMyw2XSxbMSw0XSxbMCwxXSxbMSwyXV0=
+			\adjustbox{scale=0.7}{\begin{tikzcd}[column sep = small, row sep = small, ampersand replacement=\&]
+				\&\& \vdots \\
+				\&\& A \\
+				\&\& \vdots \\
+				\vdots\arrow[d,dash]\&\&\& \ax \& {} \\
+				A \&\& {\neg A} \&\& A\arrow[d] \\
+				\& \cut \&\&\& \vdots
+				\arrow[from=4-4, to=5-5, bend left, dash]
+				\arrow[from=4-4, to=5-3, bend right, dash]
+				\arrow[from=5-1, to=6-2, bend right]
+				\arrow[from=5-3, to=6-2, bend left]
+				\arrow[from=2-3, to=4-5, thick, blue, bend left]
+				\arrow[from=1-3, to=2-3, dash]
+				\arrow[from=2-3, to=3-3]
+			\end{tikzcd}}
+		\end{equation*}
+	\end{defn}
+	\end{frame}
+
+\begin{frame}
+	\frametitle{Modelling cut reduction}
+	$T_\gamma$, $\gamma$ reducing an $m$-redex:
+	% https://q.uiver.app/?q=WzAsMjEsWzIsMSwiQiJdLFszLDIsIlxcY3V0Il0sWzQsMSwiXFxuZWcgQiJdLFsxLDEsIkEiXSxbMywzLCJcXGN1dCJdLFs1LDEsIlxcbmVnIEEiXSxbNSwwLCJcXHZkb3RzIl0sWzQsMCwiXFx2ZG90cyJdLFsyLDAsIlxcdmRvdHMiXSxbMSwwLCJcXHZkb3RzIl0sWzQsNCwiXFx2ZG90cyJdLFs2LDQsIlxcdmRvdHMiXSxbMiw0LCJcXHZkb3RzIl0sWzAsNCwiXFx2ZG90cyJdLFswLDUsIkEiXSxbMiw1LCJCIl0sWzQsNSwiXFxuZWcgQiJdLFs2LDUsIlxcbmVnIEEiXSxbMSw2LCJcXG90aW1lcyJdLFs1LDYsIlxccGFyciJdLFszLDcsIlxcY3V0Il0sWzAsMV0sWzIsMV0sWzUsNF0sWzMsNF0sWzksM10sWzgsMF0sWzcsMl0sWzYsNV0sWzEyLDE1XSxbMTMsMTRdLFsxMCwxNl0sWzExLDE3XSxbMTgsMjBdLFsxOSwyMF0sWzE2LDE5XSxbMTUsMThdLFsxNCwxOF0sWzE3LDE5XSxbMywxNF0sWzAsMTVdLFsyLDE2XSxbNSwxN11d
+	\begin{equation*}\adjustbox{scale=0.8}{\label{eq:T_m}
+		\begin{tikzcd}[column sep = small, row sep = small, ampersand replacement=\&]
+			\& \vdots \& \vdots \&\& \vdots \& \vdots \\
+			\& A \& B \&\& {\neg B} \& {\neg A} \\
+			\&\&\& \cut \\
+			\&\&\& \cut \\
+			\vdots \&\& \vdots \&\& \vdots \&\& \vdots \\
+			A \&\& B \&\& {\neg B} \&\& {\neg A} \\
+			\& \otimes\arrow[d,dash] \&\&\&\& \parr\arrow[d,dash] \\
+			\& A \otimes B \&\&\&\& \neg B \parr \neg A\\
+			\&\&\& \cut
+			\arrow[from=2-3, to=3-4, bend right]
+			\arrow[from=2-5, to=3-4, bend left]
+			\arrow[from=2-6, to=4-4, bend left]
+			\arrow[from=2-2, to=4-4, bend right]
+			\arrow[from=1-2, to=2-2, no head]
+			\arrow[from=1-3, to=2-3, dash]
+			\arrow[from=1-5, to=2-5, dash]
+			\arrow[from=1-6, to=2-6, dash]
+			\arrow[from=5-3, to=6-3, dash]
+			\arrow[from=5-1, to=6-1, dash]
+			\arrow[from=5-5, to=6-5, dash]
+			\arrow[from=5-7, to=6-7, dash]
+			\arrow[from=8-2, to=9-4, bend right]
+			\arrow[from=8-6, to=9-4, bend left]
+			\arrow[from=6-5, to=7-6, bend right]
+			\arrow[from=6-3, to=7-2, bend left]
+			\arrow[from=6-1, to=7-2, bend right]
+			\arrow[from=6-7, to=7-6, bend left]
+			\arrow[from=2-2, to=6-1, thick, blue, bend left]
+			\arrow[from=2-3, to=6-3, thick, blue, bend right]
+			\arrow[from=2-5, to=6-5, thick, blue, bend left]
+			\arrow[from=2-6, to=6-7, thick, blue, bend right]
+		\end{tikzcd}}
+	\end{equation*}
+	\end{frame}
+\begin{frame}
+	\frametitle{Modelling cut reduction}
+	$S_\gamma$, $\gamma$ reducing an $a$-redex.
+	% https://q.uiver.app/?q=WzAsMTAsWzIsMCwiXFx2ZG90cyJdLFsyLDEsIlxcbmVnIEEiXSxbMiwyLCJcXHZkb3RzIl0sWzIsNCwiQSJdLFs0LDQsIlxcbmVnIEEiXSxbMCw0LCJcXG5lZyBBIl0sWzMsNSwiXFxjdXQiXSxbMSwzLCJcXGF4Il0sWzQsMywiXFx2ZG90cyJdLFswLDUsIlxcdmRvdHMiXSxbNyw1LCIiLDAseyJjdXJ2ZSI6Miwic3R5bGUiOnsiaGVhZCI6eyJuYW1lIjoibm9uZSJ9fX1dLFs3LDMsIiIsMCx7ImN1cnZlIjotMiwic3R5bGUiOnsiaGVhZCI6eyJuYW1lIjoibm9uZSJ9fX1dLFszLDYsIiIsMCx7ImN1cnZlIjoyfV0sWzQsNiwiIiwwLHsiY3VydmUiOi0yfV0sWzUsMSwiIiwwLHsiY3VydmUiOi0zLCJjb2xvdXIiOlsyNzAsNjAsNjBdfV0sWzMsMSwiIiwwLHsiY3VydmUiOjIsImNvbG91ciI6WzI3MCw2MCw2MF0sInN0eWxlIjp7ImJvZHkiOnsibmFtZSI6ImRhc2hlZCJ9fX1dLFs0LDEsIiIsMCx7ImN1cnZlIjozLCJjb2xvdXIiOlsyNzAsNjAsNjBdfV0sWzAsMSwiIiwyLHsic3R5bGUiOnsiaGVhZCI6eyJuYW1lIjoibm9uZSJ9fX1dLFsxLDJdLFs4LDQsIiIsMCx7InN0eWxlIjp7ImhlYWQiOnsibmFtZSI6Im5vbmUifX19XSxbNSw5XV0=
+	\begin{equation*}\adjustbox{scale = 0.7}{\label{eq:S_a}
+		\begin{tikzcd}[column sep = small, row sep = small, ampersand replacement=\&]
+			\&\& \vdots \\
+			\&\& {\neg A} \\
+			\&\& \vdots \\
+			\& \ax \&\&\& \vdots \\
+			{\neg A} \&\& A \&\& {\neg A} \\
+			\vdots \&\&\& \cut
+			\arrow[curve={height=12pt}, no head, from=4-2, to=5-1]
+			\arrow[curve={height=-12pt}, no head, from=4-2, to=5-3]
+			\arrow[curve={height=12pt}, from=5-3, to=6-4]
+			\arrow[curve={height=-12pt}, from=5-5, to=6-4]
+			\arrow[color={rgb,255:red,153;green,92;blue,214}, curve={height=-18pt}, from=5-1, to=2-3, thick]
+			\arrow[color={rgb,255:red,153;green,92;blue,214}, curve={height=12pt}, from=5-3, to=2-3, thick]
+			\arrow[color={rgb,255:red,153;green,92;blue,214}, curve={height=18pt}, from=5-5, to=2-3, thick]
+			\arrow[no head, from=1-3, to=2-3]
+			\arrow[from=2-3, to=3-3]
+			\arrow[no head, from=4-5, to=5-5]
+			\arrow[from=5-1, to=6-1]
+		\end{tikzcd}}
+		\qquad
+		% https://q.uiver.app/?q=WzAsMTAsWzIsMCwiXFx2ZG90cyJdLFsyLDEsIkEiXSxbMiwyLCJcXHZkb3RzIl0sWzIsNCwiXFxuZWcgQSJdLFs0LDQsIkEiXSxbMCw0LCJBIl0sWzEsNSwiXFxjdXQiXSxbMywzLCJcXGF4Il0sWzQsNSwiXFx2ZG90cyJdLFswLDMsIlxcdmRvdHMiXSxbNyw0LCIiLDAseyJjdXJ2ZSI6LTIsInN0eWxlIjp7ImhlYWQiOnsibmFtZSI6Im5vbmUifX19XSxbNywzLCIiLDAseyJjdXJ2ZSI6Miwic3R5bGUiOnsiaGVhZCI6eyJuYW1lIjoibm9uZSJ9fX1dLFs1LDYsIiIsMCx7ImN1cnZlIjoyfV0sWzMsNiwiIiwwLHsiY3VydmUiOi0yfV0sWzAsMSwiIiwwLHsic3R5bGUiOnsiaGVhZCI6eyJuYW1lIjoibm9uZSJ9fX1dLFsxLDJdLFs0LDEsIiIsMCx7ImN1cnZlIjozLCJjb2xvdXIiOlsyNzAsNjAsNjBdfV0sWzMsMSwiIiwwLHsiY3VydmUiOi0zLCJjb2xvdXIiOlsyNzAsNjAsNjBdLCJzdHlsZSI6eyJib2R5Ijp7Im5hbWUiOiJkYXNoZWQifX19XSxbNSwxLCIiLDAseyJjdXJ2ZSI6LTMsImNvbG91ciI6WzI3MCw2MCw2MF19XSxbNCw4XSxbOSw1LCIiLDAseyJzdHlsZSI6eyJoZWFkIjp7Im5hbWUiOiJub25lIn19fV1d
+		\adjustbox{scale=0.7}{\begin{tikzcd}[column sep = small, row sep = small, ampersand replacement=\&]
+			\&\& \vdots \\
+			\&\& A \\
+			\&\& \vdots \\
+			\vdots \&\&\& \ax \\
+			A \&\& {\neg A} \&\& A \\
+			\& \cut \&\&\& \vdots
+			\arrow[curve={height=-12pt}, no head, from=4-4, to=5-5]
+			\arrow[curve={height=12pt}, no head, from=4-4, to=5-3]
+			\arrow[curve={height=12pt}, from=5-1, to=6-2]
+			\arrow[curve={height=-12pt}, from=5-3, to=6-2]
+			\arrow[no head, from=1-3, to=2-3]
+			\arrow[from=2-3, to=3-3]
+			\arrow[draw={rgb,255:red,153;green,92;blue,214}, curve={height=18pt}, from=5-5, to=2-3, thick]
+			\arrow[draw={rgb,255:red,153;green,92;blue,214}, curve={height=-18pt}, from=5-3, to=2-3, thick]
+			\arrow[draw={rgb,255:red,153;green,92;blue,214}, curve={height=-18pt}, from=5-1, to=2-3, thick]
+			\arrow[from=5-5, to=6-5]
+			\arrow[no head, from=4-1, to=5-1]
+		\end{tikzcd}}
+	\end{equation*}
+	\end{frame}
+
+\begin{frame}
+	\frametitle{Modelling cut reduction}
+	$S_\gamma$, $\gamma$ reducing an $m$-redex.
+	% https://q.uiver.app/?q=WzAsMjMsWzMsMSwiQiJdLFs1LDIsIlxcY3V0Il0sWzcsMSwiXFxuZWcgQiJdLFswLDEsIkEiXSxbNSwzLCJcXGN1dCJdLFsxMCwxLCJcXG5lZyBBIl0sWzEwLDAsIlxcdmRvdHMiXSxbNywwLCJcXHZkb3RzIl0sWzMsMCwiXFx2ZG90cyJdLFswLDAsIlxcdmRvdHMiXSxbNiw0LCJcXHZkb3RzIl0sWzgsNCwiXFx2ZG90cyJdLFs0LDQsIlxcdmRvdHMiXSxbMiw0LCJcXHZkb3RzIl0sWzIsNSwiQSJdLFs0LDUsIkIiXSxbNiw1LCJcXG5lZyBCIl0sWzgsNSwiXFxuZWcgQSJdLFszLDYsIlxcb3RpbWVzIl0sWzcsNiwiXFxwYXJyIl0sWzUsOSwiXFxjdXQiXSxbMyw4LCJBIFxcb3RpbWVzIEIiXSxbNyw4LCJcXG5lZyBCIFxccGFyciBcXG5lZyBBIl0sWzAsMSwiIiwwLHsiY3VydmUiOjJ9XSxbMiwxLCIiLDAseyJjdXJ2ZSI6LTJ9XSxbNSw0LCIiLDAseyJjdXJ2ZSI6LTJ9XSxbMyw0LCIiLDAseyJjdXJ2ZSI6Mn1dLFs5LDMsIiIsMCx7InN0eWxlIjp7ImhlYWQiOnsibmFtZSI6Im5vbmUifX19XSxbOCwwLCIiLDAseyJzdHlsZSI6eyJoZWFkIjp7Im5hbWUiOiJub25lIn19fV0sWzcsMiwiIiwwLHsic3R5bGUiOnsiaGVhZCI6eyJuYW1lIjoibm9uZSJ9fX1dLFs2LDUsIiIsMCx7InN0eWxlIjp7ImhlYWQiOnsibmFtZSI6Im5vbmUifX19XSxbMTIsMTUsIiIsMCx7InN0eWxlIjp7ImhlYWQiOnsibmFtZSI6Im5vbmUifX19XSxbMTMsMTQsIiIsMCx7InN0eWxlIjp7ImhlYWQiOnsibmFtZSI6Im5vbmUifX19XSxbMTAsMTYsIiIsMCx7InN0eWxlIjp7ImhlYWQiOnsibmFtZSI6Im5vbmUifX19XSxbMTEsMTcsIiIsMCx7InN0eWxlIjp7ImhlYWQiOnsibmFtZSI6Im5vbmUifX19XSxbMTUsMTgsIiIsMCx7ImN1cnZlIjotMn1dLFsxNCwxOCwiIiwwLHsiY3VydmUiOjJ9XSxbMTcsMTksIiIsMCx7ImN1cnZlIjotMn1dLFsxNyw1LCIiLDEseyJjdXJ2ZSI6MSwiY29sb3VyIjpbMjcwLDYwLDYwXX1dLFsxOCwyMSwiIiwwLHsic3R5bGUiOnsiaGVhZCI6eyJuYW1lIjoibm9uZSJ9fX1dLFsyMSwyMCwiIiwwLHsiY3VydmUiOjJ9XSxbMTksMjIsIiIsMCx7InN0eWxlIjp7ImhlYWQiOnsibmFtZSI6Im5vbmUifX19XSxbMjIsMjAsIiIsMSx7ImN1cnZlIjotMn1dLFsyMiw1LCIiLDEseyJjdXJ2ZSI6NSwiY29sb3VyIjpbMjcwLDYwLDYwXX1dLFsyMSwzLCIiLDEseyJjdXJ2ZSI6LTUsImNvbG91ciI6WzI3MCw2MCw2MF19XSxbMTQsMywiIiwxLHsiY3VydmUiOi0xLCJjb2xvdXIiOlsyNzAsNjAsNjBdfV0sWzE1LDAsIiIsMSx7ImN1cnZlIjoxLCJjb2xvdXIiOlsyNzAsNjAsNjBdfV0sWzE2LDIsIiIsMSx7ImN1cnZlIjotMSwiY29sb3VyIjpbMjcwLDYwLDYwXX1dLFsxNiwxOSwiIiwxLHsiY3VydmUiOjJ9XSxbMjIsMiwiIiwxLHsiY3VydmUiOi01LCJjb2xvdXIiOlsyNzAsNjAsNjBdfV0sWzIxLDAsIiIsMSx7ImN1cnZlIjo1LCJjb2xvdXIiOlsyNzAsNjAsNjBdfV1d
+	\begin{equation*}\adjustbox{scale=0.8}{\label{eq:S_m}
+		\begin{tikzcd}[column sep = small, row sep = small, ampersand replacement=\&]
+			\vdots \&\&\& \vdots \&\&\&\& \vdots \&\&\& \vdots \\
+			A \&\&\& B \&\&\&\& {\neg B} \&\&\& {\neg A} \\
+			\&\&\&\&\& \cut \\
+			\&\&\&\&\& \cut \\
+			\&\& \vdots \&\& \vdots \&\& \vdots \&\& \vdots \\
+			\&\& A \&\& B \&\& {\neg B} \&\& {\neg A} \\
+			\&\&\& \otimes \&\&\&\& \parr \\
+			\\
+			\&\&\& {A \otimes B} \&\&\&\& {\neg B \parr \neg A} \\
+			\&\&\&\&\& \cut
+			\arrow[curve={height=12pt}, from=2-4, to=3-6]
+			\arrow[curve={height=-12pt}, from=2-8, to=3-6]
+			\arrow[curve={height=-12pt}, from=2-11, to=4-6]
+			\arrow[curve={height=12pt}, from=2-1, to=4-6]
+			\arrow[no head, from=1-1, to=2-1]
+			\arrow[no head, from=1-4, to=2-4]
+			\arrow[no head, from=1-8, to=2-8]
+			\arrow[no head, from=1-11, to=2-11]
+			\arrow[no head, from=5-5, to=6-5]
+			\arrow[no head, from=5-3, to=6-3]
+			\arrow[no head, from=5-7, to=6-7]
+			\arrow[no head, from=5-9, to=6-9]
+			\arrow[curve={height=-12pt}, from=6-5, to=7-4]
+			\arrow[curve={height=12pt}, from=6-3, to=7-4]
+			\arrow[curve={height=-12pt}, from=6-9, to=7-8]
+			\arrow[draw={rgb,255:red,153;green,92;blue,214}, curve={height=6pt}, from=6-9, to=2-11]
+			\arrow[no head, from=7-4, to=9-4]
+			\arrow[curve={height=12pt}, from=9-4, to=10-6]
+			\arrow[no head, from=7-8, to=9-8]
+			\arrow[curve={height=-12pt}, from=9-8, to=10-6]
+			\arrow[draw={rgb,255:red,153;green,92;blue,214}, curve={height=30pt}, from=9-8, to=2-11, thick]
+			\arrow[draw={rgb,255:red,153;green,92;blue,214}, curve={height=-30pt}, from=9-4, to=2-1, thick]
+			\arrow[draw={rgb,255:red,153;green,92;blue,214}, curve={height=-6pt}, from=6-3, to=2-1, thick]
+			\arrow[draw={rgb,255:red,153;green,92;blue,214}, curve={height=6pt}, from=6-5, to=2-4, thick]
+			\arrow[draw={rgb,255:red,153;green,92;blue,214}, curve={height=-6pt}, from=6-7, to=2-8, thick]
+			\arrow[curve={height=12pt}, from=6-7, to=7-8]
+			\arrow[draw={rgb,255:red,153;green,92;blue,214}, curve={height=-30pt}, from=9-8, to=2-8, thick]
+			\arrow[draw={rgb,255:red,153;green,92;blue,214}, curve={height=30pt}, from=9-4, to=2-4, thick]
+		\end{tikzcd}}
+	\end{equation*}
+	\end{frame}
+
+\begin{frame}
+	\frametitle{Cut elimination on the level of the coordinate rings}
+	\begin{proposition}\label{lem:induced_maps}
+		Let $\gamma$ be any reduction, we have $T_\gamma (I_{\pi'}) \subseteq I_\pi, S_\gamma(I_\pi) \subseteq I_{\pi'}$ and the induced morphisms of $k$-algebras $\overline{T}_\gamma, \overline{S}_\gamma$ making the following diagram commute, are mutually inverse isomorphisms. In the following, $p: P_\pi \twoheadrightarrow R_\pi$ and $p': P_{\pi'} \twoheadrightarrow R_{P_{\pi'}}$ are projection maps.
+		\begin{equation*}\label{eq:induced}
+			\begin{tikzcd}[ampersand replacement=\&]
+				I_\pi\arrow[r] \& P_\pi\arrow[r,twoheadrightarrow,"{p}"]\arrow[d, bend right,swap, "{S_\gamma}"] \& R_\pi\arrow[d,bend right,swap, "{\overline{S}_\gamma}"]\\
+				I_{\pi'}\arrow[r,rightarrowtail] \& P_{\pi'}\arrow[r,twoheadrightarrow,"{p'}"]\arrow[u,bend right,swap,"{T_\gamma}"] \& R_{\pi'}\arrow[u,bend right,swap, "{\overline{T}_\gamma}"]
+			\end{tikzcd}
+		\end{equation*}
+	\end{proposition}
+	\end{frame}
+
+\begin{frame}
+	\frametitle{Permutation}
+	\begin{proposition}\label{prop:permutation}
+		\small Let $\pi$ be a proof net with single conclusion $A$ with oriented atoms $
+			\big((U_1,u_1),...,(U_n,u_n)\big)$. Then $n = 2m$ is even, and there is a subsequence $i_1 < \hdots < i_m$ with complement $j_1 < \hdots < j_m$ in $\lbrace 1, \hdots , n \rbrace$ such that $u_{i_a} = +, u_{j_a} = -$ for $1 \leq a \leq m$ and if we write $X_a = U_{i_a}, Y_a = U_{j_a}$ for $1 \leq a \leq m$ then $\beta_+,\beta_-$ in the following diagram are isomorphisms.
+		\begin{equation*}
+			\begin{tikzcd}[ampersand replacement=\&]
+				k[X_1,...,X_m]\arrow[d,dr,"{\beta_+}"]\arrow[d]\\
+				P_\pi\arrow[r,twoheadrightarrow] \& R_\pi\\
+				k[Y_1,...,Y_m]\arrow[u]\arrow[ur,swap,"{\beta_-}"]
+			\end{tikzcd}
+		\end{equation*}
+		Furthermore, the composite $\beta_-^{-1}\beta_+: k[X_1,..,X_m] \lto k[Y_1,...,Y_m]$ is given for some permutation $\sigma_\pi$ of $\lbrace 1,..., m \rbrace$ by:
+		\begin{equation*}
+			\beta_-^{-1}\beta_+(X_i) = Y_{\sigma_\pi(i)},\quad 1 \leq i \leq m
+		\end{equation*}
+	\end{proposition}
+	\end{frame}
+
+\begin{frame}
+	\frametitle{Proofs as permutations}
+	\begin{defn}[The \emph{essence} $\operatorname{Ess}\pi$ of $\pi$]
+		Let $\pi$ admit no $m$-redexes and assume all conclusions of all axiom links are atomic. $\operatorname{Ess}\pi$ is the disjoint union of the unoriented atoms appearing as conclusions to axiom links which are not premise to cut links.
+		\end{defn}
+	\begin{defn}\label{def:GoI_permutation}
+		Let $d_i$ denote the least integer such that 
+		\begin{equation*}
+			(\alpha_{\pi} \circ \gamma_{\pi})^{d_i}(X) \in \operatorname{Ess}\pi
+		\end{equation*}
+		Notice that such an integer $d_i$ always exists as $\pi$ is a proof net.
+		
+		Define for any unoriented atom appearing in the conclusion to any axiom link in $\pi$:
+		\begin{equation*}
+			\delta_{\pi}(X) = (\alpha_\pi \circ \gamma_\pi)^{d_i}(X)
+		\end{equation*}
+	\end{defn}
+	\end{frame}
+
+\begin{frame}
+	\frametitle{Comparison}
+	\begin{center}
+	\begin{tabular}{ c c }
+		{} & $
+			\adjustbox{scale=0.8}{\begin{tikzcd}[ampersand replacement=\&]
+					k[X_1,...,X_m]\arrow[d,dr,"{\beta_+}"]\arrow[d]\\
+					P_\pi\arrow[r,twoheadrightarrow] \& R_\pi\\
+					k[Y_1,...,Y_m]\arrow[u]\arrow[ur,swap,"{\beta_-}"]
+			\end{tikzcd}}
+		$ \\
+		$\adjustbox{scale=0.8}{\begin{tikzcd}[ampersand replacement=\&]
+				\delta_{\pi}(X) = (\alpha_\pi \circ \gamma_\pi)^{d_i}(X)
+				\end{tikzcd}}
+				$
+	& $
+		\adjustbox{scale=0.8}{\begin{tikzcd}
+		\beta_-^{-1}\beta_+(X_i) = Y_{\sigma(i)}
+\end{tikzcd}}
+$
+\end{tabular}
+\end{center}
+	\begin{proposition}\label{prop:GoI0_relation}
+		Let $\pi$ be a proof net with single conclusion $A$ with sequence of oriented atoms given by: $\big((U_{1},u_1),...,(U_n,u_n)\big)$. Then for all $i= 1,...,n$ we have:
+		\begin{equation*}
+			\delta_{\pi}(U_i) = U_{\sigma(i)}
+		\end{equation*}
+	\end{proposition}
+	\end{frame}
+
+\begin{frame}
+	\frametitle{Division algorithm for polynomials in multiple variables}
+	Choose an order $x_1 < \hdots < x_n$, this induces lexicographic order on the monic monomials of $k[x_1,...,x_n]$ with respect to the degrees.
+	
+		Consider $\bb{C}[x > y]$.
+		\begin{equation*}
+			y < xy < x^2 < x^2y^{10} < x^3 < \hdots
+			\end{equation*}
+		Now, divide according to leading terms!
+		\begin{equation*}
+			\begin{array}{rll}
+				\makecell{q_0: \\ q_1:} & \makecell{xy^2 \\ y^2}\\
+				\makecell{x^2y \\ x + y} & \showdiv{x^3y^3 + xy^2 - y}\\
+				%
+				&\hspace{0.45em} x^3 y^3\\
+				\CMidRule[0.0ex][0.0ex]{2-2}
+				&\hspace{0.45em} \hphantom{x^3 y^3 + {}}  xy^2 - y\\
+				& \hspace{0.45em} \hphantom{x^3 y^3 + {}} xy^2 + y^3\\
+				\CMidRule[9.0ex][0.0ex]{2-2}
+				& \hspace{0.45em} \hphantom{x^3 y^3 + xy^2} -y - y^3
+			\end{array}
+		\end{equation*}
+	\end{frame}
+
+\begin{frame}
+	\frametitle{Leading terms}
+	Given polynomials $f_1,...,f_n$ we have the following inclusion, where $\langle g_1,...,g_m \rangle$ denotes the ideal generated by the polynomials $g_1,...,g_m$.
+	\begin{equation*}
+		\langle \operatorname{LT}f_1,\hdots, \operatorname{LT}f_n \rangle \subseteq\langle \operatorname{LT}\langle f_1,...,f_n\rangle\rangle
+	\end{equation*}
+	This reverse inclusion does \emph{not} hold in general. Indeed, consider the polynomial ring $k[x,y]$ with $y < x$. Let $f_1,f_2$ respectively denote the polynomials $x^3 - 2xy$ and $x^2y - 2y^2 + x$. We have:
+	\begin{equation*}
+		\lbrace \operatorname{LT}f_1, \operatorname{LT}f_2\rbrace = \lbrace x^3, x^2y\rbrace
+	\end{equation*}
+	however, the following polynomial is in the ideal generated by $\lbrace f_1,f_2\rbrace$.
+	\begin{equation*}
+		y(x^3 - 2xy) - x(x^2y - 2y^2 + x) = -x^2
+	\end{equation*}
+	Hence, $x^2$ is in the leading ideal. However, $x^2$ is not in the ideal generated by the polynomials $x^3, x^2y$.
+	\end{frame}
+
+\begin{frame}
+	\frametitle{Gr\"{o}bner bases}
+	\begin{defn}\label{def:grobner_basis}
+		A set of polynomials $\lbrace f_1,...,f_n\rbrace$ satisfying the following:
+		\begin{equation*}
+			\langle \operatorname{LT}f_1, \hdots \operatorname{LT}f_n \rangle = \langle \operatorname{LT}\lbrace f_1,...,f_n \rbrace\rangle
+		\end{equation*}
+		is a \emph{Gr\"{o}bner basis} for the ideal $\langle f_1,...,f_n\rangle$ generated by $f_1,...,f_n$.
+	\end{defn}
+\begin{defn}\label{def:S_polynomial}
+	The \emph{$S$-polynomial} of polynomials $g,h \in k[x_1,...,x_n]$ is defined to be the following, where $\beta = (\beta_1,...,\beta_n)$ where $\beta_i = \operatorname{max}\big((\operatorname{deg}g)_i, (\operatorname{deg}h)_i\big)$..
+	\begin{equation*}
+		S(g,h) := \frac{x^\beta}{\operatorname{LT}g}g - \frac{x^\beta}{\operatorname{LT}h}h
+	\end{equation*}
+	This is indeed a polynomial, and is designed to obtain cancellation of leading terms.
+\end{defn}
+	\end{frame}
+
+\begin{frame}
+	\frametitle{Buchberger Algorithm}
+	\begin{defn}
+		Given a finite sequence $G = (f_1,...,f_m)$ of polynomials in $k[x_1,...,x_n]$ we define the \emph{Buchberger algorithm} as follows.
+		\begin{algorithm} On input $G$.
+			\begin{enumerate}
+				\item\label{step:S_poly_calc} For all $i < j$ calculate $S(f_i,f_j)$.
+				\item Consider the lexicographic order on the set of pairs $(i,j)$ where $i,j \in \lbrace 1,...,m \rbrace$. From smallest to largest, with respect to this order, divide $S(i,j)$ by $G$. If the remainder is $0$ for all pairs $(i,j)$ then terminate the algorithm and return the sequence $G$. Otherwise, let $(i',j')$ be the least pair such that division of $S(i',j')$ by $G$ results in a non-zero remainder $r$.
+				\item Append the polynomial $r$ to the end of the sequence $G$ and return to Step \eqref{step:S_poly_calc}.
+			\end{enumerate}
+		\end{algorithm}
+	\end{defn}
+	\end{frame}
+
+\begin{frame}
+		Let $\pi$ denote the following proof net.
+		% https://q.uiver.app/?q=WzAsMTMsWzEsMCwiXFxheCJdLFswLDEsIlhfMSJdLFswLDIsIlxcb3BlcmF0b3JuYW1le2N9Il0sWzIsMSwiWV8xIl0sWzMsMiwiXFxjdXQiXSxbNCwxLCJZXzIiXSxbNSwwLCJcXGF4Il0sWzYsMSwiWV8zIl0sWzcsMiwiXFxjdXQiXSxbOCwxLCJZXzQiXSxbMTAsMSwiWF8yIl0sWzksMCwiXFxheCJdLFsxMCwyLCJcXG9wZXJhdG9ybmFtZXtjfSJdLFswLDEsIiIsMCx7ImN1cnZlIjoyLCJzdHlsZSI6eyJoZWFkIjp7Im5hbWUiOiJub25lIn19fV0sWzEsMl0sWzAsMywiIiwyLHsiY3VydmUiOi0yLCJzdHlsZSI6eyJoZWFkIjp7Im5hbWUiOiJub25lIn19fV0sWzMsNCwiIiwyLHsiY3VydmUiOjJ9XSxbNSw0LCIiLDAseyJjdXJ2ZSI6LTJ9XSxbNiw1LCIiLDAseyJjdXJ2ZSI6Miwic3R5bGUiOnsiaGVhZCI6eyJuYW1lIjoibm9uZSJ9fX1dLFs2LDcsIiIsMix7ImN1cnZlIjotMiwic3R5bGUiOnsiaGVhZCI6eyJuYW1lIjoibm9uZSJ9fX1dLFsxMSw5LCIiLDAseyJjdXJ2ZSI6Miwic3R5bGUiOnsiaGVhZCI6eyJuYW1lIjoibm9uZSJ9fX1dLFsxMSwxMCwiIiwyLHsiY3VydmUiOi0yLCJzdHlsZSI6eyJoZWFkIjp7Im5hbWUiOiJub25lIn19fV0sWzEwLDEyXSxbOSw4LCIiLDAseyJjdXJ2ZSI6LTJ9XSxbNyw4LCIiLDIseyJjdXJ2ZSI6Mn1dXQ==
+		\[\adjustbox{scale=0.7}{\begin{tikzcd}[column sep = small, row sep = small, ampersand replacement=\&]
+			\& \ax \&\&\&\& \ax \&\&\&\& \ax \\
+			{X_1} \&\& {Y_1} \&\& {Y_2} \&\& {Y_3} \&\& {Y_4} \&\& {X_2} \\
+			{\operatorname{c}} \&\&\& \cut \&\&\&\& \cut \&\&\& {\operatorname{c}}
+			\arrow[curve={height=12pt}, no head, from=1-2, to=2-1]
+			\arrow[from=2-1, to=3-1]
+			\arrow[curve={height=-12pt}, no head, from=1-2, to=2-3]
+			\arrow[curve={height=12pt}, from=2-3, to=3-4]
+			\arrow[curve={height=-12pt}, from=2-5, to=3-4]
+			\arrow[curve={height=12pt}, no head, from=1-6, to=2-5]
+			\arrow[curve={height=-12pt}, no head, from=1-6, to=2-7]
+			\arrow[curve={height=12pt}, no head, from=1-10, to=2-9]
+			\arrow[curve={height=-12pt}, no head, from=1-10, to=2-11]
+			\arrow[from=2-11, to=3-11]
+			\arrow[curve={height=-12pt}, from=2-9, to=3-8]
+			\arrow[curve={height=12pt}, from=2-7, to=3-8]
+		\end{tikzcd}}\]
+		$\pi$ reduces to $\pi'$:
+		% https://q.uiver.app/?q=WzAsNSxbMSwwLCJcXGF4Il0sWzAsMSwiWF8xIl0sWzIsMSwiWF8yIl0sWzIsMiwiXFxvcGVyYXRvcm5hbWV7Y30iXSxbMCwyLCJcXG9wZXJhdG9ybmFtZXtjfSJdLFswLDEsIiIsMCx7ImN1cnZlIjoyLCJzdHlsZSI6eyJoZWFkIjp7Im5hbWUiOiJub25lIn19fV0sWzAsMiwiIiwyLHsiY3VydmUiOi0yLCJzdHlsZSI6eyJoZWFkIjp7Im5hbWUiOiJub25lIn19fV0sWzEsNF0sWzIsM11d
+		\[\adjustbox{scale=0.7}{\begin{tikzcd}[column sep = small, row sep = small, ampersand replacement=\&]
+			\& \ax \\
+			{X_1} \&\& {X_2} \\
+			{\operatorname{c}} \&\& {\operatorname{c}}
+			\arrow[curve={height=12pt}, no head, from=1-2, to=2-1]
+			\arrow[curve={height=-12pt}, no head, from=1-2, to=2-3]
+			\arrow[from=2-1, to=3-1]
+			\arrow[from=2-3, to=3-3]
+		\end{tikzcd}}\]
+		We now consider the sets of generators of the defining ideals of $\pi$ and $\pi'$.
+		\begin{equation*}
+			G_\pi := \lbrace X_1 - Y_1, Y_1 - Y_2, Y_2 - Y_3, Y_3 - Y_4, Y_4 - X_2\rbrace,\quad G_{\pi'} := \lbrace X_1 - X_2 \rbrace
+		\end{equation*}
+		\begin{equation*}\label{eq:ordering}
+			Y_1 > Y_2 > Y_3 > Y_4 > X_1 > X_2
+		\end{equation*}
+	\end{frame}
+
+\begin{frame}
+	\frametitle{There \emph{is} something to do}
+	\[\adjustbox{scale=0.7}{\begin{tikzcd}[column sep = small, row sep = small, ampersand replacement=\&]
+			\& \ax \&\&\&\& \ax \&\&\&\& \ax \\
+			{X_1} \&\& {Y_1} \&\& {Y_2} \&\& {Y_3} \&\& {Y_4} \&\& {X_2} \\
+			{\operatorname{c}} \&\&\& \cut \&\&\&\& \cut \&\&\& {\operatorname{c}}
+			\arrow[curve={height=12pt}, no head, from=1-2, to=2-1]
+			\arrow[from=2-1, to=3-1]
+			\arrow[curve={height=-12pt}, no head, from=1-2, to=2-3]
+			\arrow[curve={height=12pt}, from=2-3, to=3-4]
+			\arrow[curve={height=-12pt}, from=2-5, to=3-4]
+			\arrow[curve={height=12pt}, no head, from=1-6, to=2-5]
+			\arrow[curve={height=-12pt}, no head, from=1-6, to=2-7]
+			\arrow[curve={height=12pt}, no head, from=1-10, to=2-9]
+			\arrow[curve={height=-12pt}, no head, from=1-10, to=2-11]
+			\arrow[from=2-11, to=3-11]
+			\arrow[curve={height=-12pt}, from=2-9, to=3-8]
+			\arrow[curve={height=12pt}, from=2-7, to=3-8]
+	\end{tikzcd}}\]
+	\begin{equation*}
+		G_\pi = \lbrace \textcolor{blue}{f_1= } X_1 - Y_1, \textcolor{blue}{f_2= }Y_1 - Y_2, \textcolor{blue}{f_3= }Y_2 - Y_3, \textcolor{blue}{f_4= }Y_3 - Y_4, \textcolor{blue}{f_5= }Y_4 - X_2\rbrace
+	\end{equation*}
+\begin{equation*}
+	Y_1 > Y_2 > Y_3 > Y_4 > X_1 > X_2
+\end{equation*}
+	The leading terms of $f_1,...,f_5$ respectively are $-Y_1, Y_1, Y_2, Y_3, Y_4$ and the leading term of $f_1 + \hdots + f_5$ is $X_1$. Hence:
+	\begin{equation*}
+		X_1 \in \operatorname{LT}\langle G_\pi \rangle ,\qquad  X_1 \not\in\langle \operatorname{LT}G_\pi \rangle
+		\end{equation*}
+	Thus, $G_\pi$ is \emph{not} Gr\"{o}bner basis.
+	\end{frame}
+
+\begin{frame}
+	We now calculate the $10$ $S$-polynomials which arise from $G_\pi$.
+	\begin{equation*}\adjustbox{scale=0.7}{\begin{tikzcd}[ampersand replacement=\&, row sep = tiny]
+				S(f_1,f_2) = Y_2 - X_1 \& S(f_1, f_3) = Y_1Y_3 - Y_2 X_1 \& S(f_1,f_4) = Y_1Y_4 - X_1X_3\\
+				S(f_1,f_5) = Y_1X_2 - X_1Y_4 \& S(f_2,f_3) = Y_1Y_3 - Y_2^2 \& S(f_2,f_4) = Y_1Y_4 - Y_2Y_3\\
+				S(f_2,f_5) = Y_1X_2 - Y_2Y_4 \& S(f_3,f_4) = Y_2Y_4 - Y_2^2 \& S(f_3,f_5) = Y_2X_2 - Y_3Y_4\\
+				S(f_4,f_5) = Y_3X_2 - Y_4^2\end{tikzcd}}
+	\end{equation*}
+	For each $i > j$, $i,j \in \lbrace 1,...,5\rbrace$ we now divide $S(f_i,f_j)$ by $G$. In fact, this always gives a remainder zero except for the particular case when $(i,j) = (1,2)$, which we show on the next slide.
+	\end{frame}
+
+\begin{frame}
+	\frametitle{Division}
+	\[\adjustbox{scale=0.7}{\begin{tikzcd}[column sep = small, row sep = small, ampersand replacement=\&]
+			\& \ax \&\&\&\& \ax \&\&\&\& \ax \\
+			{X_1} \&\& {Y_1} \&\& {Y_2} \&\& {Y_3} \&\& {Y_4} \&\& {X_2} \\
+			{\operatorname{c}} \&\&\& \cut \&\&\&\& \cut \&\&\& {\operatorname{c}}
+			\arrow[curve={height=12pt}, no head, from=1-2, to=2-1]
+			\arrow[from=2-1, to=3-1]
+			\arrow[curve={height=-12pt}, no head, from=1-2, to=2-3]
+			\arrow[curve={height=12pt}, from=2-3, to=3-4]
+			\arrow[curve={height=-12pt}, from=2-5, to=3-4]
+			\arrow[curve={height=12pt}, no head, from=1-6, to=2-5]
+			\arrow[curve={height=-12pt}, no head, from=1-6, to=2-7]
+			\arrow[curve={height=12pt}, no head, from=1-10, to=2-9]
+			\arrow[curve={height=-12pt}, no head, from=1-10, to=2-11]
+			\arrow[from=2-11, to=3-11]
+			\arrow[curve={height=-12pt}, from=2-9, to=3-8]
+			\arrow[curve={height=12pt}, from=2-7, to=3-8]
+	\end{tikzcd}}\]
+	\begin{equation*}
+		G_\pi = \lbrace \textcolor{blue}{f_1= } X_1 - Y_1, \textcolor{blue}{f_2= }Y_1 - Y_2, \textcolor{blue}{f_3= }Y_2 - Y_3, \textcolor{blue}{f_4= }Y_3 - Y_4, \textcolor{blue}{f_5= }Y_4 - X_2\rbrace
+	\end{equation*}
+	\begin{equation*}
+		\begin{array}{rll}
+			& (0,0,1,1,1)\\
+			G_\pi & \showdiv{Y_2 - X_1}\\
+			%
+			&\hspace{0.55em} Y_2 - Y_3\\
+			\CMidRule[3.0ex][10.0ex]{2-2}
+			&\hspace{0.55em} \hphantom{Y_2 +{}}  Y_3 - Y_4\\
+			&\hspace{0.55em} \hphantom{Y_2 +{}}  Y_3 - X_1\\
+			\CMidRule[7.0ex][5.0ex]{2-2}
+			&\hspace{0.55em} \hphantom{Y_2 - Y_3 +{}} Y_4 - X_1\\
+			&\hspace{0.55em}\hphantom{Y_2 - Y_3 +{}} Y_4 - X_2\\
+			\CMidRule[11.0ex][0.0ex]{2-2}
+			&\hspace{0.55em} \hphantom{Y_2 - Y_3 + Y_4 + {}} X_2 - X_1
+		\end{array}
+	\end{equation*}
+\begin{equation*}
+	\big(G_\pi \cup \lbrace X_2 - X_1 \rbrace\big) \cap k[X_1,X_2] = G_{\pi'}
+	\end{equation*}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Summary}
+	\begin{itemize}
+		\item We defined a new Geometry of Interaction model and showed how it fits into the existing literature (GoI 0, GoI 1).
+		\item We related ``plugging of formulas" to an already existing algorithm.
+		\end{itemize}
+	Next steps:
+	\begin{itemize}
+		\item More algebraic structure, eg, Koszul Complexes.
+		\item Extend this model to MELL.
+		\item Use this as a foundation for more exotic models of MLL/MELL.
+		\begin{itemize}
+			\item Quantum error correction codes.
+			\item Landau-Ginzburg models, the bicategory of hypersurface singularities.
+		\end{itemize}
+	\end{itemize}
+	\end{frame}
+
+
+\begin{frame}
+	\frametitle{Thank you}
+	Questions?
+	\end{frame}
+
+\begin{frame}
+	\frametitle{(Bonus frame) Proof sketch}
+	\begin{equation*}\label{eq:induced}
+		\begin{tikzcd}[ampersand replacement=\&]
+			I_\pi\arrow[r] \& P_\pi\arrow[r,twoheadrightarrow,"{p}"]\arrow[d, bend right,swap, "{S_\gamma}"] \& R_\pi\arrow[d,bend right,swap, "{\overline{S}_\gamma}"]\\
+			I_{\pi'}\arrow[r,rightarrowtail] \& P_{\pi'}\arrow[r,twoheadrightarrow,"{p'}"]\arrow[u,bend right,swap,"{T_\gamma}"] \& R_{\pi'}\arrow[u,bend right,swap, "{\overline{T}_\gamma}"]
+		\end{tikzcd}
+	\end{equation*}
+	Existence: easy. $\overline{T}_\gamma, \overline{S}_\gamma$ isomorphisms: suffices to show:
+	\begin{align*}
+		\overline{T}_\gamma \overline{S}_\gamma p &= p\\
+		\overline{S}_\gamma \overline{T}_\gamma p' &= p'
+	\end{align*}
+	as $p,p'$ are surjective. This is equivalent to $p' S_\gamma T_\gamma = p', pT_\gamma S_\gamma = p$, or $p'(S_\gamma T_\gamma - 1) = 0, p(T_\gamma S_\gamma - 1)= 0$. It suffices to check this on generators, ie, on unoriented atoms. It is clear that $S_\gamma T_\gamma = 1$, however we have $T_\gamma S_\gamma \neq 1$. The circumstances where this is the case is indicated schematically on the next slide.
+\end{frame}
+
+\begin{frame}
+	\frametitle{(Bonus frame) Proof continued}
+	\begin{equation*}\label{eq:TS_schematic}
+		% https://q.uiver.app/?q=WzAsMTAsWzIsMCwiXFx2ZG90cyJdLFsyLDEsIlxcbmVnIEEiXSxbMiwyLCJcXHZkb3RzIl0sWzIsNCwiQSJdLFs0LDQsIlxcbmVnIEEiXSxbMCw0LCJcXG5lZyBBIl0sWzMsNSwiXFxjdXQiXSxbMSwzLCJcXGF4Il0sWzQsMywiXFx2ZG90cyJdLFswLDUsIlxcdmRvdHMiXSxbNyw1LCIiLDAseyJjdXJ2ZSI6Miwic3R5bGUiOnsiaGVhZCI6eyJuYW1lIjoibm9uZSJ9fX1dLFs3LDMsIiIsMCx7ImN1cnZlIjotMiwic3R5bGUiOnsiaGVhZCI6eyJuYW1lIjoibm9uZSJ9fX1dLFszLDYsIiIsMCx7ImN1cnZlIjoyfV0sWzQsNiwiIiwwLHsiY3VydmUiOi0yfV0sWzMsMSwiIiwwLHsiY3VydmUiOjIsImNvbG91ciI6WzI3MCw2MCw2MF19XSxbNCwxLCIiLDAseyJjdXJ2ZSI6MywiY29sb3VyIjpbMjcwLDYwLDYwXX1dLFswLDEsIiIsMix7InN0eWxlIjp7ImhlYWQiOnsibmFtZSI6Im5vbmUifX19XSxbMSwyXSxbOCw0LCIiLDAseyJzdHlsZSI6eyJoZWFkIjp7Im5hbWUiOiJub25lIn19fV0sWzUsOV0sWzEsNSwiIiwwLHsiY3VydmUiOjN9XV0=
+		\adjustbox{scale=0.5}{\begin{tikzcd}[column sep = small, row sep = small,ampersand replacement=\&]
+				\&\& \vdots \\
+				\&\& {\neg A} \\
+				\&\& \vdots \\
+				\& \ax \&\&\& \vdots \\
+				{\neg A} \&\& A \&\& {\neg A} \\
+				\vdots \&\&\& \cut
+				\arrow[curve={height=12pt}, no head, from=4-2, to=5-1]
+				\arrow[curve={height=-12pt}, no head, from=4-2, to=5-3]
+				\arrow[curve={height=12pt}, from=5-3, to=6-4]
+				\arrow[curve={height=-12pt}, from=5-5, to=6-4]
+				\arrow[draw={rgb,255:red,153;green,92;blue,214}, curve={height=12pt}, from=5-3, to=2-3, thick]
+				\arrow[draw={rgb,255:red,153;green,92;blue,214}, curve={height=18pt}, from=5-5, to=2-3, thick]
+				\arrow[no head, from=1-3, to=2-3]
+				\arrow[from=2-3, to=3-3]
+				\arrow[no head, from=4-5, to=5-5]
+				\arrow[from=5-1, to=6-1]
+				\arrow[curve={height=18pt}, from=2-3, to=5-1, thick, blue]
+			\end{tikzcd}
+			\qquad
+			% https://q.uiver.app/?q=WzAsMTAsWzIsMCwiXFx2ZG90cyJdLFsyLDEsIkEiXSxbMiwyLCJcXHZkb3RzIl0sWzIsNCwiXFxuZWcgQSJdLFs0LDQsIkEiXSxbMCw0LCJBIl0sWzEsNSwiXFxjdXQiXSxbMywzLCJcXGF4Il0sWzQsNSwiXFx2ZG90cyJdLFswLDMsIlxcdmRvdHMiXSxbNyw0LCIiLDAseyJjdXJ2ZSI6LTIsInN0eWxlIjp7ImhlYWQiOnsibmFtZSI6Im5vbmUifX19XSxbNywzLCIiLDAseyJjdXJ2ZSI6Miwic3R5bGUiOnsiaGVhZCI6eyJuYW1lIjoibm9uZSJ9fX1dLFs1LDYsIiIsMCx7ImN1cnZlIjoyfV0sWzMsNiwiIiwwLHsiY3VydmUiOi0yfV0sWzAsMSwiIiwwLHsic3R5bGUiOnsiaGVhZCI6eyJuYW1lIjoibm9uZSJ9fX1dLFsxLDJdLFszLDEsIiIsMCx7ImN1cnZlIjotMywiY29sb3VyIjpbMjcwLDYwLDYwXX1dLFs1LDEsIiIsMCx7ImN1cnZlIjotMywiY29sb3VyIjpbMjcwLDYwLDYwXX1dLFs0LDhdLFs5LDUsIiIsMCx7InN0eWxlIjp7ImhlYWQiOnsibmFtZSI6Im5vbmUifX19XSxbMSw0LCIiLDAseyJjdXJ2ZSI6LTN9XV0=
+			\begin{tikzcd}[column sep = small, row sep = small, ampersand replacement=\&]
+				\&\& \vdots \\
+				\&\& A \\
+				\&\& \vdots \\
+				\vdots \&\&\& \ax \\
+				A \&\& {\neg A} \&\& A \\
+				\& \cut \&\&\& \vdots
+				\arrow[curve={height=-12pt}, no head, from=4-4, to=5-5]
+				\arrow[curve={height=12pt}, no head, from=4-4, to=5-3]
+				\arrow[curve={height=12pt}, from=5-1, to=6-2]
+				\arrow[curve={height=-12pt}, from=5-3, to=6-2]
+				\arrow[no head, from=1-3, to=2-3]
+				\arrow[from=2-3, to=3-3]
+				\arrow[draw={rgb,255:red,153;green,92;blue,214}, curve={height=-18pt}, from=5-3, to=2-3, thick]
+				\arrow[draw={rgb,255:red,153;green,92;blue,214}, curve={height=-18pt}, from=5-1, to=2-3, thick]
+				\arrow[from=5-5, to=6-5]
+				\arrow[no head, from=4-1, to=5-1]
+				\arrow[curve={height=-18pt}, from=2-3, to=5-5, blue]
+		\end{tikzcd}}
+	\end{equation*}
+	\begin{equation*}\label{eq:TS_Schematic_m}
+		% https://q.uiver.app/?q=WzAsMjMsWzMsMSwiQiJdLFs1LDIsIlxcY3V0Il0sWzcsMSwiXFxuZWcgQiJdLFswLDEsIkEiXSxbNSwzLCJcXGN1dCJdLFsxMCwxLCJcXG5lZyBBIl0sWzEwLDAsIlxcdmRvdHMiXSxbNywwLCJcXHZkb3RzIl0sWzMsMCwiXFx2ZG90cyJdLFswLDAsIlxcdmRvdHMiXSxbNiw0LCJcXHZkb3RzIl0sWzgsNCwiXFx2ZG90cyJdLFs0LDQsIlxcdmRvdHMiXSxbMiw0LCJcXHZkb3RzIl0sWzIsNSwiQSJdLFs0LDUsIkIiXSxbNiw1LCJcXG5lZyBCIl0sWzgsNSwiXFxuZWcgQSJdLFszLDYsIlxcb3RpbWVzIl0sWzcsNiwiXFxwYXJyIl0sWzUsOSwiXFxjdXQiXSxbMyw4LCJBIFxcb3RpbWVzIEIiXSxbNyw4LCJcXG5lZyBCIFxccGFyciBcXG5lZyBBIl0sWzAsMSwiIiwwLHsiY3VydmUiOjJ9XSxbMiwxLCIiLDAseyJjdXJ2ZSI6LTJ9XSxbNSw0LCIiLDAseyJjdXJ2ZSI6LTJ9XSxbMyw0LCIiLDAseyJjdXJ2ZSI6Mn1dLFs5LDMsIiIsMCx7InN0eWxlIjp7ImhlYWQiOnsibmFtZSI6Im5vbmUifX19XSxbOCwwLCIiLDAseyJzdHlsZSI6eyJoZWFkIjp7Im5hbWUiOiJub25lIn19fV0sWzcsMiwiIiwwLHsic3R5bGUiOnsiaGVhZCI6eyJuYW1lIjoibm9uZSJ9fX1dLFs2LDUsIiIsMCx7InN0eWxlIjp7ImhlYWQiOnsibmFtZSI6Im5vbmUifX19XSxbMTIsMTUsIiIsMCx7InN0eWxlIjp7ImhlYWQiOnsibmFtZSI6Im5vbmUifX19XSxbMTMsMTQsIiIsMCx7InN0eWxlIjp7ImhlYWQiOnsibmFtZSI6Im5vbmUifX19XSxbMTAsMTYsIiIsMCx7InN0eWxlIjp7ImhlYWQiOnsibmFtZSI6Im5vbmUifX19XSxbMTEsMTcsIiIsMCx7InN0eWxlIjp7ImhlYWQiOnsibmFtZSI6Im5vbmUifX19XSxbMTUsMTgsIiIsMCx7ImN1cnZlIjotMn1dLFsxNCwxOCwiIiwwLHsiY3VydmUiOjJ9XSxbMTcsMTksIiIsMCx7ImN1cnZlIjotMn1dLFsxOCwyMSwiIiwwLHsic3R5bGUiOnsiaGVhZCI6eyJuYW1lIjoibm9uZSJ9fX1dLFsyMSwyMCwiIiwwLHsiY3VydmUiOjJ9XSxbMTksMjIsIiIsMCx7InN0eWxlIjp7ImhlYWQiOnsibmFtZSI6Im5vbmUifX19XSxbMjIsMjAsIiIsMSx7ImN1cnZlIjotMn1dLFsyMiw1LCIiLDEseyJjdXJ2ZSI6NSwiY29sb3VyIjpbMjcwLDYwLDYwXX1dLFsyMSwzLCIiLDEseyJjdXJ2ZSI6LTUsImNvbG91ciI6WzI3MCw2MCw2MF19XSxbMTYsMTksIiIsMSx7ImN1cnZlIjoyfV0sWzIyLDIsIiIsMSx7ImN1cnZlIjotNSwiY29sb3VyIjpbMjcwLDYwLDYwXX1dLFsyMSwwLCIiLDEseyJjdXJ2ZSI6NSwiY29sb3VyIjpbMjcwLDYwLDYwXX1dLFs1LDE3LCIiLDEseyJjdXJ2ZSI6LTJ9XSxbMywxNCwiIiwxLHsiY3VydmUiOjJ9XSxbMCwxNSwiIiwxLHsiY3VydmUiOjN9XSxbMiwxNiwiIiwxLHsiY3VydmUiOi0zfV1d
+		\adjustbox{scale=0.5}{\begin{tikzcd}[column sep = small, row sep = small, ampersand replacement=\&]
+				\vdots \&\&\& \vdots \&\&\&\& \vdots \&\&\& \vdots \\
+				A \&\&\& B \&\&\&\& {\neg B} \&\&\& {\neg A} \\
+				\&\&\&\&\& \cut \\
+				\&\&\&\&\& \cut \\
+				\&\& \vdots \&\& \vdots \&\& \vdots \&\& \vdots \\
+				\&\& A \&\& B \&\& {\neg B} \&\& {\neg A} \\
+				\&\&\& \otimes \&\&\&\& \parr \\
+				\\
+				\&\&\& {A \otimes B} \&\&\&\& {\neg B \parr \neg A} \\
+				\&\&\&\&\& \cut
+				\arrow[curve={height=12pt}, from=2-4, to=3-6]
+				\arrow[curve={height=-12pt}, from=2-8, to=3-6]
+				\arrow[curve={height=-12pt}, from=2-11, to=4-6]
+				\arrow[curve={height=12pt}, from=2-1, to=4-6]
+				\arrow[no head, from=1-1, to=2-1]
+				\arrow[no head, from=1-4, to=2-4]
+				\arrow[no head, from=1-8, to=2-8]
+				\arrow[no head, from=1-11, to=2-11]
+				\arrow[no head, from=5-5, to=6-5]
+				\arrow[no head, from=5-3, to=6-3]
+				\arrow[no head, from=5-7, to=6-7]
+				\arrow[no head, from=5-9, to=6-9]
+				\arrow[curve={height=-12pt}, from=6-5, to=7-4]
+				\arrow[curve={height=12pt}, from=6-3, to=7-4]
+				\arrow[curve={height=-12pt}, from=6-9, to=7-8]
+				\arrow[no head, from=7-4, to=9-4]
+				\arrow[curve={height=12pt}, from=9-4, to=10-6]
+				\arrow[no head, from=7-8, to=9-8]
+				\arrow[curve={height=-12pt}, from=9-8, to=10-6]
+				\arrow[draw={rgb,255:red,153;green,92;blue,214}, curve={height=30pt}, from=9-8, to=2-11]
+				\arrow[draw={rgb,255:red,153;green,92;blue,214}, curve={height=-30pt}, from=9-4, to=2-1, thick]
+				\arrow[curve={height=12pt}, from=6-7, to=7-8]
+				\arrow[draw={rgb,255:red,153;green,92;blue,214}, curve={height=-30pt}, from=9-8, to=2-8, thick]
+				\arrow[draw={rgb,255:red,153;green,92;blue,214}, curve={height=30pt}, from=9-4, to=2-4]
+				\arrow[curve={height=-12pt}, from=2-11, to=6-9, blue, thick]
+				\arrow[curve={height=12pt}, from=2-1, to=6-3, blue, thick]
+				\arrow[curve={height=18pt}, from=2-4, to=6-5, blue, thick]
+				\arrow[curve={height=-18pt}, from=2-8, to=6-7, blue, thick]
+		\end{tikzcd}}
+	\end{equation*}
+\end{frame}
+
+\begin{frame}
+	\frametitle{(Bonus frame) Example of Proposition}
+	Let $\pi$ denote the following proof net.
+	% https://q.uiver.app/?q=WzAsMTcsWzQsMiwiXFxuZWcgWF81IFxccGFyciBYXzYiXSxbNSwzLCJcXG90aW1lcyJdLFs1LDQsIkMiXSxbNiwyLCJYXzcgXFxvdGltZXMgXFxuZWcgWF84Il0sWzcsMiwiWF85IFxcb3RpbWVzIFxcbmVnIFhfezEwfSJdLFs5LDIsIlxcbmVnIFhfezExfSBcXHBhcnIgWF97MTJ9Il0sWzgsMSwiXFxheCJdLFs4LDMsIlxccGFyciJdLFs4LDQsIlxcbmVnIEMiXSxbNyw1LCJcXGN1dCJdLFszLDEsIlxcYXgiXSxbMiwyLCJYXzMgXFxvdGltZXMgXFxuZWcgWF80Il0sWzMsMCwiXFxheCJdLFswLDIsIlxcbmVnIFhfMSBcXHBhcnIgWF8yIl0sWzEsMywiXFxwYXJyIl0sWzEsNCwiXFxuZWcgQyJdLFsxLDUsIlxcb3BlcmF0b3JuYW1le2N9Il0sWzMsMSwiIiwwLHsiY3VydmUiOi0yfV0sWzAsMSwiIiwxLHsiY3VydmUiOjJ9XSxbMSwyLCIiLDEseyJzdHlsZSI6eyJoZWFkIjp7Im5hbWUiOiJub25lIn19fV0sWzYsNCwiIiwxLHsiY3VydmUiOjIsInN0eWxlIjp7ImhlYWQiOnsibmFtZSI6Im5vbmUifX19XSxbNiw1LCIiLDEseyJjdXJ2ZSI6LTIsInN0eWxlIjp7ImhlYWQiOnsibmFtZSI6Im5vbmUifX19XSxbNCw3LCIiLDEseyJjdXJ2ZSI6Mn1dLFs1LDcsIiIsMSx7ImN1cnZlIjotMn1dLFs3LDgsIiIsMSx7InN0eWxlIjp7ImhlYWQiOnsibmFtZSI6Im5vbmUifX19XSxbMiw5LCIiLDEseyJjdXJ2ZSI6Mn1dLFs4LDksIiIsMSx7ImN1cnZlIjotMn1dLFsxMCwwLCIiLDEseyJjdXJ2ZSI6LTIsInN0eWxlIjp7ImhlYWQiOnsibmFtZSI6Im5vbmUifX19XSxbMTAsMTEsIiIsMSx7ImN1cnZlIjoyLCJzdHlsZSI6eyJoZWFkIjp7Im5hbWUiOiJub25lIn19fV0sWzEyLDMsIiIsMix7ImN1cnZlIjotMywic3R5bGUiOnsiaGVhZCI6eyJuYW1lIjoibm9uZSJ9fX1dLFsxMiwxMywiIiwwLHsiY3VydmUiOjMsInN0eWxlIjp7ImhlYWQiOnsibmFtZSI6Im5vbmUifX19XSxbMTEsMTQsIiIsMCx7ImN1cnZlIjotMn1dLFsxMywxNCwiIiwxLHsiY3VydmUiOjF9XSxbMTQsMTUsIiIsMSx7InN0eWxlIjp7ImhlYWQiOnsibmFtZSI6Im5vbmUifX19XSxbMTUsMTZdXQ==
+	\[\adjustbox{scale=0.6}{\begin{tikzcd}[column sep = tiny, row sep = small, ampersand replacement=\&]
+			\&\&\& \ax \\
+			\&\&\& \ax \&\&\&\&\& \ax \\
+			{\neg X_1 \parr X_2} \&\& {X_3 \otimes \neg X_4} \&\& {\neg X_5 \parr X_6} \&\& {X_7 \otimes \neg X_8} \& {X_9 \otimes \neg X_{10}} \&\& {\neg X_{11} \parr X_{12}} \\
+			\& \parr \&\&\&\& \otimes \&\&\& \parr \\
+			\& {\neg C} \&\&\&\& C \&\&\& {\neg C} \\
+			\& {\operatorname{c}} \&\&\&\&\&\& \cut
+			\arrow[curve={height=-12pt}, from=3-7, to=4-6]
+			\arrow[curve={height=12pt}, from=3-5, to=4-6]
+			\arrow[no head, from=4-6, to=5-6]
+			\arrow[curve={height=12pt}, no head, from=2-9, to=3-8]
+			\arrow[curve={height=-12pt}, no head, from=2-9, to=3-10]
+			\arrow[curve={height=12pt}, from=3-8, to=4-9]
+			\arrow[curve={height=-12pt}, from=3-10, to=4-9]
+			\arrow[no head, from=4-9, to=5-9]
+			\arrow[curve={height=12pt}, from=5-6, to=6-8]
+			\arrow[curve={height=-12pt}, from=5-9, to=6-8]
+			\arrow[curve={height=-12pt}, no head, from=2-4, to=3-5]
+			\arrow[curve={height=12pt}, no head, from=2-4, to=3-3]
+			\arrow[curve={height=-18pt}, no head, from=1-4, to=3-7]
+			\arrow[curve={height=18pt}, no head, from=1-4, to=3-1]
+			\arrow[curve={height=-12pt}, from=3-3, to=4-2]
+			\arrow[curve={height=6pt}, from=3-1, to=4-2]
+			\arrow[no head, from=4-2, to=5-2]
+			\arrow[from=5-2, to=6-2]
+	\end{tikzcd}}\]
+	We apply $\eta$-expansion:
+	% https://q.uiver.app/?q=WzAsNSxbMSwwLCJcXGF4Il0sWzIsMSwiXFxuZWcgQSBcXHBhcnIgXFxuZWcgQiJdLFswLDEsIkEgXFxvdGltZXMgQiJdLFswLDIsIlxcdmRvdHMiXSxbMiwyLCJcXHZkb3RzIl0sWzAsMSwiIiwyLHsiY3VydmUiOi0yLCJzdHlsZSI6eyJoZWFkIjp7Im5hbWUiOiJub25lIn19fV0sWzAsMiwiIiwwLHsiY3VydmUiOjIsInN0eWxlIjp7ImhlYWQiOnsibmFtZSI6Im5vbmUifX19XSxbMiwzXSxbMSw0XV0=
+	\begin{equation*}\label{eq:eta_expansion}
+		\adjustbox{scale=0.7}{\begin{tikzcd}[column sep = small, row sep = small, ampersand replacement=\&]
+				\& \ax \\
+				{A \otimes B} \&\& {\neg A \parr \neg B} \\
+				\vdots \&\& \vdots
+				\arrow[curve={height=-12pt}, no head, from=1-2, to=2-3]
+				\arrow[curve={height=12pt}, no head, from=1-2, to=2-1]
+				\arrow[from=2-1, to=3-1]
+				\arrow[from=2-3, to=3-3]
+			\end{tikzcd}
+			% https://q.uiver.app/?q=WzAsMTIsWzEsMCwiXFxheCJdLFswLDEsIkEiXSxbMiwxLCJcXG5lZyBBIl0sWzQsMCwiXFxheCJdLFszLDEsIkIiXSxbNSwxLCJcXG5lZyBCICJdLFsxLDIsIlxcb3RpbWVzIl0sWzMsMiwiXFxwYXJyIl0sWzMsMywiXFxuZWcgQSBcXHBhcnIgXFxuZWcgQiJdLFszLDQsIlxcdmRvdHMiXSxbMSwzLCJBIFxcb3RpbWVzIEIiXSxbMSw0LCJcXHZkb3RzIl0sWzMsNCwiIiwwLHsiY3VydmUiOjIsInN0eWxlIjp7ImhlYWQiOnsibmFtZSI6Im5vbmUifX19XSxbMyw1LCIiLDIseyJjdXJ2ZSI6LTIsInN0eWxlIjp7ImhlYWQiOnsibmFtZSI6Im5vbmUifX19XSxbMCwxLCIiLDIseyJjdXJ2ZSI6Miwic3R5bGUiOnsiaGVhZCI6eyJuYW1lIjoibm9uZSJ9fX1dLFswLDIsIiIsMCx7ImN1cnZlIjotMiwic3R5bGUiOnsiaGVhZCI6eyJuYW1lIjoibm9uZSJ9fX1dLFsxLDYsIiIsMix7ImN1cnZlIjoyfV0sWzQsNiwiIiwwLHsiY3VydmUiOi0yfV0sWzIsNywiIiwwLHsiY3VydmUiOjJ9XSxbNSw3LCIiLDIseyJjdXJ2ZSI6LTJ9XSxbNyw4LCIiLDIseyJzdHlsZSI6eyJoZWFkIjp7Im5hbWUiOiJub25lIn19fV0sWzgsOV0sWzYsMTAsIiIsMix7InN0eWxlIjp7ImhlYWQiOnsibmFtZSI6Im5vbmUifX19XSxbMTAsMTFdXQ==
+			\begin{tikzcd}[column sep = small, row sep = small, ampersand replacement=\&]
+				\& \ax \&\&\& \ax \\
+				A \&\& {\neg A} \& B \&\& {\neg B } \\
+				\& \otimes \&\& \parr \\
+				\& {A \otimes B} \&\& {\neg A \parr \neg B} \\
+				\& \vdots \&\& \vdots
+				\arrow[curve={height=12pt}, no head, from=1-5, to=2-4]
+				\arrow[curve={height=-12pt}, no head, from=1-5, to=2-6]
+				\arrow[curve={height=12pt}, no head, from=1-2, to=2-1]
+				\arrow[curve={height=-12pt}, no head, from=1-2, to=2-3]
+				\arrow[curve={height=12pt}, from=2-1, to=3-2]
+				\arrow[curve={height=-12pt}, from=2-4, to=3-2]
+				\arrow[curve={height=12pt}, from=2-3, to=3-4]
+				\arrow[curve={height=-12pt}, from=2-6, to=3-4]
+				\arrow[no head, from=3-4, to=4-4]
+				\arrow[from=4-4, to=5-4]
+				\arrow[no head, from=3-2, to=4-2]
+				\arrow[from=4-2, to=5-2]
+		\end{tikzcd}}
+	\end{equation*}
+\end{frame}
+
+\begin{frame}
+	\frametitle{(Bonus frame) After $\eta$-expansion}
+	% https://q.uiver.app/?q=WzAsMzgsWzUsNSwiXFxuZWcgWF81IFxccGFyciBYXzYiXSxbNiw2LCJcXG90aW1lcyJdLFs2LDcsIkMiXSxbNyw1LCJYXzcgXFxvdGltZXMgXFxuZWcgWF84Il0sWzgsNSwiWF85IFxcb3RpbWVzIFxcbmVnIFhfezEwfSJdLFsxMCw1LCJcXG5lZyBYX3sxMX0gXFxwYXJyIFhfezEyfSJdLFs5LDYsIlxccGFyciJdLFs5LDcsIlxcbmVnIEMiXSxbOCw4LCJcXGN1dCJdLFszLDUsIlhfMyBcXG90aW1lcyBcXG5lZyBYXzQiXSxbMSw1LCJcXG5lZyBYXzEgXFxwYXJyIFhfMiJdLFsyLDYsIlxccGFyciJdLFsyLDcsIlxcbmVnIEMiXSxbMiw4LCJcXG9wZXJhdG9ybmFtZXtjfSJdLFswLDMsIlxcbmVnIFhfMSJdLFsxLDMsIlhfMiJdLFsyLDMsIlhfMyJdLFszLDMsIlxcbmVnIFhfNCJdLFs0LDMsIlxcbmVnIFhfNSJdLFs1LDMsIlhfNiJdLFs2LDMsIlhfNyJdLFs3LDMsIlxcbmVnIFhfOCJdLFs4LDMsIlhfOSJdLFs5LDMsIlhfezEwfSJdLFsxMCwzLCJYX3sxMX0iXSxbMTEsMywiWF97MTJ9Il0sWzEsNCwiXFxwYXJyIl0sWzMsNCwiXFxvdGltZXMiXSxbNSw0LCJcXHBhcnIiXSxbNyw0LCJcXG90aW1lcyJdLFs4LDQsIlxcb3RpbWVzIl0sWzEwLDQsIlxccGFyciJdLFsyLDAsIlxcYXgiXSxbNSwwLCJcXGF4Il0sWzMsMiwiXFxheCJdLFs0LDIsIlxcYXgiXSxbOSwyLCJcXGF4Il0sWzEwLDIsIlxcYXgiXSxbMywxLCIiLDAseyJjdXJ2ZSI6LTJ9XSxbMCwxLCIiLDEseyJjdXJ2ZSI6Mn1dLFsxLDIsIiIsMSx7InN0eWxlIjp7ImhlYWQiOnsibmFtZSI6Im5vbmUifX19XSxbNCw2LCIiLDEseyJjdXJ2ZSI6Mn1dLFs1LDYsIiIsMSx7ImN1cnZlIjotMn1dLFs2LDcsIiIsMSx7InN0eWxlIjp7ImhlYWQiOnsibmFtZSI6Im5vbmUifX19XSxbMiw4LCIiLDEseyJjdXJ2ZSI6Mn1dLFs3LDgsIiIsMSx7ImN1cnZlIjotMn1dLFs5LDExLCIiLDAseyJjdXJ2ZSI6LTJ9XSxbMTAsMTEsIiIsMSx7ImN1cnZlIjoxfV0sWzExLDEyLCIiLDEseyJzdHlsZSI6eyJoZWFkIjp7Im5hbWUiOiJub25lIn19fV0sWzEyLDEzXSxbMjQsMzFdLFsyNSwzMSwiIiwyLHsiY3VydmUiOi0yfV0sWzMxLDUsIiIsMCx7InN0eWxlIjp7ImhlYWQiOnsibmFtZSI6Im5vbmUifX19XSxbMjMsMzAsIiIsMCx7ImN1cnZlIjotMn1dLFsyMiwzMF0sWzMwLDQsIiIsMix7InN0eWxlIjp7ImhlYWQiOnsibmFtZSI6Im5vbmUifX19XSxbMjEsMjldLFsyMCwyOSwiIiwwLHsiY3VydmUiOjJ9XSxbMjksMywiIiwwLHsic3R5bGUiOnsiaGVhZCI6eyJuYW1lIjoibm9uZSJ9fX1dLFsxOSwyOF0sWzE4LDI4LCIiLDIseyJjdXJ2ZSI6Mn1dLFsyOCwwLCIiLDIseyJzdHlsZSI6eyJoZWFkIjp7Im5hbWUiOiJub25lIn19fV0sWzE3LDI3XSxbMTYsMjcsIiIsMCx7ImN1cnZlIjoyfV0sWzI3LDksIiIsMCx7InN0eWxlIjp7ImhlYWQiOnsibmFtZSI6Im5vbmUifX19XSxbMTQsMjYsIiIsMix7ImN1cnZlIjoyfV0sWzI2LDEwLCIiLDIseyJzdHlsZSI6eyJoZWFkIjp7Im5hbWUiOiJub25lIn19fV0sWzE1LDI2XSxbMzIsMTQsIiIsMix7ImN1cnZlIjo0LCJzdHlsZSI6eyJoZWFkIjp7Im5hbWUiOiJub25lIn19fV0sWzMyLDIwLCIiLDAseyJjdXJ2ZSI6LTQsInN0eWxlIjp7ImhlYWQiOnsibmFtZSI6Im5vbmUifX19XSxbMzMsMTUsIiIsMCx7ImN1cnZlIjo0LCJzdHlsZSI6eyJoZWFkIjp7Im5hbWUiOiJub25lIn19fV0sWzMzLDIxLCIiLDIseyJjdXJ2ZSI6LTQsInN0eWxlIjp7ImhlYWQiOnsibmFtZSI6Im5vbmUifX19XSxbMzQsMTYsIiIsMCx7ImN1cnZlIjoyLCJzdHlsZSI6eyJoZWFkIjp7Im5hbWUiOiJub25lIn19fV0sWzM0LDE4LCIiLDIseyJjdXJ2ZSI6LTIsInN0eWxlIjp7ImhlYWQiOnsibmFtZSI6Im5vbmUifX19XSxbMzUsMTcsIiIsMix7ImN1cnZlIjoyLCJzdHlsZSI6eyJoZWFkIjp7Im5hbWUiOiJub25lIn19fV0sWzM1LDE5LCIiLDAseyJjdXJ2ZSI6LTIsInN0eWxlIjp7ImhlYWQiOnsibmFtZSI6Im5vbmUifX19XSxbMzYsMjIsIiIsMix7ImN1cnZlIjoyLCJzdHlsZSI6eyJoZWFkIjp7Im5hbWUiOiJub25lIn19fV0sWzM2LDI0LCIiLDAseyJjdXJ2ZSI6LTIsInN0eWxlIjp7ImhlYWQiOnsibmFtZSI6Im5vbmUifX19XSxbMzcsMjMsIiIsMCx7ImN1cnZlIjoyLCJzdHlsZSI6eyJoZWFkIjp7Im5hbWUiOiJub25lIn19fV0sWzM3LDI1LCIiLDIseyJjdXJ2ZSI6LTIsInN0eWxlIjp7ImhlYWQiOnsibmFtZSI6Im5vbmUifX19XV0=
+	\[\adjustbox{scale=0.45}{\begin{tikzcd}[column sep = small, ampersand replacement=\&]
+			\&\& \ax \&\&\& \ax \\
+			\\
+			\&\&\& \ax \& \ax \&\&\&\&\& \ax \& \ax \\
+			{\neg X_1} \& {X_2} \& {X_3} \& {\neg X_4} \& {\neg X_5} \& {X_6} \& {X_7} \& {\neg X_8} \& {X_9} \& {X_{10}} \& {X_{11}} \& {X_{12}} \\
+			\& \parr \&\& \otimes \&\& \parr \&\& \otimes \& \otimes \&\& \parr \\
+			\& {\neg X_1 \parr X_2} \&\& {X_3 \otimes \neg X_4} \&\& {\neg X_5 \parr X_6} \&\& {X_7 \otimes \neg X_8} \& {X_9 \otimes \neg X_{10}} \&\& {\neg X_{11} \parr X_{12}} \\
+			\&\& \parr \&\&\&\& \otimes \&\&\& \parr \\
+			\&\& {\neg C} \&\&\&\& C \&\&\& {\neg C} \\
+			\&\& {\operatorname{c}} \&\&\&\&\&\& \cut
+			\arrow[curve={height=-12pt}, from=6-8, to=7-7]
+			\arrow[curve={height=12pt}, from=6-6, to=7-7]
+			\arrow[no head, from=7-7, to=8-7]
+			\arrow[curve={height=12pt}, from=6-9, to=7-10]
+			\arrow[curve={height=-12pt}, from=6-11, to=7-10]
+			\arrow[no head, from=7-10, to=8-10]
+			\arrow[curve={height=12pt}, from=8-7, to=9-9]
+			\arrow[curve={height=-12pt}, from=8-10, to=9-9]
+			\arrow[curve={height=-12pt}, from=6-4, to=7-3]
+			\arrow[curve={height=6pt}, from=6-2, to=7-3]
+			\arrow[no head, from=7-3, to=8-3]
+			\arrow[from=8-3, to=9-3]
+			\arrow[from=4-11, to=5-11]
+			\arrow[curve={height=-12pt}, from=4-12, to=5-11]
+			\arrow[no head, from=5-11, to=6-11]
+			\arrow[curve={height=-12pt}, from=4-10, to=5-9]
+			\arrow[from=4-9, to=5-9]
+			\arrow[no head, from=5-9, to=6-9]
+			\arrow[from=4-8, to=5-8]
+			\arrow[curve={height=12pt}, from=4-7, to=5-8]
+			\arrow[no head, from=5-8, to=6-8]
+			\arrow[from=4-6, to=5-6]
+			\arrow[curve={height=12pt}, from=4-5, to=5-6]
+			\arrow[no head, from=5-6, to=6-6]
+			\arrow[from=4-4, to=5-4]
+			\arrow[curve={height=12pt}, from=4-3, to=5-4]
+			\arrow[no head, from=5-4, to=6-4]
+			\arrow[curve={height=12pt}, from=4-1, to=5-2]
+			\arrow[no head, from=5-2, to=6-2]
+			\arrow[from=4-2, to=5-2]
+			\arrow[curve={height=24pt}, no head, from=1-3, to=4-1]
+			\arrow[curve={height=-24pt}, no head, from=1-3, to=4-7]
+			\arrow[curve={height=24pt}, no head, from=1-6, to=4-2]
+			\arrow[curve={height=-24pt}, no head, from=1-6, to=4-8]
+			\arrow[curve={height=12pt}, no head, from=3-4, to=4-3]
+			\arrow[curve={height=-12pt}, no head, from=3-4, to=4-5]
+			\arrow[curve={height=12pt}, no head, from=3-5, to=4-4]
+			\arrow[curve={height=-12pt}, no head, from=3-5, to=4-6]
+			\arrow[curve={height=12pt}, no head, from=3-10, to=4-9]
+			\arrow[curve={height=-12pt}, no head, from=3-10, to=4-11]
+			\arrow[curve={height=12pt}, no head, from=3-11, to=4-10]
+			\arrow[curve={height=-12pt}, no head, from=3-11, to=4-12]
+	\end{tikzcd}}\]
+\end{frame}
+
+\begin{frame}
+	\frametitle{(Bonus frame) After reducing $m$-redexes}
+	% https://q.uiver.app/?q=WzAsMjksWzksNSwiWF8zIFxcb3RpbWVzIFxcbmVnIFhfNCJdLFsxLDUsIlxcbmVnIFhfMSBcXHBhcnIgWF8yIl0sWzMsNiwiXFxwYXJyIl0sWzMsNywiXFxuZWcgQyJdLFszLDgsIlxcb3BlcmF0b3JuYW1le2N9Il0sWzAsMywiXFxuZWcgWF8xIl0sWzIsMywiWF8yIl0sWzgsMywiWF8zIl0sWzEwLDMsIlxcbmVnIFhfNCJdLFs3LDMsIlxcbmVnIFhfNSJdLFsxMSwzLCJYXzYiXSxbNCwzLCJYXzciXSxbMTQsMywiXFxuZWcgWF84Il0sWzYsMywiWF85Il0sWzEyLDMsIlhfezEwfSJdLFs1LDMsIlhfezExfSJdLFsxMywzLCJYX3sxMn0iXSxbMSw0LCJcXHBhcnIiXSxbOSw0LCJcXG90aW1lcyJdLFsxLDIsIlxcYXgiXSxbOSwwLCJcXGF4Il0sWzcsMiwiXFxheCJdLFsxMCwyLCJcXGF4Il0sWzUsMiwiXFxheCJdLFsxMiwyLCJcXGF4Il0sWzYsNCwiXFxjdXQiXSxbMTEsNCwiXFxjdXQiXSxbNCw0LCJcXGN1dCJdLFsxMyw0LCJcXGN1dCJdLFswLDIsIiIsMCx7ImN1cnZlIjotMn1dLFsxLDIsIiIsMSx7ImN1cnZlIjoxfV0sWzIsMywiIiwxLHsic3R5bGUiOnsiaGVhZCI6eyJuYW1lIjoibm9uZSJ9fX1dLFszLDRdLFs4LDE4LCIiLDAseyJjdXJ2ZSI6LTJ9XSxbNywxOCwiIiwwLHsiY3VydmUiOjJ9XSxbMTgsMCwiIiwwLHsic3R5bGUiOnsiaGVhZCI6eyJuYW1lIjoibm9uZSJ9fX1dLFs1LDE3LCIiLDIseyJjdXJ2ZSI6Mn1dLFsxNywxLCIiLDIseyJzdHlsZSI6eyJoZWFkIjp7Im5hbWUiOiJub25lIn19fV0sWzYsMTcsIiIsMCx7ImN1cnZlIjotMn1dLFsxOSw1LCIiLDIseyJjdXJ2ZSI6Miwic3R5bGUiOnsiaGVhZCI6eyJuYW1lIjoibm9uZSJ9fX1dLFsxOSwxMSwiIiwwLHsiY3VydmUiOi0yLCJzdHlsZSI6eyJoZWFkIjp7Im5hbWUiOiJub25lIn19fV0sWzIwLDYsIiIsMCx7ImN1cnZlIjozLCJzdHlsZSI6eyJoZWFkIjp7Im5hbWUiOiJub25lIn19fV0sWzIwLDEyLCIiLDIseyJjdXJ2ZSI6LTQsInN0eWxlIjp7ImhlYWQiOnsibmFtZSI6Im5vbmUifX19XSxbMjEsNywiIiwwLHsiY3VydmUiOi0xLCJzdHlsZSI6eyJoZWFkIjp7Im5hbWUiOiJub25lIn19fV0sWzIxLDksIiIsMix7InN0eWxlIjp7ImhlYWQiOnsibmFtZSI6Im5vbmUifX19XSxbMjIsOCwiIiwyLHsic3R5bGUiOnsiaGVhZCI6eyJuYW1lIjoibm9uZSJ9fX1dLFsyMiwxMCwiIiwwLHsiY3VydmUiOi0yLCJzdHlsZSI6eyJoZWFkIjp7Im5hbWUiOiJub25lIn19fV0sWzIzLDEzLCIiLDIseyJjdXJ2ZSI6LTIsInN0eWxlIjp7ImhlYWQiOnsibmFtZSI6Im5vbmUifX19XSxbMjMsMTUsIiIsMCx7InN0eWxlIjp7ImhlYWQiOnsibmFtZSI6Im5vbmUifX19XSxbMjQsMTQsIiIsMCx7InN0eWxlIjp7ImhlYWQiOnsibmFtZSI6Im5vbmUifX19XSxbMjQsMTYsIiIsMix7ImN1cnZlIjotMiwic3R5bGUiOnsiaGVhZCI6eyJuYW1lIjoibm9uZSJ9fX1dLFs5LDI1LCIiLDIseyJjdXJ2ZSI6LTJ9XSxbMTMsMjVdLFsxMCwyNl0sWzE0LDI2LCIiLDEseyJjdXJ2ZSI6LTJ9XSxbMTEsMjddLFsxNSwyNywiIiwxLHsiY3VydmUiOi0yfV0sWzEyLDI4LCIiLDIseyJjdXJ2ZSI6LTJ9XSxbMTYsMjhdXQ==
+	\begin{equation*}\label{eq:GoI_example}\adjustbox{scale=0.45}{\begin{tikzcd}[column sep = small, ampersand replacement=\&]
+				\&\&\&\&\&\&\&\&\& \ax \\
+				\\
+				\& \ax \&\&\&\& \ax \&\& \ax \&\&\& \ax \&\& \ax \\
+				{\neg X_1} \&\& {X_2} \&\& {X_7} \& {X_{11}} \& {X_9} \& {\neg X_5} \& {X_3} \&\& {\neg X_4} \& {X_6} \& {X_{10}} \& {X_{12}} \& {\neg X_8} \\
+				\& \parr \&\&\& \cut \&\& \cut \&\&\& \otimes \&\& \cut \&\& \cut \\
+				\& {\neg X_1 \parr X_2} \&\&\&\&\&\&\&\& {X_3 \otimes \neg X_4} \\
+				\&\&\& \parr \\
+				\&\&\& {\neg C} \\
+				\&\&\& {\operatorname{c}}
+				\arrow[curve={height=-12pt}, from=6-10, to=7-4]
+				\arrow[curve={height=6pt}, from=6-2, to=7-4]
+				\arrow[no head, from=7-4, to=8-4]
+				\arrow[from=8-4, to=9-4]
+				\arrow[curve={height=-12pt}, from=4-11, to=5-10]
+				\arrow[curve={height=12pt}, from=4-9, to=5-10]
+				\arrow[no head, from=5-10, to=6-10]
+				\arrow[curve={height=12pt}, from=4-1, to=5-2]
+				\arrow[no head, from=5-2, to=6-2]
+				\arrow[curve={height=-12pt}, from=4-3, to=5-2]
+				\arrow[curve={height=12pt}, no head, from=3-2, to=4-1]
+				\arrow[curve={height=-12pt}, no head, from=3-2, to=4-5]
+				\arrow[curve={height=18pt}, no head, from=1-10, to=4-3]
+				\arrow[curve={height=-24pt}, no head, from=1-10, to=4-15]
+				\arrow[curve={height=-6pt}, no head, from=3-8, to=4-9]
+				\arrow[no head, from=3-8, to=4-8]
+				\arrow[no head, from=3-11, to=4-11]
+				\arrow[curve={height=-12pt}, no head, from=3-11, to=4-12]
+				\arrow[curve={height=-12pt}, no head, from=3-6, to=4-7]
+				\arrow[no head, from=3-6, to=4-6]
+				\arrow[no head, from=3-13, to=4-13]
+				\arrow[curve={height=-12pt}, no head, from=3-13, to=4-14]
+				\arrow[curve={height=-12pt}, from=4-8, to=5-7]
+				\arrow[from=4-7, to=5-7]
+				\arrow[from=4-12, to=5-12]
+				\arrow[curve={height=-12pt}, from=4-13, to=5-12]
+				\arrow[from=4-5, to=5-5]
+				\arrow[curve={height=-12pt}, from=4-6, to=5-5]
+				\arrow[curve={height=-12pt}, from=4-15, to=5-14]
+				\arrow[from=4-14, to=5-14]
+		\end{tikzcd}}
+	\end{equation*}
+	\begin{equation*}
+		\delta(X_1) = X_3\quad \delta(X_3) = X_1\quad \delta(X_4) = X_2\quad \delta(X_2) = X_4
+	\end{equation*}
+\end{frame}
+
+\begin{frame}
+	\frametitle{(Bonus frame) Comparison continued}
+	Returning to $\pi$:
+	% https://q.uiver.app/?q=WzAsMTcsWzQsMiwiXFxuZWcgWF81IFxccGFyciBYXzYiXSxbNSwzLCJcXG90aW1lcyJdLFs1LDQsIkMiXSxbNiwyLCJYXzcgXFxvdGltZXMgXFxuZWcgWF84Il0sWzcsMiwiWF85IFxcb3RpbWVzIFxcbmVnIFhfezEwfSJdLFs5LDIsIlxcbmVnIFhfezExfSBcXHBhcnIgWF97MTJ9Il0sWzgsMSwiXFxheCJdLFs4LDMsIlxccGFyciJdLFs4LDQsIlxcbmVnIEMiXSxbNyw1LCJcXGN1dCJdLFszLDEsIlxcYXgiXSxbMiwyLCJYXzMgXFxvdGltZXMgXFxuZWcgWF80Il0sWzMsMCwiXFxheCJdLFswLDIsIlxcbmVnIFhfMSBcXHBhcnIgWF8yIl0sWzEsMywiXFxwYXJyIl0sWzEsNCwiXFxuZWcgQyJdLFsxLDUsIlxcb3BlcmF0b3JuYW1le2N9Il0sWzMsMSwiIiwwLHsiY3VydmUiOi0yfV0sWzAsMSwiIiwxLHsiY3VydmUiOjJ9XSxbMSwyLCIiLDEseyJzdHlsZSI6eyJoZWFkIjp7Im5hbWUiOiJub25lIn19fV0sWzYsNCwiIiwxLHsiY3VydmUiOjIsInN0eWxlIjp7ImhlYWQiOnsibmFtZSI6Im5vbmUifX19XSxbNiw1LCIiLDEseyJjdXJ2ZSI6LTIsInN0eWxlIjp7ImhlYWQiOnsibmFtZSI6Im5vbmUifX19XSxbNCw3LCIiLDEseyJjdXJ2ZSI6Mn1dLFs1LDcsIiIsMSx7ImN1cnZlIjotMn1dLFs3LDgsIiIsMSx7InN0eWxlIjp7ImhlYWQiOnsibmFtZSI6Im5vbmUifX19XSxbMiw5LCIiLDEseyJjdXJ2ZSI6Mn1dLFs4LDksIiIsMSx7ImN1cnZlIjotMn1dLFsxMCwwLCIiLDEseyJjdXJ2ZSI6LTIsInN0eWxlIjp7ImhlYWQiOnsibmFtZSI6Im5vbmUifX19XSxbMTAsMTEsIiIsMSx7ImN1cnZlIjoyLCJzdHlsZSI6eyJoZWFkIjp7Im5hbWUiOiJub25lIn19fV0sWzEyLDMsIiIsMix7ImN1cnZlIjotMywic3R5bGUiOnsiaGVhZCI6eyJuYW1lIjoibm9uZSJ9fX1dLFsxMiwxMywiIiwwLHsiY3VydmUiOjMsInN0eWxlIjp7ImhlYWQiOnsibmFtZSI6Im5vbmUifX19XSxbMTEsMTQsIiIsMCx7ImN1cnZlIjotMn1dLFsxMywxNCwiIiwxLHsiY3VydmUiOjF9XSxbMTQsMTUsIiIsMSx7InN0eWxlIjp7ImhlYWQiOnsibmFtZSI6Im5vbmUifX19XSxbMTUsMTZdXQ==
+	\[\adjustbox{scale=0.6}{\begin{tikzcd}[column sep = tiny, row sep = small, ampersand replacement=\&]
+			\&\&\& \ax \\
+			\&\&\& \ax \&\&\&\&\& \ax \\
+			{\neg X_1 \parr X_2} \&\& {X_3 \otimes \neg X_4} \&\& {\neg X_5 \parr X_6} \&\& {X_7 \otimes \neg X_8} \& {X_9 \otimes \neg X_{10}} \&\& {\neg X_{11} \parr X_{12}} \\
+			\& \parr \&\&\&\& \otimes \&\&\& \parr \\
+			\& {\neg C} \&\&\&\& C \&\&\& {\neg C} \\
+			\& {\operatorname{c}} \&\&\&\&\&\& \cut
+			\arrow[curve={height=-12pt}, from=3-7, to=4-6]
+			\arrow[curve={height=12pt}, from=3-5, to=4-6]
+			\arrow[no head, from=4-6, to=5-6]
+			\arrow[curve={height=12pt}, no head, from=2-9, to=3-8]
+			\arrow[curve={height=-12pt}, no head, from=2-9, to=3-10]
+			\arrow[curve={height=12pt}, from=3-8, to=4-9]
+			\arrow[curve={height=-12pt}, from=3-10, to=4-9]
+			\arrow[no head, from=4-9, to=5-9]
+			\arrow[curve={height=12pt}, from=5-6, to=6-8]
+			\arrow[curve={height=-12pt}, from=5-9, to=6-8]
+			\arrow[curve={height=-12pt}, no head, from=2-4, to=3-5]
+			\arrow[curve={height=12pt}, no head, from=2-4, to=3-3]
+			\arrow[curve={height=-18pt}, no head, from=1-4, to=3-7]
+			\arrow[curve={height=18pt}, no head, from=1-4, to=3-1]
+			\arrow[curve={height=-12pt}, from=3-3, to=4-2]
+			\arrow[curve={height=6pt}, from=3-1, to=4-2]
+			\arrow[no head, from=4-2, to=5-2]
+			\arrow[from=5-2, to=6-2]
+	\end{tikzcd}}\]
+	The following are elements of the defining ideal $I_\pi$ of $\pi$.
+	\begin{equation*}
+		X_2 - X_8 \quad X_8'' - X_{12}'' \quad X_{12} - X_{10} \quad X_{10}'' - X_{6}'' \quad X_{6} - X_4
+	\end{equation*}
+	and so are $X_i - X_i', X_i' - X_i''$ for $i = 2,4,6,10,12$. Hence $\sigma(2) = 4$ and $\sigma(4) = 2$. Similarly, $\sigma(1) = 3$ and $\sigma(3) = 1$.
+	\begin{equation*}
+		\delta(X_1) = X_3\quad \delta(X_3) = X_1\quad \delta(X_4) = X_2\quad \delta(X_2) = X_4
+	\end{equation*}
+\end{frame}
+	
+\end{document}

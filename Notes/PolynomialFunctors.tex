@@ -1,0 +1,1013 @@
+\documentclass[12pt]{article}
+
+\usepackage{amsthm}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{mathrsfs}
+\usepackage{array}
+\usepackage{amssymb}
+\usepackage{units}
+\usepackage{graphicx}
+\usepackage{tikz-cd}
+\usepackage{nicefrac}
+\usepackage{hyperref}
+\usepackage{bbm}
+\usepackage{color}
+\usepackage{tensor}
+\usepackage{tipa}
+\usepackage{bussproofs}
+\usepackage{ stmaryrd }
+\usepackage{ textcomp }
+\usepackage{leftidx}
+\usepackage{afterpage}
+\usepackage{varwidth}
+\usepackage{tasks}
+\usepackage{ cmll }
+\usepackage{makecell}
+\usepackage{MnSymbol}
+\usepackage{quiver}
+\usepackage{adjustbox}
+\usepackage{multirow}
+\usepackage{booktabs}
+\usepackage{xparse}
+\usepackage{calc}
+\usepackage{stackengine}
+\usepackage{csquotes}
+
+\newcommand\blankpage{
+	\null
+	\thispagestyle{empty}
+	\addtocounter{page}{-1}
+	\newpage
+}
+
+\newcommand{\PhantC}{\phantom{\colon}}%
+\newcommand{\PhantSQ}{\phantom{\sqrt{\hspace{0.3ex}}}}
+
+% https://tex.stackexchange.com/questions/63355/wrapping-cmidrule-in-a-macro
+\ExplSyntaxOn
+\makeatletter
+\newcommand{\CMidRule}{\noalign\bgroup\@CMidRule{}}
+\NewDocumentCommand{\@CMidRule}{
+	m % Material to reinsert before cmidrule.
+	O{0.0ex} % #1 = left adjust
+	O{0.0ex} % #1 = right adjust
+	m  %       #3 = columns to span
+}{
+	\peek_meaning_remove_ignore_spaces:NTF \CMidRule
+	{ \@CMidRule { #1 \cmidrule[\cmidrulewidth](l{#2}r{#3}){#4} } }
+	{ \egroup #1 \cmidrule[\cmidrulewidth](l{#2}r{#3}){#4} }
+}
+\makeatother
+\ExplSyntaxOff
+
+\graphicspath{ {images/} }
+
+\theoremstyle{plain}
+\newtheorem{thm}{Theorem}[subsection] % reset theorem numbering for each chapter
+\newtheorem{proposition}[thm]{Proposition}
+\newtheorem{lemma}[thm]{Lemma}
+\newtheorem{fact}[thm]{Fact}
+\newtheorem{cor}[thm]{Corollary}
+
+\theoremstyle{definition}
+\newtheorem{defn}[thm]{Definition} % definition numbers are dependent on theorem numbers
+\newtheorem{exmp}[thm]{Example} % same for example numbers
+\newtheorem{notation}[thm]{Notation}
+\newtheorem{remark}[thm]{Remark}
+\newtheorem{condition}[thm]{Condition}
+\newtheorem{question}[thm]{Question}
+\newtheorem{construction}[thm]{Construction}
+\newtheorem{exercise}[thm]{Exercise}
+\newtheorem{example}[thm]{Example}
+\newtheorem{aside}[thm]{Aside}
+\newtheorem{algorithm}[thm]{Algorithm}
+
+\def\doubleunderline#1{\underline{\underline{#1}}}
+\newcommand{\bb}[1]{\mathbb{#1}}
+\newcommand{\scr}[1]{\mathscr{#1}}
+\newcommand{\call}[1]{\mathcal{#1}}
+\newcommand{\psheaf}{\text{\underline{Set}}^{\scr{C}^{\text{op}}}}
+\newcommand{\und}[1]{\underline{\hspace{#1 cm}}}
+\newcommand{\adj}[1]{\text{\textopencorner}{#1}\text{\textcorner}}
+\newcommand{\comment}[1]{}
+\newcommand{\lto}{\longrightarrow}
+\newcommand{\rone}{(\operatorname{R}\bold{1})}
+\newcommand{\lone}{(\operatorname{L}\bold{1})}
+\newcommand{\rimp}{(\operatorname{R} \multimap)}
+\newcommand{\limp}{(\operatorname{L} \multimap)}
+\newcommand{\rtensor}{(\operatorname{R}\otimes)}
+\newcommand{\ltensor}{(\operatorname{L}\otimes)}
+\newcommand{\rtrue}{(\operatorname{R}\top)}
+\newcommand{\rwith}{(\operatorname{R}\&)}
+\newcommand{\lwithleft}{(\operatorname{L}\&)_{\operatorname{left}}}
+\newcommand{\lwithright}{(\operatorname{L}\&)_{\operatorname{right}}}
+\newcommand{\rplusleft}{(\operatorname{R}\oplus)_{\operatorname{left}}}
+\newcommand{\rplusright}{(\operatorname{R}\oplus)_{\operatorname{right}}}
+\newcommand{\lplus}{(\operatorname{L}\oplus)}
+\newcommand{\prom}{(\operatorname{prom})}
+\newcommand{\ctr}{(\operatorname{ctr})}
+\newcommand{\der}{(\operatorname{der})}
+\newcommand{\weak}{(\operatorname{weak})}
+\newcommand{\exi}{(\operatorname{exists})}
+\newcommand{\fa}{(\operatorname{for\text{ }all})}
+\newcommand{\ex}{(\operatorname{ex})}
+\newcommand{\cut}{(\operatorname{cut})}
+\newcommand{\ax}{(\operatorname{ax})}
+\newcommand{\negation}{\sim}
+\newcommand{\true}{\top}
+\newcommand{\false}{\bot}
+\DeclareRobustCommand{\diamondtimes}{%
+	\mathbin{\text{\rotatebox[origin=c]{45}{$\boxplus$}}}%
+}
+\newcommand{\tagarray}{\mbox{}\refstepcounter{equation}$(\theequation)$}
+\newcommand{\startproof}[1]{
+	\AxiomC{#1}
+	\noLine
+	\UnaryInfC{$\vdots$}
+}
+\newcommand\showdiv[1]{\overline{\smash{)}#1}}
+\newcommand{\set}{\operatorname{\underline{Set}}}
+\newcommand{\coherence}[2]{#1\text{ }\rotatebox{90}{()}_A\text{ }#2}
+
+
+
+\newenvironment{scprooftree}[1]%
+{\gdef\scalefactor{#1}\begin{center}\proofSkipAmount \leavevmode}%
+	{\scalebox{\scalefactor}{\DisplayProof}\proofSkipAmount \end{center} }
+
+\title{Polynomial functors}
+\author{William Troiani}
+\date{\today}
+
+
+\begin{document}
+	\maketitle
+	\tableofcontents
+	
+	\section{Introduction}
+	Coherence spaces have been described as ``a simplification of Scott domains..." from which ``one eventually discoverss a logical layer finer than intuitionism, linear logic" \cite{BS}. Quotes such as these imply that Girard discovered linear logic by first considering coherence spaces. This however, is not true. In fact, Girard discovered linear logic by first considering a model of $\lambda$-calculus using Analytic Functors, indeed, we quote from his paper \cite{Girard}:
+	
+	\begin{displayquote}
+		``It appears now (October 1986) that the main interest of the paper is the general analogy with linear algebra. The analogy brought in sight new operations, new connectives, thus leading to `linear logic'. The treatment of the sum of types... contains implicitly all the operations of linear logic. What has been found later is that the operations used here (e.g., linearization by means of `tensor algebra') are of logical nature."
+		\end{displayquote}
+	
+	
+	
+	\section{Forms}
+	Let $A$ be a small category with only identity morphisms (in other words, $A$ is a set). We denote the category of sets by $\set$. The category whose objects consist of functors $A \lto \set$ with morphisms given by natural transformations will be denoted $\set^A$.
+	\begin{notation}
+		We adopt the following notation:
+		\begin{itemize}
+			\item Functors $\set^A \lto \set$ are written in script font $\scr{F}, \scr{G}, \scr{H},\ldots$
+			\item Functors in $\set^A$ are written in capital roman letters $F, G, H, \ldots$
+			\item Natural transformations between functors $F \lto G$ with $F,G \in \set^A$ are written in lower case Greek letters $\eta, \epsilon, \mu, \gamma, \delta, \ldots$
+			\item Elements of sets are written in lower case roman letters towards the end of the alphabet $x, y, z, w, u, v, \ldots$
+			\item Functions between sets are denoted by lower case roman letters $f, g, h, j, k, l, \ldots$
+			\end{itemize}
+		\end{notation}
+	Throughout, we work with a functor $\scr{F}: \set^A \lto \set$.
+	\begin{defn}
+		The \textbf{category of elements} is denoted $\operatorname{El}(\scr{F})$ and has as objects pairs $(F, x)$ where $F \in \set^A$ and $x \in \scr{F}(F)$. A morphism $\eta: (F,x) \lto (G,y)$ consists of a natural transformation $\eta: F \lto G$ satisfying $\scr{F}(F)(x) = y$.
+	\end{defn}
+\begin{defn}
+	Given an object $(F,x)$ of $\operatorname{El}(\scr{F})$, we define the \textbf{comma category over $(F,x)$}, denoted $\operatorname{El}(\scr{F})/(F,x)$, to be the category whose objects are morphism $\eta: (G,y) \lto (F,x)$ in $\operatorname{El}(\scr{F})$ with codomain $(F,x)$. A morphism $(\eta: (G,y) \to (F,x)) \lto (\epsilon: (H,z) \to (F,x))$ is a morphism $\mu: (G,y) \lto (H,z)$ in $\operatorname{El}(\scr{F})$ rendering the following diagram commutative (in $\operatorname{El}(\scr{F})$).
+	\begin{equation}
+		\begin{tikzcd}
+			(G,y)\arrow[r,"{\mu}"]\arrow[dr,swap,"{\eta}"] & (H,z)\arrow[d,"{\epsilon}"]\\
+			& (F,x)
+			\end{tikzcd}
+		\end{equation}
+	\end{defn}
+	\begin{defn}\label{def:forms}
+		Let $(F,x) \in \operatorname{El}(\scr{F})$. A \textbf{form} of $\scr{F}$ with respect to $(F,x)$ is an element of the comma category $\operatorname{El}(\scr{F})/(F,x)$.
+		
+%		The form is \textbf{normal} if it is initial (ie, is an initial object in the category $\operatorname{El}(\scr{F}))/(F,x)$.
+		\end{defn}
+
+See Example \ref{ex:saturated_normal_form} for an example of a normal form.
+	
+	\begin{defn}\label{def:integer}
+		We define a family of adjectives for sets, forms, and functors. Let $X \in \set$ be a set and $F \in \set^A$ a functor, and $\eta: (G,y) \lto (F,x)$ a form, where $x \in \scr{F}(F)$.
+		\begin{itemize}
+			\item $X$ is \textbf{finite} if its cardinality is finite.
+			\item $X$ is an \textbf{integer} if it is one of the following sets (formally defined using induction).
+			\begin{align*}
+				0 &:= \varnothing\\
+				1 &:= \lbrace 0 \rbrace = \lbrace \varnothing \rbrace\\
+				2 &:= \lbrace 0, 1 \rbrace = \big\lbrace \varnothing, \lbrace \varnothing \rbrace \big\rbrace\\
+				3 &:= \lbrace 0, 1, 2 \rbrace = \big\lbrace \varnothing, \lbrace \varnothing \rbrace, \lbrace  \varnothing , \lbrace \varnothing \rbrace \rbrace \big\rbrace\\
+				&\hdots\\
+				n &:= \lbrace 0, \hdots, n-1 \rbrace\\
+				&\hdots
+			\end{align*}
+		\item $F$ is \textbf{finite} if for all $a \in A$ the set $F(a)$ is finite.
+		\item $F$ is \textbf{integral} if for all $a \in A$ the set $F(a)$ is integral.
+		\item $\eta: (G,y) \lto (F,x)$ is \textbf{finite} if $G$ is finite.
+		\item $\eta: (G,y) \lto (F,x)$ is \textbf{integral} if $G$ is integral.
+			\end{itemize}
+		We let $\operatorname{Int}(A)$ denote the set of integral functors $F \in \set^A$.
+		\end{defn}
+	
+	\section{Finite normal forms and analyticity}
+	Clearly, every integral functor is finite, the next result establishes a partial converse.
+	\begin{lemma}\label{lem:finite--->integral}
+		Any finite functor $F \in \set^A$ is isomorphic to an integral functor.
+		\end{lemma}
+	\begin{proof}
+		For every $a \in A$, the set $F(a)$ is finite, so choose a bijection $h_a: F(a) \lto n_{F(a)}$ where $n_{F(a)}$ is the integer (Definition \ref{def:integer}) corresponding to the cardinality of $F(a)$. This in fact ends our proof because the only remaining work to do is check that the naturality square commutes, but since $A$ admits only identity morphisms this condition is vacuously satisfied.
+		\end{proof}
+	
+	We continue to work with a functor $\scr{F}: \set^A \lto \set$.
+	
+	\begin{defn}\label{def:normal_form_property}
+		The functor $\scr{F}$ satisfies the \textbf{finite normal form property} if for every object $(F,x)$ in $\operatorname{El}(\scr{F})$ there exists a finite normal form $\eta: (G,y) \lto (F,x)$ (Definition \ref{def:forms}).
+		
+		The functor $\scr{F}$ satisfies the \textbf{integral normal form property} if in the above the functor $G$ can be taken to be integral.
+		\end{defn}
+	
+	\begin{lemma}
+		The functor $\scr{F}$ satisfies the finite normal form property if and only if it satisfies the integral normal form property.
+		\end{lemma}
+	\begin{proof}
+		This is a Corollary to Lemma \ref{lem:finite--->integral}.
+		\end{proof}
+	
+	\begin{cor}
+		If $\scr{F}$ satisfies the integral normal form property, then for each $(F,x)$ we know there exists an integral normal form $\eta: (G, y) \lto (F,x)$. The statement of this Corollary is that the functor $G$ is uniquely determined by $(F,x)$.
+		\end{cor}
+	\begin{proof}
+		We know that all normal forms with the same codomain are isomorphic (by the universal property of initial objects), and an integral normal form can be thought of as a particular choice of initial object.
+		\end{proof}
+	
+	\begin{lemma}\label{lem:int_id}
+		Let $\eta: (G,y) \lto (F,x)$ be an integral form (not necessarily normal) and say $\scr{F}$ satisfies the integral normal form property. Then $\eta$ is normal if and only if $\operatorname{id}_G: (G, y) \lto (G,y)$ is.
+	\end{lemma}
+	\begin{proof}
+		Let $\eta': (G, y') \lto (F,x)$ be an integral normal form associated to $(F,x)$. Then by normality there exists a morphism $\delta: G \lto G$ so that the following is a commutative diagram in $\operatorname{El}(\scr{F})$.
+		\begin{equation}\label{eq:id_normal}
+			\begin{tikzcd}
+				(G, y')\arrow[d,dashed,swap,"{\delta}"]\arrow[r,"{\eta'}"] & (F,x)\\
+				(G,y)\arrow[ur,swap,"{\eta}"]\arrow[u,bend left, "{\delta'}"]
+				\end{tikzcd}
+			\end{equation}
+		Since $\operatorname{id}$ is normal, there exists a section $\delta'$ rendering \eqref{eq:id_normal} commutative. The existence of $\delta'$ is sufficient to show that $\eta$ satisfies the universal property of initial objects, that is, $\eta$ is normal.
+		
+		On the other hand, normality of $\eta$ means that any form $\epsilon: (H,w) \lto (F,x)$ factors through $(G,y)$, and so factors through the identity morphism $\operatorname{id}: (G,y) \lto (G,y)$.
+	\end{proof}
+\begin{remark}
+	In fact, Lemma \eqref{lem:int_id} is significant. This is because it gives a condition on $(G,y)$ which ensures a morphism out of it is normal, \emph{without reference to the codomain of this morphism}. This will be a crucial  observation in the proof of Lemma \ref{lem:normal_form_prop--->analytic}.
+	\end{remark}
+	\begin{defn}
+		A functor $\scr{F}: \set^A \lto \set$ is \textbf{analytic} if there exists a family of sets $\lbrace C_{G}\rbrace_{G \in \set^A}$ such that for all objects $F \in \set^A$ and all morphism $\mu: F \lto G$ we have
+		\begin{equation}
+			\scr{F}(F) = \coprod_{G \in \operatorname{Int}(A)}(\set^A(G,F) \times C_G)\quad \scr{F}(\mu) = \coprod_{G \in \operatorname{Int}(A)}(\set^A(G,\mu) \times C_G)
+			\end{equation}
+		\end{defn}
+	\begin{remark}
+		If we write $\set^A(G,F)$ as $F^G$, write $\times$ as concatination, write $\sum$ for $\coprod$, and swap the order of the product, then an analytic functor can be written as
+		\begin{equation}
+			\scr{F}(F) = \sum_{G \in \operatorname{Int}(A)}C_G F^G\quad \scr{F}(\mu) = \sum_{G \in \operatorname{Int}A}C_G \mu^G
+			\end{equation}
+		which is where the term ``analytic" comes from.
+		\end{remark}
+	
+	\begin{lemma}\label{lem:normal_form_prop--->analytic}
+		If a functor $\scr{F}: \set^A \lto \set$ satisfies the finite normal form property, then $\scr{F}$ is isomorphic to an analytic functor.
+		\end{lemma}
+	\begin{proof}
+		The main step in the proof will be to define for each $G \in \operatorname{Int}(A)$ a set $C_G$ and for each $F \in \set^A$ a bijection
+		\begin{equation}\label{eq:bijection}
+			h_F: \scr{F}(F) \lto \coprod_{G \in \operatorname{Int}(A)}(\operatorname{Set}^A(G, F) \times C_G)
+			\end{equation}
+		In fact, in the current setting where $A$ admits only identity morphisms, this will complete the proof.
+		
+		For any element $(F,x)$ of $\operatorname{El}(\scr{F})$ there is some finite normal form $\eta: (G,y) \lto (F,x)$, isomorphic to an integral normal form, by Lemma \ref{lem:finite--->integral}. Thus it suffices to consider the case where $\scr{F}$ satisfies the \emph{integral} normal form property, that associated to every $(F,x) \in \operatorname{El}(\scr{F})$ is an \emph{integral} normal form $\eta: (G, y) \lto (F,x)$.
+		
+		An integral normal form $\eta: (G,y) \lto (F,x)$ is \emph{not} uniquely determined by $(F,x)$, however, given another integral normal form $\eta': (G',y') \lto (F,x)$ we have that $G' \cong G$ by normality and thus $G' = G$ by integrality. So at least the domain of the object is uniquely determined by $(F,x)$.
+		
+		Let $X_G$ denote the elements $y \in \scr{F}(G)$ for which $\operatorname{id}_G: (G,y) \lto (G,y)$ is normal, and let $C_G$ denote a set of choices of representatives of the isomorphism classes of $X_G$.
+				
+		Thus, to each $x \in \scr{F}(F)$ we have associated an integral normal form $\eta: (G, y) \lto (F,x)$ and fixed particular choices so that this map $h_F(x) = (G, \eta, y)$ is a bijection.
+		\end{proof}
+	
+	\begin{remark}
+		What happens in Lemma \ref{lem:normal_form_prop--->analytic} when we allow the set $A$ to admit morphisms? It has to be shown that Lemma \ref{lem:int_id} can be extended to this setting, but assuming it can, we can prove that Lemma \ref{lem:normal_form_prop--->analytic} can also be. This is done as follows.
+		
+		Let $\mu: F \lto H$ be a natural transformation, we need to show that the following diagram commutes.
+		\begin{equation}
+			\begin{tikzcd}
+				\scr{F}(F)\arrow[d, swap,"{\scr{F}(\mu)}"]\arrow[r,"{h_F}"] & \coprod_{G \in \operatorname{Int}(A)}(\set^A(G,F) \times C_G)\arrow[d,"{(\mu \circ \und{0.2}) \times \operatorname{id}_{C_G}}"]\\
+				\scr{F}(H)\arrow[r,"{h_H}"] & \coprod_{G \in \operatorname{Int}(A)}(\set^A(G,H) \times C_G)
+			\end{tikzcd}
+		\end{equation}
+		Let $x \in \scr{F}(F)$ and say $h_F(x) = (G, \eta, y), \text{ } h_H\scr{F}(\mu) = (G',\eta',y')$. We need to show
+		\begin{equation}
+			(G, \mu \eta, y) = (G', \eta', y')
+		\end{equation}
+	First we show that these are both normal forms with respect to $(H, \scr{F}(\mu)(x))$. This is true of $\eta': (G', y') \lto (H,\scr{F}(\mu)(x))$ by construction of $h_H$ and so we only need to consider $\mu \eta: (G,y) \lto (H, \scr{F}(\mu)(x))$.
+	
+	We know that $\eta: (G, y) \lto (F, x)$ is a normal. Lemma \ref{lem:nat_trans_carry} below states that natural transformations preserve normal forms, in the context of a functor $\scr{F}$ satisfying the integral normal form property. So $\mu\eta: (G, y) \lto (H, \scr{F}(\mu)(x))$ is a normal form.
+	
+	Thus there is a natural isomorphism $G \cong G'$ which by integrality implies $G = G'$. Secondly, by construction of the set $C_G$ we have that $y = y'$ and it follows that $\mu\eta = \eta'$. This completes the proof.
+		\end{remark}
+	
+	\begin{lemma}\label{lem:nat_trans_carry}
+		Let $\scr{F}: \set^A \lto \set$ be a functor satisfying the normal form property. Then if $\mu: (G,y) \lto (F,x)$ is a normal form and $\eta: G \lto H$ is a natural transformation, then $\eta \mu: (G,y) \lto (H, \scr{F}(\eta)(x))$ is a normal form.
+	\end{lemma}
+	\begin{proof}
+		Let $\epsilon: (K, z) \lto (H, \scr{F}(\eta)(x))$ be an arbitrary form. We show that there exists a unique morphism $(G,y) \lto (K,z)$ in the category $\operatorname{El}(\scr{F})/(H, \scr{F}(\eta)(x))$. Since $\scr{F}$ satisfies the normal form property there exists some normal form $\gamma:(L,w) \lto (H, \scr{F}(\eta)(x))$. It is convenient to draw this situation out in the category $\operatorname{El}(\scr{F})$, ignore the dashed arrows for now.
+		% https://q.uiver.app/?q=WzAsNSxbMSwwLCIoRiwgeCkiXSxbMSwxLCIoSCwgXFxzY3J7Rn0oXFxldGEpKHgpKSJdLFswLDIsIihLLHopIl0sWzAsMCwiKEcseSkiXSxbMCwxLCIoTCx3KSJdLFswLDEsIlxcZXRhIl0sWzIsMSwiXFxlcHNpbG9uIiwyXSxbMywwLCJcXG11Il0sWzQsMSwiXFxnYW1tYSJdLFs0LDIsIlxcYmV0YSIsMix7InN0eWxlIjp7ImJvZHkiOnsibmFtZSI6ImRhc2hlZCJ9fX1dLFs0LDMsIlxcZGVsdGEiLDAseyJzdHlsZSI6eyJib2R5Ijp7Im5hbWUiOiJkYXNoZWQifX19XSxbMyw0LCJcXGRlbHRhJyIsMix7ImN1cnZlIjoyLCJzdHlsZSI6eyJib2R5Ijp7Im5hbWUiOiJkYXNoZWQifX19XV0=
+		\begin{equation}\label{eq:natural_trans_carry}
+			\begin{tikzcd}
+				{(G,y)} & {(F, x)} \\
+				{(L,w)} & {(H, \scr{F}(\eta)(x))} \\
+				{(K,z)}
+				\arrow["\eta", from=1-2, to=2-2]
+				\arrow["\epsilon"', from=3-1, to=2-2]
+				\arrow["\mu", from=1-1, to=1-2]
+				\arrow["\gamma", from=2-1, to=2-2]
+				\arrow["\beta"', dashed, from=2-1, to=3-1]
+				\arrow["\delta", dashed, from=2-1, to=1-1]
+				\arrow["{\delta'}"', curve={height=12pt}, dashed, from=1-1, to=2-1]
+			\end{tikzcd}
+		\end{equation}
+		Since $\eta\mu: (G,y) \lto (H, \scr{F}(\eta)(x))$ is a form with respect to $(H, \scr{F}(\eta)(x))$ we have by initiality of $\gamma: (L,w) \lto (H, \scr{F}(\eta)(x))$ that there exists a morphism $\delta: (L,w) \lto (G,y)$ fitting into \eqref{eq:natural_trans_carry}.
+		
+		The morphism $\mu \delta: (L,w) \lto (F,x)$ induces the morphism $\delta'$ and composing this with the morphism $\beta$ (which is induce by initiality of $\gamma: (L, w) \lto (H, \scr{F}(\eta)(x))$ induces a morphism $(G,y) \lto (K,z)$ which is the unique morphism rending the full diagram commutative. Thus $\eta \mu: (G,y) \lto (H, \scr{F}(\eta)(x))$ is initial.
+	\end{proof}
+	
+	Now we prove the converse to Lemma \ref{lem:normal_form_prop--->analytic}.
+	\begin{lemma}\label{lem:analytic--->normal_form_property}
+		Let $\scr{F}: \set^A \lto \set$ be analytic. Then $\scr{F}$ satisfies the normal form property.
+		\end{lemma}
+	\begin{proof}
+		Let $F \in \set^A$ and consider an element $(G, \eta, y)$ of $\scr{F}(F) = \coprod_{G' \in \operatorname{Int}(A)}(\set^A(G', F) \times C_{G'})$. We can then consider the set $\scr{F}(G) = \coprod_{G' \in \operatorname{Int}(A)}\set^A(G', G) \times C_{G'}$. A particular element of this set is $(G, \operatorname{id}_G, y)$. We show that $\eta: (G, (G, \operatorname{id}_G, y)) \lto (F, (G, \eta, y))$ is normal.
+		
+		Say $\epsilon: (H, (G', \eta', y')) \lto (F, (G,\eta, y))$ is a form, then
+		\begin{equation}\label{eq:ep_im}
+			\scr{F}(\epsilon)(G', \eta', y') = (G, \eta, y)
+			\end{equation}
+		We unpack the definition of the function $\scr{F}(\epsilon) = \coprod_{G \in \operatorname{Int}(A)}(\set^A(G,\epsilon) \times C_G)$. This function makes the following Diagram commute, where the vertical morphisms are canonical inclusion maps.
+		\begin{equation}
+			\begin{tikzcd}
+				\coprod_{G \in \operatorname{Int}(A)}(\set^A(G, H) \times C_G)\arrow[r,"{\scr{F}(\mu)}"] & \coprod_{G \in \operatorname{Int}A}(\set^A(G, F))\\
+				\set^A(G, H) \times C_G\arrow[r,"{\und{0.2} \circ \epsilon \times \operatorname{id}_{C_G}}"]\arrow[u] & \set^A(G, F) \times C_G\arrow[u]
+				\end{tikzcd}
+			\end{equation}
+		So \eqref{eq:ep_im} implies $((\und{0.2} \circ \epsilon) \times \operatorname{id})(\eta', y') = (\eta, y)$. We thus have:
+		\begin{equation}
+				G' = G,\quad \epsilon \eta' = \eta,\quad y' = y
+			\end{equation}
+		Thus, the domain of the morphism $\epsilon: (H, (G', \eta', y')) \lto (F, (G, \eta, y))$ is equal to $(H, (G, \eta', y))$. We need a unique morphism $(G, (G, \operatorname{id}_G, y)) \lto (H, (G, \eta', y))$. Clearly $\eta'$ is such a morphism, and it is the unique such because for any morphism $\mu: G \lto G$ we have $(\set^A(G, \mu) \times C_G)(\mu) = \mu$,  and so $\eta'$ is the unique morphism $\mu$ determined by the condition $(\set^A(G, \mu) \times C_G)(\mu) = \eta'$.
+		\end{proof}
+	\begin{cor}
+		A functor $\scr{F}: \set^A \lto \set$ satisfies the normal form property if and only if $\scr{F}$ is isomorphic to an analytic functor.
+		\end{cor}
+	\begin{proof}
+		The only check to do is that if $\scr{F}$ is merely isomorphic to an anlytic functor (rather than being one itself) then it also satisfies the normal form property. If $\scr{A}: \set^A \lto \set$ is an analytic functor and $\mu: \scr{F} \lto \scr{A}$ an isomorphism, then for all $F \in \set^A$ and all $x \in \scr{F}(F)$ there exists a normal form $\eta: (G, y) \lto (F, \mu_F(x))$ (by Lemma \ref{lem:analytic--->normal_form_property}) with respect to $\scr{A}$. Thus, given a form $\epsilon: (H, w) \lto (F, x)$ in $\operatorname{El}(\scr{F})$ we can consider $\scr{A}(\epsilon): \scr{A}(H) \lto \scr{A}(F)$ which by naturality of $\mu$ satisfies $\scr{A}(\epsilon)(\mu_H(w)) = \mu_F(x)$. In other words, we have a form $\epsilon: (H, \mu_H(y)) \lto (F, \mu_F(x))$ in $\operatorname{El}(\scr{A})$. By normality of $\eta$ there exists a natural transformation $\delta: H \lto G$ so that $\scr{A}(\delta)(\mu_H(y)) = y$. It follows from naturality that $\scr{F}(\delta)(w) = \mu_G^{-1}(y)$, and since $\mu$ is a family of isomorphism, this is the unique such $\delta$. In other words, $\eta: (G, \mu_G^{-1}(y)) \lto (F, x)$ is a normal form in $\operatorname{El}(\scr{F})$.
+		\end{proof}
+	
+	\section{Finite normal forms and normality}
+	\begin{defn}
+		A functor $\set^A \lto \set$ is \textbf{normal} if it preserves directed colimits and (wide) pullbacks.
+		\end{defn}
+	
+	The following lemma will not be used but has a nice argument, so we leave it here.
+	
+	\begin{lemma}
+		A functor $\scr{F}: \set^A \lto \set$ satisfying the finite normal form property preserves monomorphisms. That is, if $\epsilon: H \lto F$ is a monomorphism in $\set^A$ then $\scr{F}(\epsilon)$ is a monomorphism (ie, an injective function).
+		\end{lemma}
+	\begin{proof}
+		Let $\epsilon: H \lto F$ be monic. Consider two elements $x,x' \in \scr{F}(H)$ so that $\scr{F}(\epsilon)(x) = \scr{F}(\epsilon)(x')$, denote this element by $z$. Since $\scr{F}$ satisfies the normal form property, there exists normal forms $\eta: (G, y) \lto (F,x), \eta': (G',y') \lto (F,x')$. In fact, the normal form property ensures us that $G,G'$ are \emph{finite} but this fact will not be used in this proof. We now consider the normal forms $\epsilon \eta: (G, y) \lto (F,z), \epsilon \eta': (G', y') \lto (F,z)$, these are normal by Lemma \ref{lem:nat_trans_carry}. Since these are both normal forms with respect to the same object $(F,z)$ there is a unique isomorphism $\sigma: G \lto G'$ such that $\scr{F}(\sigma)(y) = y'$. We have commutativity of the following Diagram.
+		\begin{equation}
+			\begin{tikzcd}
+				H\arrow[r,"{\epsilon}"] & F\\
+				G\arrow[u,"{\eta}"]\arrow[r,swap,"{\eta' \sigma}"] & H\arrow[u,swap,"{\epsilon}"]
+				\end{tikzcd}
+			\end{equation}
+		That $\epsilon$ is monic then implies $\eta = \eta' \sigma$. We thus have the following calculation.
+		\begin{equation}
+			x = \scr{F}(\eta)(y) = \scr{F}(\eta' \sigma)(y') = x'
+			\end{equation}
+		\end{proof}
+	
+	\begin{lemma}\label{lem:normal_from_prop--->normal}
+		A functor $\scr{F}: \set^A \lto \set$ satisfying the finite normal form property is normal.
+		\end{lemma}
+	\begin{proof}
+		We must show that $\scr{F}$ preserves directed colimits and wide pullbacks.\\
+		\textbf{$\scr{F}$ preserves directed colimits:} consider a directed system, that is, assume there exists a collection of objects $\lbrace F_i \rbrace_{i \in I}$, where $I$ is a set equipt with a partial order $<$, along with a collection of morphisms $\lbrace \alpha_{ij}: F_i \lto F_j \rbrace_{i,j \in I}$ subject to the following conditions
+		\begin{itemize}
+			\item $\forall i, j \in I,\text{ }\exists k \in I\text{ such that }\alpha_{ik}: F_i \lto F_k, \text{ and } \alpha_{jk}: F_j \lto F_k\text{ exist.}$
+			\item $\forall i,j,k \in I,\text{ }\alpha_{jk} \alpha_{ij} = \alpha_{ik}$
+			\item $\forall i \in I\text{ }\alpha_{ii} = \operatorname{id}_{F_i}$
+			\end{itemize}
+		Let $C$ denote the directed colimit of this directed system in the category $\set^A$ and let $\{\mu_i: F_i \lto C\}$ denote the associated morphisms into $C$. Consider also the directed colimit
+		\begin{equation}
+			\big(C',\{g_i: \scr{F}(F_i) \lto C'\}_{i \in I}\big)
+		\end{equation}
+		of the directed system given by $\lbrace \scr{F}( F_i) \rbrace_{i \in I}, \lbrace \scr{F}(\alpha_{ij}): \scr{F}(F_i) \lto \scr{F}(F_j)\rbrace_{i,j \in I}$ in the category $\set$.
+		
+		By the universal property of $C'$, there exists a unique function
+		\begin{equation}
+			f: C' \lto \scr{F}C
+			\end{equation}
+		so that for all $i \in I$ the following diagram commutes.
+		\begin{equation}
+			\begin{tikzcd}
+				\scr{F}(F_i)\arrow[d,swap,"{g_i}"]\arrow[dr,"{\scr{F}(\mu_i)}"]\\
+				C'\arrow[r,swap,"{f}"] & \scr{F} C
+				\end{tikzcd}
+			\end{equation}
+		We need to prove that $f$ is an isomorphism (that is, a bijection). We do this by proving that it is injective and surjective.
+		
+		First we prove surjectivity. Let $z \in \scr{F}C$. Using the finite normal form property, we construct a finite normal form $\epsilon: (G, w) \lto (C, z)$. Now, for each $a \in A$ there is a function
+		\begin{equation}
+			\epsilon_a: G(a) \lto C(a)
+			\end{equation}
+		hence, there exists some $i \in I$ and function $\epsilon_a': G(a) \lto F_i(a)$ through which the function $\epsilon_a$ factors. Since $G$ is finite, and the colimit is directed, there exists an $i \in I$ such that for each $a \in A$ there is a morphism $G(a) \lto F_i(a)$, which we also call $\epsilon_a'$, which makes the following diagram commutes.
+		\begin{equation}
+			\begin{tikzcd}
+				G(a)\arrow[r,"{\epsilon_a'}"]\arrow[dr,swap,"{\epsilon_a}"] & F_i(a)\arrow[d]\\
+				& C(a)
+				\end{tikzcd}
+			\end{equation}
+		We claim the collection $\epsilon' := \{\epsilon_a': G(a) \lto F_i(a)\}$ is a natural transformation, however since $A$ is discrete (ie, has no non-identity morphisms), there is no condition to check, so this is vacuously satisfied.
+		
+		We have constructed a natural transformation $\epsilon': G \lto F_i$ so that the following diagram commutes.
+		\begin{equation}
+			\begin{tikzcd}
+				G\arrow[r,"{\epsilon'}"]\arrow[dr,swap,"{\epsilon}"] & F_i\arrow[d]\\
+				& C
+				\end{tikzcd}
+			\end{equation}
+		Let $z'$ denote $\scr{F}(\epsilon')(w)$. We have commutativity of the following diagram
+		\begin{equation}
+			\begin{tikzcd}
+				\scr{F}F_i\arrow[d,swap,"{g_i}"]\arrow[dr,"{\scr{F}\mu_i}"]\\
+				C'\arrow[r,"{f}"] & \scr{F} C
+				\end{tikzcd}
+			\end{equation}
+		Hence, $g_i(z')$ is an element of $C'$ such that $f(g_i(z')) = z$, establishing surjectivity.
+		
+		Now we prove injectivity. Let $x_1,x_2 \in C'$ be such that $f(x_1) = f(x_2)$. Let $z$ denote this common element of $\scr{F}C$. The functions $\{ g_i\}_{i \in I}$ form a surjective family over $C'$ and so there exists $i,i' \in I$ and $x_1' \in \scr{F}(F_i), x_2' \in \scr{F}(F_{i'})$ so that $g_i(x_1') = x_1, g_{i'}(x_2') = x_2$. In fact, since the diagram the colimit is over is filtered, we can assume without loss of generality that $i = i'$.
+		
+		Turning our consideration to $z$, which is an element of $\scr{F}C$, we choose a normal form $\epsilon: (G, y) \lto (C, z)$. We have already seen in the proof of surjectivity how from this we obtain a $j \in I$ along with a natural transformation $\epsilon': G \lto F_j$ so that the following diagram commutes.
+		\begin{equation}\label{eq:by_finiteness}
+			\begin{tikzcd}
+				G\arrow[r,"{\epsilon'}"]\arrow[dr,swap,"{\epsilon}"] & F_j\arrow[d,"{\mu_j}"]\\
+				& C
+				\end{tikzcd}
+			\end{equation}
+		We have that $\scr{F}(\mu_i)(x_1') = \scr{F}(\mu_i)(x_2') = z$. So, by initiality of $(G,y)$ there exists unique morphisms $\delta_1,\delta_2: G \lto F_i$ so that the following diagram commutes
+		\begin{equation}\label{eq:by_normality}
+		\begin{tikzcd}
+			G\arrow[dr,"{\epsilon}"]\arrow[d,swap, shift right, "{\delta_2}"]\arrow[d,shift left, "{\delta_1}"]\\
+			F_i\arrow[r,swap,"{\mu_i}"] & C
+			\end{tikzcd}
+		\end{equation}
+		and so that $
+			\scr{F}(\delta_1)(y) = x_1\text{ and }\scr{F}(\delta_2)(y) = x_2$.
+		
+		Combining \eqref{eq:by_finiteness} and \eqref{eq:by_normality} we obtain commutativity of the following diagram.
+		\begin{equation}\label{eq:colimit_commuting}
+			\begin{tikzcd}
+				G\arrow[r,"{\epsilon'}"]\arrow[d,shift left,"{\delta_1}"]\arrow[d, swap, shift right, "{\delta_2}"] & F_j\arrow[d,"{\mu_j}"]\\
+				F_i\arrow[r,swap,"{\mu_i}"] & C
+				\end{tikzcd}
+			\end{equation}
+		Now, let $a \in A$ be an arbitrary element of $A$ and consider \eqref{eq:colimit_commuting} with everything evaluated at $a$, this gives a commuting diagram in $\set$. We notice that if $G(a)$ is non-empty, then there exists a pair of elements $d,d' \in F_i(a)$ so that $\mu_{ia}(d) = \mu_{ia}(d')$ and so there exists some $k \in I$ such that $\alpha_{ika}: F_{i}(a) \lto F_k(a)$ so that $\alpha_{ika}(d) = \alpha_{ika}(d')$. By finiteness of $G$ (in particular, since all but finitely many $a \in A$ are such that $G(a)$ is non-empty) there thus exists $k \in I$ and $\alpha_{ik}: F_i \lto F_k$ so that for all $a \in A$ there exists $d,d' \in F_i(a)$ so that $\alpha_{ika}(d) = \alpha_{ika}(d')$. Lastly, by the first property above of directed colimits we may assume $k = j$. The result is the following commutative diagram in $\set^A$.
+		\begin{equation}
+			\begin{tikzcd}
+				& F_k\arrow[d,"{\mu_j}"]\\
+				F_i\arrow[ur,"{\alpha_{ik}}"]\arrow[r,"{\mu_i}"] & C
+				\end{tikzcd}
+			\end{equation}
+		Finally, we can consider the following commuting diagram in $\set$.
+		\begin{equation}
+			\begin{tikzcd}[column sep = huge, row sep = huge]
+			\scr{F}G\arrow[dr,"{\scr{F}\epsilon'}"]\arrow[d,shift right, swap, "{\scr{F}\delta_1}"]\arrow[d,shift left, "{\scr{F}\delta_2}"]\\
+			\scr{F}F_i\arrow[r,"{\scr{F}\alpha_{ij}}"]& \scr{F}F_j
+			\end{tikzcd}
+			\end{equation}
+		Thus, $\scr{F}\alpha_{ij}\scr{F}\delta_1(y) = \scr{F}\alpha_{ij}\scr{F}\delta_2(y)$, ie, $\scr{F}\alpha_{ij}(x_1') = \scr{F}\alpha_{ij}(x_2')$, ie, $x_1 = x_2$. This establishes injectivity.
+		
+		\textbf{$\scr{F}$ preserves arbitrary pullbacks:} Let $\{\alpha_{i}: F_i \lto H\}_{i \in I}$ be a (possibly infinite) collection of natural transformations and let $(P, \{\pi_i: P \lto F_i\})$ denote their pullback. Also, let $(P', \{\mu_i: P \lto \scr{F}F_i \})$ denote the pullback in $\set$ of $\{\scr{F}\alpha_i: \scr{F}F_i \lto \scr{F}H\}_{i \in I}$. By the universal property of the pullback $P'$ there exists a function $f: \scr{F}P \lto P'$ so that for each $i \in I$ the following Diagram commutes.
+		\begin{equation}
+			\begin{tikzcd}\label{eq:induced_commutativity}
+				\scr{F}P\arrow[r,"{f}"]\arrow[dr,swap,"{\scr{F}\pi_i}"] & P'\arrow[d,"{\mu_i}"]\\
+				& \scr{F}F_i
+				\end{tikzcd}
+			\end{equation}
+		We must show that $f$ is a bijection. First we show surjectivity. Let $z \in P'$. For each $i$ we consider $\scr{F}\pi_i(z)$, which we denote by $z_i$. Since $\scr{F}$ satisfies the normal form property, there exists a normal form
+		\begin{equation}
+			\eta_i: (G_i, w_i) \lto (F_i, z_i)
+			\end{equation}
+		By Lemma \ref{lem:nat_trans_carry} the compositions
+		\begin{equation}
+			\alpha_i \eta_i: (G_i, w_i) \lto (H, \scr{F}\alpha_i(w_i))
+			\end{equation}
+		are normal forms with respect to $(G, \scr{F}\alpha_i(w_i))$ (note, $\scr{F}\alpha_i(w_i)$ is independent of $i$).
+		
+		Hence by essential uniqueness of initial objects, we can assume without loss of generality that for all pairs $i,j \in I$ we have $G_i = G_j$, denote this common element by $G$.
+		
+		By the universal property of the pullback, there exists a natural transformation $\delta: G \lto P$ rendering the following Diagram commutative.
+		\begin{equation}
+			\begin{tikzcd}
+				G\arrow[d,swap,"{\delta}"]\arrow[r,"{\eta_i}"] & F_i\\
+				P\arrow[ur,swap,"{\pi_i}"]
+				\end{tikzcd}
+			\end{equation}
+		We notice also that the colleciton of elements $\lbrace w_i \rbrace_{i \in I}$ induces an element $w \in \scr{F}G$ so that for all $i \in I$ we have $\scr{F}(\eta_i)(w) = z_i$.
+	
+		We claim that
+		\begin{equation}
+			f\scr{F}(\delta)(w) = z
+			\end{equation}
+		It suffices to show the following for all $i \in I$.
+		\begin{equation}
+			\pi_{\scr{F}F_i}(z) = \pi_{\scr{F}F_i}f\scr{F}\delta(w)
+			\end{equation}
+		This holds by the following calculation.
+		\begin{align}
+			\pi_{\scr{F}F_i}f\scr{F}\delta(w) &= \scr{F}\pi_i \scr{F} \delta(w)\\
+			&= \scr{F}\eta_i(w)\\
+			&= z_i\\
+			&= \pi_{\scr{F}F_i}(z)
+			\end{align}
+		
+		Now we prove injectivity. Let $x_1,x_2 \in \scr{F}P$ be such that $f(x_1) = f(x_2)$. By the normal form property, there is a normal form $\chi_1: (X_1, x_1') \lto (P, x_1)$ with respect to $(P,x_1)$ and a normal form $\chi_2: (X_2, x_2') \lto (P, x_2)$ with respect to $(P,x_1)$. Let $i \in I$ be arbitrary and consider the composition of these normal forms with the natural transformation $\pi_i$:
+		\begin{equation}\label{eq:composed_normal_forms}
+			\begin{tikzcd}
+				(X_1,x_1')\arrow[r,"{\chi_1}"] & (P, x_1)\arrow[r,"{\pi_i}"] & (F_i, \scr{F}(\pi_i \chi_1)(x_1'))\\
+				(X_2,x_2')\arrow[r,"{\chi_2}"] & (P, x_2)\arrow[r,"{\pi_i}"] & (F_i, \scr{F}(\pi_i \chi_2)(x_2'))
+				\end{tikzcd}
+			\end{equation}
+		Now, by commutativity of \eqref{eq:induced_commutativity} we have
+		\begin{equation}
+			\scr{F}(\pi_i \chi_1)(x_1') = \scr{F}(\pi_i)(x_1) = \mu_i f(x_1) = \mu_if(x_2) = \scr{F}(\pi_i \chi_2)(x_2')
+			\end{equation}
+		Let $w$ denote this common element.
+		
+		This implies that \eqref{eq:composed_normal_forms} are both elements of the same comma category, $\operatorname{El}(\scr{F})/(F_i, w)$, and in fact these are both normal by Lemma \ref{lem:nat_trans_carry}. We can thus assume without loss of generality that $X_1 = X_2, x_1' = x_2'$, we let $X,x$ respectively denote these common elements. Thus, our hypothesis is: for all $i \in I$ we have
+		\begin{equation}\label{eq:epi_would_be_nice}
+			\pi_i\chi_1 = \pi_i\chi_2
+			\end{equation}
+		It now remains to show 
+		\begin{equation}
+			\scr{F}(\chi_1)(x) = \scr{F}(\chi_2)(x)
+			\end{equation}
+		We do this by proving $\chi_1 = \chi_2$.
+		
+		First, notice that for $k = 1,2$ and all $i \in I$ we have $\scr{F}(\pi_i \chi_k) = \mu_i f \scr{F}(\chi_k)(x)$. Thus, by Lemma \ref{lem:nat_trans_carry} the following are normal forms:
+		\begin{equation}
+			\pi_i \chi_k: (X,x) \lto (F_i, \mu_i f \scr{F}(\chi_k)(x))
+			\end{equation}
+		By uniqueness of normal forms, it follows that $\pi_i \chi_1 = \pi_i \chi_j$ for all $i \in I$. Let $\xi_i$ denote this common morphism. We now have that both $\chi_1$ and $\chi_2$ are morphisms $X \lto P$ rendering the following diagram commutative for all $i, j \in I$.
+		\begin{equation}
+			\begin{tikzcd}
+				X\arrow[rrd, bend left,"{\xi_i}"]\arrow[ddr,swap,bend right,"{\xi_j}"]\arrow[dr,"{\chi_1,\chi_2}"]\\
+				& P\arrow[r,"{\pi_i}"]\arrow[d,swap,"{\pi_j}"] & F_i\arrow[d,swap,"{\alpha_i}"]\\
+				& F_j\arrow[r,"{\alpha_j}"] & H
+				\end{tikzcd}
+			\end{equation}
+		It follows from the universal property of the pullback that $\chi_1 = \chi_2$.
+		\end{proof}
+	
+	Now we prove the converse to Lemma \ref{lem:normal_from_prop--->normal}. This will be proven using a sequence of lemmas, as well as a new notion, a \emph{saturated} form.
+	
+	\begin{defn}\label{def:saturated}
+		A form $\eta: (G, y) \lto (F,x)$ is \textbf{saturated} if any other form $\epsilon: (H, z) \lto (G,y)$ is an epimorphism.
+		\end{defn}
+	
+	An example of a saturated form is given by	$k: (\bold{2}, (0,1)) \lto (\bold{23}, (4,4))$ of Example \ref{ex:saturated_normal_form}.
+	
+	The key observation for this result is that any functor $F \in \set^A$ is a colimit of its finite subobjects. This is made precise by Lemma \ref{lem:finite_generation_functors}. This is analogous to the similar fact that any set $X$ is a colimit of its finite subsets.
+	
+	More precisely, let $X$ be an arbitrary set and let $\call{P}_{\text{fin}}$ denote the set of finite subsets of $X$. Given any other set $Y$ along with a family of morphisms for each finite subset $A$ of $X$
+	\begin{equation}
+		y_{A}: A \lto Y
+		\end{equation}
+	satisfying the property that for any inclusion $A' \subseteq A$ the following diagram commutes
+	\begin{equation}
+		\begin{tikzcd}
+			A\arrow[r,"{y_{A}}"] & Y\\
+			A'\arrow[u,rightarrowtail]\arrow[ur, swap,"{y_{A'}}"]
+			\end{tikzcd}
+		\end{equation}
+	there is a unique morphism $f: X \lto Y$ which for all $A \in \call{P}_{\text{fin}}$ renders the following Diagram commutative.
+	\begin{equation}
+		\begin{tikzcd}
+			A\arrow[r,"{y_A}"]\arrow[dr,rightarrowtail] & Y\\
+			& X\arrow[u,swap,"{f}"]
+		\end{tikzcd}
+	\end{equation}
+This morphism is given as follows.
+	\begin{align*}
+		f: X &\lto Y\\
+		x &\longmapsto y_{\{ x\}}(\{ x\})
+		\end{align*}
+	Thus, $X$ satisfies the universal property of $\operatorname{Colim}\{ A \}_{A \in \call{P}_{\text{fin}}}$. This is the formal sense in which any set is colimit of its finite subsets.
+	
+	\begin{lemma}\label{lem:finite_generation_functors}
+		Any functor $F \in \set^A$ is the colimit of finite functors in $\set^A$.
+		\end{lemma}
+	\begin{proof}
+		Consider the collection of all finite functors $G \in \set^A$ and monomorphisms $\mu_G: G \lto F$. Say $H \in \set^A$ is a functor and there is a collection of monomorphisms $\eta_G: G \lto H$ so that for any monic $\epsilon: G' \lto G$ the following diagram commutes.
+		\begin{equation}
+			\begin{tikzcd}
+				G\arrow[r,"{\eta_G}"] & H\\
+				G'\arrow[ur,swap,"{\eta_{G'}}"]\arrow[u,"{\epsilon}"]
+				\end{tikzcd}
+			\end{equation}
+		For any $a \in A$ any finite subset $A \subseteq F(a)$ there exists a finite functor $G \in \set^A$ so that $G(a) = A$. Thus, it follows from the fact that any set is the colimit of its finite subsets, that for all $a \in A$ there exists a unique morphism $\delta_a: F(a) \lto H(a)$ rendering the following diagram commutative for all $G'$.
+		\begin{equation}
+			\begin{tikzcd}
+				G'(a)\arrow[r,"{\eta_{G'(a)}}"]\arrow[dr,swap,"{\mu_a}"] & H(a)\\
+				& F(a)\arrow[u,swap,"{\delta_a}"]
+				\end{tikzcd}
+			\end{equation}
+		Since $A$ is discrete, a natural transformation is simply given by a collection of funtions. Hence we have a natural transformation $\delta: F \lto H$ which is unique in the appropriate sense, proving that $F$ satisfies the universal property of the colimit.
+		\end{proof}
+	
+	The way Lemma \ref{lem:finite_generation_functors} will be used, is in the setting where $\scr{F}$ is normal, we can extract the finiteness of the subobjects onto objects not involved in the diagram. The proof of the following gives a concrete example of this technique.
+	
+	\begin{lemma}
+		If $\scr{F}$ is normal, then every saturated form is finite.
+		\end{lemma}
+	\begin{proof}
+		Let $\eta: (G, y) \lto (F,x)$ be a saturated form. We have by Lemma \ref{lem:finite_generation_functors} that $G$ is the colimit of its finite subobjects, so we write $G \cong \operatorname{Colim}\{ G_i \}_{i \in I}$. Hence, $\scr{F}(G) \cong \scr{F} \operatorname{Colim}\{ G_i \} \cong \operatorname{Colim}\{ \scr{F}(G_i) \}$, using normality.
+		
+		Thus, we can view $y$ as an element of $\operatorname{Colim}\{ \scr{F}(G_i) \}$ and consider $i \in I$ along with $y' \in \scr{F}(G_i)$ which maps onto $y \in \operatorname{Colim}\{ \scr{F}(G_i) \}$ under the corresponding morphism of the colimit. We thus have a commutative diagram.
+		\begin{equation}
+			\begin{tikzcd}
+				\scr{F}(G)\arrow[r,"{\cong}"] & \operatorname{Colim}\{ \scr{F}(G_i) \}\\
+				& \scr{F} (G_i)\arrow[u]\arrow[ul]
+				\end{tikzcd}
+			\end{equation}
+		Thus, $(G_i, y') \lto (G,y)$ is a form which is surjective by saturation of $\eta$. Since $G_i$ is finite, this implies $G$ is finite.
+		\end{proof}
+	The final preliminary lemma required states that morphisms out of saturated normal forms are unique, in an appropriate sense. The proof of this lemma will use the fact that any functor preserving pullbacks preserves equalisers.
+	\begin{lemma}\label{lem:saturated_unique}
+		Let $\eta: (G,y) \lto (F,x)$ be saturated and $\eta': (G,y) \lto (F,x)$ an arbitrary form. Then $\eta = \eta'$.
+		\end{lemma}
+	\begin{proof}
+		Consider the equaliser $\operatorname{Eq}(\scr{F}\eta, \scr{F}\eta')$. Since $\scr{F}\eta(y) = \scr{F}\eta'(y)$ we have that $y \in \operatorname{Eq}(\scr{F}\eta, \scr{F}\eta')$. Since $\operatorname{Eq}(\scr{F}\eta, \scr{F}\eta') \cong \scr{F}\operatorname{Eq}(\eta,\eta')$ it follows that $(\operatorname{Eq}(\eta,\eta'), y) \lto (G,y)$ is a form, which in fact is surjective by saturation of $\eta$. It follows that $\eta = \eta'$.
+		\end{proof}
+	
+	\begin{lemma}\label{lem:normal--->finite_normal_form_property}
+		If $\scr{F}: \set^A \lto \set$ is normal then it satisfies the normal form property.
+		\end{lemma}
+	\begin{proof}
+		Let $(F,x)$ be a pair consisting of a functor $F \in \set^A$ and an element $x \in \scr{F}(F)$. Consider all the saturated forms with codomain $(F,x)$ and take the pullback of this entire diagram. We use the labelling as given by \eqref{eq:pullback_diag}.
+		\begin{equation}\label{eq:pullback_diag}
+			\begin{tikzcd}
+				& (S_i, y_i)\arrow[dr,"{\sigma_i}"]\\
+				\operatorname{PullBack}\arrow[ur,"{\eta_i}"]\arrow[dr,swap,"{\eta_j}"] & \vdots & (F,x)\\
+				 & (S_j, y_j)\arrow[ur,swap,"{\sigma_j}"]
+				\end{tikzcd}
+			\end{equation}
+		There exists $y \in \scr{F}(\operatorname{PullBack})$ so that $\scr{F}\eta_i(y) = y_i$ for all $i$. We consider a saturated form $\epsilon: (G, z) \lto (\operatorname{PullBack}, y)$. We claim that this is a normal form with respect to $(F,x)$.
+		
+		Assume there is a form $\delta: (H, w) \lto (F,x)$ and consider a saturated from $\delta': (H', w') \lto (H, w)$. A saturated form is one such that any form \emph{into} it is surjective. Thus $\delta \delta': (H', w')\lto (F,x)$ is saturated as $\delta': (H', w') \lto (H,w)$ is.
+		
+		It follows that $(H,w) = (S_i, y_i)$ for some $i$. Thus we have a morphism $\eta_i \epsilon: (G, z) \lto (S_i, y_i) = (H,w)$. It follows from Lemma \ref{lem:saturated_unique} that this is the unique morphism in the appropriate sense. This completes the proof.
+		\end{proof}
+	
+	\section{Qualitative domains}
+	\begin{defn}
+		A \textbf{qualitative domain} is a set $X$ along with a collection $\scr{X}$ of subsets $U \subseteq X$ subject to the following.
+		\begin{itemize}
+			\item $\scr{X}$ covers $X$
+			\begin{equation}
+				\bigcup_{U \in \scr{X}}U = X
+				\end{equation}
+			\item The empty set is in $\scr{X}$
+			\begin{equation}
+				\varnothing \in \scr{X}
+				\end{equation}
+			\item The union of a directed system in $\scr{X}$ is in $\scr{X}$. That is, if $\{ U_i \}_{i \in I}$ satisfies
+			\begin{equation}
+				\forall i, j \in I, \exists k \in I, U_i \cup U_j \subseteq U_k
+				\end{equation}
+			and $U_i \in \scr{X}$ for all $i$, then $\bigcup_{i \in I} U_i \in \scr{X}$.
+			\item Any subset of a set in $\scr{X}$ is in $\scr{X}$. That is,
+			\begin{equation}
+				V \in \scr{X}\text{ and }U \subseteq V \Longrightarrow U \in \scr{X}
+				\end{equation}
+			\end{itemize}
+		A qualitative domain is \textbf{binary} if whenever $U\subseteq X$ is such that $U \not\in \scr{X}$ there exists $x,y \in U$ such that $\{ x,y \} \not\in \scr{X}$.
+		\end{defn}
+	
+	\begin{example}
+		Let $X = \bb{Z}$. Denote respectively by $\bb{Z}_{\text{Even}}, \bb{Z}_{\text{Odd}}$ the even integers and the odd integers. Define:
+		\begin{equation}
+			\scr{X} := \call{P}(\bb{Z}_{\text{Even}}) \cup \call{P}(\bb{Z}_{\text{Odd}}) \cup \Big\{ \{ n, m \} \mid n\text{ even}, m\text{ odd}\Big\}
+			\end{equation}
+		This is a qualitative domain which is not binary.
+		\end{example}
+	\begin{lemma}\label{lem:finite_subsets}
+		For any qualitative domain $(X,\scr{X})$ a subset $U \subseteq X$ is an element of $\scr{X}$ if and only if all the finite subsets of $U$ are in $\scr{X}$.
+		\end{lemma}
+	\begin{proof}
+		If was proved just after Definition \ref{def:saturated} that any set is the directed colimit of its finite subsets. Since a qualitative domain is closed under this operation, it follows that if all the finite subsets of $U$ are in $\scr{X}$, then so is $U$.
+		
+		Conversely, \emph{any} subset of an element of $\scr{X}$ is in $\scr{X}$, by definition. So clearly any finite subset is so.
+		\end{proof}
+	
+	\begin{thm}\label{thm:representation}
+		Let $f: (X,\scr{X}) \lto (Y, \scr{Y})$ be a stable function of qualitative domains. For all pairs $(U, y)$ consisting of a set $U \in \scr{X}$ in $\scr{X}$ and an element $y \in f(U)$ in $f(U)$ there exists a unique minimal finite subset $V \subseteq U$ such that $y \in f(V)$.
+		\end{thm}
+	\begin{proof}
+		Recall that $U$ is the direct colimit of its finite subsets, so we can write
+		\begin{equation}
+			\bigcup_{U' \in \call{P}_{\text{fin}}(U)}U' = U
+			\end{equation}
+		By Lemma \ref{lem:finite_subsets} we have that all $U' \in \call{P}_{\text{fin}U}$ are elements of $\scr{X}$. Since $f$ preserves directed colimits, we have
+		\begin{equation}
+			f\Big(\bigcup_{U' \in \call{P}_{\text{fin}}(U)}U'\Big) = \bigcup_{U' \in \call{P}_{\text{fin}}(U)}f(U')
+			\end{equation}
+		and so $y \in f(U')$ for some finite subset $U' \subseteq U$, establishing existence.
+		
+		Assume that $U'$ is chosen to be minimal with respect to inclusion. Say $V$ is another such set. Then $U' \cup V$ is a subset of $U$, thus $U' \cup V \in \scr{X}$. In such a setting, $f$ commutes with intersection, so $f(U' \cap V) = f(U') \cap f(V)$ contains $y$. To avoid contradicting minimality, we must have $U' = V$. This establishes uniqueness.
+		\end{proof}
+	
+	\begin{defn}
+		Let $(X, \scr{X}), (Y, \scr{Y})$ be qualitative domains and let $f: \scr{X} \lto \scr{Y}$ be a stable function. The \textbf{trace} of $f$ is the following set.
+		\begin{equation}
+			\operatorname{tr}(f) := \{ (W, w) \in \call{P}_{\text{fin}}(X) \times Y \mid \exists U \in W \cap \scr{X}, w \in f(U)\text{ and }\forall V \subseteq U, V \neq U \Rightarrow w \not\in f(V) \}
+			\end{equation}
+		\end{defn}
+	
+	Ranging over all stable functions gives back a qualitative domain.
+	
+	\begin{defn}\label{def:implication}
+		Let $(X,\scr{X}), (Y, \scr{Y})$ be qualitative domains and let $f: \scr{X} \lto \scr{Y}$ be stable. Define the following set.
+		\begin{equation}
+			\scr{X} \Rightarrow \scr{Y} := \{ \operatorname{tr}(f) \mid f: \scr{X} \lto \scr{Y}\text{ stable} \}
+			\end{equation}
+		\end{defn}
+	
+	\begin{lemma}\label{lem:implication_qd}
+		In the context and with the notation of Definition \ref{def:implication}, the following is a qualitative domain.
+		\begin{equation}
+			\big(\call{P}_{\text{fin}}(X) \times Y, \scr{X} \Rightarrow \scr{Y}\big)
+			\end{equation}
+		\end{lemma}
+	\begin{proof}
+		Adopting the attitude that a function is a subset of a cartesian product, we may consider the \emph{empty function} $\varnothing: \scr{X} \lto \scr{Y}$, defined formally as the empty subset of the set $X \times Y$. This is such that $\operatorname{tr}(\varnothing) = \varnothing$, and so $\varnothing \in \scr{X} \times \scr{Y}$.
+		
+		Next we show that $\scr{X} \times \scr{Y}$ is closed under subsets, that is, if $\operatorname{tr}(f) \in \scr{X} \times \scr{Y}$ and $\frak{a} \subseteq \operatorname{tr}(f)$ then $\frak{a} \in \scr{X} \times \scr{Y}$.
+		
+		Define the following function.
+		\begin{align}
+			\label{eq:subset}h_{\frak{a}}: \scr{X} &\lto \scr{Y}\\
+			W &\longmapsto \{ y \in Y \mid \exists V \subseteq W, V \text{ finite}, (V, y) \in \frak{a} \}
+			\end{align}
+		We claim this is stable and that $\frak{a} =\operatorname{tr}(h)$. First we prove stability.
+		
+		Consider a directed system of sets $\{ W_i \}_{i \in I}$. We have
+		\begin{equation}
+			g_U(\bigcup_{i \in I}W_i) = \{ y \in Y \mid \exists V \subseteq \bigcup_{i \in I}W_i, V\text{ finite}, (V,y) \in \frak{a} \}
+			\end{equation}
+		Let $y \in g_U(\bigcup_{i \in I}W_i)$ and let $V \subseteq \bigcup_{i \in I}W_i$ be finite so that $(V,y) \in \frak{a}$. For each $v \in V$ there exists $i_v \in I$ so that $v \in W_{i_v}$. Since $V$ is finite and the system $\{ W_i \}_{i \in I}$ is directed, there thus exists $i \in I$ so that $V \subseteq W_i$. We have shown
+		\begin{equation}
+			g_U(\bigcup_{i \in I}W_i) = \bigcup_{i \in I}\{ y \in Y \mid \exists V \subseteq W_i,\text{ finite}, (V,y) \in \frak{a} \} = \bigcup_{i \in I}g_U(W_i)
+			\end{equation}
+		Next, say $W, W' \in \scr{X}$ are such that $W \cup W' \in \scr{X}$, we must show $g_U(W \cap W') = g_U(W) \cap g_U(W')$. We observe that $g_U(W \cap W') \subseteq g_U(W) \cap g_U(W')$ is trivial, as if there exists a finite subset $V$ of $W \cap W'$ satisfying $(V,y) \in \frak{a}$, then that same subset $V$ is a subset of $W$ and of $W'$ satisfying $(V,y) \in \frak{a}$.
+		
+		Thus, we consider an element $y \in g_U(W) \cap g_U(W')$. Let $V \subseteq W, V' \subseteq W'$ be finite subsets so that $(V, y) \in \frak{a}, (V', y)\in \frak{a}$. We have that $V \cup V' \subseteq W \cup W' \in \scr{X}$ and so $V \cup V' \in \scr{X}$. This means that $f(V \cap V') = f(V) \cap f(V')$ by stability of $f$, moreover, this shows $y \in f(V \cap V')$. To avoid contradicting the minimality condition which is part of $\operatorname{tr}(f)$ we must have $V \cap V' = V = V'$. Thus, $V$ is a finite subset of $W \cap W'$ satisfying $(V, y) \in \frak{a}$, in other words, $y \in g_U(W \cap W')$.
+		
+		Next we show that $\operatorname{tr}(g_{\frak{a}}) = \frak{a}$. First, let $(W, w) \in \frak{a}$. We notice that since $\frak{a} \subseteq \operatorname{tr}(f)$ that $W$ is finite. Hence, $w$ satisfies the defining property of $g_U(W)$ and thus $w \in g_U(W)$. To show minimality, simply notice that for any subset $T \in \scr{X}$,
+		\begin{align*}
+			w \in g_{\frak{a}}(T) &\Longrightarrow (T,w) \in \frak{a}\\
+			&\Longrightarrow (T,w) \in \operatorname{tr}(f)
+			\end{align*}
+		Thus, $W$ must be minimal so that $w \in g_{\frak{a}}(W)$. We have shown that $W$ is finite and minimal such that $w \in g_U(W)$, in other words, $(W,w) \in \operatorname{tr}(g_U)$.
+		
+		Lastly, say $(W,w) \in \operatorname{tr}(g_{\frak{a}})$. Then $w \in g_{\frak{a}}(W)$. Let $W' \subseteq W$ be finite so that $(W', w) \in \frak{a}$. Since $W$ is the minimal such (by definition of $\operatorname{tr}(g_{\frak{a}})$), we must have $W = W'$, and so $(W,w) \in \frak{a}$.
+		
+		So far, we have established that $\scr{X} \times \scr{Y}$ is closed under subsets. Now we show that it is closed under directed union.
+		
+		Say $\{ \operatorname{tr}(f_i) \}_{i \in I}$ is a directed system. Define the following function.
+		\begin{align*}
+			h: \scr{X} &\lto \scr{Y}\\
+			W &\longmapsto \{ y \in Y \mid \exists V \subseteq W, V\text{ finite}, (V,y) \in \bigcup_{i \in I}\operatorname{tr}(f_i) \}
+			\end{align*}
+		First we show this is stable.
+		
+		Closure under directed sets follows exactly similarly as the proof that $h_{\frak{a}}$ \eqref{eq:subset} is closed under directed sets.
+		
+		Finally, we show that if $W, W', W \cup W' \in \scr{X}$ then $h(W \cap W) = h(W) \cap h(W')$. This also follows similarly to what has already been shown, but we give the details.
+		
+		Let $V,V'$ be finite subsets of $W,W'$ respectively so that $(V,y), (V',y) \in \bigcup_{i \in I}\operatorname{tr}(f_i)$. By directedness, there exists $i \in I$ such that $(V,y), (V',y) \in \operatorname{tr}(f_i)$. Since $V \cup V' \subseteq W \cup W'$ we have $V \cup V' \in \scr{X}$ and so $ f_i(V \cap V') = f_i(V) \cap f_i(V') $, by stability of $f_i$. Since $y \in f_i(V \cap V')$ it follows by minimality that $V = V' = V \cap V'$. Thus $y \in h(W \cap W')$.
+		\end{proof}
+	
+	\begin{proposition}\label{prop:abs_binary}
+		If $(X,\scr{X}), (Y, \scr{Y})$ are qualitative domains, then $(\call{P}_{\text{fin}}(X) \times Y, \scr{X} \Rightarrow \scr{Y})$ is also binary.
+		\end{proposition}
+	\begin{proof}
+		We claim the following: if $\frak{a} \in \call{P}_{\text{fin}}(X) \times Y$ satisfies the following condition:
+		\begin{equation}\label{eq:condition_stability}
+			\text{if } (U,u),(V,u) \in \frak{a}\text{ satisfy }U \cup V \in \scr{X}\text{ then }U = V
+			\end{equation}
+		then there exists a stable function $g: \scr{X} \lto \scr{Y}$ such that $\frak{a} = \operatorname{tr}(g)$.
+		
+		In the proof of Lemma \ref{lem:implication_qd} we showed that if $\frak{a}$ is a subset of a set which is the trace $\operatorname{tr}(f)$ of a function, then $\frak{a}$ is itself the trace of a function. There, the only fact about $\frak{a} \subseteq \operatorname{tr}(f)$ which was used, was that in such a setting, condition \eqref{eq:condition_stability} holds. Thus, the proof there applies to the current context.
+		
+		The contrapositive to what has been proved so far, is that if $\frak{a}$ is not the trace of any stable function, then there exists $(U,u), (V,u) \in \frak{a}$ such that $U \cup V \in \scr{X}$ but $U \neq V$.
+		
+		We consider the two element subset
+		\begin{equation}
+			A := \{ (U, u), (V,u) \} \subseteq \frak{a}
+			\end{equation}
+		Since $U \cup V \in \scr{X}$, if $A = \operatorname{tr}(g)$ for some stable $g$, then by minimality we would have $U = V$, which we know is not the case.
+		
+		Thus, $\scr{X} \Rightarrow \scr{Y}$ is binary.
+		\end{proof}
+	
+	\begin{remark}
+		We remark that Proposition \ref{prop:abs_binary} did \emph{not} require that either $\scr{X},\scr{Y}$ be binary.
+	\end{remark}
+	
+	\begin{defn}\label{def:app}
+		Given qualitative domains $(X, \scr{X})$, $(\call{P}_{\text{fin}}(X) \times Y, \scr{X} \Rightarrow \scr{Y})$ along with $U \in \scr{X}, \frak{a} \in \scr{X} \Rightarrow \scr{Y}$ we define
+		\begin{equation}\label{eq:app_def}
+			\operatorname{App}(\frak{a}, U) = \{ y \in Y \mid \exists V \subseteq U, (V, y) \in \frak{a} \}
+			\end{equation}
+		Let $\operatorname{App}(\scr{X} \Rightarrow \scr{Y}, \scr{X})$ denote the collection of sets \eqref{eq:app_def} ranging over all $U \in \scr{X}$ and all $\frak{a} \in \scr{X} \Rightarrow \scr{Y}$.
+		\end{defn}
+	\begin{lemma}
+		In the context and with the notation of Definition \ref{def:app}, the pair $(Y, \operatorname{App}(\scr{X} \Rightarrow \scr{Y}, \scr{X}))$ is a qualitative domain.
+		\end{lemma}
+	\begin{proof}
+		Let $\frak{a} = \operatorname{tr}(g)$ for some stable function $g: \scr{X} \lto \scr{Y}$ and let $U \in \scr{X}$. Say $T \subseteq \operatorname{App}(\frak{a}, U)$ and define the following function.
+		\begin{align}
+			f: \scr{X} &\lto \scr{Y}\\
+			\label{eq:defining_equation}W &\longmapsto \{ y \in Y \mid \exists V \subseteq W\text{ finite } (V,y) \in \frak{a} \} \cap T
+			\end{align}
+		This is well defined as for all $W \in \scr{X}$ the set given on the right of \eqref{eq:defining_equation} is a subset of $g(W)$. Now we show that this is stable.
+		
+		The function $f$ clearly preserves inclusion, we now show that $f$ preserves directed unions.
+		
+		Consider a directed family of sets $\{ W_i \}_{i \in I}$ each of which is an element of $\scr{X}$. We have the following calculation, where the second equality follows by directedness of $\{ W_i \}_{i\in I}$ and the finiteness of the set $V$ present there.
+		\begin{align*}
+			f(\bigcup_{i \in I}W_i) &= \{ y \in Y \mid \exists V \subseteq W\text{ finite }(V, y) \in \frak{a} \} \cap T\\
+			&= \Big(\bigcup_{i \in I} \{ y \in Y \mid \exists V \subseteq W_i \text{ finite }(V,y) \in \frak{a} \}\Big) \cap T\\
+			&= \bigcup_{i \in I}\Big( \{ y \in Y \mid \exists V \subseteq W_i \text{ finite }(V,y) \in \frak{a} \} \cap T\Big)\\
+			&= \bigcup_{i \in I}f(W_i)
+			\end{align*}
+		
+		Now we show that if $U,W \in \scr{X}$ satisfy $U \cup W \in \scr{X}$ then $f(U \cap W) = f(U) \cap f(W)$. The non-trivial inequality to be proved is the following.
+		\begin{align}
+			\label{eq:finite_cap}&\{ y \in Y \mid \exists V \subseteq U\text{ finite }(V,y) \in \frak{a} \} \cap  \{ y \in Y \mid \exists W \subseteq U\text{ finite }(V,y) \in \frak{a} \} \\
+			\label{eq:finite_cap_both}&\subseteq \{ y \in Y \mid \exists V \subseteq U \cap W\text{ finite }(V,y) \in \frak{a} \}
+			\end{align}
+		Let $y$ be an element of the set $\eqref{eq:finite_cap}$ and let $V_1,V_2$ respectively denote finite sets such that $(V_1,y) \in \frak{a}, (V_2, y) \in \frak{a}$. Recall that $\frak{a} = \operatorname{tr}(g)$ and so $y \in g(V_1) \cap g(V_2) = g(V_1 \cap V_2)$ by stability of $g$. It follows by minimality that $V_1 \cap V_2 = V_1 = V_2$. We thus have that $V_1$ is finite and $V_1 \subseteq U, V_1 \subseteq W$. So $(V_1,y) \in \frak{a}$ and $V_1$ is finite and satisfies $V_1 \subseteq U \cap W$. That is, $y$ is an element of the set given in \eqref{eq:finite_cap_both}. Establishing stability of $f$.
+		
+		We now claim that $T = \operatorname{App}(\operatorname{tr}(f), U)$. First, let $t \in T$. Then $t \in \operatorname{App}(\frak{a}, U)$. Denote by $V$ a subseteq of $U$ such that $(V, t) \in \frak{a}$. Since $\frak{a} = \operatorname{tr}(g)$ we have that $V$ is finite and minimal amongst those subseteq $W \subseteq U$ such that $y \in g(W)$. That is, $t \in \operatorname{tr}(f)$.
+		
+		On the other hand, if $y \in \operatorname{App}(\operatorname{tr}(f), U)$ then by definition of $\operatorname{App}(\operatorname{tr}(f), U)$ there exists $V \subseteq U$ such that $(V, y) \in \operatorname{tr}(f)$. This implies in particular that $y \in f(V)$ and so $y \in \{ y' \in Y \mid \exists V' \subseteq W \text{ finite }(V,y) \in \frak{a} \} \cap T$, so in particular, $y \in T$. We make the remark that everything up until this point of the proof still works if $\operatorname{App}(\frak{a},U)$ had instead been defined as $\{ y \in Y \mid (U, y) \in \frak{a} \}$. However for what follows, it is crucial that Definition \eqref{eq:app_def} is taken instead.
+		
+		We now show that $\operatorname{App}(\scr{X} \Rightarrow \scr{Y}, \scr{X})$ is closed under directed union. Let $\{ \operatorname{App}(\frak{a}_i, U_u) \}_{i \in I}$ be a directed set. For each $i \in I$ let $f_i$ denote a stable function such that $\frak{a}_i = \operatorname{tr}(f_i)$. We have already seen in the proof of Lemma \ref{lem:implication_qd} that the union of a direct system of sets which are all the trace of some stable function is itself the trace of a function. So our first claim is that $\{ \operatorname{tr}(f_i) \}_{i \in I}$ is directed. Let $i,j \in I$ and let $k \in I$ be such that $\operatorname{App}(\operatorname{tr}(f_i), U_i), \operatorname{App}(\operatorname{tr}(f_j), U_j) \subseteq \operatorname{App}(\operatorname{tr}(f_k), U_k)$. Then for any $y \in \operatorname{App}(\operatorname{tr}(f_i), U_i)$ we have $y \in f_i(U_i) \subseteq f_k(U_i) \subseteq f_k(U_k)$ and similarly for $j$. This shows that $\operatorname{tr}(f_i), \operatorname{tr}(f_j) \subseteq \operatorname{tr}(f_k)$. It follows that $\{ \operatorname{tr}(f_i) \}_{i \in I}$ is a directed system. Let $f$ denote a stable function such that $\operatorname{tr}(f) = \bigcup_{i \in I}\operatorname{tr}(f_i)$.
+		
+		Let $U := \bigcup_{i \in I}U_i$, the proof will be finished once we establish the following claim.
+		\begin{equation}
+			\bigcup_{i \in I}\operatorname{App}(\frak{a}_i, U_i) = \operatorname{App}(\operatorname{tr}(f), U)
+			\end{equation}
+		For any element $y \in \bigcup_{i \in I}\operatorname{App}(\frak{a}_i, U_i)$ there exists $i \in I$ such that $y \in \operatorname{App}(\frak{a}_i, U_i)$ and so there exists $V \subseteq U_i$ for which $(V, y) \in \frak{a}_i$. We have that $y \in f_i(V) \subseteq f(V) \subseteq f(U)$. Thus, $V$ is a subset of $U$ such that $(V, y) \in \operatorname{tr}(f)$, that is, $y \in \operatorname{App}(\operatorname{tr}(f), U)$. Here, we used crucially Definition \eqref{eq:app_def}.
+		
+		Conversely, if $y \in \operatorname{App}(\operatorname{tr}(f), U)$ then $y \in f(U) = \bigcup_{i \in I}f(U_i)$ by stability of $f$. Hence, there exists $i \in I$ such that $y \in f(U_i)$ and so taking $U_i$ as a subset of itself, we see that $(U_i, y)$ satisfy the condition required so that $y \in f_i(U_i)$. That is, there exists $i \in I$ such that $y \in \operatorname{App}(\frak{a}_i, U_i)$. This completes the proof.
+		\end{proof}
+	
+	\begin{lemma}
+		Let $(X, \scr{X}), (Y, \scr{Y})$ be qualitative domains. For every subset $\frak{a} \subseteq Y$ there exists a stable function $f: X \lto Y$ and a set $U \subseteq X$ such that
+		\begin{equation}
+			\frak{a} = \operatorname{App}(\operatorname{tr}(f), U)
+			\end{equation}
+		\end{lemma}
+	\begin{proof}
+		Consider the constant function
+		\begin{align*}
+			f: \scr{X} &\lto \scr{Y}\\
+			W &\longmapsto \frak{a}
+			\end{align*}
+		We first claim that this is stable. Clearly, if $W \subseteq W'$ then $f(W) = f(W')$ and so in particular, $f(W) \subseteq f(W')$.
+		
+		Next, if $\{ U_i \}_{i \in I}$ is a directed system of sets in $\scr{X}$ we have
+		\begin{equation}
+			\bigcup_{i \in I}f(U_i) = \bigcup_{i \in I}\frak{a} = \frak{a}  = f(\bigcup_{i \in I})
+			\end{equation}
+		
+		Lastly, if $W_1 \cup W_2 \in \scr{X}$ then we again (trivially) have
+		\begin{equation}
+			f(W_1 \cap W_2) = \frak{a} = \frak{a}\cap \frak{a} = f(W_1) \cap f(W_2)
+			\end{equation}
+		
+		Next, we claim that the empty set $\varnothing$ is an appropriate choice for $U$, that is
+		\begin{equation}
+			\frak{a} = \operatorname{App}(\operatorname{tr}(f), \varnothing)
+			\end{equation}
+		We have
+		\begin{align*}
+			y \in \frak{a} &\Leftrightarrow y \in f(\varnothing)\\
+			&\Leftrightarrow \exists V \subseteq \varnothing\text{ st }(V,y) \in \operatorname{tr}(f)\\
+			&\Leftrightarrow y \in \operatorname{App}(\operatorname{tr}(f), \varnothing)
+			\end{align*}
+		\end{proof}
+	
+	\section{Coherence spaces}
+	We recall the definition of a \emph{reflexive graph}.
+	\begin{defn}
+		A multigraph $G = (V,E)$ is \textbf{reflexive} if for every vertex $v \in V$ there exists an edge $\{ v, v \}$ (recall that in a multigraph, the set $E$ is a \emph{multiset}, and so here the notation $\{ v,v\}$ does \emph{not} mean the set $\{ v\}$).
+		\end{defn}
+	\begin{defn}
+		A \textbf{coherence space} $A$ is a pair $(|A|, \coh_A)$ consisting of a set $|A|$ and a reflexive, symmetric relation $\coh_A$ on $|A|$. The set $|A|$ is the \textbf{web} of $A$ and the relation $\coh_A$ is the \textbf{coherence} of $A$.
+		\end{defn}
+	
+	\begin{lemma}
+		Let $(X, \scr{X})$ be a binary qualitative domain. Define a relation $R$ on $X$ in the following way.
+		\begin{equation}
+			(x_1,x_2) \in R \Leftrightarrow \{ x_1, x_2 \} \in \scr{X}
+			\end{equation}
+		This relation is reflexive and symmetric.
+		\end{lemma}
+	\begin{proof}
+		Since $X$ is a qualitative domain, the sets $\scr{X}$ cover $X$, that is,
+		\begin{equation}
+			\bigcup_{U \in \scr{X}}U = X
+			\end{equation}
+		Thus, since every subset of every elemenet of $\scr{X}$ is also an element of $\scr{X}$, it follows that $\{ x \} \in \scr{X}$ for each $x \in X$. In other words, $R$ is reflexive.
+		
+		The defining statement of $R$ is symmetric in $x_1, x_2$ and so $R$ is clearly symmetric as a relation.
+		\end{proof}
+	
+	\begin{defn}
+		A \textbf{clique} in a coherence space $A = (|A|, \coh_A)$ is a subset $C \subseteq |A|$ subject to
+		\begin{equation}
+			\forall c_1, c_2 \in C\qquad c_1 \coh_A c_2
+			\end{equation}
+		\end{defn}
+	
+	\begin{lemma}
+		Let $A = (|A|, \coh_A)$ be a coherence space. Let $\scr{X}$ denote the set of cliques of $A$. Then $(|A|, \scr{X})$ is a binary qualitative domain.
+		\end{lemma}
+	\begin{proof}
+		Since $\coh_A$ is reflexice, we have that for all $a \in |A|$ that $\{ a \} \in \scr{X}$, and so $\scr{X}$ covers $|A|$.
+		
+		The empty set is vacuously a clique, and so $\varnothing \in \scr{X}$.
+		
+		If $\{ U_i \}_{i \in I}$ is a directed family of cliques, then $U := \bigcup_{i \in I}U_i$ is satisfies:
+		\begin{equation}
+			\forall u_1, u_2 \in U, \exists i \in I, \{ u_1, u_2 \} \in U
+			\end{equation}
+		and so $u_1 \coh_A u_2$. That is, $U$ is a clique.
+		
+		If $U,V \in \scr{X}$ are such that $U \cup V \in \scr{X}$ then we see that $U \cap V$, being a subset of $U \cup V$, is a clique. Thus $U \cap V \in \scr{X}$.
+		
+		Say $U \not\in \scr{X}$. Then by definition, there exists $u_1, u_2$ such that $u_1 \not\coh_A u_2$. That is, $\{ u_1 u_2 \} \not\in \scr{X}$, and so $(|A|,\scr{X})$ is binary.
+		\end{proof}
+	We thus have a bijection between the collection of coherence spaces and the collection of binary qualitative domains.
+	
+	\appendix
+	\section{Examples}
+	
+	\begin{example}\label{ex:saturated_normal_form}
+		Consider the functor $\scr{D}: \set \lto \set$ which acts on objects and morphisms in the following way.
+		\begin{align*}
+			\scr{D}(X) &:= X \times X\\
+			\scr{D}(f: X \lto Y) &:= f \times f: X \times X \lto Y \times Y
+		\end{align*}
+		Let $\bold{2}$ denote the set $\lbrace 0, 1 \rbrace$ and $\bold{23}$ denote the set $\lbrace 0, ..., 22\rbrace$. Consider the point $(4,4) \in \scr{D}(\bold{23})$. We will define a normal form with codomain $(\bold{23}, (4,4))$. Define the following function.
+		\begin{align}
+			k: \bold{2} &\lto \bold{23}\\
+			0 &\longmapsto 4\\
+			1 &\longmapsto 4
+		\end{align}
+		The form we consider is $k: (\bold{2},(0,1)) \lto (\bold{23}, (4,4))$. To see that this is normal, consider a form $f: (X, (x,y)) \lto (\bold{23}, (4,4))$. We wish to define a function $l: \bold{2} \lto X$ such that $l \times l: \bold{2} \times \bold{2} \lto X \times X$ renders the following diagram commutative.
+		\begin{equation}
+			\begin{tikzcd}
+				& (\bold{23} \times \bold{23}, (4,4))\\
+				(\bold{2} \times \bold{2}, (0,1))\arrow[ur,"{k \times k}"]\arrow[rr,swap,"{l \times l}"] && (X \times X, (x,y))\arrow[ul,swap,"{f \times f}"]
+			\end{tikzcd}
+		\end{equation}
+		In other words, we desire a function $l: \bold{2} \lto X$ satisfying the following properties.
+		\begin{equation}
+			l(0) = x, \quad l(1) = y
+		\end{equation}
+		but this condition defines a function with domain $\bold{2}$ uniquely.
+	\end{example}
+\section{Girard's LIES}
+\cite{BS}[\S 8.2 page 164] ``Coherent spaces are originally a simplification of Scott domains; the irredundant encoding due to stability enables a more limpid approach: we no longer content ourselves with the possibility of interpreting logic, one is able to write down this interpretation. One eventually discovers a logical layer finer than intuitionism, linear logic". This isn't necessarily a \emph{lie} though, because he isn't saying that Linear Logic was originally invented this way.
+
+Thomas Erhard, Probabilistic Coherence Spaces are
+Fully Abstract for Probabilistic PCF, page 1. ``From the very beginning, Linear Logic has been associated with intuitions coming from calculus and linear algebra" (and then references \cite{Girard}). Does this imply that Erhard new \cite{Girard} was the beginning of Linear Logic?
+	
+	\begin{thebibliography}{9}
+		\bibitem{Girard} J. Y. Girard, \emph{Normal functors, power series and lambda-calculus}.
+		
+		\bibitem{BS} J.Y.Girard, \emph{The Blind Spot}
+		\end{thebibliography}
+	\end{document}
+

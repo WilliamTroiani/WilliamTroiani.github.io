@@ -1,0 +1,56 @@
+\contentsline {section}{\numberline {1}Introduction}{1}{section.1}%
+\contentsline {section}{\numberline {2}Finite colimits in the topos of sets}{3}{section.2}%
+\contentsline {section}{\numberline {3}Type theory}{5}{section.3}%
+\contentsline {subsection}{\numberline {3.1}\sc Definition.}{5}{subsection.3.1}%
+\contentsline {subsection}{\numberline {3.2}\sc Remark.}{9}{subsection.3.2}%
+\contentsline {subsection}{\numberline {3.3}Some helpful type theory lemmas}{9}{subsection.3.3}%
+\contentsline {subsection}{\numberline {3.4}\sc Lemma.}{9}{subsection.3.4}%
+\contentsline {subsection}{\numberline {3.5}\sc Lemma.}{11}{subsection.3.5}%
+\contentsline {subsection}{\numberline {3.6}\sc Lemma.}{12}{subsection.3.6}%
+\contentsline {subsection}{\numberline {3.7}\sc Lemma.}{12}{subsection.3.7}%
+\contentsline {subsection}{\numberline {3.8}\sc Lemma.}{12}{subsection.3.8}%
+\contentsline {subsection}{\numberline {3.9}Internal logic}{13}{subsection.3.9}%
+\contentsline {subsection}{\numberline {3.10}\sc Definition.}{13}{subsection.3.10}%
+\contentsline {subsection}{\numberline {3.11}\sc Remark.}{13}{subsection.3.11}%
+\contentsline {subsection}{\numberline {3.12}\sc Notation.}{14}{subsection.3.12}%
+\contentsline {subsection}{\numberline {3.13}\sc Definition.}{14}{subsection.3.13}%
+\contentsline {subsection}{\numberline {3.14}\sc Definition.}{16}{subsection.3.14}%
+\contentsline {subsection}{\numberline {3.15}\sc Definition.}{17}{subsection.3.15}%
+\contentsline {subsection}{\numberline {3.16}\sc Example.}{17}{subsection.3.16}%
+\contentsline {subsection}{\numberline {3.17}\sc Definition.}{17}{subsection.3.17}%
+\contentsline {subsection}{\numberline {3.18}\sc Lemma.}{17}{subsection.3.18}%
+\contentsline {subsection}{\numberline {3.19}\sc Proposition.}{18}{subsection.3.19}%
+\contentsline {section}{\numberline {4}Using an internal logic}{22}{section.4}%
+\contentsline {subsection}{\numberline {4.1}The term associated to an object}{22}{subsection.4.1}%
+\contentsline {subsection}{\numberline {4.2}\sc Lemma.}{22}{subsection.4.2}%
+\contentsline {subsection}{\numberline {4.3}\sc Corollary.}{23}{subsection.4.3}%
+\contentsline {subsection}{\numberline {4.4}Crucial terms}{24}{subsection.4.4}%
+\contentsline {subsection}{\numberline {4.5}\sc Definition.}{24}{subsection.4.5}%
+\contentsline {subsection}{\numberline {4.6}\sc Example.}{24}{subsection.4.6}%
+\contentsline {subsection}{\numberline {4.7}\sc Example.}{25}{subsection.4.7}%
+\contentsline {section}{\numberline {5}Finite colimits in an arbitrary topos}{25}{section.5}%
+\contentsline {subsection}{\numberline {5.1}Initial object}{26}{subsection.5.1}%
+\contentsline {subsection}{\numberline {5.2}\sc Proposition.}{26}{subsection.5.2}%
+\contentsline {subsection}{\numberline {5.3}Finite coproducts}{27}{subsection.5.3}%
+\contentsline {subsection}{\numberline {5.4}\sc Proposition.}{27}{subsection.5.4}%
+\contentsline {subsection}{\numberline {5.5}\sc Remark.}{29}{subsection.5.5}%
+\contentsline {subsection}{\numberline {5.6}\sc Definition.}{29}{subsection.5.6}%
+\contentsline {subsection}{\numberline {5.7}\sc Proposition.}{30}{subsection.5.7}%
+\contentsline {subsection}{\numberline {5.8}Coequalisers}{30}{subsection.5.8}%
+\contentsline {subsection}{\numberline {5.9}\sc Definition.}{30}{subsection.5.9}%
+\contentsline {subsection}{\numberline {5.10}\sc Remark.}{30}{subsection.5.10}%
+\contentsline {subsection}{\numberline {5.11}\sc Definition.}{31}{subsection.5.11}%
+\contentsline {subsection}{\numberline {5.12}\sc Definition.}{31}{subsection.5.12}%
+\contentsline {subsection}{\numberline {5.13}\sc Proposition.}{31}{subsection.5.13}%
+\contentsline {subsection}{\numberline {5.14}Finite colimits}{34}{subsection.5.14}%
+\contentsline {section}{\numberline {A}Topos theory and logic}{37}{appendix.A}%
+\contentsline {subsection}{\numberline {A.1}Quantifiers}{37}{subsection.A.1}%
+\contentsline {subsection}{\numberline {A.2}\sc Definition.}{37}{subsection.A.2}%
+\contentsline {subsection}{\numberline {A.3}\sc Theorem.}{38}{subsection.A.3}%
+\contentsline {subsection}{\numberline {A.4}\sc Definition.}{38}{subsection.A.4}%
+\contentsline {subsection}{\numberline {A.5}\sc Lemma.}{38}{subsection.A.5}%
+\contentsline {subsection}{\numberline {A.6}Heyting algebras}{40}{subsection.A.6}%
+\contentsline {subsection}{\numberline {A.7}\sc Definition.}{40}{subsection.A.7}%
+\contentsline {subsection}{\numberline {A.8}\sc Theorem.}{40}{subsection.A.8}%
+\contentsline {subsection}{\numberline {A.9}\sc Definition.}{41}{subsection.A.9}%
+\contentsline {subsection}{\numberline {A.10}\sc Remark.}{41}{subsection.A.10}%

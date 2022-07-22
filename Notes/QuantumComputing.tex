@@ -1,0 +1,1878 @@
+\documentclass[12pt]{article}
+
+\usepackage{amsthm}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{mathrsfs}
+\usepackage{amssymb}
+\usepackage{units}
+\usepackage{graphicx}
+\usepackage{tikz-cd}
+\usepackage{nicefrac}
+\usepackage{hyperref}
+\usepackage{bbm}
+\usepackage{color}
+\usepackage{tensor}
+\usepackage{tipa}
+\usepackage{bussproofs}
+\usepackage{ stmaryrd }
+\usepackage{ textcomp }
+\usepackage{leftidx}
+\usepackage{afterpage}
+\usepackage{varwidth}
+\usepackage{physics}
+
+\newcommand\blankpage{
+	\null
+	\thispagestyle{empty}
+	\addtocounter{page}{-1}
+	\newpage
+}
+
+\graphicspath{ {images/} }
+
+\theoremstyle{plain}
+\newtheorem{thm}{Theorem}[subsection] % reset theorem numbering for each chapter
+\newtheorem{proposition}[thm]{Proposition}
+\newtheorem{lemma}[thm]{Lemma}
+\newtheorem{fact}[thm]{Fact}
+\newtheorem{cor}[thm]{Corollary}
+\newtheorem{post}[thm]{Postulate}
+
+\theoremstyle{definition}
+\newtheorem{defn}[thm]{Definition} % definition numbers are dependent on theorem numbers
+\newtheorem{exmp}[thm]{Example} % same for example numbers
+\newtheorem{notation}[thm]{Notation}
+\newtheorem{remark}[thm]{Remark}
+\newtheorem{condition}[thm]{Condition}
+\newtheorem{question}[thm]{Question}
+\newtheorem{construction}[thm]{Construction}
+\newtheorem{exercise}[thm]{Exercise}
+\newtheorem{example}[thm]{Example}
+\newtheorem{observation}[thm]{Observation}
+\newtheorem{algorithm}[thm]{Algorithm}
+\newtheorem{application}[thm]{Application}
+
+\newcommand{\bb}[1]{\mathbb{#1}}
+\newcommand{\scr}[1]{\mathscr{#1}}
+\newcommand{\call}[1]{\mathcal{#1}}
+\newcommand{\psheaf}{\text{\underline{Set}}^{\scr{C}^{\text{op}}}}
+\newcommand{\und}[1]{\underline{\hspace{#1 cm}}}
+\newcommand{\adj}[1]{\text{\textopencorner}{#1}\text{\textcorner}}
+\newcommand{\comment}[1]{}
+\newcommand{\lto}{\longrightarrow}
+
+\title{Mathematician's introduction to quantum error correction}
+\author{Will Troiani}
+\date{August 2020}
+
+\begin{document}
+	
+	\maketitle
+	\tableofcontents
+	
+	\section{Quantum computing}\label{sec:quantum_computing}
+	The goal of this document to define a mathematical system of \emph{qubits} as well as their \emph{measurements}, \emph{time evolutions}, etc, and then to develop a theory of error correction upon this foundation. An optional next step after understanding this mathematics is to find a physical phenomena adhering to these conditions. This step which we refer to as optional though is not part of this document.
+	
+	Our standard of \emph{information} will be sequences of binary integers. The form this information can be encoded into during transmission however will be more liberal. A bit of \emph{quantum information}, that is, a \emph{qubit}, will be any norm 1 element of the complex Hilbert space $\call{H} := \bb{C}^2$. Actually, we identify elements of $\call{H}$ with linear operators from $\bb{C}$ into $\call{H}$ and use Dirac notation. For example, $\ket{0}: \bb{C} \lto \call{H}$ denotes the map defined by linearity and the rule $1 \longmapsto (1,0)$, whereas $\ket{1}$ denotes the map defined by linearity and the rule $1 \longmapsto (0,1)$.
+	\begin{defn}\label{def:qubit}
+		A \textbf{qubit} is a copy of the $\bb{C}$-Hilbert space $\bb{C}^2$.
+		
+		The \textbf{state} of a qubit $\bb{C}^2$ is a vector $\ket{\psi} \in \bb{C}^2$ of norm 1.
+		
+		A pair $(\bb{C}^2,\ket{\psi})$ consisting of a qubit $\bb{C}^2$ and a state $\ket{\psi} \in \bb{C}^2$ is a \textbf{prepared qubit} and we say $\bb{C}^2$ has been \textbf{prepared} to $\ket{\psi}$.
+		\end{defn}
+	If clarity is needed, we will refer to a binary integer as a \textbf{classical bit}. This is to help distinguish our standard of information from qubits just defined. If we write a state $\ket{\psi}$ of a qubit $\call{H}$ as a linear combination of the standard basis vectors
+\begin{equation}
+	\ket{\psi} = \alpha\ket{0} + \beta\ket{1}
+	\end{equation}
+	We think of $|\alpha|^2$ and $|\beta|^2$ respectively as \emph{probabilities} of the state $\ket{\psi}$ being in state $\ket{0}$ or state $\ket{1}$ respectively. A qubit where $\alpha \neq 0$ and $\beta \neq 0$ is a \textbf{superposition state}.
+	
+	We can now be more precise; our goal is to develop a theory of communication of classical bits \emph{via} qubits. The manipulation and transmission of classical bits via qubits will loosely be referred to as \emph{quantum computing}. For any physical computation to take place, it is crucial that reliable error correction is possible, simply due to the huge number of components and interactions involved. The following is our central question.
+	\begin{question}\label{question:error_correction}
+		What tolerance for error does quantum computing allow for?
+		\end{question}
+	This is answered formally by Theorem \ref{thm:general_error_correction}, which classifies necessary and sufficient conditions for a collection of errors to be correctable.
+	
+	So far, however, we have only considered systems consisting of a single qubit. Since a system consisting of multiple qubits, any of which may be in superposition, may \emph{itself} be in a superposition state, the definition of a \emph{composite} system of qubits is not as simple as the \emph{product} of qubits, in the category of Hilbert spaces.
+	
+	More precisely, say we had two qubits prepared respectively to states $\ket{\psi}, \ket{\varphi}$. Then the pair $(\ket{\psi}, \ket{\varphi})$ may also be in superposition. That is, the state
+	\begin{equation}
+		\alpha (\ket{\psi}, \ket{\varphi}) + \beta (\ket{\psi}, \ket{\varphi})
+		\end{equation}
+	where $|\alpha|^2 + |\beta|^2 = 1$ is a valid state of the combined system consisting of the two qubits. Thus, states of \emph{pairs} of systems are vectors in a subspace of the Hilbert space freely generated by the pairs $(\ket{\psi},\ket{\varphi})$ of states of the qubits. in fact, we will take the composite system to be the tensor product of the two spaces, which means we need to justfiy the bilinearity conditions too. At the time of writing, the author does not know a satisfying way to motivate these conditions mathematically (although $L(X \times Y) \cong L(X) \otimes L(Y)$ is surely relevant).
+	
+	A qubit as well as any composite of a finite collection of qubits are examples of finite dimensional complex Hilbert spaces. We define a \textbf{state space} to be any finite dimensional Hilbert space $\call{H}$.
+	
+	\begin{defn}\label{def:composite_system}
+		Let $\call{H}_1,\call{H}_2$ be two state spaces. The \textbf{composite state space} is $\call{H}_1 \otimes \call{H}_2$. A \textbf{state} of a composite system is a vector $\ket{\psi} \in \call{H}_1 \otimes \call{H}_2$ which can be written as a linear combination of pure tensors
+		\begin{equation}\label{eq:sum_pure_tensors}
+			\alpha_{1}\ket{\psi_1} + \ldots + \alpha_n\ket{\psi_n} \in \call{H}_1 \otimes \call{H}_2
+			\end{equation}
+		where the coefficients satisfy $|\alpha_1|^2 + \ldots + |\alpha_n|^2 = 1$. The condition that each $\ket{\psi_i}$ is a pure tensor means
+		\begin{equation}
+			\forall i =1,\ldots, n, \exists \ket{\psi_i^1}\in \call{H}_1,\exists \ket{\psi_i^2}\in \call{H}_2, \ket{\psi_i} = \ket{\psi_i^1} \otimes \ket{\psi_i^2}
+			\end{equation}
+	\end{defn}
+	
+	\begin{remark}
+		The tensor product is \emph{not} a product in the category of Hilbert spaces. This is because the states such as \eqref{eq:sum_pure_tensors} are \emph{not} necessarily determined by a choice of state in $\bb{H}_1$, and a choice of state in $\bb{H}_2$. Thus, it is not a surprise that we observe ``bizarre" behavior, as our definition of a coupled system is \emph{not} given by the standard mathematical definition of \emph{product}. A comparison between the monoidal structure of the category of Hilbert spaces and a hypothetical product can be found in \cite{Baez}).
+	\end{remark}
+What degree of access do we have to superposition states? The answer, naturally, is we have access to what we can measure. Rather than one particular outcome, we define a measurement as a family of possible outcomes with assocaited probabilities; the states of state spaces are probabilistic, and so the measurements will be too. Moreover, we do \emph{not} assume that measurement leaves the state uneffected, and so measurements are operators upon the state space.
+
+\begin{defn}\label{def:measurement}
+	A \textbf{measurement} on a state space $\call{H}$ is a finite family of linear operators $\lbrace M_m: \call{H}\lto \call{H}\rbrace_{m \in \call{M}}$ satisfying the \textbf{completeness condition}.
+	\begin{equation}\label{eq:completeness}
+		\sum_{m \in \call{M}}M_m^{\dagger}M_m = I
+	\end{equation}
+	An element $m \in \call{M}$ is an \textbf{outcome} (simply a set of labels).
+	
+	The \textbf{resulting state} after measurement $\{ M_m \}_{m \in \call{M}}$ and outcome $m$ is:
+	\begin{equation}
+		\frac{M_m\ket{\psi}}{\sqrt{p(m)}}
+	\end{equation}
+\end{defn}
+\begin{remark}
+	Associated to every measurement and state vector $\ket{\psi}$ there is a value
+	\begin{equation}
+		p(m) := \bra{\psi}M^{\dagger}_mM_m\ket{\psi} = \lVert M_m \ket{\psi} \rVert^2
+	\end{equation}
+	It follows from \eqref{eq:completeness} that $p(m) \leq 1$ for all $m, \ket{\psi}$. We understand $p(m)$ as the probability of outcome $m$ on the measurement $\{ M_m \}_{m \in \call{M}}$. Under this interpretation, we think of \eqref{eq:completeness} as requiring that the probabilities $p(m)$ sum to $1$.
+	\end{remark}
+	
+The possibility of superposition states is a liberation, and measurements needing to satisfy the completeness condition is a limitation. For instance, where a classical bit is in one of two states (0 or 1) a qubit has an \emph{infinite} number of possible states (a liberation). On the other hand, only \emph{orthogonal} states can be distinguished, due to the completeness condition (Lemma \ref{lem:nonorthogonal_indistinguishability} below) (a limitation).
+
+\begin{lemma}\label{lem:nonorthogonal_indistinguishability}
+	Let $\ket{\psi_1}, \ket{\psi_2}$ be non-orthogonal states of a qubit $\call{H}$. There is no measurement $\{ M_m: \call{H} \lto \call{H} \}_{m \in \call{M}}$ with $1,2 \in \call{M}$ satisfying:
+	\begin{equation}\label{eq:distinguish}
+		p(1) = \bra{\psi_1} M_{1}^\dagger M_1\ket{\psi_1} = 1\quad \text{and}\quad p(2) = \bra{\psi_2} M_2^\dagger M_2\ket{\psi_2} = 1
+		\end{equation}
+	\end{lemma}
+\begin{proof}
+	Assume such a measurement exists. Since $\ket{\psi_1}, \ket{\psi_2}$ are non-orthogonal, there exists $\ket{\varphi}$, orthorgonal to $\ket{\psi_1}$ such that
+	\begin{equation}
+		\ket{\psi_2} = \alpha \ket{\psi_1} + \beta \ket{\varphi}
+		\end{equation}
+	for some $\alpha, \beta \in \bb{C}$ satisfying $|\alpha|^2 + |\beta|^2 = 1$. Moreover, since $\ket{\psi_1}, \ket{\psi_2}$ are non-orthogonal, we have $\beta \neq 1$. We have
+	\begin{align}
+		1 &= \bra{\psi_2}\ket{\psi_2}\\
+		&= \bra{\psi_2} M_2^\dagger M_2 \ket{\psi_2}\\
+		&= (\bar{\alpha}\bra{\psi_1} + \bar{\beta}\bra{\varphi})M_2^\dagger M_2(\alpha \ket{\psi_1} + \beta \ket{\varphi})\\
+		&\label{eq:expanded}= |\alpha|^2\bra{\psi_1}M_2^\dagger M_2\ket{\psi_1} + \bar{\alpha}\beta \bra{\psi_1}M_2^\dagger M_2 \ket{\varphi}\\
+		&\qquad+ \bar{\beta}\alpha\bra{\varphi}M_2^\dagger M_2\ket{\psi_1} + |\beta|^2 \bra{\varphi}M_2^\dagger M_2\ket{\varphi}
+		\end{align}
+	Now, by the completeness condition, we have
+	\begin{equation}
+		\bra{\psi_1} \sum_{m \in \call{M}}M_m^\dagger M_m\ket{\psi_1} = \bra{\psi_1} I \ket{\psi_1} = 1
+		\end{equation}
+	This, combined with $p(1) = 1$ implies $\bra{\psi_1} M_2^\dagger M_2 \ket{\psi_1} = 0$. In other words, $\lVert M_2 \ket{\psi_1} \rVert^2 = 0$. This implies $M_2\ket{\psi_1} = 0$ (the zero vector). Thus, \eqref{eq:expanded} implies:
+	\begin{equation}
+		1 = |\beta|^2 \bra{\varphi} M_2^\dagger M_2 \ket{\varphi} = |\beta|^2 \lVert M_2 \ket{\varphi}\rVert^2 \leq |\beta|^2 < 1
+		\end{equation}
+	This stands in contradiction to \eqref{eq:distinguish}.
+	\end{proof}
+
+The liberty of superposition means the following are four valid states of a single qubit.
+\begin{equation}
+	\frac{\ket{0} + \ket{1}}{\sqrt{2}}\quad \frac{\ket{0} - \ket{1}}{\sqrt{2}}\quad  \frac{-\ket{0} + \ket{1}}{\sqrt{2}} \quad \frac{-\ket{0} - \ket{1}}{\sqrt{2}}
+	\end{equation}
+Since these are non-orthogonal though, Lemma \ref{lem:nonorthogonal_indistinguishability} renders these indistinguishable. Desigining algorithms amongst the push and pull of superposition and measurement is the art of quantum computing. An example of such an art piece is the possibility of transferring two classical bits of information via a single qubit. This possibility is surprising given the previous observation.
+
+	\begin{example}\label{ex:2_bits}
+		The following is a state of the composite system $\call{H} := \bb{C}^2 \otimes \bb{C}^2$.
+		\begin{equation}\label{eq:bell}
+			\frac{\ket{00} + \ket{11}}{\sqrt{2}} \in \call{H}
+		\end{equation}
+		Consider the following matrices, we note that these matrices will play an important role later too.
+		\begin{equation}\label{eq:pauli}
+			I :=
+			\begin{pmatrix}
+				1 & 0\\
+				0 & 1
+			\end{pmatrix}
+			\quad
+			X :=
+			\begin{pmatrix}
+				0 &1\\
+				1 &0
+			\end{pmatrix}
+			\quad
+			Y :=
+			\begin{pmatrix}
+				0 & -i\\
+				i & 0
+			\end{pmatrix}
+			\quad
+			Z :=
+			\begin{pmatrix}
+				1 & 0\\
+				0 & -1
+			\end{pmatrix}
+		\end{equation}
+		To make the action of $Y$ simpler we will consider $iY$. These act on basis elements as follows.
+		\begin{align*}
+			I\ket{0} &= \ket{0} & I\ket{1} &= \ket{1}\\
+			X\ket{0} &= \ket{1} & X\ket{1} &= \ket{0}\\
+			iY\ket{0} &= -\ket{1} & iY \ket{1} &= \ket{0}\\
+			Z\ket{0} &= \ket{0} & Z\ket{1} &=-\ket{1}
+		\end{align*}
+		Applying a choice of these unitary matrices to the first qubit results in the following states of the combined system.
+		\begin{align}\label{eq:orthogonal_states}
+			\begin{split}
+			I:\qquad & \frac{\ket{00} + \ket{11}}{\sqrt{2}}\\
+			X:\qquad & \frac{\ket{10} + \ket{01}}{\sqrt{2}}\\
+			iY:\qquad & \frac{\ket{01} - \ket{10}}{\sqrt{2}}\\
+			Z:\qquad & \frac{\ket{00} - \ket{11}}{\sqrt{2}}
+			\end{split}
+		\end{align}
+		A priori, we may have agreed on a correspondence between the operators $I,X, iY, Z$ and respectively the classical bits $00, 10, 01, 11$. Moreover, the states \eqref{eq:orthogonal_states} are orthogonal, so Lemma \ref{lem:nonorthogonal_indistinguishability} does not rule out the possibility of distinguishing these states.
+		
+		Orthogonal states can be distinguished via measurement, this is the content of Lemma \ref{lem:orthogonal_distinguishability} below. Let us emphasise the crucial point of this example: although state \eqref{eq:bell} is in superposition, the system itself is still thought of as a pair of qubits, one in one hand, one in the other. Thus, if Alice holds the first qubit, and performs one of the transformations \eqref{eq:pauli} then 2 bits of information can be transferred by sending this single qubit to Bob, who holds the second qubit. Bob performs a measurement to distinguish which of the four states \eqref{eq:orthogonal_states} the combined system is in, and then extracts the classical bits from the result.
+		\end{example}
+	\begin{lemma}\label{lem:orthogonal_distinguishability}
+		If $\ket{\psi_1},\ldots, \ket{\psi_n}$ are orthogonal states of a state space, then there exists a measurement $\{ M_m \}_{m \in \call{M}}$ such that for all $i = 1,\ldots, n$:
+		\begin{equation}
+			p(i) = \bra{\psi_i}M_i^\dagger M_i \ket{\psi_i} = 1
+			\end{equation}
+		\end{lemma}
+	\begin{proof}
+		The operator
+		\begin{equation}
+			E := \sum_{i = 1}^n \ket{\psi_i}\bra{\psi_i}
+			\end{equation}
+		is equal to the identity when restricted to the subspace $\operatorname{Span}\{ \ket{\psi_1},\ldots, \ket{\psi_n} \}$ and when written with respect to the basis $\ket{1},\ldots, \ket{n}$ of this subspace. A trick to extend this to a measurement of the whole space, and written with respect to the standard basis is to add an operator $M_0$ defined by $I - E$. The set $\{ \ket{\psi_i}\bra{\psi_i} \}_{i = 1,\ldots, n}\cup M_0$ is a measurement distinguishing $\ket{1},\ldots, \ket{n}$.
+		\end{proof}
+	
+	Example \ref{ex:2_bits} assumed that Alice was able to perform one of the unitary operators \eqref{eq:pauli} to her qubit. For single qubits, \emph{all} the unitary operators constitute the operations we can perform to qubits.
+	
+	\begin{defn}\label{def:time_evolution}
+		Let $\call{H}$ be a state space. A \textbf{single step time evolution} of $\call{H}$ is a unitary operator $U$ on $\call{H}$. A \textbf{single step time evolution} of a state vector $\ket{\psi}$ with respect to $U$ is the pair $(\ket{\psi},U\ket{\psi})$.
+		
+		An \textbf{evolution} of $\call{H}$ is a sequence of unitary operators $(U_1,...,U_n)$ on $\call{H}$, an \textbf{evolution} of a state vector $\ket{\psi}$ with respect to the evolution $(U_1,...,U_n)$ is the sequence $(\ket{\psi},U_1\ket{\psi},...,U_n\hdots U_1\ket{\psi})$.
+	\end{defn}
+	
+	Example \ref{ex:2_bits} falls into the special setting where the measurement used to distinguish the states \eqref{eq:orthogonal_states} is \textbf{projective}, ie, all the measurement operators are projectors.
+	
+	\begin{defn}
+		A linear transformation $P$ is a \textbf{projector} if $P^2 = P$.
+	\end{defn}
+	
+	These simple measurements are sufficient in many situations.
+	
+	The exact relationship between projective measurements and measurements is given by Proposition \ref{prop:projective_vs_measurement} below which says in a precise sense that general measurements are projective measurements augmented by a unitary operator.
+	
+		\begin{lemma}\label{lem:unitary_extension}
+		Let $W \subseteq V$ be a subspace of a Hilbert space $V$, and let $U: W \lto V$ be a unitary operator. Then $U$ extends to a unitary $U'$ operator on all of $V$.
+	\end{lemma}
+	\begin{proof}[Proof sketch]
+		Define $U' = U\otimes \operatorname{Id}_{W^{\perp}}$.
+	\end{proof}
+	
+	\begin{proposition}\label{prop:projective_vs_measurement}
+		Let $\lbrace M_m\rbrace_{m \in \call{M}}$ be a measurement on $\call{H}$. Then there exists a projective measurement $\{ P_m \}_{m \in \call{M}}$, a state space $Q$, and a unitary operator $U: \call{H} \otimes Q \lto \call{H} \otimes Q$ such that for any state $\ket{\psi}$ of the composite system $\call{H} \otimes Q$ and any $n \in \call{M}$:
+		\begin{equation}
+			\bra{\psi} U^\dagger P_n^\dagger P_n U\ket{\psi} = \bra{\psi} M_n^\dagger M_n \ket{\psi}
+			\end{equation}
+	\end{proposition}
+	\begin{proof}
+		Let $Q$ be the Hilbert space freely generated by the set $\lbrace \ket{1},...,\ket{m}\rbrace$. Define the following linear map.
+		\begin{align}
+			\label{eq:measurement}U: \call{H} &\lto \call{H} \otimes Q\\
+			\label{eq:measurement_equation}\ket{\psi} &= \sum_{m \in \call{M}}M_m\ket{\psi}\otimes \ket{m}
+		\end{align}
+		We first prove this is unitary, by Corollary \ref{cor:unitary_true} it suffices to check that $\bra{\psi}U^\dagger U\ket{\psi} = \bra{\psi}\ket{\psi}$ for arbitrary $\ket{\psi} \in \call{H}$. We perform the following calculation, note: we have written $\bra{\psi} M_m^\dagger \otimes \bra{m}$ for the linear functional which sends $a \otimes b$ to the product $\bra{\psi} M_m^\dagger a \bra{m}b$.
+		\begin{align*}
+			\bra{\psi}U^\dagger U\ket{\psi} &= \Big(\sum_{m \in \call{M}}\bra{\psi}M_m^\dagger \otimes \bra{m}\Big)\Big(\sum_{m' \in \call{M}}M_{m'}\ket{\psi} \otimes \ket{m'}\Big)\\
+			&= \sum_{m \in \call{M}}\sum_{m' \in M}\bra{\psi}M_m^\dagger M_{m'}\ket{\psi}\bra{m}\ket{m'}\\
+			&= \sum_{m \in \call{M}}\bra{\psi}M_m^\dagger M_{m'}\ket{\psi}\\
+			&= \bra{\psi}\ket{\psi}
+		\end{align*}
+		We now want to extend $U$ to a unitary operator on all of $\call{H} \otimes Q$ using Lemma \ref{lem:unitary_extension}, however we must first identify $\call{H}$ with a subspace of $\call{H} \otimes Q$. There are many ways this can be done, here we choose the basis vector $\ket{1} \in Q$ to be special, and identify $\call{H}$ with $\call{H} \otimes \operatorname{Span}\ket{1} \subseteq \call{H} \otimes Q$.
+		
+		Now consider the following projective measurement on $\call{H} \otimes Q$:
+		\begin{equation}
+			P_m := I_q \otimes \ket{m}\bra{m}
+		\end{equation}
+		Then the probability outcome $n$ occurs is:
+		\begin{align*}
+			p(n) &= \bra{\psi}U^\dagger P_n U \ket{\psi}\\
+			&= \Big(\sum_{m \in \call{M}}\bra{\psi}M_m^\dagger \otimes \bra{m}\Big) I_Q \otimes \ket{n}\bra{n}\Big(\sum_{m' \in \call{M}}M_{m'}\ket{\psi}\otimes\ket{m}\Big)\\
+			&= \big(\sum_{m \in \call{M}}\bra{\psi}M_m^\dagger \otimes \bra{m}\big)\sum_{m'\in\call{M}}M_{m'}\ket{\psi}\otimes\ket{n}\bra{n}\ket{m}\\
+			&=\sum_{m \in \call{M}}\Big(\bra{\psi}M_m^\dagger \otimes \bra{m}\Big) M_n \ket{\psi}\otimes \ket{n}\\
+			&=\sum_{m \in \call{M}}\bra{\psi}M_m^\dagger M_n\ket{\psi}\bra{m}\ket{n}\\
+			&=\bra{\psi}M_n^\dagger M_n \ket{\psi}
+		\end{align*}
+	\end{proof}
+	\begin{remark}
+		The defining equation \eqref{eq:measurement_equation} of the linear map \eqref{eq:measurement} may look opaque. We derive it from a more natural starting point here. See Appendix \ref{sec:commutative_algebra} for a justification of the natural isomorphisms used in the following calculation.
+		\begin{align}
+			\operatorname{Hom}(Q, \operatorname{Hom}(\call{H}, \call{H})) &\cong \operatorname{Hom}(Q \otimes \call{H}, \call{H})\\
+			&\cong\operatorname{Hom}(\call{H}, \call{H} \otimes Q^\ast)
+		\end{align}
+		Then, by identifying $Q$ with $Q^\ast$ via the anti-linear, isometric bijection given by the Riesz Representation Theorem (see Corollary \ref{cor:antilinear_isometry}), a linear map $\call{H} \lto \call{H} \otimes Q$ can be given by a linear map $Q \lto \call{H} \otimes \call{H}$. We claim that \eqref{eq:measurement} corresponds under this correspondence to the following linear map.
+		\begin{align}
+			Q &\lto \operatorname{Hom}(\call{H}, \call{H})\\
+			\ket{m} &\longmapsto M_m
+		\end{align}
+		We now validate this claim. This is a matter of a calculation.
+		\begin{align}
+			\big(\ket{m} \mapsto M_m\big) &\longmapsto \big(\ket{m} \otimes \ket{\psi} \mapsto M_m\ket{\psi}\big)\\
+			& \longmapsto \big(\psi \mapsto \sum_{m \in \call{M}} M_m\ket{\psi} \otimes \ket{m}\big)
+		\end{align}
+		See Corollary \cite[1.2.6]{CommutativeAlgebra} for a justification of the last step.
+	\end{remark}
+	
+	\section{The density operator}\label{sec:density_operator}
+	Let us consider again the Bell state
+	\begin{equation}\label{eq:bell_again}
+		\frac{1}{\sqrt{2}}(\ket{00} + \ket{11})
+		\end{equation}
+	thought of as the state of a composite system consisting of two qubits. In Section \ref{sec:quantum_computing} we thought of this state as having probability $1/2$ that the first and second qubits are in state $\ket{0}$, and a probably $1/2$ that the first and second qubits are in state $\ket{1}$. So what is the probability of the first qubit being in state $\ket{0}$? Presumably $1/2$, but how do we know this?
+	
+	In short, we have not been precise enough with how the state of a combined system reflects the states of the individual systems.
+	
+	Obtaining this precision will in fact require reformulating the entirety of what has been done so far, right down to the definition of what a qubit is... Such expositions are excrutiating, so here we provide a justification. In the one qubit case, there is no ``combined system", we only have a single qubit. Thus, Section \ref{sec:quantum_computing} is perfectly valid. In fact, even in situations where composite systems are considered, but scrutinising analysis of the subsystems is not, Section \ref{sec:quantum_computing} remains valid. For instance, Example \ref{ex:2_bits} was perfectly precise.
+	
+	In situations where combined systems are considered and precise analysis of the indivisual subsystems is relevant, such as Example \ref{ex:quantum_teleportation} below, the formalisation of Section \ref{sec:quantum_computing} is insufficient.
+	
+	Again, the complication comes from the decision that a composite system is \emph{not} described as a product, but rather a tensor product. Had a composite system been described as a product, then we would have projection morphisms which would be able to relate the multi-qubit case to the single-qubit case. Here though, we need some way of moving from the tensor product of several qubits to a subcollection of qubits. Our tool of choice will be the \emph{partial trace} operator.
+	
+	\subsection{Partial trace}
+	For an introduction to the partial trace operator, see \cite{CommutativeAlgebra}
+	\begin{example}\label{ex:Bell_operator}
+		We calculate the partial trace of the operator
+		\begin{align*}
+			\rho &:= \Big(\frac{\ket{00} + \ket{11}}{\sqrt{2}}\Big)\Big(\frac{\bra{00} + \bra{11}}{\sqrt{2}}\Big)\\
+			&= \frac{\ket{00}\bra{00} + \ket{00}\bra{11} + \ket{11}\bra{00} + \ket{11}\bra{11}}{2}
+		\end{align*}
+		First consider $\operatorname{Trace}_2(\ket{00}\bra{00})$. We have, where we write $E_{ij}: \bb{C}^2 \lto \bb{C}^2$ for the linear map which maps the $i^{\text{th}}$ basis vector to the $j^{\text{th}}$ basis vector, and similarly for $F_{ij}$ (just applied to the second copy of $\bb{C}^2$)
+		\begin{equation}
+			\ket{00}\bra{00} = E_{00} \otimes F_{00}
+		\end{equation}
+		and so
+		\begin{equation}
+			\operatorname{Trace}_2(\ket{00}\bra{00}) = \operatorname{Trace}(F_{00})E_{00} = \ket{0}\bra{0}
+		\end{equation}
+		Similarly,
+		\begin{equation}
+			\ket{11}\bra{00} = E_{01}\otimes F_{01},\quad \ket{00}\bra{11} = E_{10} \otimes F_{10},\quad \ket{11}\bra{11} = E_{11} \otimes F_{11}
+		\end{equation}
+		and so
+		\begin{align}
+			\operatorname{Trace}_2(\ket{11}\bra{00}) = \operatorname{Trace}(F_{00})E_{11} &= 0\\
+			\operatorname{Trace}_2(\ket{11}\bra{00}) = \operatorname{Trace}(F_{00})E_{11} &= 0\\
+			\operatorname{Trace}_2(\ket{11}\bra{11}) = \operatorname{Trace}(F_{11})E_{11} &= \ket{1}\bra{1}
+		\end{align}
+	\end{example}
+	we thus have
+	\begin{equation}\label{eq:partial_trace_ex}
+		\operatorname{Trace}_2(\rho) = \frac{\ket{0}\bra{0} + \ket{1}\bra{1}}{2} = I/2
+	\end{equation}
+
+In fact, Example \ref{ex:Bell_operator} can be interpreted as deriving the state of a subsystem from a composite system. This involves identifying the state $\frac{1}{\sqrt{2}}(\ket{00} + \ket{11})$ with the operator $\rho$ of Example \ref{ex:Bell_operator}. The following definition generalises Definition \ref{def:qubit} in this way, and also generalises further by allowing for an \emph{ensemble} of states, each weighted by some probability.
+
+Now we can interpret Calculation \eqref{eq:partial_trace_ex} as extracting the state of the second qubit (as an isolated system) from the composite system. We see the resulting operator corresponds to the state $\frac{1}{2}(\ket{0} + \ket{1})$ which fits what was said at the start of this section that the state of a single qubit has probability $1/2$ of being in state $\ket{0},\ket{1}$ respectively when the combined system is in state \eqref{eq:bell_again}.
+
+	Since positive operators on finite dimension Hilbert spaces are Hermitian (Lemma \ref{prop:positive_finite_=>_Hermitian}) it follows from the Spectral Decomposition Theorem \ref{thm:spectral} that positive operators on finite dimensional Hilbert spaces are diagonalisable. It follows that if moreover the trace of a positive operator $H$ is finite, then there exists a finite set of vector $\ket{\psi_1},\ldots, \ket{\psi_n}$ and probabilities $p_1,\ldots, p_n \in [0,1]$ so that
+	\begin{equation}
+	H = \sum_{i = 1}^n p_i\ket{\psi_i}\bra{\psi_i}
+	\end{equation}
+Thus we have the following definition of a density operator, which is thought of as an ``ensemble of states".
+\begin{defn}[Intrinsic definition of density operator]\label{def:density_operator_intrinsic}
+	Let $\bb{H}$ be finite dimensional. A \textbf{density operator} is a positive operator $\rho: \bb{H} \lto \bb{H}$ with trace equal to 1.
+\end{defn}
+
+\begin{defn}
+	Let $\call{H} = \bb{C}^2 \otimes \bb{C}^2$ be a composite system given by the tensor product of two qubits.  we have density operator $\rho$ on $\call{H}$, then \textbf{tracing over the first copy of $\bb{C}^2$} (respectively, the second copy of $\bb{C}^2$) yields the following operators
+	\begin{equation}
+		\operatorname{Trace}_2(\rho),\qquad \operatorname{Trace}_1(\rho)
+	\end{equation}
+\end{defn}
+
+We observe a few convenient properties of the trace operator, then give the definitions of \emph{measurement} and \emph{time evolution} for density operators. Once this is done, we can exhibit another interesting phenoma pertaining to Quantum Computing (Example \ref{ex:quantum_teleportation}).
+	
+	\begin{defn}
+		The \textbf{trace} of an operator $T: \call{H} \lto \call{H}$ is the trace of any (and hence all) matrix representations of $T$.
+	\end{defn}
+	The trace of an operator can be computed using a unit vector.
+	\begin{lemma}\label{lem:trace_evaluation}
+		Let $A$ be an operator on a Hilbert space $\bb{H}$ and let $\ket{\psi} \in \bb{H}$ be a unit vector in $\bb{H}$. We have the following formula:
+		\begin{equation}
+			\operatorname{Trace}(A\ket{\psi}\bra{\psi}) = \bra{\psi}A\ket{\psi}
+		\end{equation}
+	\end{lemma}
+	\begin{proof}
+		 In general, if $\ket{v_1},...,\ket{v_n}$ is an orthogonal basis for $\bb{H}$, and let $A$ is an operator on $\bb{H}$ if we write $A\ket{v_j} = a_{1j}\ket{v_1} + \hdots + a_{nj}\ket{v_n}$, then we have
+		\begin{equation}
+			\bra{v_i}A\ket{v_j} = a_{ij}
+		\end{equation}
+		and so
+		\begin{equation}
+			\operatorname{Trace}A = \sum_{i = 1}^n \bra{v_i}A\ket{v_i}
+		\end{equation}
+	Applying this to the current statement to be proved, let $\ket{\psi}$ be a unit vector in $\bb{H}$ and let $\lbrace \ket{\psi},\ket{v_2},...,\ket{v_n}\rbrace$ be an orthogonal basis for $\bb{H}$ (using Gram-Schmidt, say). Then
+		\begin{align*}
+			\operatorname{Trace}(A\ket{\psi}\bra{\psi}) &= \bra{\psi}A\ket{\psi}\bra{\psi}\ket{\psi} + \sum_{i = 2}^n \bra{v_i}A\ket{\psi}\bra{\psi}\ket{v_i}\\
+			&= \bra{\psi}A\ket{\psi}
+		\end{align*}
+	\end{proof}
+	We see now that Section \ref{sec:quantum_computing} concerned itself with pure states, where we identify a state vector $\ket{\psi}$ with the operator $\ket{\psi}\bra{\psi}$ (that is, we identify the vector $\ket{\psi}$ with the projection onto this vector). We now describe how to generalise the Definitions of Section \ref{sec:quantum_computing} to the case of mixed states.
+	
+	\begin{defn}\label{def:density_measurement}
+		A \textbf{measurement} on a state space $\call{H}$ is a family of linear operators $\lbrace M_m: \call{H} \lto \call{H}\rbrace_{m \in \call{M}}$ satisfying
+		\begin{equation}
+			\sum_{m \in \call{M}}M^\dagger M = I
+		\end{equation}
+		Associated to every measurement and density operator $\rho$ there is a value
+		\begin{equation}
+			p(m) = \operatorname{Trace}(M^\dagger_mM_m \rho)
+		\end{equation}
+		which is understood as the probability $p(m)$ of outcome $m$ on measurement $\lbrace M_m\rbrace_{m \in \call{M}}$.
+		
+		Also, there is a \textbf{resulting density operator},:
+		\begin{equation}
+			\rho_m := \frac{M_m^\dagger \rho M_m}{\operatorname{Trace}(M^\dagger_mM_m \rho)}
+		\end{equation}
+	\end{defn}
+	Definition \ref{def:density_measurement} becomes more transparent when we pick a diagonalisation of $\rho$. Say
+	\begin{equation}
+		\rho = \sum_{i = 1}^n p_i \ket{\psi_i}\bra{\psi_i}
+		\end{equation}
+	We have
+	\begin{align*}
+		p(m) &= \sum_{i = 1}^n p_i p(m \mid i)\\
+		&=\sum_{i = 1}^n p_i \bra{\psi_i}M^\dagger_m M_m \ket{\psi_i}\\
+		&= \sum_{i = 1}^n p_i \operatorname{Trace}(M^\dagger_m M_m \ket{\psi_i}\bra{\psi_i})\\
+		&= \operatorname{Trace}(M^\dagger_m M_m \rho)
+	\end{align*}
+	where the last equality follows from linearity of the $\operatorname{Trace}$.
+	
+	The resulting density operator is:
+	\begin{equation}
+		\rho_m := \sum_{i = 1}^n p(i\mid m)\frac{M\ket{\psi_i}\bra{\psi_i}M^\dagger}{p(m \mid i)}
+	\end{equation}
+	we then use Bayes Theorem:
+	\begin{equation}
+		p(i \mid m)/p(m \mid i) = p_i/p(m)
+	\end{equation}
+	to obtain:
+	\begin{equation}
+		\rho_m = \sum_{i = 1}^n p_i\frac{M_m\ket{\psi_i}\bra{\psi_i}M_m^\dagger}{p(m)} = \sum_{i = 1}^n \frac{M_m\rho M_m^\dagger}{\operatorname{Trace}(M^\dagger_m M \rho)}
+	\end{equation}
+	
+	\begin{lemma}
+		For a pure state density operator $\ket{\psi}\bra{\psi}$ Definitions \ref{def:density_measurement} and \ref{def:measurement} agree once $\ket{\psi}\bra{\psi}$ has been identified with $\ket{\psi}$.
+	\end{lemma}
+	
+	\begin{defn}
+		Let $\call{H}$ be a state space. A \textbf{single step time evolution} on $\bb{H}$ is a unitary operator $U: \call{H} \lto \call{H}$. A \textbf{single step time evolution} of a density operator $\rho$ with respect to $U$ is the pair $(\rho, U\rho U^\dagger)$.
+		
+		An \textbf{evolution} of $\call{H}$ is a sequence of unitary operators $(U_1,...,U_n)$ on $\call{H}$, an \textbf{evolution} of a density operator $\rho$ with respect to the evolution $(U_1,...,U_n)$ is the sequence $(\rho, U\rho U^\dagger, ..., U_n\hdots U_1 \rho U_1^\dagger \hdots U_n^\dagger)$.
+	\end{defn}
+	
+	\begin{defn}
+		Let $\call{H}_1,\call{H}_2$ be two state spaces. The \textbf{composite state space }is $\call{H}_1 \otimes \call{H}_2$. We often describe a state of $\call{H}_1 \otimes \call{H}_2$ using the terminology ``$\call{H}_1$ is in state $\rho_1$ and $\call{H}_2$ is in state $\rho_2$",  this simply describes the state $\rho_1 \otimes \rho_2 \in \call{H}_1 \otimes \call{H}_2$.
+	\end{defn}
+	
+	With this higher level of fidelity in our theory, we can show another interesting phenomena pertaining to quantum computation.
+	
+	\begin{example}[Quantum teleportation]\label{ex:quantum_teleportation}
+		Superposition states clearly have ``awareness" of each other, because if we had a pair of qubits which we prepared to the state
+		\begin{equation}
+			\frac{\ket{00} + \ket{11}}{\sqrt{2}}
+		\end{equation}
+		and the first qubit was measured and found to be in the state $\ket{0}$, then we know with certainty that the second qubit is in state $\ket{00}$, as the combined state $\ket{01}$ is not an option. Again, this fact can be leaned on to provide an application. The following example shows how a qubit can be sent from one party Alice to another Bob, by only sending a pair of classical bits, provided Alice and Bob are in possession of another pair of qubits which together are in a superposition state.
+		
+		Consider a pair of qubits which together as a composite system are in the Bell state
+		\begin{equation}
+			\frac{\ket{00} + \ket{11}}{\sqrt{2}}
+		\end{equation}
+		Assume that Alice is in posession of the first of these qubits, and Bob is in posession of the second.
+		
+		Introduce a new qubit $\call{H}$ which is in some state $\ket{\psi} = \alpha \ket{0} + \beta\ket{1}$. The system consisting of all three qubits is in state
+		\begin{align*}
+			&\frac{1}{\sqrt{2}}(\alpha \ket{0} + \beta\ket{1})(\ket{00} + \ket{11})\\
+			&= \frac{1}{\sqrt{2}}\big(\alpha\ket{0}(\ket{00} + \ket{11}) + \beta\ket{1}(\ket{00} + \ket{11})\big)
+		\end{align*}
+		Alice applies the following unitary matrix (which is written with respect to the ordered basis $\ket{00}, \ket{01}, \ket{10}, \ket{11}$)
+		\begin{equation}
+			\begin{pmatrix}
+				1 & 0 & 0 & 0\\
+				0 & 1 & 0 & 0\\
+				0 & 0 & 0 & 1\\
+				0 & 0 & 1 & 0
+			\end{pmatrix}
+		\end{equation}
+		to her pair of qubits, resulting in the following state:
+		\begin{equation}
+			\frac{1}{\sqrt{2}}\big(\alpha\ket{0}(\ket{00} + \ket{11}) + \beta\ket{1}(\ket{10} + \ket{01})\big)
+		\end{equation}
+		Then she applies the following unitary matrix to her first qubit
+		\begin{equation}
+			\frac{1}{\sqrt{2}}
+			\begin{pmatrix}
+				1 & 1\\
+				1 & -1
+			\end{pmatrix}
+		\end{equation}
+		resulting in the following state.
+		\begin{equation}
+			\frac{1}{2}\big(\alpha(\ket{0} + \ket{1})(\ket{00} + \ket{11}) + \beta(\ket{0} - \ket{1})(\ket{10} + \ket{01})\big)
+		\end{equation}
+		This state can be rewritten as follows.
+		\begin{align*}
+			&\frac{1}{2}\big(\ket{00}(\alpha \ket{0} + \beta\ket{1}) + \ket{01}(\alpha\ket{1} + \beta\ket{0})\\
+			&+ \ket{10}(\alpha\ket{0} - \beta\ket{1}) + \ket{11}(\alpha\ket{1} - \beta\ket{0})\big)
+		\end{align*}
+		Now, Alice can perform a measurement on her two qubits, and depending on which outcome $\ket{00}, \ket{01}, \ket{10}, \ket{11}$ the state of Bob's qubit is respectively $\alpha\ket{0} + \beta\ket{1}, \alpha\ket{1} + \beta\ket{0}, \alpha\ket{0} - \beta\ket{1}, \alpha\ket{1} - \beta\ket{0}$.
+		
+		Alice can then send Bob the classical bits $00, 01, 10, 11$ respectively indicating that Bob should apply the Unitary matrix respectively $I, X, Z, ZX$, recovering Alice's qubit $\ket{\psi} = \alpha\ket{0} + \beta\ket{1}$.
+	\end{example}
+	
+	\subsection{Environment}
+	A system interacting with an environment can be modelled as a composite system where one of the systems is the original one in question and the other is the environment.
+	
+	However, there are particulars we want to consider. We do not want to allow for non-pure states between the system and the environment, and we specifically want to trace over the environment each time. The correct definition is that of a \emph{quantum operation} given below.
+	
+	\begin{defn}
+		An \textbf{open quantum system} is the tensor product of two state spaces $\call{H}_p \otimes \call{H}_e$ where $\call{H}_p$ is the \textbf{principal system} and $\call{H}_e$ is the \textbf{environment}.
+	\end{defn}
+	\begin{defn}\label{def:quantum_operation_partial_trace}
+		The \textbf{time evolution of an open quantum system} is that of Definition \ref{def:time_evolution} where an open quantum system is thought of as a composite system (Definition \ref{def:composite_system}).
+		
+		A \textbf{quantum operation} on an open quantum system $\call{H}_p \otimes \call{H}_e$ is a triple $(\call{E}, \rho_e, U)$ consisting of an operator
+		\begin{equation}
+			\call{E}: \operatorname{Hom}(\call{H}_p, \call{H}_p) \lto \operatorname{Hom}(\call{H}_p, \call{H}_p)
+			\end{equation}
+		a state $\rho_e \in \call{H}_e$ and a unitary operator $U$ on the entire open quantum system $\call{H}_p\otimes \call{H}_e$. This data is required to satisfy the following for all $\rho \in \operatorname{Hom}(\call{H}_p, \call{H}_p)$.
+		\begin{equation}\label{eq:quant_op_general_form}
+			\call{E}(\rho) = \operatorname{Trace}_{\call{H}_e}(U (\rho \otimes \rho_e) U^\dagger)
+		\end{equation}
+	\end{defn}
+	\begin{remark}\label{rmk:operator_sum_derivation}
+		Let $\call{H}_p \otimes \call{H}_e$ be an open quantum system and let $\ket{1},...,\ket{n}$ be a basis for $\call{H}_e$. We think of $\ket{1},...,\ket{n}$ as operators $\bb{C} \lto \call{H}_e$ and write $\operatorname{id} \otimes \ket{i}$ for the composite $\call{H}_p \lto \call{H}_p \otimes \bb{C} \lto \call{H}_p \otimes \call{H}_e$. We have for any operator $f: \call{H}_p \otimes \call{H}_e \lto \call{H}_p \otimes \call{H}_e$ that
+		\begin{equation}\label{eq:partial_trace_exp_form}
+			\operatorname{Trace}_{\call{H}_e}(f) = \sum_{i = 1}^n (\operatorname{id} \otimes \bra{i})f(\operatorname{id} \otimes \ket{i})
+		\end{equation}
+		See Appendix \ref{sec:commutative_algebra} for background.
+	\end{remark}
+	We let $\ket{1},...,\ket{n}$ be a basis for $\bb{H}_e$ and use \eqref{eq:partial_trace_exp_form} to rewrite \eqref{eq:quant_op_general_form} in the special case where $\rho_e = \ket{j}\bra{j}$.We have
+	\begin{align}
+		\call{E}(\rho) &= \operatorname{Trace}_{\bb{H}_e}(U (\rho \otimes \ket{j}\bra{j})U^\dagger)\\
+		&= \sum_{i = 1}^n (\operatorname{id} \otimes \bra{i}) (U (\rho \otimes \ket{j}\bra{j})U^\dagger)(\operatorname{id} \otimes \ket{i}\label{eq:trace_mult}
+	\end{align}
+	Now we make the observation that
+	\begin{align}
+		\rho \otimes \ket{j}\bra{j} &= (\rho \otimes \operatorname{id})(\operatorname{id} \otimes \ket{j})(\operatorname{id} \otimes \bra{j})\\
+		&= (\operatorname{id} \otimes \ket{j})(\rho \otimes \operatorname{id})(\operatorname{id} \otimes \bra{j})\label{eq:tensor_trick}
+	\end{align}
+	Substituting \eqref{eq:tensor_trick} into \eqref{eq:trace_mult} we obtain:
+	\begin{align*}
+		&\sum_{i = 1}^n (\operatorname{id} \otimes \bra{i}) (U (\rho \otimes \ket{j}\bra{j})U^\dagger)(\operatorname{id} \otimes \ket{i})\\
+		= &\sum_{i = 1}^n (\operatorname{id} \otimes \bra{i}) U (\operatorname{id} \otimes \ket{j})(\rho \otimes \operatorname{id})(\operatorname{id} \otimes \bra{j})U^\dagger(\operatorname{id} \otimes \ket{i})\\
+		= &\sum_{i = 1}^n (\operatorname{id} \otimes \bra{i}) U (\operatorname{id} \otimes \ket{j})(\operatorname{id} \otimes \bra{j})U^\dagger(\operatorname{id} \otimes \ket{i})\\
+		= &\sum_{i = 1}^n E_i \rho E_i^\dagger
+	\end{align*}
+	where $E_i =(\operatorname{id} \otimes \bra{i}) (U ((\operatorname{id} \otimes \ket{j})$.
+	
+	We thus have a second Definition of a quantum operation:
+	\begin{defn}\label{def:operator_sum}
+		Given a state space $\call{H}$ (notice, we do not ask for an open quantum system), a \textbf{quantum operation} is a pair $(\call{E}, \lbrace E_1,...,E_n \rbrace)$ consisting of an operator
+		\begin{equation}
+			\call{E}: \operatorname{Hom}(\call{H},\call{H}) \lto \operatorname{Hom}(\call{H}, \call{H})
+			\end{equation}
+		and a finite set $\lbrace E_1,...,E_n\rbrace$ of operators on $\call{H}$ subject to the following conditions, where $\rho \in \operatorname{Hom}(\call{H}, \call{H})$ is arbitrary.
+		\begin{equation}
+			\call{E}(\rho) = \sum_{i = 1}^n E_i \rho E_i^\dagger,\qquad \sum_{i = 1}^n E_i^\dagger E_i = I
+			\end{equation}
+	\end{defn}
+	We now have two different definitions of quantum operations, Definition \ref{def:quantum_operation_partial_trace} and Definition \ref{def:operator_sum}. We have already seen in Remark \ref{rmk:operator_sum_derivation} how to obtain a quantum operation in the sense of Definition \ref{def:operator_sum} given a quantum operation in the sense of Definition \ref{def:quantum_operation_partial_trace}, now we show the converse.
+	\begin{remark}
+		Let $\call{H}$ be a state space and $\lbrace E_1,...,E_n\rbrace$ a quantum operation on $\call{H}$. We introduce the Hilbert space $(\bb{C}^2)^{\otimes n}$ which we denote by $\call{H}_e$ and define the following unitary operator.
+		\begin{align}
+			U: \call{H}&\lto \call{H} \otimes \call{H}_e\\
+			\ket{\psi} &\longmapsto \sum_{i = 1}^n E_i \ket{\psi} \otimes \ket{i}
+		\end{align}
+	We show that this is unitary.
+	\begin{align*}
+		\bra{\psi} U^\dagger U \ket{\psi} &= \sum_{j = 1}^n \bra{\psi} E_i^\dagger \otimes \bra{j})\sum_{i = 1}^n E_i \ket{\psi} \otimes \ket{i}\\
+		&= \sum_{j = 1}^n \sum_{i= 1}^n \bra{\psi}E_j^\dagger E_i \ket{\psi} \bra{j}\ket{i}\\
+		&= \sum_{k = 1}^n \bra{\psi} E_k^\dagger E_k \ket{\psi}\\
+		&= \bra{\psi}\ket{\psi}
+	\end{align*}
+We identify the space $\call{H}$ with the subspace $\call{H} \otimes \operatorname{Span}\ket{1} \subseteq \call{H} \otimes \call{H}_e$, where $\ket{1} \in \bb{H}$ is an arbitrarily chosen vector in $\call{H}_e$, and hence by Lemma \ref{lem:unitary_extension} the operator $U$ extends to a unitary operator on all of $\call{H} \otimes \call{H}_e$. The next step is to show the following for density operator $\rho := \sum_{i = 1}^m p_i \ket{\psi_i}\bra{\psi_i}$:
+\begin{equation}
+	\operatorname{tr}_{\call{H}_e}(U(\rho \otimes \ket{1}\bra{1})U^\dagger) = \sum_{k = 1}^n E_k \rho E_k^\dagger
+\end{equation}
+This is shown by the following calculation.
+\begin{align*}
+	\operatorname{tr}_{\call{H}_e}(U(\rho \otimes \ket{1}\bra{1})U^\dagger) &= \operatorname{tr}_{\call{H}_e}(U (\sum_{i = 1}^n p_i \ket{\psi_i}\bra{\psi_i} \otimes \ket{1}\bra{1})U^\dagger)\\
+	&= \operatorname{tr}_{\call{H}_e}(\sum_{i,j,k = 1}^n p_i E_j \ket{\psi_i}\bra{\psi_i}E_k^\dagger \otimes \ket{j}\bra{k})\\
+	&= \operatorname{tr}_{\call{H}_e}(\sum_{j,k = 1}^n E_j \rho E_k^\dagger \otimes \bra{j}\ket{k})\\
+	&= \operatorname{tr}_{\call{H}_e}(\sum_{l = 1}^n E_l \rho E_l^\dagger \otimes \ket{l}\bra{l})\\
+	&= \sum_{l = 1}^n E_l \rho E_l^\dagger
+\end{align*}
+	\end{remark}
+	
+	\section{Error correction}
+	The more informed two parties are, the more communication may be prone to error while still sustaining certainty on the intended message. This is because both parties can ``error correct" the other.
+	
+	Throughout, $\bb{H}$ denotes a qubit $\bb{C}^2$, that is, the complex Hilbert space $\bb{C}^2$.
+	
+	\begin{defn}
+		A \textbf{message} is a state $\ket{\psi} \in \bb{H}^{\otimes n}$, for some $n$. An \textbf{error} is a pair of states $(\ket{\varphi},\ket{\psi})$ where $\ket{\varphi},\ket{\psi} \in \bb{H}^{\otimes n}$ for some $n$, note that an error may be such that $\ket{\varphi} = \ket{\psi}$.  The message $\ket{\varphi}$ is the \textbf{intended message} and $\ket{\psi}$ is the \textbf{received message}. 
+	\end{defn}
+	\begin{defn}
+		An \textbf{$n$-encoding of a single state} (sometimes just an \textbf{encoding}) is an injective linear map $\iota: \bb{H} \lto \bb{H}^{\otimes n}$. An \textbf{$n$-encoding of a message} $\ket{m} \in \bb{H}^{\otimes k}$ is an $n$-encoding $\iota$ along with a message $\ket{m} \in \bb{H}^{\otimes nk}$ for which there exists $\ket{m'} \in \bb{H}^{\otimes k}$ satisfying $\iota^{\otimes k}\ket{m'} = \ket{m}$.
+	\end{defn}
+
+\begin{defn}\label{def:QECC}
+	A \textbf{quantum error correcting code (QECC)} is a pair $\call{Q} = (\call{H}, S)$ consisting of a state space $\call{H}$ along with a set of operators $S$ on $\call{H}$. The elements of $S$ are the \textbf{stabilisers}. The \textbf{codespace} $\call{H}^S$ of $\call{Q}$ is the maximal subspace of $\call{H}$ invariant under all the operators in $S$.
+	\end{defn}
+
+In Section \ref{sec:stabilisers} we will present a method for proving when a set of vectors generate the codespace of a quantum error correction code.
+
+\subsection{Examples}\label{sec:examples}
+Throughout, $\bb{H}$ denotes a qubit $\bb{C}^2$, that is, the complex Hilbert space $\bb{C}^2$.
+
+	\begin{defn}\label{def:pauli_hadamard}
+	We define the following operators:
+	\begin{align*}
+		&X :=
+		\begin{pmatrix}
+			0 &1\\
+			1 &0
+		\end{pmatrix}
+		\quad
+		Y :=
+		\begin{pmatrix}
+			0 & -i\\
+			i & 0
+		\end{pmatrix}\\
+		&Z :=
+		\begin{pmatrix}
+			1 & 0\\
+			0 & -1
+		\end{pmatrix}
+		\quad
+		H :=
+		\frac{1}{\sqrt{2}}
+		\begin{pmatrix}
+			1 & 1\\
+			1 & -1
+		\end{pmatrix}
+	\end{align*}
+	The matrices $X,Y,Z$ are the \textbf{Pauli matrices}, and $H$ is the \textbf{Hadamard matrix}.
+\end{defn}
+We make the passing observation that all of $X,Y,Z,H$ square to the identity matrix. The basis vectors
+\begin{equation}
+	H\ket{0} = \frac{1}{\sqrt{2}}(\ket{0} + \ket{1}),\quad H\ket{1} = \frac{1}{\sqrt{2}}(\ket{0} - \ket{1})
+\end{equation}
+are the \textbf{Bell states} and are denoted $\ket{+},\ket{-}$ respectively. Notice that as already stated, $H^2 = I$, so $H\ket{+} = \ket{0}$ and $H\ket{-} = \ket{1}$.
+\begin{defn}
+	The standard basis $\ket{0},\ket{1}$ of $\bb{H}$ induces a basis of $\bb{H}^{\otimes n}$, we denote $\ket{0} \otimes \hdots \otimes \ket{0}$ by $\ket{0\hdots 0}$, etc.
+\end{defn}
+
+\begin{notation}\label{not:Pauli_comp}
+	Given a Pauli matrix $W \in \{ X, Y , Z \}$ the operator on $\bb{H}^{\otimes n}$ given by the tensor product consisting of $W$ in the $i^{\text{th}}$ slot (for $i \leq n$) and the identity operator in all other slots by $W_i$. For example, the operator $Z_1$ on $\bb{H}^{\otimes 3}$ is the operator $Z \otimes I \otimes I$.
+	
+	Given a collection of Pauli matrices $W_{i_1},...,W_{i_m} \in \lbrace X,Y,Z\rbrace$ where $0 < i_1 < \hdots < i_m \leq n$ we denote by $W_{i_1}\ldots W_{i_m}$ the composition $W_{i_1} \circ \ldots \circ W_{i_m}$. For example, the operator $Z_1Z_2$ on $\bb{H}^{\otimes 3}$ is the operator
+	\begin{equation}
+		(Z \otimes I \otimes I) \circ (I \otimes Z \otimes I) = Z \otimes Z \otimes I: \bb{H}^{\otimes 3} \lto \bb{H}^{\otimes 3}
+	\end{equation}
+\end{notation}
+
+	Consider the \textbf{bit flip encoding}
+	\begin{align}\label{enc:bit_flip}
+		\operatorname{BitFlip}: \bb{H} &\lto \bb{H}^{\otimes 3}\\
+		\ket{0} &\longmapsto \ket{000}\\
+		\ket{1} &\longmapsto \ket{111}
+	\end{align}
+	then an encoding of a message with respect to this encoding might be $\ket{000111000}$, but could not be $\ket{000111001}$. We call Encoding \ref{enc:bit_flip} the \textbf{bit flip encoding}. As another example, we consider the \textbf{phase flip encoding}.
+	\begin{align*}
+		\operatorname{PhaseFlip}: \bb{H} &\lto \bb{H}^{\otimes 3}\\
+		\ket{0} &\longmapsto \ket{+++}\\
+		\ket{1} &\longmapsto \ket{---}
+	\end{align*}
+
+\begin{defn}
+	A \textbf{bit flip error} is an error $(\ket{\varphi},\ket{\psi})$ where $\ket{\varphi}$ is an encoding of a message with respect to the encoding $\operatorname{BitFlip}^{\otimes m}$ for some $m$, such that $X_i\ket{\varphi} =\ket{\psi}$ for some $i$.
+	
+	A \textbf{phase flip error} is an error $(\ket{\varphi},\ket{\psi})$ where $\ket{\varphi}$ is an encoding of a message with respect to the the encoding $\operatorname{PhaseFlip}^{\otimes m}$, such that $Z_i\ket{\varphi} =\ket{\psi}$ for some $i$.
+\end{defn}
+Let $(\ket{\varphi},\ket{\psi})$ be a bit flip error.  The following algorithm takes as input $\ket{\psi}$ and reconstructs $\ket{\varphi}$:
+\begin{algorithm}[Bit flip correction]\label{alg:bit_flip_correction}
+	Input: a received message $\ket{\psi}$,
+	\begin{enumerate}
+		\item perform the following projective measurements:
+		\begin{equation}
+			\bra{\psi} Z_1 Z_2 \ket{\psi}\text{ with resulting state }\ket{\psi'},
+		\end{equation}
+		followed by
+		\begin{equation}
+			\bra{\psi'} Z_2 Z_3 \ket{\psi'}
+		\end{equation}
+		let $(r_1,r_2)$ be the pair of results from these measurements.
+		\item It will be shown that $r_1,r_2 \in \lbrace 1,-1\rbrace$, and the resulting state of the second measurement is $\ket{\psi}$.
+		\item Now retrieve $\ket{\varphi}$ based on the values of $r_1,r_2$:
+		\begin{itemize}
+			\item if $(r_1, r_2) = (1,1)$, return $\ket{\psi}$,
+			\item if $(r_1,r_2) = (-1,1)$, return $X_1 \ket{\psi}$,
+			\item if $(r_1,r_2) = (1,-1)$, return $X_3 \ket{\psi}$,
+			\item if $(r_1,r_2) = (-1,-1)$, return $X_2 \ket{\psi}$
+		\end{itemize}
+	\end{enumerate}
+\end{algorithm}
+We now prove correctness of Algorithm \ref{alg:bit_flip_correction}:
+\begin{proof}
+	It will be helpful to first notice:
+	\begin{align*}
+		Z_1Z_2\ket{000} &= \ket{000} & Z_1Z_2\ket{001} &= \ket{001}\\
+		Z_1Z_2\ket{010} &= -\ket{010} & Z_1Z_2\ket{011} &= -\ket{011}\\
+		Z_1Z_2\ket{100} &= -\ket{100} & Z_1Z_2\ket{101} &= -\ket{101}\\
+		Z_1Z_2\ket{110} &= \ket{110} &Z_1Z_2 \ket{111} &= \ket{111}
+	\end{align*}
+	Let $\ket{\psi}:= a\ket{010} + b\ket{101}$ be a state, ie, an element of $\bb{H}^{\otimes 3}$. We perform the measurement $Z_1Z_2$ followed by $Z_2Z_3$:
+	\begin{align*}
+		\bra{\psi}Z_1Z_2\ket{\psi} &= (a\bra{010} + b\bra{101})Z_1Z_2(a\ket{010} + b\ket{101})\\
+		&= (a\bra{010} + b\bra{101})(-a\ket{010} - b\ket{101})\\
+		&= -a^2 - b^2 = -1
+	\end{align*}
+	and
+	\begin{align*}
+		\bra{\psi}Z_2Z_3\ket{\psi} &= (a\bra{010} + b\bra{101})Z_1Z_2(a\ket{010} + b\ket{101})\\
+		&= (a\bra{010} + b\bra{101})(-a\ket{010} - b\ket{101})\\
+		&= -a^2 - b^2 = -1
+	\end{align*}
+	We can infer from the fact that both of these came out as $-1$ that it was the second bit which was flipped, and so we can correct this. However, what is the impact of this measurement on the state? Again we calculate:
+	\begin{align*}
+		Z_1Z_2(a\ket{010} + b\ket{101}) &= Z_1(-a\ket{010} + b\ket{101})\\
+		&= -a\ket{010} - b\ket{101}
+	\end{align*}
+	and
+	\begin{align*}
+		Z_2Z_3(-a\ket{010} - b\ket{101}) &= Z_2(-a\ket{010} + b\ket{101})\\
+		&= a\ket{010} + b\ket{101}
+	\end{align*}
+	and so the measurements (in the end) did not impact our state.
+\end{proof}
+Later, using the theory of \emph{stabiliser codes}, we will show that in fact single bit flip errors form the full set of correctable errors using $Z_1Z_2,Z_1Z_3,Z_2Z_3$.
+
+Let $(\ket{\varphi},\ket{\psi})$ be a phase flip error. The following algorithm takes as input $\ket{\psi}$ and reconstructs $\ket{\varphi}$:
+\begin{algorithm}[Phase flip correction]
+	Input: a received message $\ket{\psi}$:
+	\begin{enumerate}
+		\item perform the following projective measurements:
+		\begin{equation}
+			\bra{\psi} X_1 X_2 \ket{\psi} \text{ with resulting state }\ket{\psi'}
+		\end{equation}
+		followed by
+		\begin{equation}
+			\bra{\psi'} X_2 X_3 \ket{\psi'}
+		\end{equation}
+		let $(r_1,r_2)$ be the pair of results from these measurements.
+		\item It will be shown that $r_1, r_2 \in \lbrace 1, -1\rbrace$ and the resulting state of the second measurement is $\ket{\psi}$.
+		\item Now retrieve $\ket{\varphi}$ based on the values of $r_1,r_2$:
+		\begin{enumerate}
+			\item if $(r_1,r_2) = (1,1)$, return $\ket{\psi}$,
+			\item if $(r_1,r_2) = (-1,1)$, return $Z_1 \ket{\psi}$
+			\item if $(r_1,r_2) = (1,-1)$, return $Z_3 \ket{\psi}$,
+			\item if $(r_1,r_2) = (-1,-1)$, return $Z_2 \ket{\psi}$
+		\end{enumerate}
+	\end{enumerate}
+\end{algorithm}
+\begin{proof}
+	In fact all our work is already done. We simply note that $Z\ket{+} = \ket{-}, Z\ket{-} = \ket{+}$ (and so phase flip acts like bit flip for $\ket{+},\ket{-})$, and that  in general
+	\begin{equation}
+		H^{\otimes n}Z_{i_1}\hdots Z_{i_j}H^{\otimes n} = X_{i_1}\hdots X_{i_j}
+	\end{equation}
+	The result then follows from the proof of correctness for Algorithm \ref{alg:bit_flip_correction}.
+\end{proof}
+What if we wanted to correct an error where we knew the received message corresponded to the intended message by either a bit flip \emph{or} a phase flip. This can be done by combining the two approaches above. Define the following encoding:
+\begin{defn}
+	The \textbf{Shor encoding} is:
+	\begin{equation}
+		\operatorname{Shor}: \bb{H} \lto \bb{H}^{\otimes 9}
+	\end{equation}
+	where
+	\begin{equation}
+		\operatorname{Shor}(\ket{\psi}) = \operatorname{BitFlip} \circ \operatorname{PhaseFlip}\ket{\psi}
+	\end{equation}
+\end{defn}
+\begin{algorithm}
+	On input $\ket{\psi}$:
+	\begin{enumerate}
+		\item Perform the following projective measurements:
+		\begin{align*}
+			&\bra{\psi}Z_1Z_2\ket{\psi}\text{ with resulting state }\ket{\psi'}\\
+			&\bra{\psi'}Z_2Z_3\ket{\psi'}\text{ with resulting state }\ket{\psi}\\
+			&\bra{\psi}Z_3Z_4\ket{\psi}\text{ with resulting state }\ket{\psi''}\\
+			&\bra{\psi'}Z_4Z_5\ket{\psi''}\text{ with resulting state }\ket{\psi}\\
+			&\bra{\psi'}Z_5Z_6\ket{\psi}\text{ with resulting state }\ket{\psi'''}\\
+			&\bra{\psi'}Z_6Z_7\ket{\psi'''}\text{ with resulting state }\ket{\psi}\\
+			&\bra{\psi'}Z_7Z_8\ket{\psi}\text{ with resulting state }\ket{\psi''''}\\
+			&\bra{\psi'}Z_8Z_9\ket{\psi''''}\text{ with resulting state }\ket{\psi}
+		\end{align*}
+		let $(r_1,r_2,r_3,r_4,r_5,r_6,r_7,r_8) \in \bb{Z}_2^8$ be the results from these measurements. Notice that there are only three possibilities, all entries are $1$, exactly one entry is $-1$ in which case it is either $r_1$ or $r_8$ (with the rest equal to $1$) or exactly two values are $-1$ and the rest are $1$ in which case the two $-1$ entries are neighbours.
+		\item Then perform the following measurements:
+		\begin{align*}
+			&\bra{\psi}X_1X_2X_3X_4X_5X_6\ket{\psi}\text{ with resulting state }\ket{\psi'}\\
+			&\bra{\psi'}X_4X_5X_6X_7X_8X_9\ket{\psi'}\text{ with resulting state }\ket{\psi}
+		\end{align*}
+		let $(s_1,s_2) \in \bb{Z}_2^2$ be the result of these measurements.
+	\end{enumerate}
+	\item Now retrieve $\ket{\varphi}$ based on the values:
+	\begin{center}
+		\begin{tabular}{|c|c|c|}
+			\hline
+			$(r_1,r_2,r_3,r_4,r_5,r_6,r_7,r_8)$ & $(s_1,s_2)$ & Return\\
+			\hline
+			$(1,1,1,1,1,1,1,1)$ & $(1,1)$ & $\ket{\psi}$\\
+			\hline
+			$(-1,1,1,1,1,1,1,1,1)$ & $(1,1)$ & $X_1\ket{\psi}$\\
+			\hline
+			$(-1,-1,1,1,1,1,1,1,1)$ & $(1,1)$ & $X_2\ket{\psi}$\\
+			\hline
+			$\vdots$ & $\vdots$ & $\vdots$\\
+			\hline
+			$(1,1,1,1,1,1,1,-1,-1)$ & $(1,1)$ & $X_8\ket{\psi}$\\
+			\hline
+			$(1,1,1,1,1,1,1,1,-1)$ & $(1,1)$ & $X_9\ket{\psi}$\\
+			\hline
+			$(1,1,1,1,1,1,1,1)$ & $(-1,1)$ & $\ket{\psi}$\\
+			\hline
+			$(-1,1,1,1,1,1,1,1,1)$ & $(-1,1)$ & $Z_1Z_2Z_3X_1\ket{\psi}$\\
+			\hline
+			$(-1,-1,1,1,1,1,1,1,1)$ & $(-1,1)$ & $Z_1Z_2Z_3X_2\ket{\psi}$\\
+			\hline
+			$\vdots$ & $\vdots$ & $\vdots$\\
+			\hline
+			$(1,1,1,1,1,1,1,-1,-1)$ & $(-1,-1)$ & $Z_4Z_5Z_6X_8\ket{\psi}$\\
+			\hline
+			$(1,1,1,1,1,1,1,1,-1)$ & $(-1,-1)$ & $Z_4Z_5Z_6X_9\ket{\psi}$\\
+			\hline
+			$(-1,1,1,1,1,1,1,1,1)$ & $(-1,-1)$ & $Z_4Z_5Z_6X_1\ket{\psi}$\\
+			\hline
+			$(-1,-1,1,1,1,1,1,1,1)$ & $(-1,-1)$ & $Z_4Z_5Z_6X_2\ket{\psi}$\\
+			\hline
+			$\vdots$ & $\vdots$ & $\vdots$\\
+			\hline
+			$(1,1,1,1,1,1,1,-1,-1)$ & $(-1,-1)$ & $Z_4Z_5Z_6X_8\ket{\psi}$\\
+			\hline
+			$(1,1,1,1,1,1,1,1,-1)$ & $(-1,-1)$ & $Z_4Z_5Z_6X_9\ket{\psi}$\\
+			\hline
+			$(1,1,1,1,1,1,1,-1,-1)$ & $(-1,-1)$ & $Z_4Z_5Z_6X_8\ket{\psi}$\\
+			\hline
+			$(1,1,1,1,1,1,1,1,-1)$ & $(-1,-1)$ & $Z_4Z_5Z_6X_9\ket{\psi}$\\
+			\hline
+			$(-1,1,1,1,1,1,1,1,1)$ & $(-1,1)$ & $Z_7Z_8Z_9X_1\ket{\psi}$\\
+			\hline
+			$(-1,-1,1,1,1,1,1,1,1)$ & $(-1,1)$ & $Z_7Z_8Z_9X_2\ket{\psi}$\\
+			\hline
+			$\vdots$ & $\vdots$ & $\vdots$\\
+			\hline
+			$(1,1,1,1,1,1,1,-1,-1)$ & $(-1,1)$ & $Z_7Z_8Z_9X_8\ket{\psi}$\\
+			\hline
+			$(1,1,1,1,1,1,1,1,-1)$ & $(-1,1)$ & $Z_7Z_8Z_9X_9\ket{\psi}$\\
+			\hline
+		\end{tabular}
+	\end{center}
+\end{algorithm}
+\begin{proof}
+	That the Shor algorithm corrects bit flip errors is obvious.
+	
+	Now assume a single phase flip error has occurred, and no bit flip error has occurred. The core observation is the commutativity of the following diagrams for any $\ket{v} \in \lbrace \ket{0},\ket{1}\rbrace$ (where we think of any ``ket" vector $\ket{v}$ as a map $k \lto \ket{v}$). We have written $\operatorname{BF}$ for $\operatorname{BitFlip}$:
+	\begin{equation}
+		\begin{tikzcd}[column sep = huge, row sep = huge]
+			k\arrow[dr,swap,"{\ket{vvv}}"]\arrow[r,"{\ket{v}}"] & \bb{H}\arrow[r,"X"]\arrow[d,"{\operatorname{BF}}"] & \bb{H}\arrow[r,"{\bra{v}}"]\arrow[d,"{\operatorname{BF}}"] & k\\
+			& \bb{H}^{\otimes 3}\arrow[r,"{X\otimes XZ \otimes X}"] & \bb{H}^{\otimes 3}\arrow[ur,swap,"{\bra{vvv}}"]
+		\end{tikzcd}
+	\end{equation}
+	A similar Diagram but with $X\otimes XZ \otimes X$ replaced by $XZ\otimes X \otimes X$ or by $X\otimes X \otimes XZ$ also commutes. Thus, if $\ket{\psi} = Z_i\ket{\varphi}$, defining
+	\begin{equation}
+		s(i) =
+		\begin{cases}
+			1, & i = 1,2,3\\
+			2, & i=4,5,6\\
+			3, & i=7,8,9
+		\end{cases}
+	\end{equation}
+	we have
+	\begin{equation}
+		\bra{m}\operatorname{BF}^{\otimes 3\dagger}Z_i^\dagger X_1X_2X_3X_4X_5X_6 Z_i \operatorname{BF}^{\otimes 3}\ket{m} = \bra{m}Z_{s(i)}^\dagger X_1X_2Z_{s(i)}\ket{m}
+	\end{equation}
+	and so we can treat each ``block" of three states as a single state, so we know how to interpret the measurements $(s_1,s_2)$. The last observation to make is commutativity of the following Diagram for all $i=1,2,3$
+	\begin{equation}
+		\begin{tikzcd}[column sep = huge, row sep = huge]
+			\bb{H}^{\otimes 3}\arrow[r,"{Z_i}"]\arrow[d,"{\operatorname{BF}}"] & \bb{H}^{\otimes 3}\arrow[d,"{\operatorname{BF}}"]\\
+			\bb{H}^{\otimes 9}\arrow[r,"{Z_{3i-2}Z_{3i-1}Z_{3i}}"] & \bb{H}^{\otimes 9}
+		\end{tikzcd}
+	\end{equation}
+	Now say a combination of a bit flip and a phase flip error occurred. That is, say $\ket{\psi} = Z_iX_j\ket{\varphi}$. The error correction will first correct the bit flip which reduces to the previous case. In other words, $X_j^2 \ket{\varphi} = \ket{\varphi}$ is in the image of $\operatorname{BitFlip}$.
+\end{proof}
+	
+	\section{General error correction}
+	This section is the climax of this document, and Theorem \ref{thm:general_error_correction} is the climax of this section. It presents the general error correction conditions as advertised in the Introduction. That is, Theorem \ref{thm:general_error_correction} present necessary and sufficient conditions for a set of operators to be correctable, in the sense made precise by Definition \ref{def:correctable}.
+	
+	To prove Theorem \ref{thm:general_error_correction} we go back to definition of a density operator and of quantum operators and make the observation that we did \emph{not} describe a canonical presentation of either. That is, a density operator is an operator which \emph{admits} a certain form, and likewise for quantum operators. Choices of presentations of particular density and quantum operators are not unique. Our first goal is to establish how two distinct presentations relate to each other. See \cite[Page 103]{quantum_computing} for an example of two different diagonalisations of the same density operator. The following Proposition describes the relationship between these different diagonalisations.
+	\begin{proposition}\label{prop:equivalent_density_operators}
+		Let $\rho = \sum_{i = 1}^n p_i \ket{\psi_i}\bra{\psi_i}$, where $\ket{\psi_1},\ldots, \ket{\psi_n}$ is some explicit choice of vectors, be a positive (and hence diagonalisable) operator on a Hilbert space $\call{H}$. Let $\ket{1},...,\ket{m}$ be an orthonormal set of vectors so that $\rho$ written as a matrix with respect to $\ket{1},...,\ket{m}$ is diagonal. Let $\lambda_1,...,\lambda_m$ denote the eigenvalues corresponding to the eigenvectors $\ket{1},...,\ket{m}$. Let $r$ denote $\operatorname{max}\lbrace n, m \rbrace$. Then there exists a unitary matrix $A = (a_{ij})_{1 \leq i,j \leq r}$ so that for all $i = 1,...,n$
+		\begin{equation}
+			p_i\ket{\psi_i}\bra{\psi_i} = \sum_{j = 1}^m a_{ij} \lambda_j\ket{j}\bra{j}
+		\end{equation}
+	\end{proposition}
+	\begin{proof}
+		If $n < m$ then can define $\ket{\psi_{n+1}} = \hdots = \ket{\psi_{m}} = 0$ and $p_{n+1} = \hdots = p_{m} = 0$ so that it is sufficient to consider the case when $n \geq m$.
+		
+		Since $\ket{1},...,\ket{m}$ form an orthonormal basis for $\call{H}$ we can write for each $i = 1,...,n$ the following, where $a_{i1},...,\alpha_{im} \in \bb{C}$
+		\begin{equation}\label{eq:possibly_opaque}
+			\sqrt{p_i}\ket{\psi_i} = \sum_{j = m}^n a_{ij} \sqrt{\lambda_j}\ket{j}
+		\end{equation}
+		Hence we have the following calculation.
+		\begin{align}
+			\rho &= \sum_{i = 1}^n p_i \ket{\psi} \bra{\psi}\\
+			&= \sum_{i = 1}^n \sqrt{p_i}\ket{\psi_i}\sqrt{p_i}\bra{\psi_i}\\
+			&= \sum_{i = 1}^n\sum_{j,j'=1}^m a_{ij}\overline{a_{j'i}}\sqrt{\lambda_j \lambda_{j'}} \ket{j} \bra{j'}\\
+			&= \sum_{j = 1}^m \lambda_k \ket{k}\bra{k}
+		\end{align}
+		It follows from this that $\sum_{j,j' = 1}^m a_{ij}\overline{a_{j'i}} = 0$ if $j \neq j'$ and $\sum_{j = 1}^n a_{ij}\overline{a_{ji}} = 1$. Thus, if $m = n$ the matrix $(a_{ij})_{1 \leq i,j \leq n}$ is untary. If $m > n$ then we define $a_{ij} = 0$ for $j = n+1,...,m$ and $i = 1,...,m$ and arrive at a square, unitary matrix.
+	\end{proof}
+	\begin{cor}\label{cor:equivalent_density_operators}
+		If $\rho = \sum_{i = 1}^n p_i \ket{\psi_i}\bra{\psi_i} = \sum_{j = 1}^m q_j \ket{\varphi_j} \bra{\varphi_j}$ and $r$ denotes $\operatorname{max}\lbrace n, m \rbrace$ then there is a positive operator then there exists a unitary matrix 
+		\begin{equation}
+			A = (a_{ij})_{1 \leq i,j \leq r}
+		\end{equation}
+		so that for all $i = 1,...,n$
+		\begin{equation}
+			p_i \ket{\psi}\bra{\psi_i} = \sum_{j = 1}^{r}a_{ij}q_j \ket{\varphi_j}\bra{\varphi_j}
+		\end{equation}
+	\end{cor}
+	Moreover, in Section \ref{sec:density_operator}, the choice of operators $\lbrace E_1,\ldots,E_n\rbrace$ for a quantum operation was also not given a canonical form. Indeed, the operators $\{ E_1, \ldots, E_n\}$ are not uniquely determined by the operator $\sum_{i = 1}^n E_i^\dagger \rho E_i$. The following proposition classifies this discrepency.
+	\begin{proposition}\label{prop:quantum_operator_equiv}
+		Let $\lbrace E_1,...,E_n\rbrace$ and $\lbrace F_1,...,F_m\rbrace$ be two sets of operators on a Hilbert space $\call{H}$ so that for all positive operators $\rho$ on $\call{H}$ we have
+		\begin{equation}\label{eq:equality_qo}
+			\sum_{i = 1}^n E_i \rho E_i^\dagger= \sum_{i = 1}^m F_i \rho F_i^\dagger
+		\end{equation}
+		If $r$ denote $\operatorname{max}\lbrace n,m \rbrace$, then there exists a unitary matrix $(a_{ij})_{1 \leq i,j \leq r}$ so that for each $i = 1,...,n$ we have
+		\begin{equation}\label{eq:lin_comb_operators}
+			E_i = \sum_{j = 1}^m a_{ij} F_j
+		\end{equation}
+		The converse also holds.
+	\end{proposition}
+	\begin{proof}
+		Say the dimension of $\call{H}$ is $k$ and $\ket{1},...,\ket{k}$ is an orthonormal basis. The proof will proceed by introducing a new Hilbert space, $\call{Q}$, which is freely generated by $\ket{1},...,\ket{k}$ and then we define a positive operator $\sigma$ on $\call{H} \otimes \call{Q}$. We then appeal to Corollary \ref{cor:equivalent_density_operators}.
+		
+		Let $\ket{\alpha}$ denote the vector $\sum_{i = 1}^k \ket{i} \otimes \ket{i} \in \call{H} \otimes \call{Q}$. For each $i = 1,..., k$ define the following vectors in $\call{H} \otimes \call{Q}$.
+		\begin{align}
+			\ket{e_i} &:= \sum_{j = 1}^k E_i\ket{j} \otimes \ket{j}\\
+			\ket{f_i} &:= \sum_{j = 1}^k F_i \ket{j} \otimes \ket{j}
+		\end{align}
+		Define the following operators on $\call{H} \otimes \ket{Q}$.
+		\begin{align}
+			\label{eq:operator_e}&\sum_{i = 1}^n \ket{e_i}\bra{e_i}\\
+			\label{eq:operator_f}&\sum_{i = 1}^m \ket{f_i} \bra{f_i}
+		\end{align}
+		The operators \eqref{eq:operator_e}, \eqref{eq:operator_f} are equal, which we now justify. Notice first that for any $j = 1,...,k$ the operator $\ket{j}\bra{j}$ is positive, as for any $\ket{\psi} \in \call{H}$ we have
+		\begin{equation}
+			\bra{\psi}\ket{j}\bra{j}\ket{\psi} = |\bra{\psi}\ket{\psi}|^2 \geq 0
+		\end{equation}
+		This along with \eqref{eq:equality_qo} justifies \eqref{eq:due_to_pos} in the following calculation.
+		\begin{align}
+			\sum_{i = 1}^n \ket{e_i}\bra{e_i} &= \sum_{i = 1}^n\sum_{j,j' = 1}^k E_i \ket{j}\bra{j'}E_i^\dagger \otimes \ket{j}\bra{j'}\\
+			&=\sum_{j,j' = 1}^k \Big(\sum_{i = 1}^n E_i \ket{j}\bra{j'}E_i^\dagger\Big) \otimes \ket{j}\bra{j'}\\
+			\label{eq:due_to_pos}&= \sum_{j,j' = 1}^k \Big(\sum_{i = 1}^m F_i \ket{j}\bra{j'}F_i^\dagger\Big) \otimes \ket{j}\bra{j'}\\
+			&= \sum_{i = 1}^m \ket{f_i}\bra{f_i}
+		\end{align}
+		Thus, by Corollary \ref{cor:equivalent_density_operators}, if $r$ denotes $\operatorname{max}\lbrace n,m \rbrace$, there exists a unitary matrix $(a_{ij})_{1 \leq i, j \leq r}$ so that for each $i = 1,...,n$ we have the following, where if $m > n$ we set $\ket{f_{n+1}} = \hdots = \ket{f_m} = 0$ and if $n > m$ we set $a_{i(n+1)} = \hdots = a_{im} = 0$.
+		\begin{equation}\label{eq:reduction}
+			\ket{e_i} = \sum_{j = 1}^r a_{ij} \ket{f_j}
+		\end{equation}
+		It now remains to show that $E_i = \sum_{j = 1}^r a_{ij}F_j$. To do this, we use the following trick. Let $\ket{\psi} \in \call{H}$ and write $\ket{\psi} = \alpha_1 \ket{1} + \hdots + \alpha_k \ket{k}$. We let consider the linear functional $\sum_{l = 1}^k \alpha_l \bra{l}$. We consider also the linear function $\operatorname{id}_{\call{H}} \otimes \bra{j}: \call{H} \otimes \call{Q} \lto \call{H}$. This has the following property.
+		\begin{align}
+			\Big(\operatorname{id}_{\call{H}} \otimes \big(\sum_{l = 1}^k \alpha_l \bra{l}\big)\Big)\ket{e_i} &= \sum_{j = 1}^kE_i\ket{j} \otimes \sum_{l = 1}^k \alpha_l \bra{l}\ket{j}\\
+			&= \sum_{j = 1}^k \alpha_j E_i\ket{j}\\
+			&= E_i\ket{\psi}
+		\end{align}
+		Combining this calculation with \eqref{eq:reduction} we obtain \eqref{eq:lin_comb_operators}.
+		
+		Now we prove the converse, this is a simple calculation.
+		\begin{equation}
+			\sum_{i = 1}^n F_i \rho F_i^\dagger = \sum_{i, j, j' = 1}^n a_{ij}\overline{a}_{ji}E_i \rho E_i^\dagger = \sum_{i = 1}^n E_i \rho E_i^\dagger
+		\end{equation}
+	\end{proof}
+	
+	Necessary conditions for quantum error correction follow as a corollary to Proposition \ref{prop:quantum_operator_equiv}.
+	
+	\begin{defn}\label{def:correctable}
+		Let $\call{H}$ be a Hilbert space and $(\call{E}, \lbrace E_1,...,E_n\rbrace)$ a quantum operation over $\call{H}$ and let $C \subseteq \call{H}$ be a codespace (that is, $C \subseteq \call{H}$ is a subspace). The quantum operation $\call{E}$ is a \textbf{correctable set of errors for $C$} if it satisfies the following condition: let $\ket{1},...,\ket{l}$ denote an orthonormal basis for $C$. Let $\call{H}_e$ denote the complex Hilbert space freely generated by $\ket{1}_e,...,\ket{n}_e$. There exists a quantum operation $\call{R} = \lbrace R_1,...,R_m\rbrace$ along with a set of complex numbers $\lbrace \alpha_{jk}\rbrace_{1 \leq j \leq n, 1 \leq k \leq m}$ so that for each $i = 1,...,n$ we have the following, where $\ket{1}_a,...,\ket{m}_a$ is a basis for the free complex Hilbert space of dimension $m$.
+		\begin{equation}\label{eq:correcting_condition}
+			\sum_{j = 1}^n\sum_{k = 1}^m R_k E_j \ket{i} \otimes \ket{j}_e \otimes \ket{k}_a = \ket{i} \otimes \sum_{k = 1}^n \sum_{l = 1}^m \alpha_{jk} \ket{j}_e \otimes \ket{k}_a
+		\end{equation}
+		there, $\rho: C \lto C$ is an operator on $C$.
+	\end{defn}
+	\begin{remark}\label{rmk:operator_transition}
+		By Lemma \ref{lem:operator_preliminary} below, condition \eqref{eq:correcting_condition} implies that there exists a family of complex numbers $\lbrace \lambda_{jk}\rbrace_{1 \leq j \leq n, 1 \leq k \leq m}$ so that
+		\begin{equation}
+			R_kE_j\ket{i} = \sqrt{\lambda_{jk}}\ket{i}
+		\end{equation}
+		In other words,
+		\begin{equation}
+			R_kE_j \ket{i} \bra{i}E_j^\dagger R_k^\dagger = \lambda_{jk} \ket{i}\bra{i}
+		\end{equation}
+		This is what \cite{quantum_computing} mean when they write the condition
+		\begin{equation}
+			\call{R}(\call{E}(\rho)) \propto \rho
+		\end{equation}
+		there, $\rho$ is a positive operator.
+	\end{remark}
+
+\begin{lemma}\label{lem:operator_preliminary}
+	Let $(H,Q)$ be a pair of Hilbert spaces, let $\ket{1},...,\ket{n}$ and $\ket{\bar{1}},...,\ket{\bar{m}}$ respectively be orthonormal basis vectors for $H,Q$. Also, for each $j = 1,...,m$ let $M_j$ be a bounded linear operator on $H$. If there exists $\alpha_1,...,\alpha_m \in \bb{C}$ so that for all $i = 1,...,n$ we have:
+	\begin{equation}
+		\sum_{j = 1}^mM_j\ket{i} \otimes \ket{\bar{j}} = \ket{i} \otimes \Big(\sum_{j= 1}^m \alpha_{j} \ket{\bar{j}}\Big)
+	\end{equation}
+	then there exists $\lambda_1,...,\lambda_m \in \bb{C}$ so that for all $j = 1,...,m$
+	\begin{equation}
+		M_j\ket{i} = \lambda_j \ket{i}
+	\end{equation}
+\end{lemma}
+\begin{proof}
+	For each $j = 1,...,m$ write
+	\begin{equation}
+		M_j\ket{i} = \beta^{i,j}_1\ket{1} + \hdots + \beta^{i,j}_n \ket{n}
+	\end{equation}
+	Then we have
+	\begin{align*}
+		\sum_{j = 1}^mM_j\ket{i} \otimes \ket{\bar{j}} &= \sum_{j = 1}^m(\beta^{i,j}_1\ket{1} + \hdots + \beta^{i,j}_n \ket{n}) \otimes \ket{\bar{j}}\\
+		&= \sum_{j=1}^m\sum_{i' = 1}^n \beta_{i'}^{i,j} \ket{i'} \otimes \ket{\bar{j}}
+	\end{align*}
+	which by assumption is equal to
+	\begin{equation}
+		\ket{i} \otimes \Big(\sum_{j = 1}^m \alpha_{j} \ket{\bar{j}}\Big) = \sum_{j = 1}^m \alpha_j \ket{i} \otimes \ket{\bar{j}}
+	\end{equation}
+	It follows that $\beta_{i'}^{i,j} = 0$ if $i' \neq i$. The result follows.
+\end{proof}
+
+	In light of Remark \ref{rmk:operator_transition} we may make the following, equivalent definition of a correctable set of operators (Definition \ref{def:correctable}).
+	\begin{defn}\label{def:correctable_errors}
+		Let $(\call{E}, \lbrace E_1,...,E_n\rbrace)$ be a quantum operator on a Hilbert space $\call{H}$ and let $C \subseteq \call{H}$ be a codespace. The quantum operator is a \textbf{correctable set of errors} if there exists a trace-preserving quantum operator $(\call{R}, \lbrace R_1,...,R_m\rbrace)$ and a complex number $\lambda \in \bb{C}$ so that for any positive operator $\rho: C \lto C$ the following holds.
+		\begin{equation}
+			\call{R}(\call{E}(\rho)) = \lambda \rho
+		\end{equation}
+	\end{defn}
+
+\begin{remark}\label{rmk:discrepancy}
+	In Section \ref{sec:examples} we considered error correction codes which had ``multiple steps". For instance, the bitflip error correcting algorithm (Algorithm \ref{alg:bit_flip_correction}) has \emph{two} diagnoses involved, first that from the measurement $Z_1Z_2$ and then that form the measurement $Z_2Z_3$. In Definition \ref{def:correctable_errors} we ask for more than this, we ask that there exists a \emph{single} quantum operator $\call{R}$ which in the proof of Theomem \ref{thm:general_error_correction} below we will see involves a \emph{single} diagnosis.
+	
+	Thus, we will not extract the exact algorithms considered in Section \ref{sec:examples} from the general theory of this section. We can however apply the result of this section to the cases considered in Section \ref{sec:examples} to obtain something different, we do this at the end of this section.
+	
+	The flow of content for this document should thus be read as follows: in Section \ref{sec:examples} we saw that error correction (in some sense) was possible for some particular examples, and in this section we classify when error correction in the sense of Definition \ref{def:correctable_errors} is possible.
+	\end{remark}
+	
+	\begin{thm}\label{thm:general_error_correction}
+		Let $\bb{H}$ be a qubit and $C \subseteq \bb{H}$ a codespace, ie, $\bb{H}$ is $(\bb{C}^{\otimes 2})^n$ for some $n$ and $C \subseteq \bb{H}$ is a subspace. Let $P$ denote the projection onto $C$. Suppose $\call{E}$ is a quantum operation (Definition \ref{def:operator_sum}) with operator elements $\lbrace E_1,...,E_n\rbrace$. Then there exists a trace preserving quantum operation $\call{R}$ which corrects $\call{E}$ (Definition \ref{def:correctable}) if and only if there exists a Hermitian matrix $A = (\alpha_{ij})_{1 \leq i,j \leq n}$ satisfying
+		\begin{equation}\label{eq:error_correction_conditions}
+			\forall i, j =1,\ldots, n\quad PE_i^\dagger E_j P = \alpha_{ij}P
+		\end{equation}
+	\end{thm}
+	\begin{proof}
+		First we show that these conditions are necessary. If $\call{R}$ exists, that is, if there is a collection of operators $\lbrace R_1,...,R_m\rbrace$ on $\bb{H}$ so that for all $\rho \in \operatorname{Hom}(\bb{H},\bb{H})$ there exists a family of complex numbers $\lbrace \lambda_{jk}\rbrace_{1 \leq j \leq n, 1 \leq k \leq m}$ so that
+		\begin{equation}
+			R_k E_j P\rho P E_j^\dagger R_k^\dagger = \lambda_{jk}P\rho P
+		\end{equation}
+		This is because $P \rho P$ is an operator on $C$. In other words, there exists $\lambda \in \bb{C}$ so that
+		\begin{equation}
+			\call{R}(\call{E}(P\rho P)) = \lambda P \rho P
+		\end{equation}
+		Let $\mu \in \bb{C}$ be a complex number so that $\mu^2 = \lambda$. The two operators induced by the sets $\lbrace R_kE_j P \rbrace_{1 \leq j \leq n, 1 \leq k \leq m}$ and $\lbrace \mu P\rbrace$ together satisfy the hypothesis of Proposition \ref{prop:quantum_operator_equiv}. Consider lexicographic ordering on the set $\lbrace (j,k) \mid 1 \leq j \leq n, 1 \leq k \leq m\rbrace$ induced by the standard order $<$ on the integers. With respect to this indexing, there exists a unitary matrix $(a_{jk,j'k'})_{1 \leq j, j' \leq n, 1 \leq k,k' \leq m}$ subject to the following.
+		\begin{equation}
+			R_kE_j P = \sum_{(k',j')}a_{kj, k'j'} \mu P
+		\end{equation}
+		It follows that
+		\begin{equation}\label{eq:individual_k}
+			P E_{i}^\dagger R_{k}^\dagger R_kE_j P = \sum_{(k',i')}\sum_{(k'',j')}\overline{a_{k'i',ki}}a_{kj,k''j'}\mu\overline{\mu}P
+		\end{equation}
+		Now we set
+		$$\alpha_{ij} = \sum_{k = 1}^m \sum_{(k', i')}\sum_{(k'',j')}\overline{a_{k'i',ki}}a_{kj,k''j'}\mu\overline{\mu}$$
+		and sum \eqref{eq:individual_k} over all $k$ to obtain
+		\begin{equation}
+			PE_i^\dagger E_j P = \alpha_{ij}P
+		\end{equation}
+		as required, it is easy to see that $(\alpha_{ij})_{1 \leq i, j \leq n}$ is Hermitian.
+		
+		Now we prove sufficiency.
+		
+		First we simplify the error correction conditions by diagonalising the Hermitian matrix $A$. Let $D$ be diagonal and $U$ unitary such that $D = U^\dagger A U$. Denote the entry in row $i$ and column $j$ of $U$ by $u_{ij}$, similary for $u_{ij}^\dagger$. For each $k = 1,...,n$ we define operators $F_k = \sum_{i = 1}^n u_{ij}E_i$. Notice that by Proposition \ref{prop:quantum_operator_equiv} we have
+		\begin{equation}\label{eq:E_F}
+			\sum_{i = 1}^n F_i \rho F_i^\dagger = \sum_{i = 1}^n E_i \rho E_i^\dagger
+		\end{equation}
+		We then calculate, for $k,l \in \lbrace 1,...,n\rbrace$:
+		\begin{equation}
+			PF_k^\dagger F_l P = \sum_{i,j = 1}^n u_{ki}^\dagger u_{jl}PE_i^\dagger E_j P
+		\end{equation}
+		Substituting \eqref{eq:error_correction_conditions} we have $PF_k^\dagger F_lP = \sum_{i,j= 1}^n u_{ki}^\dagger \alpha_{ij}u_{jl}P$ and since $D = U^\dagger A U$ we obtain:
+		\begin{equation}\label{eq:correction_conditions_diag}
+			PF_k^\dagger F_l P = d_{kl}P
+		\end{equation}
+		Now we make use of polar decomposition (Theorem \ref{thm:polar_decomp}). There exists for each $k = 1,...,m$ a unitary matrix $U_k$ such that $F_k P = U_k \sqrt{P F_k^\dagger F_k P} = \sqrt{d_{kk}}U_k P$. We define $P_k := U_k P U_k^\dagger$, these operators $P_k$ are the syndrome measurement. We will make use of the following observation.
+		\begin{equation}\label{eq:pk_observation}
+			P_k = F_k P U_k^\dagger/\sqrt{d_{kk}}
+		\end{equation}
+		We define $\call{R} = \lbrace U_1^\dagger P_1, ..., U_n^\dagger P_n \rbrace$ with corresponding operator $\call{R}(\rho) = \sum_{i = 1}^n U_i^\dagger P_i \rho P_iU_i$.
+		
+		We now have the following incredible calculation.
+		\begin{align*}
+			\call{R}(\call{E}(\rho)) &= \sum_{i,j = 1}^n U^\dagger P_j E_i \rho E_i^\dagger P_j U_j\\
+			&= \sum_{i,j = 1}^n U_j^\dagger P_j F_i \rho F_i^\dagger P_j U_j & \text{By }\eqref{eq:E_F}\\
+			&= \sum_{i,j = 1}^n U_j^\dagger P_j^\dagger F_i P \rho P F_i^\dagger P_j U_j\\
+			&= \sum_{i,j = 1}^n U_j^\dagger U_j P F_j^\dagger F_i P \rho P F_i^\dagger F_j P U_j^\dagger U_j/d_{jj} & \text{By } \eqref{eq:pk_observation}\\
+			&= \sum_{i,j = 1}^n d_{ji}\rho d_{ij}/d_{jj} & \text{By }\eqref{eq:correction_conditions_diag}\\
+			&= \sum_{i = 1}^n d_{ii} \rho\\
+			&\propto \rho
+		\end{align*}
+	\end{proof}
+	\begin{defn}
+		The equations \eqref{eq:error_correction_conditions} are the \textbf{error correction conditions}.
+	\end{defn}
+
+In Section \ref{sec:examples} we looked at some specific examples of quantum error correction codes, in particular we looked at the bit flip algorithm (Algorithm \ref{alg:bit_flip_correction}). We show here how this particular example fits into the general theory presented in this Section.
+
+\begin{example}
+	The operator elements in question are $\lbrace I, X_1, X_2, X_3\rbrace$. The appropriate projector $P$ is $P := \ket{000}\bra{000} + \ket{111}\bra{111}$. We let $E_1 = I, E_2 = X_1, E_3 = X_2, E_4 = X_3$ and notice that for $i,j = 1,...,4$ we have $PE_i^\dagger E_j P = \delta_{ij}P$. So the identity matrix $I$ can be taken as the appropriate Hermitian operator $A$.
+	
+	We now run through the proof of \ref{thm:general_error_correction} and see how it works in this particular setting. We have that $A = I$ is already diagonal so $F_k = E_k$. Moreover, we have that $\sqrt{PF_k^\dagger F_k P} = \sqrt{PP} = P$ and so the polar decomposition of $F_k P$ is $F_kP$ (as $F_k = E_k$ is unitary). We thus have:
+	\begin{align*}
+		P_1 &= IPI^\dagger = P = \ket{000}\bra{000} + \ket{111}\bra{111}\\
+		P_2 &= X_1 P X_1 = \ket{100}\bra{100} + \ket{011}\bra{011}\\
+		P_3 &= X_2 P X_2 = \ket{010}\bra{010} + \ket{101}\bra{101}\\
+		P_4 &= X_3 P X_3 = \ket{001}\bra{001} + \ket{110}\bra{110}\\
+	\end{align*}
+Thus $\call{R} = \{ I P_1, X_1 P_2, X_2 P_3, X_3 P_4  \}$:
+\begin{align*}
+	IP_1 &= PI^\dagger = P = \ket{000}\bra{000} + \ket{111}\bra{111}\\
+	X_1P_2 &= P X_1 = \ket{000}\bra{100} + \ket{111}\bra{011}\\
+	X_2P_3 &= P X_2 = \ket{000}\bra{010} + \ket{111}\bra{101}\\
+	X_3P_4 &= P X_3 = \ket{000}\bra{001} + \ket{111}\bra{110}\\
+	\end{align*}and so
+\begin{equation}\label{eq:rho}
+	\call{R}(\rho) = P_1 \rho P_1 + X_1 P_2 \rho P_2 X_1 + X_2 P_3 \rho P_3 X_2 + X_3 P_4 \rho P_4 X_3
+	\end{equation}
+As anticipated by Remark \ref{rmk:discrepancy}, we see that \eqref{eq:rho} is distinct from Algorithm \ref{alg:bit_flip_correction}.
+\end{example}
+
+\section{Stabilisers}\label{sec:stabilisers}
+	We provide a means for determining when a vector subspace consisting of correctable errors is the largest such. That is, we establish a method for proving that a set of vectors span the codespace of a QECC (Definition \ref{def:QECC}).
+	
+	Throughout, $\bb{H}$ denotes a qubit $\bb{C}^2$, that is, the complex Hilbert space $\bb{C}^2$.
+	
+	Recall the Pauli operators of Definition \ref{def:pauli_hadamard}.
+	\begin{equation}
+		X :=
+		\begin{pmatrix}
+			0 &1\\
+			1 &0
+		\end{pmatrix}
+		\quad
+		Y :=
+		\begin{pmatrix}
+			0 & -i\\
+			i & 0
+		\end{pmatrix}
+	\quad
+		Z :=
+		\begin{pmatrix}
+			1 & 0\\
+			0 & -1
+		\end{pmatrix}
+	\end{equation}
+	Recall also our notation that, for example, $Z_1Z_2$ on $\bb{H}^{\otimes 3}$ denotes the operator $Z \otimes Z \otimes I$, see Notation \ref{not:Pauli_comp}.
+	
+	\begin{defn}
+		Let $n > 0$. The $n^{\text{th}}$-\textbf{Pauli Group}, denoted $G_n$, is the set of operators $\bb{H}^{\otimes n} \lto \bb{H}^{\otimes n}$ generated by of all operators $\pm I,  i I, X_j, Y_j, Z_j$ for $j = 1,...,n$.
+	\end{defn}
+\begin{defn}
+Given a subgroup $S \subseteq G_n$ of the Pauli group $G_n$, we denote by $V^S$ the subspace of $\bb{H}^{\otimes n}$ which is invariant under the operators $S$. That is, $\ket{\psi} \in V^S$ if and only if
+	\begin{equation}
+		\forall W \in S, W\ket{\psi} = \ket{\psi}
+	\end{equation}
+\end{defn}
+
+Denote by $\scr{X}$ the following Pauli operators
+\begin{equation}
+	\scr{X} := \lbrace I,X,Y,Z\rbrace
+\end{equation}
+For an arbitrary element $g \in G_n$,  let $g_1,...,g_n \in \scr{X}$ be such that
+\begin{equation}\label{eq:canonical_tensor}
+	g = \alpha g_1 \otimes \hdots \otimes g_n, \quad\alpha \in \{ 1,-1,i,-i \}
+\end{equation}
+then the sequence $g_1,...,g_n$ is the unique such, and we denote a length $2n$ sequence $x = (x_1,...,x_{2n})$ in $\bb{Z}_2^{2n}$ by $r(g)$ defined by the following schemata:
+\begin{itemize}
+	\item $x_i = 1$ if and only if $g_i = X$,
+	\item $x_{i + n} = 1$ if and only if $g_i = Z$,
+	\item $x_i = x_{i+n} = 1$ if and only if $g_i = Y$.
+\end{itemize}
+Given a set $\lbrace g_1,...,g_k\rbrace$ of elements of the Pauli group, the \textbf{check matrix} is the $k \times 2n$ matrix whose $j^\text{th}$ row is $r(g_j)$. The check matrix is denoted $\operatorname{Check}(g_1,...,g_k)$.
+
+\begin{observation}\label{obs:evenness}
+	Let $(g,h)$ be a pair of elements of $G_n$ and let $g_1,...,g_n, h_1,...,h_n \in \scr{X}$ be such that
+	\begin{align*}
+		g &= \alpha g_1 \otimes \hdots \otimes g_n,\quad \alpha \in \{ 1,-1,i,-i \}\\
+		h &= \beta h_1 \otimes \hdots \otimes h_n,\quad \beta \in \{ 1,-1,i,-i \}
+	\end{align*}
+	we see that $g$ and $h$ commute if and only if the number of times $g_j$ and $h_j$ are distinct matrices with neither equal to the identity is even. 
+\end{observation}
+Defining
+\begin{equation}
+	\Lambda :=
+	\begin{pmatrix}
+		0 & I\\
+		I & 0
+	\end{pmatrix}
+\end{equation}
+we have the following Lemma.
+\begin{lemma}
+	Let $(g_1,g_2) \in G_n$. Then $g_1,g_2$ commute if and only if
+	\begin{equation}
+		r(g_1) \Lambda r(g_2)^T = 0
+	\end{equation}
+\end{lemma}
+\begin{proof}[Rough sketch]
+	The form of $r(g_1)$:
+	\begin{equation}
+		r(g_1) =
+		\begin{pmatrix}
+			X \text{ or } Y \text{ in }g_1 & | & Z \text{ or } Y\text{ in }g_1
+		\end{pmatrix}
+	\end{equation}
+	and similarly for $r(g_2)$. Thus we have
+	\begin{equation}
+		r(g_1) \Lambda r(g_2)^T = \begin{pmatrix}
+			X \text{ or } Y \text{ in }g_1 & | & Z \text{ or } Y\text{ in }g_1
+		\end{pmatrix}
+		\begin{pmatrix}
+			Z \text{ or } Y \text{ in }g_2\\
+			X \text{ or } Y \text{ in }g_2
+		\end{pmatrix}
+	\end{equation}
+	This contains the data of the requirements specified by Observation \ref{obs:evenness}.
+\end{proof}
+The Check matrix is useful for more:
+\begin{defn}
+	A set of elements $g_1,...,g_r \in G_n$ of the Pauli group $G_n$ are \textbf{independent} if the for any $j$ we have, where we write $\hat{g}_i$ for the omission of $g_i$:
+	\begin{equation}
+		\langle g_1,...,g_r \rangle \neq \langle g_1,...,\hat{g}_j, ..., g_n\rangle
+	\end{equation}
+	(here, the notation $\langle g_1,...,g_n\rangle$ denotes the group generated by these elements).
+\end{defn}
+\begin{lemma}\label{lem:lin_indep}
+	Let $g_1,...,g_r \in G_n$ be a set of elements such that $-I \not\in \langle g_1,...,g_r\rangle$, then the elements $g_1,...,g_r$ are independent if and only if $r(g_1),...,r(g_r)$ and linearly independent (over the field $\bb{Z}_2$).
+\end{lemma}
+\begin{proof}
+	See \cite[Page 457, Proposition 10.3]{quantum_computing}
+\end{proof}
+The following Lemma will be used to calculate the dimension of $V^S$:
+	\begin{lemma}\label{lem:anti_commutes}
+		Let $g_1,...,g_k$ be independent elements of the Pauli group $G_n$ and denote by $S$ the group they generate. Assume $-I \not\in S$. Then for each $i = 1,...,k$ there exists $g \in G_n$ such that $g$ anti-commutes with $g_i$ and commutes with all $g_j$ satisfying $i \neq j$.
+	\end{lemma}
+	\begin{proof}
+		The set $r(g_1),...,r(g_k)$ is linearly independent by Lemma \ref{lem:lin_indep}, thus the check matrix of $g_1,...,g_k$ has $k$ linearly independent columns. So, there exists a vector $x \in \bb{Z}_2^k$ such that
+		\begin{equation}
+			\operatorname{Check}(g_1,...,g_n)\Lambda x = e_i
+		\end{equation}
+		where $e_i$ is the $i^{\text{th}}$ standard basis vector of $\bb{Z}_2^k$. Let $g$ be such that $r(g)^T = x$. The result follows from Lemma \ref{lem:lin_indep}.
+	\end{proof}
+	\begin{thm}\label{thm:dimension_stabiliser}
+		Let $S = \langle g_1,...,g_k\rangle \subseteq G_n$ and say $-I \not\in S$. Then $\operatorname{dim}V^S = 2^{n - k}$.
+	\end{thm}
+	\begin{proof}
+		We notice that $(1/2)(I + g_j)$ is the projector onto the +1-Eigenspace of $g_j$. We let $x = (x_1,...,x_k) \in \bb{Z}_2^k$ and define the operator
+		\begin{equation}
+			P_S^x := 1/2^{k}\prod_{j = 1}^k(I + (-1)^{x_{j}}g_j)
+		\end{equation}
+		By Lemma \ref{lem:anti_commutes} we have for each $g_j$ there exists $g_{x_j}$ such that $g_{x_j}g_j g_{x_j}^{-1} = -g_j$. Let $g_x = g_{x_1}\hdots g_{x_k}$, then
+		\begin{align*}
+			g_xP_S^{(0,...,0)} g_x^{-1} &= 1/2^k\prod_{j = 1}^k (g_{x_j}g_{x_j}^{-1} + g_{x_j} g_{j}g_{x_j}^{-1})\\
+			&= P_S^x
+		\end{align*}
+		Thus there is an isomorphism
+		\begin{equation}
+			\operatorname{im}P_S^x \cong \operatorname{im}P_S^{(0,...,0)}
+		\end{equation}
+		Since $\operatorname{im}P_S \cong V_S$ we have $\operatorname{dim}\operatorname{im}P_S^x = \operatorname{dim}V_S$. Finally we note that
+		\begin{equation}
+			I = \sum_{x \in \bb{Z}_2^k}P_S^x
+		\end{equation}
+		The operator $I$ is a projector onto an $n$-dimensional space, and $\sum_{x \in \bb{Z}_2^k}P_S^x$ is a sum of $2^k$ orthogonal projectors all of the same dimension as $V_S$, thus
+		the only possibility is $\operatorname{dim}V_S = 2^{n - k}$.
+	\end{proof}
+
+\begin{application}
+	In the context of the bitflip error correction, we have:
+	\begin{equation}
+		S = \langle Z_1Z_2, Z_2Z_3 \rangle \subseteq G_3
+		\end{equation}
+	It is clear that
+	\begin{equation}\label{eq:bitflip_stab}
+		V^S \supseteq \operatorname{Span}\{ \ket{000}, \ket{111} \}
+		\end{equation}
+	Now we want to use Theomre \ref{thm:dimension_stabiliser} to prove that in fact \eqref{eq:bitflip_stab} holds up to equality.
+	
+	Since $Z_1Z_2, Z_2Z_3$ are $2$ independent generators for $S$, it follows from Theorem \ref{thm:dimension_stabiliser} that
+	\begin{equation}
+		\operatorname{dim}V^S = 2^{3 - 2} = 2 = \operatorname{dim}\big(\operatorname{Span}\{ \ket{000}, \ket{111} \}\big)
+		\end{equation}
+	\end{application}
+
+\appendix
+
+\section{Operator Theory}
+\subsection{Adjoint operators}
+We will be chiefly concerned with the Hilbert space $\ell^2$ but we work in a more general setting for now. A \emph{Hilbert space} will always mean over $\bb{C}$. Associated to every operator between Hilbert spaces is an operator between their \emph{dual spaces}:
+
+In general, if $\call{I}$ is any inner product space over $\bb{C}$ and we have two vectors $x,y \in I$ then we can consider the projection of $y$ onto $x$ which is given by
+\begin{equation}\label{eq:easy_case}
+	\operatorname{Proj}_y(x) := \frac{\langle x, y \rangle}{||y||} \frac{y}{||y||}
+\end{equation}
+Thus, if $U \subseteq \call{I}$ is a one dimensional subspace spanned by a unit vector $u \in U$ then the projection of any $x \in \call{I}$ onto $u$ is given by the simple formula $\langle x,u\rangle u$. The following Lemma shows what we can say when the subspace is of arbitrary dimension but with $U$ closed:
+\begin{lemma}\label{lem:decomposition}
+	Let $\bb{H}$ be a Hilbert space and $U \subseteq \bb{H}$ a closed subspace. Then
+	\[\bb{H} = U \oplus U^\perp\]
+\end{lemma}
+\begin{proof}
+	We will define a projection
+	\begin{align*}
+		P_U: \bb{H} &\lto U\\
+		x &\longmapsto \operatorname{inf}\lbrace ||x - y|| \mid y \in U\rbrace
+	\end{align*}
+	We let $d$ denote $\operatorname{inf}\lbrace ||x - y|| \mid y \in U\rbrace$. By definition of $\operatorname{inf}$ there exists a sequence $(x_n)_{n=0}^\infty$ of elements in $U$ such that $\lim_{n\to \infty}||x - x_n|| = d$. Since $U$ is closed it is complete and the norm is continuous so it suffices to show that the sequence $(x_n)_{n=0}^\infty$ is Cauchy. This can be done for example using the parallelogram identity: for all $n,m\geq 0$:
+	\begin{equation}
+		||x_n - x_m||^2 + ||(x - x_n) + (x - x_m)||^2 = 2||x - x_n||^2 + 2||x - x_m||^2
+	\end{equation}
+	As given $\epsilon > 0$ there exists $N \geq 0$ such that $||x - x_n||^2 < d^2 + \epsilon^2/4$, for $n \geq N$. Thus
+	\begin{align*}
+		||x_n - x_m||^2 &= 2||x - x_n||^2 + 2||x - x_m||^2 - 4||x = ||1/2(x_n + x_m)||^2\\
+		&\leq 4d^2 + \epsilon^2 - 4||x - 1/2(x_n + x_m)||^2
+	\end{align*}
+	which since $1/2(x_n + x_m) \in C$ we have $d \leq ||x - 1/2(x_n + x_m)||$, proving $(x_n)_{n = 0}^\infty$ is Cauchy. This also shows linearity.
+	
+	It remains to show $x - P_U(x) \in U^\perp$. To do this, we will consider the family of vectors $c(t) = (1-t)P_U(x) + ty$, ($t \in \bb{R}$) and analyse the derivative of $||x - y_t||^2$ at $t = 0$.
+	
+	Consider the composition
+	\begin{align}
+		\gamma: \bb{R} &\lto \bb{R}\\
+		t &\longmapsto ||x - c(t)||^2
+	\end{align}
+	We can write $\gamma$ in a more explicit form:
+	\begin{align*}
+		\gamma(t) &= ||x - P_U(x) + t(y - P_U(x))||^2\\
+		&= \big\langle x - P_U(x) + t(y - P_U(x)),x - P_U(x) + t(y - P_U(x))\big\rangle\\
+		&= ||x - P_U(x)||^2 - 2t\operatorname{Re}\langle  x - P_U(x),y - P_U(x)\rangle + t^2||y - P_U(x)||
+	\end{align*}
+	which is clearly differentiable and has derivative $- 2\operatorname{Re}\langle  x - P_U(x),y - P_U(x)\rangle$ at $t = 0$. Since $P_U(x)$ (which equals $c(0)$) is a minimum of $\gamma(t)$ we have that $\operatorname{Re}\langle  x - P_U(x),y - P_U(x)\rangle = 0$. This holds true for arbitrary $y \in U$ and lastly we have
+	\[\lbrace y - P_U(x) \mid y \in U \rbrace = U\]
+	thus for all $y \in U$:
+	\begin{equation}
+		\operatorname{Re}\langle  x - P_U(x),y\rangle = 0
+	\end{equation}
+	This shows that $x - P_U(x) \in U^\perp$.
+\end{proof}
+Given a Hilbert space $\bb{H}$ there is a map
+\begin{align}
+	\Phi: \bb{H} &\lto \bb{H}^\ast\label{eq:Riesz_map}\\
+	b &\longmapsto \langle \und{0.2}, b \rangle
+\end{align}
+Notice that in order to produce a \emph{linear} functional, it was important we put $b$ in the second argument, we must define $\Phi$ so that $\Phi(b) \neq \langle b, \und{0.2}\rangle$. By anti-linearity of the second argument of the inner product we have that $\Phi$ is anti-linear, and moreover is injective as
+\begin{align*}
+	\Phi(b) = \Phi(b') &\Longrightarrow \langle \und{0.2}, b\rangle = \langle \und{0.2}, b'\rangle\\
+	&\Longrightarrow \forall b'' \in \bb{H}, \langle b'', b - b'\rangle = 0\\
+	&\Longrightarrow \text{ in particular, } \langle b-b', b-b'\rangle = 0\\
+	&\Longrightarrow b - b' = 0
+\end{align*}
+In the special case where $\bb{H}$ is finite dimensional, we automatically have that this map is surjective as it is injective, and any anti-linear, injective map between two finite dimensional spaces of equal dimension is automatically surjective. More generally, if $\bb{H}$ has arbitrary dimension, then for any $y \in \bb{H}$ the map $\langle \und{0.2},y\rangle$ is bounded (see Remark \ref{rmk:bounded_inner_product}) so the image of $\Phi$ is contained in the set of continuous linear functionals, the following establishes the reverse inequality:
+\begin{thm}[Riesz Representation Theorem]\label{thm:riesz}
+	Let $\bb{H}$ be a Hilbert space. For every continuous linear functional $\varphi \in \bb{H}^\ast$ there exists a unique element $h_\varphi \in \bb{H}$ such that
+	\begin{equation}
+		\varphi = \langle \und{0.2}, h_\varphi \rangle
+	\end{equation}
+	Moreover, we have
+	\begin{equation}
+		||\varphi||_{\bb{H}^\ast} = ||h_\varphi||_{\bb{H}}
+	\end{equation}
+\end{thm}
+We will use the following Lemma:
+\begin{lemma}\label{lem:one_dim_kernel}
+	Let $\bb{H}$ be a Hilbert space and $\varphi \in \bb{H}^\ast$ be non-zero and continuous. Then $(\operatorname{ker}\varphi)^\perp$ is one dimensional.
+\end{lemma}
+\begin{proof}
+	Since $\varphi$ is continuous the set $\operatorname{ker}\varphi$ is closed and so by Lemma \ref{lem:decomposition} we have $\bb{H} = \operatorname{ker}\varphi \oplus (\operatorname{ker}\varphi)^\perp$, which since $\varphi\neq 0$ implies there exists $v\neq 0 \in (\operatorname{ker}\varphi)^\perp$, so $\operatorname{dim}(\operatorname{ker}\varphi)^\perp > 0$. Now, say $v_1,v_2 \in (\operatorname{ker}\varphi)^\perp$ so that $\varphi(v_1) \neq 0$ and $\varphi(v_2) \neq 0$. These are complex numbers and so there exists $\lambda \in \bb{C}$ such that
+	\[0 = \lambda \varphi(v_1) - \varphi(v_2) = \varphi(\lambda v_1 - v_2)\]
+	which means $\lambda v_1 - v_2 \in \operatorname{ker}\varphi \cap (\operatorname{ker}\varphi)^\perp = \lbrace 0 \rbrace$.
+\end{proof}
+\begin{proof}[Proof of Theorem \ref{thm:riesz}]
+	Clearly if $\operatorname{ker}\varphi = \bb{H}$ we can take $h_\varphi = 0$ so assume this is not the case. Since $\varphi$ is continuous its kernel $\operatorname{ker}\varphi$ is a closed subset of $\bb{H}$. Thus, by Lemma \ref{lem:decomposition} the Hilbert space $\bb{H}$ decomposes: $\bb{H} = \operatorname{ker}\varphi \oplus (\operatorname{ker}\varphi)^\ast$. Since $\operatorname{ker}\varphi$ is a proper subset it then follows that there exists a non-zero element $v\neq0 \in (\operatorname{ker}\varphi)^\ast$, by normalising we may assume that $v$ is a unit vector. We will show that $\overline{\varphi(v)}v$ is the appropriate unique choice for $h_\varphi$.
+	
+	By Lemma \ref{lem:one_dim_kernel} the subspace $(\operatorname{ker}\varphi)^\perp$ is one dimensional, hence we can use formula \eqref{eq:easy_case} for the projection of arbitrary $x$ onto $(\operatorname{ker}\varphi)^\perp$. Observe the following calculation:
+	\begin{align*}
+		\varphi(x) &= \varphi(x - \langle x,v\rangle v + \langle x,v\rangle v)\\
+		&= \varphi(x - \langle x,v\rangle v) + \varphi(\langle x,v\rangle v)\\
+		&= 0 + \langle x,v\rangle\varphi(v)\\
+		&= \langle x, \overline{\varphi(v)}v\rangle
+	\end{align*}
+	For uniqueness, say $h_\varphi'$ was another such element. Then
+	\begin{align*}
+		&\forall x \in \bb{H}, \langle x, h_\varphi\rangle = \langle x, h_\varphi'\rangle\\
+		&\Longrightarrow \forall x \in \bb{H}, \langle x, h_\varphi - h_\varphi'\rangle = 0\\
+		&\Longrightarrow|| h_\varphi - h_\varphi'|| = 0\\
+		&\Longrightarrow h_\varphi = h_\varphi'
+	\end{align*}
+	For the second claim, we use the Cauchy-Schwartz inequality:
+	\begin{align*}
+		|\varphi(x)| = |\langle x, \overline{\varphi(v)}v\rangle| \leq ||x||||\overline{\varphi(v)}||v|| = ||x|||\varphi(v)|
+	\end{align*}
+	and so if $x$ has unit norm $|\varphi(x)| \leq |\varphi(v)|$, in other words, $||\varphi||_{\bb{H}^\ast} \leq |\varphi(v)|$ however $v$ has unit norm itself, so $||\varphi||_{\bb{H}^\ast} = |\varphi(v)|$. The proof is now complete once it is noted that $||h_\varphi||_{\bb{H}} = |\varphi(v)|$.
+\end{proof}
+\begin{cor}\label{cor:antilinear_isometry}
+	There existgs an antilinear, isometric injection:
+	\begin{align}
+		\bb{H} &\lto \bb{H}^\ast\\
+		v &\longmapsto \langle v, \und{0.2}\rangle
+	\end{align}
+	 and hence a bijection when $\bb{H}$ is finite dimensional.
+\end{cor}
+
+
+
+\begin{remark}
+	\label{rmk:bounded_inner_product} Let $y \in \bb{H}$ be an element of a Hilbert space $\bb{H}$ and consider the function $\langle \und{0.2},y\rangle$. This is bounded, as by Cauchy-Schwartz:
+	\[|\langle x,y\rangle| \leq ||x||||y||\]
+	thus $|\langle \und{0.2},y\rangle|/||x|| \leq ||y||$ and in fact this is equality as $|\langle y/||y||,y\rangle| = ||y||$.
+\end{remark}
+Given an operator $u: \bb{H}_1 \lto \bb{H}_2$ there is for each $y \in \bb{H}_2$ an associated linear functional $x \longmapsto \langle u(x),y\rangle$ which we denote by $\langle u(\und{0.2}),y\rangle$. By Theorem \ref{thm:riesz} there is thus an element $y^\ast \in \bb{H}_1$ such that $\langle u(\und{0.2}),y\rangle = \langle \und{0.2}, y^\ast\rangle$. The assignment $y \mapsto y^\ast$ is in fact linear, we show additivity:
+\begin{align*}
+	\langle u(\und{0.2}), y_1 + y_2\rangle &= \langle \und{0.2}, (y_1 + y_2)^\ast\rangle\\
+\end{align*}
+and
+\begin{align*}
+	\langle u(\und{0.2}), y_1 + y_2\rangle &= \langle u(\und{0.2}), y_1\rangle + \langle u(\und{0.2}), y_2\rangle\\
+	&= \langle \und{0.2}, y_1^\ast\rangle + \langle \und{0.2}, y_2^\ast\rangle\\
+	&= \langle \und{0.2}, y_1^\ast + y_2^\ast\rangle
+\end{align*}
+which implies $(y_1 + y_2)^\ast = y_1^\ast + y_2^\ast$. We define:
+\begin{defn}
+	The \textbf{adjoint operator} associated to an operator $u: \bb{H}_1 \lto \bb{H}_2$ is the linear map:
+	\begin{align*}
+		u^\ast: \bb{H}_2 &\lto \bb{H}_1\\
+		y &\longmapsto y^\ast
+	\end{align*}
+	Its existence is established by the Riesz Representation Theorem (\ref{thm:riesz}) and it is uniquely determined by the property:
+	\begin{equation}
+		\forall x\in\bb{H}_1,y\in\bb{H}_2, \langle u(x),y\rangle = \langle x, u^\ast(y)\rangle
+	\end{equation}
+\end{defn}
+\begin{remark}
+	Let $\big(\bb{H}_1,\langle\cdot,\cdot\rangle_B\big), \big(\bb{H}_2,\langle \cdot, \cdot \rangle\big)_C$ be Hilbert spaces and let $u: \bb{H}_1 \lto \bb{H}_2$ be an operator. The \textbf{adjoint} to $u$, denoted $u^\ast$ is the operator:
+	\begin{align}
+		\und{0.2} \circ u: \bb{H}_2^\ast &\lto \bb{H}_1^\ast\\
+		\varphi &\longmapsto \varphi \circ u
+	\end{align}
+	The following diagram commutes:
+	\begin{equation}
+		\begin{tikzcd}
+			\bb{H}_{2}^{\ast}\arrow[rrrr,"{\und{0.2} \circ u}"]\arrow[ddd,swap,"{\cong}"] & & & & \bb{H}_1^{\ast}\arrow[ddd,"{\cong}"]\\
+			&\langle\und{0.2},v\rangle\arrow[r,mapsto] & \langle u(\und{0.2}), v\rangle\arrow[r,leftrightarrow] & \langle \und{0.2},v^{\ast}\rangle\\
+			&v\arrow[r,mapsto]\arrow[u,mapsto] & u^{\ast}(v)\arrow[ur,mapsto]\\
+			\bb{H}_2\arrow[rrrr,swap,"{u^\ast}"] & & & & \bb{H}_1
+		\end{tikzcd}
+	\end{equation}
+	which explains the overloading of terminology.
+\end{remark}
+\begin{notation}
+	Given a complex matrix $A$, the matrix given by conjugating each element $a \in A$ and then transposing the result, ie, the \textbf{conjugate transpose} is denoted $A^{\dagger}$. Due to Proposition \ref{prop:transpose_matrix} below, the conjugate transpose of a matrix is often referred to as the \textbf{adjoint}.
+\end{notation}
+\begin{proposition}\label{prop:transpose_matrix}
+	Let $\bb{H}_1,\bb{H}_2$ be finite dimensional, and let $v_1,...,v_n \in \bb{H}_1, w_1,...,w_m\in \bb{H}_2$ be orthonormal bases for $\bb{H}_1,\bb{H}_2$ respectively. If $\varphi: \bb{H}_1 \lto \bb{H}_2$ is a linear transformation and $A$ its matrix representation with respect to these bases, then the matrix representation of the adjoint $\varphi^\ast$ is $A^\dagger$, the conjugate transpose of $A$.
+\end{proposition}
+\begin{proof}`
+	For each $j = 1,...,m$ write $w_j^\ast = \alpha_1 v_1 + \hdots + \alpha_n v_n$ and each $i = 1,...,n$ write $\varphi(v_i) = \beta_1 w_1 + \hdots + \beta_m w_m$. We calculate:
+	\begin{equation}
+		\langle \varphi(v_i), w_j\rangle = \beta_m \langle w_1, w_j \rangle + \hdots + \beta_m \langle w_m, w_j\rangle = \beta_j
+	\end{equation}
+	and
+	\begin{equation}
+		\langle v_i, w_j^\ast\rangle = \bar{\alpha}_1 \langle v_i, v_1\rangle + \hdots + \bar{\alpha}_n \langle v_i, v_n \rangle = \bar{\alpha}_i
+	\end{equation}
+	Since by definition $\langle \varphi(v_i), w_j\rangle = \langle v_i, w_j^\ast\rangle$ the proof is complete.
+\end{proof}
+
+\subsection{Hermitian and unitary operators}\label{sec:Hermitian_Unitary}
+Throughout, $V$ is a complex vector space.
+\begin{defn}
+	A square, complex matrix $A$ is \textbf{Hermitian} if it is self-adjoint, that is $A^\dagger = A$.
+	
+	A matrix is \textbf{normal} if $AA^\dagger = A^\dagger A$
+	
+	An operator $\varphi:V \lto V$ is \textbf{Hermitian} (\textbf{normal}) if a (and hence all) matrix representation(s) of $V$ is Hermitian (normal).
+\end{defn}
+Clearly, all Hermitian matrices are normal.
+\begin{thm}[Spectral decomposition]\label{thm:spectral}
+	Let $V$ be a finite dimensional, complex vector space and $A$ a matrix representation of an operator on $V$. The matrix $A$ is normal if and only if it is diagonalisable with respect to some orthonormal basis for $V$.
+\end{thm}
+\begin{proof}
+	We prove that normal matrices are diagonalisable.
+	
+	We proceed by induction on the size of the matrix. If the matrix is $1\times 1$ then there is nothing to prove. Now for the inductive step. Let $\lambda$ be an eigenvalue of $A$, and $P$ the matrix which projects onto the $\lambda$-eigenspace. We let $Q$ denote $I - P$, the projector onto the complement subspace.  We notice that
+	\begin{equation}
+		A = (P + Q)A(P + Q)= PAP + QAP + PAQ + QAQ
+	\end{equation}
+	We have that $QAP = 0$ because $A$ maps the $\lambda$-eigenspace onto itself, and we claim moreover that $PAQ = 0$. To see this, let $v$ be an eigenvector with eigenvalue $\lambda$, then
+	\begin{equation}
+		AA^{\dagger}v = A^{\dagger}Av = A^{\dagger} \lambda v = \lambda A^\dagger v
+	\end{equation}
+	which means $A^\dagger$ maps the $\lambda$-eigenspace onto itself. This implies $QA^\dagger P = 0$, taking the transpose of which we end at $P A Q = 0$ as claimed.
+	
+	Thus $A = PAP + QAQ$. The matrix $PAP$ is diagonalisable with respect to some orthonormal basis for $P$. Since $P \cap Q = 0$ it remains to show that $QAQ$ is diagonalisable with respect to some orthonormal basis for $Q$. The space $Q$ has strictly smaller size than $A$ and so this follows by induction once we have shown that $QAQ$ is normal. This is a simple calculation:
+	\begin{align*}
+		QAQQA^\dagger Q &= QAQA^\dagger Q\\
+		&= QA(P + Q)A^\dagger Q\\
+		&= QAA^\dagger Q\\
+		&= QA^\dagger AQ\\
+		&= QA^\dagger (P + Q)AQ\\
+		&= QA^\dagger QAQ \\
+		&= QA^\dagger QQ A Q
+	\end{align*}
+\end{proof}
+\begin{defn}
+	Let $\bb{H}$ be a possibly inifinite dimensional Hilbert space, an operator $U: \bb{H} \lto \bb{H}$ is \textbf{unitary} if $U^\dagger U = U U^\dagger = \operatorname{Id}_n$.
+\end{defn}
+\begin{defn}
+	A matrix $U$ is \textbf{unitary} if $U^\dagger U = I$. 
+\end{defn}
+\begin{lemma}\label{lem:unitary_red}
+	A square, unitary matrix $U$ satisfies $UU^\dagger = I$.
+\end{lemma}
+\begin{proof}
+Let $u_{ij}$ denote the entry of $U$ in row $i$ and column $j$. The entry in row $i$ and column $j$ of $U^\dagger U$ is $\sum_{k = 1}^n \overline{u}_{ik}u_{kj}$ which by hypothesis is equal to $\delta_{ij}$. Hence, $\sum_{k = 1}^n \overline{u}_{ki}u_{kj}$ is equal to $\sum_{k = 1}^n u_{ik}\overline{u}_{jk}$ which is the entry in row $i$ and column $j$ of $UU^\dagger$.
+\end{proof}
+\begin{cor}\label{cor:unitary_simple}
+	If $\bb{H}$ is a finite dimensional Hilbert space and $U: \bb{H} \lto \bb{H}$ is an operator on $\bb{H}$, then $U$ is unitary if and only if for all $u, v \in \bb{H}$ we have $\langle Uu, Uv \rangle = \langle u, v \rangle$.
+\end{cor}
+\begin{proof}
+	First we observe the following calculation, where $u \in \bb{H}$ is arbitary.
+\begin{align*}
+	||U^\dagger U u - u|| &= \langle U^\dagger U u - u, U^\dagger U u - u \rangle\\
+	&= \langle U^\dagger U u, U^\dagger U u \rangle - \langle U^\dagger U u, u \rangle - \langle u, U^\dagger U u \rangle + \langle u, u \rangle\\
+	&= \langle U U^\dagger U u, U u \rangle - \langle Uu, Uu \rangle - \langle U u, U u \rangle + \langle u ,u \rangle\\
+	&= \langle U^\dagger U u, u \rangle - \langle u, u \rangle - \langle u, u \rangle + \langle u, u \rangle\\
+	&= \langle Uu, Uu \rangle - \langle u, u \rangle\\
+	&= \langle u, u \rangle - \langle u, u \rangle\\
+	&= 0
+\end{align*}
+Hence $U^\dagger U u = u$ for all $u \in \bb{H}$ and so $U^\dagger U = \operatorname{Id}_{\bb{H}}$.
+
+Let $u_1,...,u_n$ be an orthonormal basis for $\bb{H}$ and let $\underline{U}$ denote the matrix of $U$ written with respect to this basis. Since $U$ is unitary we have that $\underline{U}$ is unitary and so $\underline{U}^\dagger \underline{U} = I$ and by Lemma \ref{lem:unitary_red} we have $\underline{U}\underline{U}^\dagger = I$. It follows from this that $UU^\dagger = \operatorname{Id}_{\bb{H}}$ and so $U$ is unitary.
+
+The converse is obvious.
+\end{proof}
+In fact, it is sufficient to check even less.
+\begin{lemma}\label{lem:even_less}
+	Let $U: \bb{H} \lto \bb{H}$ be an operator on a finite dimensional Hilbert space. If $\langle Uu, Uu \rangle = \langle u, u \rangle$ for all $u \in \bb{H}$, then for all $u,v \in \bb{H}$ we have $\langle Uu, Uv \rangle = \langle u, v \rangle$.
+\end{lemma}
+\begin{proof}
+	It suffices to prove that if $C: \bb{H} \lto \bb{H}$ is an operator on $\bb{H}$ such that for all $x \in \bb{H}$ we have $\langle Cx, x \rangle = 0$ then $C = 0$.
+	
+	We let $x,y \in \bb{H}$ be arbitrary and consider $\langle C(x + y), x + y \rangle$. Since this is $0$ it follows that $\langle Cx, y \rangle = -\langle Cy, x \rangle$. On the other hand, $\langle C(x + iy), x + iy\rangle$ is also $0$, which implies $\langle Cx, y \rangle = \langle Cx, y \rangle$. Hence $\langle Cx, y \rangle = \langle Cy, x \rangle = 0$.
+\end{proof}
+\begin{cor}\label{cor:unitary_true}
+	If $U: \bb{H} \lto \bb{H}$ is an operator and $\bb{H}$ is finite dimensional, then $U$ is unitary if and only if $\forall u \in \bb{H}, \langle Uu, Uu \rangle = \langle u, u \rangle$.
+\end{cor}
+\begin{proof}
+	Immediate from Corollary \ref{cor:unitary_simple} and Lemma \ref{lem:even_less}.
+\end{proof}
+
+Notice that the spectral decomposition (\ref{thm:spectral}) states that the matrix $A$ is such that $A = U^\dagger DU$ for a diagonal matrix $D$ and a unitary matrix $U$.
+\begin{cor}
+	A normal matrix $A$ is Hermitian if and only if its eigenvalues are real.
+\end{cor}
+\begin{proof}
+	First notice that if a matrix is Hermitian then for any eigenvector $v$ with eigenvalue $\lambda$:
+	\begin{equation}
+		\lambda |v|^2 = \langle \lambda v,v \rangle = \langle Av, v \rangle = \langle v,Av \rangle = \bar{\lambda}|v|^2
+	\end{equation}
+	
+	Now we prove the other direction.  Let $D$ be diagonal and $U$ a unitary matrix such that $A = U^{-1}DU$. Then
+	\begin{equation}
+		A^\dagger = U^{\dagger}D^\dagger U^{-1^\dagger} = U^{-1}DU = A
+	\end{equation}
+\end{proof}
+\begin{defn}
+	An operator $\varphi: V \lto V$ is \textbf{positive} if:
+	\begin{equation}
+		\forall v \in V, \langle v, \varphi v\rangle \geq 0
+	\end{equation}
+	which means, $\langle v, \varphi v\rangle$ is real and non-negative. If the inequality is strict, then $\varphi$ is \textbf{positive definite}.
+\end{defn}
+\begin{example}
+	Let $A$ be any operator. Then for any $v \in V$:
+	\begin{equation}
+		\langle v, A^\dagger Av\rangle = \langle Av, Av \rangle = ||Av||^2 \geq 0
+	\end{equation}
+	Thus $A^\dagger A$ is positive.
+\end{example}
+\begin{proposition}\label{prop:positive_finite_=>_Hermitian}
+	A positive operator on a finite dimensional vector space is necessarily Hermitian.
+\end{proposition}
+\begin{proof}
+	Let $A$ be a matrix representation of the positive operator. Notice the following calculation:
+	\begin{align*}
+		0 \leq \langle v, (A - A^\dagger)v\rangle &= \langle (A^\dagger - A)v,v\rangle\\
+		&= \overline{\langle v, (A^\dagger - A)v\rangle}\\
+		&= \langle v, (A^\dagger - A)v\rangle\\
+		&= -\langle v, (A - A^\dagger)v\rangle \geq 0
+	\end{align*}
+	and so for all $v \in V$ we have $\langle v, (A - A^\dagger)v\rangle = 0$.
+	
+	Moreover, we notice that $A - A^\dagger$ is normal and hence diagonalisable, by the Spectral decomposition. It follows from these two observations that $A - A^\dagger = 0$.
+\end{proof}
+\begin{defn}
+	Let $A,B$ be matrices, then the \textbf{commutator} is $[A,B] := AB - BA$. The \textbf{anticommutator} is $\lbrace A,B \rbrace = AB + BA$.
+\end{defn}
+\begin{thm}[Simultaneous Diagonalisation Theorem]
+	Let $A,B$ be Hermitian operators. Then $[A,B] = 0$ if and only if $A$ and $B$ are simultaneously diagonalisable.
+\end{thm}
+\begin{proof}
+	If $A$ and $B$ are simultaneously diagonalisable, then let $U$ be a unitary matrix and $D_1,D_2$ diagonal matrices such that
+	\begin{equation}
+		A = U^{-1}D_1U,\qquad B = U^{-1}D_2U
+	\end{equation}
+	We then have:
+	\begin{equation}
+		AB = U^{-1}D_1UU^{-1}D_2U = U^{-1}D_1D_2U = U^{-1}D_2D_1U = U^{-1}D_2UU^{-1}D_1U = BA
+	\end{equation}
+	Conversely, say $[A,B] = 0$. We have that $A$ is Hermitian and so admits a spectral decomposition. Let $a_1,...,a_n$ be the eigenvalues corresponding to this decomposition and let $V_{a_i}$ denote the $a_i$-eigenspace. We first notice that $B$ maps $V_{a_i}$ into itself: for any $v \in V_{a_i}$
+	\begin{equation}
+		ABv = BAv = a_{i}Bv
+	\end{equation}
+	Now, since $B$ is Hermitian, it follows that $B_{V_{a_i}}: V_{a_i} \lto V_{a_i}$ is and so there exists a spectral decomposition of $B_{V_{a_i}}$ for each vector space $V_{a_i}$. Denote by $b_1^{a_i},...,b_{k_{a_i}}^{a_i}$ an orthonormal basis for $V_{a_i}$. We then have that
+	\begin{equation}
+		\lbrace b_1^{a_i},...,b_{k_{a_i}}^{a_i}\rbrace_{i = 1}^n
+	\end{equation}
+	is a basis of eigenvectors of both $A$ and $B$ for the whole space $V$.
+\end{proof}
+There is another decomposition which is often helpful:
+\begin{observation}
+	Let $T: V \lto V$ be a linear operator on a finite dimensional vector space $V$. We could ask if $T$ can be factored $T = UT'$ where $U$ is unitary? Say this was possible, then
+	\begin{equation}
+		T^\dagger T = T'^\dagger U^\dagger U T'
+	\end{equation}
+	so if $T'$ were Hermitian we would have $T^\dagger T = T'^2$ which would imply $T' = \sqrt{T^\dagger T}$, in fact $T^\dagger T$ is Hermitian (indeed it is positive) and thus so is $\sqrt{T^\dagger T}$ and so our assumption that $T'$ be Hermitian is not too much to ask for, and if $U$ were to exist it must be that $T' = \sqrt{T^\dagger T}$. Thus we are prompted to make the following calculation: let $v_1,...,v_n$ be a basis for $V$ such that (we write $P_{v_i}$ for the projection onto $v_i$)
+	\begin{equation}
+		\sqrt{T^\dagger T} = \sum_{i = 1}^n \lambda_i P_{v_i}
+	\end{equation}
+	then
+	\begin{equation}
+		\sqrt{T^\dagger T}v_i \lambda_i
+	\end{equation}
+	and indeed we want $U$ such that $\lambda_i Uv_i = Tv_i$. One might suggest defining $Uv_i = Tv_i/\lambda_i$ at this point, however there is no reason for this to be unitary. Instead we define
+	\begin{equation}
+		U = \sum_{j = 1}^n Tv_jP_{v_j}/\sqrt{\lambda_j}
+	\end{equation}
+	which indeed is unitary.  In fact we read off from this that $\lbrace Tv_1/\sqrt{\lambda_1},...,Tv_n/\sqrt{\lambda_n}\rbrace$ is an orthonormal basis for $V$. Notice however that this assumes $\lambda_i \neq 0$ for all $i$. This can be fixed by doing this process first for all $\lambda_i \neq 0$, and to construct an orthonormal set $\lbrace Tv_1/\sqrt{\lambda_1},...,Tv_j/\sqrt{\lambda_j}\rbrace$ and then extending this to an orthonormal basis for $V$ via the Gram-Schmidt process.
+	
+	We have proven the first half of:
+	\begin{thm}[Polar decomposition]\label{thm:polar_decomp}
+		Let $T: V \lto V$ be a linear operator on an $n$-dimensional vector space $V$. Then there exists a unitary operator $U$ and positive operators $J,K$ such that
+		\begin{equation}
+			T = UJ = KU
+		\end{equation}
+		with $J = \sqrt{T^\dagger T}, K = \sqrt{TT^\dagger}$.
+	\end{thm}
+	To obtain $K$ we simply notice
+	\begin{equation}
+		A = JU = UJU^\dagger  U
+	\end{equation}
+	so we set $K = UJU^\dagger$, which is a positive operator. Then $AA^\dagger = KUU^\dagger K = K^2$.
+\end{observation}
+If we have such a decomposition $T = UJ$, then $J$ is diagonalisable, being positive, thus $T = USDS^\dagger$ for unitary $S$ and diagonal $D$. Setting $V = S^\dagger$ we obtain:
+\begin{cor}[Singular value decomposition]
+	Let $T: V \lto V$ be a linear operator on an $n$-dimensional vector space, then there exists unitary operators $U,V$ and a diagonal operator $D$ such that
+	\begin{equation}
+		T = UDV
+	\end{equation}
+\end{cor}
+
+\begin{remark}\label{rmk:notation_bra_ket}
+	We make a remark on notation. Given a vector $v \in \bb{H}$ in some Hilbert space $\bb{H}$ (which we assume to be finite dimensional for simplicity), the linear functional which we have been notating as $\langle v, \und{0.2}\rangle$ can also be written simply as $\bra{v}$. Symmetrically, the vector $v$ can be identified with the linear map $k \lto \bb{H}$ sending $1 \longmapsto v$, we notate this map by $\ket{v}$. Hence, given two vectors $v,u \in V$, the notation $\bra{v}\ket{u}$ denotes the linear map $k \lto k$ sending $1 \longmapsto \langle v, u \rangle$. We now describe how some of the concepts introduced in this Section and the last are written using this notation.
+	\begin{itemize}
+		\item The linear map given in Corollary \ref{cor:antilinear_isometry} can be written as $\ket{v} \longmapsto \bra{v}$.
+		\item Let $U: \bb{H} \lto \bb{H}$ be an operator. We have for any $v \in \bb{H}$ that:
+		\begin{equation}
+			\bra{ Uv} = \langle Uv, \und{0.2}\rangle = \langle v, U^\dagger \und{0.2}\rangle = \bra{v}U^\dagger
+		\end{equation}
+		Hence, in light of Corollary \ref{cor:unitary_simple} we have that $U$ is unitary if and only if for all $v \in \bb{H}$ we have $\bra{v}U^\dagger U \ket{v} = \bra{v}\ket{v}$. This is the condition which is checked throughout the body of this paper.
+	\end{itemize}
+\end{remark}
+
+\section{Commutative algebra}\label{sec:commutative_algebra}
+The following is a copy and paste from my commutative algebra notes \cite{CommutativeAlgebra}. We have put this here to keep the referencing within this document consistent.
+\begin{lemma}\label{lem:embedding_tensor}
+	For arbitrary vector spaces $X,Y,X',Y'$ there exists a natural injection
+	\begin{equation}
+		\operatorname{Hom}(X,X') \otimes \operatorname{Hom}(Y,Y') \rightarrowtail \operatorname{Hom}(X \otimes Y, X'\otimes Y')
+	\end{equation}
+	which is an isomorphism if $X,Y,X',Y'$ are finite dimensional.
+\end{lemma}
+\begin{remark}
+	The map described in Lemma \ref{lem:embedding_tensor} sends a formal tensor element $f \otimes g$ to the tensor product of the two maps $f$ and $g$, which is also denoted $f \otimes g$. Hence we clearly have an injection, and the argument above shows surjectivity in the finite dimensional case.
+	
+	It follows easily from this presentation that this map is natural in all arguments.
+\end{remark}
+\begin{cor}\label{cor:hom_dual}
+	There is a natural isomorphism (recall that $V,W$ are finite dimensional).
+	\begin{align}
+		\operatorname{Hom}(V,W) &\lto V^\ast \otimes W\\
+		f &\longmapsto \sum_{i = 1}^n v_i^\ast \otimes f(v_i)
+	\end{align}
+	where $\lbrace v_1,..., v_n\rbrace$ is ar arbitrary basis for $V$.
+\end{cor}
+\begin{proof}
+	By Lemma \ref{lem:embedding_tensor} we have:
+	\begin{equation}
+		\operatorname{Hom}(V \otimes k, k\otimes W) \cong \operatorname{Hom}(V, k) \otimes \operatorname{Hom}(k, W)
+	\end{equation}
+	hence we can perform the following calculation, where $s: V \otimes k \lto k \otimes V$ is the swap map, for $i=1,...,n$ we denote by $E_{i}: V \lto k$ is the linear map sending $v_i \longmapsto 1$ and $F_{j}: k \lto V$ the linear map sending $1 \longmapsto v_i$.
+	\begin{equation}
+		f \longmapsto 1 \otimes f \circ s = \sum_{i = 1}^n E_{i} \otimes f F_{i} \longmapsto \sum_{i = 1}^n v_i^\ast \otimes f(v_i)
+	\end{equation}
+\end{proof}
+We will generalise the definition of the trace operator to the definition of a \emph{partial} trace operator, to do this we use the natural isomorphism of Corollary \ref{cor:hom_dual} and combine it with the following adjunction, the \textbf{tensor-hom} adjunction.
+\begin{fact}
+	There is an adjunction
+	\begin{align}
+		\operatorname{Hom}(V \otimes W, U) &\cong \operatorname{Hom}(W, \operatorname{Hom}(V,U))\\
+		f &\longmapsto \big(w \mapsto (v \mapsto f(v\otimes w))\big)\\
+		\big(v \otimes w \mapsto g(v)(w) \big) &\longmapsfrom g
+	\end{align}
+	with counit given by the evaluation map (we simply write $h$ for $\operatorname{Hom}$)
+	\begin{align*}
+		V \otimes h(V,U) &\lto U\\
+		v \otimes f &\longmapsto f(v)
+	\end{align*}
+	and unit given by tensor:
+	\begin{align*}
+		U &\lto h(V,V \otimes U)\\
+		u &\longmapsto (v \mapsto v \otimes u)
+	\end{align*}
+\end{fact}
+\begin{cor}
+	For finite dimensional vector spaces, there is an adjunction:
+	\begin{align}\label{eq:tensor_dual_adjunction}
+		\operatorname{Hom}(V \otimes W, U) &\lto \operatorname{Hom}(W, U \otimes V^\ast)\\
+		f &\longmapsto \big(w \mapsto \sum_{i = 1}^n v_i^\ast \otimes f(u_i \otimes w)\big)
+	\end{align}
+	where $\lbrace u_1,...,u_n\rbrace$ is an arbitrary choice of basis for $V$.
+	
+	The counit of this adjunction is given by
+	\begin{align*}
+		V \otimes U \otimes V^\ast &\lto U\\
+		x \otimes u \otimes y^\ast &\longmapsto y^\ast(x )u
+	\end{align*}
+	and unit given by (where $v_1,...,v_n$ is an arbitrary basis for $V$)
+	\begin{align*}
+		W &\lto W \otimes V \otimes V^\ast\\
+		w &\longmapsto w \otimes (\sum_{i = 1}^n v_i \otimes v_i^\ast)
+	\end{align*}
+\end{cor}
+\begin{proof}
+	For existence of the adjunction, we observe the following algebra.
+	\begin{align}
+		\operatorname{Hom}(V \otimes W, U) &\cong \operatorname{Hom}(W, \operatorname{Hom}(V,U))\\
+		&\cong \operatorname{Hom}(W, V^\ast \otimes U )
+	\end{align}
+	Now we unwind definitions and find the unit and counit. Writing simply $h$ for $\operatorname{Hom}$ the map:
+	\begin{equation}
+		h(V,V) \lto h(V \otimes k, k \otimes V) \lto h(V,k) \otimes h(k,V) \lto V^\ast \otimes V
+	\end{equation}
+	acts on $\operatorname{id}_V$ in the following way, where $s$ denotes the \emph{swap map} and $v_1,...,v_n$ is an arbitrary basis for $V$,
+	\begin{equation}
+		\operatorname{id}_V \longmapsto s \longmapsto \sum_{i = 1}^n v_i^\ast \otimes (1 \mapsto v_i) \longmapsto \sum_{i = 1}^nv_i^\ast \otimes v_i
+	\end{equation}
+	which describes the unit. The counit is calculated similarly.
+\end{proof}
+With this language, we come up with a description of the trace operator.
+\begin{observation}
+	Let $f: V \lto V$ be a linear map. Then the map $k \lto k$ given by $1 \longmapsto \operatorname{Trace}f$ is given by the following composite, where $\eta,\epsilon$ are respectively the unit and counit of the adjunction \eqref{eq:tensor_dual_adjunction} and $v_1,...,v_n$ is an arbitrary basis for $V$:
+	\begin{equation}
+		\begin{tikzcd}
+			k\arrow[r,"{\eta}"] & V \otimes V^\ast\arrow[r, "{f \otimes 1}"] & V \otimes V^\ast\arrow[r,"{\epsilon}"] & k\\
+			1\arrow[r,mapsto] & \sum_{i = 1}^n v_i \otimes v_i^\ast\arrow[r,mapsto] & \sum_{i = 1}^n f(v_i) \otimes v_i^\ast\arrow[r,mapsto] & \sum_{i = 1}^n v_i^{\ast}(f(v_i)) = \operatorname{Trace}f
+		\end{tikzcd}
+	\end{equation}
+\end{observation}
+We use this observation to make a definition:
+\begin{defn}
+	Let $f: W \otimes V \lto W \otimes V$ be a linear map. We define the \textbf{partial trace operator} $\operatorname{Trace}_Vf$ as the following composite:
+	\begin{equation}\label{eq:partial_trace}
+		\begin{tikzcd}
+			W\arrow[r,"{1 \otimes \eta}"] & W \otimes V \otimes V^\ast\arrow[d,"{f \otimes 1}"]\\
+			W & W \otimes V \otimes V^\ast\arrow[l,"{1 \otimes \epsilon}"]\\
+			w\arrow[r,mapsto] & w \otimes (\sum_{i = 1}^n v_i \otimes v_i^\ast) = \sum_{i = 1}^n(w \otimes v_i) \otimes v_i^\ast\arrow[d,mapsto]\\
+			 \hdots & \sum_{i = 1}^n f(w \otimes v_i) \otimes v_i^\ast\arrow[l,mapsto]
+		\end{tikzcd}
+	\end{equation}
+	the final formula is a bit difficult to write out, in the special case where $f = f_1 \otimes f_2$ for $f_1: W \lto W, f_2: V \lto V$ we obtain
+	\begin{equation}
+		(\operatorname{Trace}_Vf)(w) = \sum_{i = 1}^n f_1(w)v_i^\ast\big(f_2(v_i)\big) = (\operatorname{Trace}f_2)f_1(w)
+	\end{equation}
+\end{defn}
+In fact we can write out a formula for \eqref{eq:partial_trace} if we use Dirac notation. Let $\ket{1},...,\ket{n}$ be a basis for $V$, we think of these as operators $k \lto V$.  We write $\operatorname{id} \otimes \ket{i}$ for the composite $W \lto W \otimes k \lto W \otimes V$.  Also, we denote the multiplication map $W \otimes k \lto W$ defined by $w \otimes x \longmapsto xw$ by $\operatorname{Mult}$. We have
+\begin{align*}
+	\operatorname{Trace}_V f &= \epsilon\Big(\sum_{i = 1}^n f(\operatorname{id} \otimes \ket{i}) \otimes \bra{i}\Big)\\
+	&= \operatorname{Mult}\Big(\sum_{i = 1}^n (\operatorname{id} \otimes \bra{i})f (\operatorname{id} \otimes \ket{i})\Big)
+\end{align*}
+	
+	\begin{thebibliography}{9}
+		\bibitem{quantum_computing} Nielsen, Chuang.
+		
+		\bibitem{CommutativeAlgebra} W. Troiani \emph{Commutative Algebra}
+		
+		\bibitem{Baez}, J. Baez. \url{https://math.ucr.edu/home/baez/quantum/node4.html}
+	\end{thebibliography}
+\end{document}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\maketitle
+\tableofcontents

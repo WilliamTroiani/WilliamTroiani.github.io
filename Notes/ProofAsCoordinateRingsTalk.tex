@@ -1,0 +1,410 @@
+\documentclass[12pt]{article}
+
+\usepackage{amsthm}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{mathrsfs}
+\usepackage{array}
+\usepackage{amssymb}
+\usepackage{units}
+\usepackage{graphicx}
+\usepackage{tikz-cd}
+\usepackage{nicefrac}
+\usepackage{hyperref}
+\usepackage{bbm}
+\usepackage{color}
+\usepackage{tensor}
+\usepackage{tipa}
+\usepackage{bussproofs}
+\usepackage{ stmaryrd }
+\usepackage{ textcomp }
+\usepackage{leftidx}
+\usepackage{afterpage}
+\usepackage{varwidth}
+\usepackage{tasks}
+\usepackage{ cmll }
+\usepackage{makecell}
+\usepackage{MnSymbol}
+\usepackage{adjustbox}
+\usepackage{multirow}
+\usepackage{booktabs}
+\usepackage{xparse}
+\usepackage{calc}
+\usetikzlibrary{positioning,calc}
+\usepackage{quiver}
+
+\newcommand\blankpage{
+	\null
+	\thispagestyle{empty}
+	\addtocounter{page}{-1}
+	\newpage
+}
+
+\newcommand{\PhantC}{\phantom{\colon}}%
+\newcommand{\PhantSQ}{\phantom{\sqrt{\hspace{0.3ex}}}}
+
+% https://tex.stackexchange.com/questions/63355/wrapping-cmidrule-in-a-macro
+\ExplSyntaxOn
+\makeatletter
+\newcommand{\CMidRule}{\noalign\bgroup\@CMidRule{}}
+\NewDocumentCommand{\@CMidRule}{
+	m % Material to reinsert before cmidrule.
+	O{0.0ex} % #1 = left adjust
+	O{0.0ex} % #1 = right adjust
+	m  %       #3 = columns to span
+}{
+	\peek_meaning_remove_ignore_spaces:NTF \CMidRule
+	{ \@CMidRule { #1 \cmidrule[\cmidrulewidth](l{#2}r{#3}){#4} } }
+	{ \egroup #1 \cmidrule[\cmidrulewidth](l{#2}r{#3}){#4} }
+}
+\makeatother
+\ExplSyntaxOff
+
+\graphicspath{ {images/} }
+
+\theoremstyle{plain}
+\newtheorem{thm}{Theorem}[subsection] % reset theorem numbering for each chapter
+\newtheorem{proposition}[thm]{Proposition}
+\newtheorem{lemma}[thm]{Lemma}
+\newtheorem{fact}[thm]{Fact}
+\newtheorem{cor}[thm]{Corollary}
+
+\theoremstyle{definition}
+\newtheorem{defn}[thm]{Definition} % definition numbers are dependent on theorem numbers
+\newtheorem{exmp}[thm]{Example} % same for example numbers
+\newtheorem{notation}[thm]{Notation}
+\newtheorem{remark}[thm]{Remark}
+\newtheorem{condition}[thm]{Condition}
+\newtheorem{question}[thm]{Question}
+\newtheorem{construction}[thm]{Construction}
+\newtheorem{exercise}[thm]{Exercise}
+\newtheorem{example}[thm]{Example}
+\newtheorem{aside}[thm]{Aside}
+\newtheorem{algorithm}[thm]{Algorithm}
+
+\def\doubleunderline#1{\underline{\underline{#1}}}
+\newcommand{\bb}[1]{\mathbb{#1}}
+\newcommand{\scr}[1]{\mathscr{#1}}
+\newcommand{\call}[1]{\mathcal{#1}}
+\newcommand{\psheaf}{\text{\underline{Set}}^{\scr{C}^{\text{op}}}}
+\newcommand{\und}[1]{\underline{\hspace{#1 cm}}}
+\newcommand{\adj}[1]{\text{\textopencorner}{#1}\text{\textcorner}}
+\newcommand{\comment}[1]{}
+\newcommand{\lto}{\longrightarrow}
+\newcommand{\rone}{(\operatorname{R}\bold{1})}
+\newcommand{\lone}{(\operatorname{L}\bold{1})}
+\newcommand{\rimp}{(\operatorname{R} \multimap)}
+\newcommand{\limp}{(\operatorname{L} \multimap)}
+\newcommand{\rtensor}{(\operatorname{R}\otimes)}
+\newcommand{\ltensor}{(\operatorname{L}\otimes)}
+\newcommand{\rtrue}{(\operatorname{R}\top)}
+\newcommand{\rwith}{(\operatorname{R}\&)}
+\newcommand{\lwithleft}{(\operatorname{L}\&)_{\operatorname{left}}}
+\newcommand{\lwithright}{(\operatorname{L}\&)_{\operatorname{right}}}
+\newcommand{\rplusleft}{(\operatorname{R}\oplus)_{\operatorname{left}}}
+\newcommand{\rplusright}{(\operatorname{R}\oplus)_{\operatorname{right}}}
+\newcommand{\lplus}{(\operatorname{L}\oplus)}
+\newcommand{\prom}{(\operatorname{prom})}
+\newcommand{\ctr}{(\operatorname{ctr})}
+\newcommand{\der}{(\operatorname{der})}
+\newcommand{\weak}{(\operatorname{weak})}
+\newcommand{\exi}{(\operatorname{exists})}
+\newcommand{\fa}{(\operatorname{for\text{ }all})}
+\newcommand{\ex}{(\operatorname{ex})}
+\newcommand{\cut}{(\operatorname{cut})}
+\newcommand{\ax}{(\operatorname{ax})}
+\newcommand{\negation}{\sim}
+\newcommand{\true}{\top}
+\newcommand{\false}{\bot}
+\newcommand{\blank}{\textvisiblespace}
+\DeclareRobustCommand{\diamondtimes}{%
+	\mathbin{\text{\rotatebox[origin=c]{45}{$\boxplus$}}}%
+}
+\newcommand{\tagarray}{\mbox{}\refstepcounter{equation}$(\theequation)$}
+\newcommand{\startproof}[1]{
+	\AxiomC{#1}
+	\noLine
+	\UnaryInfC{$\vdots$}
+}
+\newcommand\showdiv[1]{\overline{\smash{)}#1}}
+\newcommand{\set}{\operatorname{\underline{Set}}}
+
+
+
+\newenvironment{scprooftree}[1]%
+{\gdef\scalefactor{#1}\begin{center}\proofSkipAmount \leavevmode}%
+	{\scalebox{\scalefactor}{\DisplayProof}\proofSkipAmount \end{center} }
+
+\usepackage[margin=1cm]{geometry}
+
+\title{Proofs as coordinate rings (talk)}
+\author{William Troiani}
+\date{\today}
+
+\begin{document}
+	\maketitle
+	\section{Introduction}
+	
+	Computation, considered as an invisible mental process, is a naive stance. The crucial point is that there are genuine mathematical and physical properties of computation which are independent of the choice of implementation.
+	
+	A historically significant indication that this might be the case, was the thought experiment often referred to as \emph{Maxwell's Demon}, where it appears as though heat is being transfered from a cooler body to a warmer body, which contradicts the second law of thermodynamics. This thought experiment includes an onlooker (the demon) who stands idle and makes decisions. A proposed solution was that the decision process inside the demon's mind was to be included as part of the physical system. That is, the \emph{computation} being performed by the Demon was a \emph{physically} relevant part of the experiment.
+	
+	So it makes sense to ask about the inherrent \emph{physical} properties of computation, but what about the inherrent \emph{mathematical} properties of computation? Can one dream of a \emph{geometric} theory of computation? What about an \emph{algebraic} one?
+	
+	Today's talk presents a humble step in this direction. I introduce a fresh perspective on Girard's \emph{Geometry of interaction program}, which modelled linear logic as operators upon a Hilbert space. There, each proof was associated to a bounded linear operator, here, each proof will be associated to a \emph{coordinate ring}, that is, a quotient of a polynomial ring.
+	
+	\section{Proofs}
+	
+	\begin{defn}[Formulas]\label{def:formulas}
+		\begin{itemize}
+			\item \emph{Unoriented atoms} $X,Y,Z,...$
+			\item \emph{An oriented atom} (or \emph{atomic proposition}) is a pair $(X,+)$ or $(X,-)$ where $X$ is an unoriented atom.
+		\end{itemize}
+		\emph{Pre-formulas}:
+		\begin{itemize}
+			\item Any atomic proposition is a preformula.
+			\item If $A,B$ are pre-formulas then so are $A \otimes B$, $A \parr B$.
+			\item If $A$ is a pre-formula then so is $\neg A$.
+		\end{itemize}
+		\emph{Formulas}: quotient of pre-formulas:
+		\begin{equation*}
+			\neg (A \otimes B) \sim \neg B \parr \neg A \qquad \neg (A \parr B) \sim \neg B \otimes \neg A
+		\end{equation*}
+		\begin{equation*}
+			\neg (X, +) \sim (X, -)\qquad \neg (X,-) \sim (X,+)
+		\end{equation*}
+	\end{defn}
+
+\begin{example}\label{ex:basic_cut_elim}
+	% https://q.uiver.app/?q=WzAsMTYsWzEsMCwiXFxheCJdLFswLDEsIlxcbmVnIFgiXSxbMiwxLCJYIl0sWzAsMiwiXFxvcGVyYXRvcm5hbWV7Y30iXSxbMywyLCJcXG90aW1lcyJdLFs0LDEsIlxcbmVnIFgiXSxbNiwxLCJYIl0sWzUsMCwiXFxheCJdLFs2LDIsIlxcb3BlcmF0b3JuYW1le2N9Il0sWzMsMywiWCBcXG90aW1lcyBcXG5lZyBYIl0sWzgsMywiXFxuZWcgWCBcXHBhcnIgWCJdLFs4LDIsIlxccGFyciJdLFs3LDEsIlxcbmVnIFgiXSxbOSwxLCJYIl0sWzgsMCwiXFxheCJdLFs2LDQsIlxcY3V0Il0sWzAsMSwiIiwwLHsiY3VydmUiOjIsInN0eWxlIjp7ImhlYWQiOnsibmFtZSI6Im5vbmUifX19XSxbMCwyLCIiLDIseyJjdXJ2ZSI6LTIsImNvbG91ciI6WzM1NCw5OCw2MF0sInN0eWxlIjp7ImhlYWQiOnsibmFtZSI6Im5vbmUifX19XSxbMSwzXSxbNyw1LCIiLDAseyJjdXJ2ZSI6MiwiY29sb3VyIjpbMzU0LDk4LDYwXSwic3R5bGUiOnsiaGVhZCI6eyJuYW1lIjoibm9uZSJ9fX1dLFs3LDYsIiIsMix7ImN1cnZlIjotMiwic3R5bGUiOnsiaGVhZCI6eyJuYW1lIjoibm9uZSJ9fX1dLFs2LDhdLFs1LDQsIiIsMCx7ImN1cnZlIjotMiwiY29sb3VyIjpbMzU0LDk4LDYwXX1dLFsyLDQsIiIsMix7ImN1cnZlIjoyLCJjb2xvdXIiOlszNTQsOTgsNjBdfV0sWzE0LDEyLCIiLDIseyJjdXJ2ZSI6MiwiY29sb3VyIjpbMzU0LDk4LDYwXSwic3R5bGUiOnsiaGVhZCI6eyJuYW1lIjoibm9uZSJ9fX1dLFsxNCwxMywiIiwwLHsiY3VydmUiOi0yLCJjb2xvdXIiOlszNTQsOTgsNjBdLCJzdHlsZSI6eyJoZWFkIjp7Im5hbWUiOiJub25lIn19fV0sWzEzLDExLCIiLDAseyJjdXJ2ZSI6LTIsImNvbG91ciI6WzM1NCw5OCw2MF19XSxbMTIsMTEsIiIsMix7ImN1cnZlIjoyLCJjb2xvdXIiOlszNTQsOTgsNjBdfV0sWzExLDEwLCIiLDIseyJjb2xvdXIiOlszNTQsOTgsNjBdLCJzdHlsZSI6eyJoZWFkIjp7Im5hbWUiOiJub25lIn19fV0sWzEwLDE1LCIiLDIseyJjdXJ2ZSI6LTIsImNvbG91ciI6WzM1NCw5OCw2MF19XSxbOSwxNSwiIiwwLHsiY3VydmUiOjIsImNvbG91ciI6WzM1NCw5OCw2MF19XSxbNCw5LCIiLDAseyJjb2xvdXIiOlszNTQsOTgsNjBdLCJzdHlsZSI6eyJoZWFkIjp7Im5hbWUiOiJub25lIn19fV1d
+	\[\begin{tikzcd}[column sep = small, row sep = small]
+		& \textcolor{red}{\ax} &&&& \textcolor{red}{\ax} &&& \textcolor{red}{\ax} \\
+		{\neg X} && \textcolor{red}{X} && \textcolor{red}{\neg X} && X & \textcolor{red}{\neg X} && \textcolor{red}{X} \\
+		{\operatorname{c}} &&& \textcolor{red}{\otimes} &&& {\operatorname{c}} && \textcolor{red}{\parr} \\
+		&&& \textcolor{red}{X \otimes \neg X} &&&&& \textcolor{red}{\neg X \parr X} \\
+		&&&&&& \textcolor{red}{\cut}
+		\arrow[curve={height=12pt}, no head, from=1-2, to=2-1]
+		\arrow[color={rgb,255:red,253;green,53;blue,73}, curve={height=-12pt}, no head, from=1-2, to=2-3]
+		\arrow[from=2-1, to=3-1]
+		\arrow[color={rgb,255:red,253;green,53;blue,73}, curve={height=12pt}, no head, from=1-6, to=2-5]
+		\arrow[curve={height=-12pt}, no head, from=1-6, to=2-7]
+		\arrow[from=2-7, to=3-7]
+		\arrow[color={rgb,255:red,253;green,53;blue,73}, curve={height=-12pt}, from=2-5, to=3-4]
+		\arrow[color={rgb,255:red,253;green,53;blue,73}, curve={height=12pt}, from=2-3, to=3-4]
+		\arrow[color={rgb,255:red,253;green,53;blue,73}, curve={height=12pt}, no head, from=1-9, to=2-8]
+		\arrow[color={rgb,255:red,253;green,53;blue,73}, curve={height=-12pt}, no head, from=1-9, to=2-10]
+		\arrow[color={rgb,255:red,253;green,53;blue,73}, curve={height=-12pt}, from=2-10, to=3-9]
+		\arrow[color={rgb,255:red,253;green,53;blue,73}, curve={height=12pt}, from=2-8, to=3-9]
+		\arrow[color={rgb,255:red,253;green,53;blue,73}, no head, from=3-9, to=4-9]
+		\arrow[color={rgb,255:red,253;green,53;blue,73}, curve={height=-12pt}, from=4-9, to=5-7]
+		\arrow[color={rgb,255:red,253;green,53;blue,73}, curve={height=12pt}, from=4-4, to=5-7]
+		\arrow[color={rgb,255:red,253;green,53;blue,73}, no head, from=3-4, to=4-4]
+	\end{tikzcd}\]
+	% https://q.uiver.app/?q=WzAsMTMsWzEsMSwiXFxheCJdLFswLDIsIlxcbmVnIFgiXSxbMiwyLCJYIl0sWzAsNCwiXFxvcGVyYXRvcm5hbWV7Y30iXSxbNCwxLCJcXG5lZyBYIl0sWzYsMSwiWCJdLFs1LDAsIlxcYXgiXSxbNiwyLCJcXG9wZXJhdG9ybmFtZXtjfSJdLFs3LDIsIlxcbmVnIFgiXSxbOSwyLCJYIl0sWzgsMSwiXFxheCJdLFs0LDMsIlxcY3V0Il0sWzcsMywiXFxjdXQiXSxbMCwxLCIiLDAseyJjdXJ2ZSI6Miwic3R5bGUiOnsiaGVhZCI6eyJuYW1lIjoibm9uZSJ9fX1dLFswLDIsIiIsMix7ImN1cnZlIjotMiwic3R5bGUiOnsiaGVhZCI6eyJuYW1lIjoibm9uZSJ9fX1dLFsxLDNdLFs2LDQsIiIsMCx7ImN1cnZlIjoyLCJjb2xvdXIiOlszNTQsOTgsNjBdLCJzdHlsZSI6eyJoZWFkIjp7Im5hbWUiOiJub25lIn19fV0sWzYsNSwiIiwyLHsiY3VydmUiOi0yLCJzdHlsZSI6eyJoZWFkIjp7Im5hbWUiOiJub25lIn19fV0sWzUsN10sWzEwLDgsIiIsMix7ImN1cnZlIjoyLCJzdHlsZSI6eyJoZWFkIjp7Im5hbWUiOiJub25lIn19fV0sWzEwLDksIiIsMCx7ImN1cnZlIjotMiwiY29sb3VyIjpbMzU0LDk4LDYwXSwic3R5bGUiOnsiaGVhZCI6eyJuYW1lIjoibm9uZSJ9fX1dLFsyLDExLCIiLDIseyJjdXJ2ZSI6Mn1dLFs4LDExLCIiLDEseyJjdXJ2ZSI6LTJ9XSxbNCwxMiwiIiwwLHsiY3VydmUiOjIsImNvbG91ciI6WzM1NCw5OCw2MF19XSxbOSwxMiwiIiwxLHsiY3VydmUiOi0yLCJjb2xvdXIiOlszNTQsOTgsNjBdfV1d
+	\[\begin{tikzcd}[column sep = small, row sep = small]
+		&&&&& \textcolor{red}{\ax} \\
+		& \ax &&& \textcolor{red}{\neg X} && X && \textcolor{red}{\ax} \\
+		{\neg X} && X &&&& {\operatorname{c}} & {\neg X} && X \\
+		&&&& \cut &&& \textcolor{red}{\cut} \\
+		{\operatorname{c}}
+		\arrow[curve={height=12pt}, no head, from=2-2, to=3-1]
+		\arrow[curve={height=-12pt}, no head, from=2-2, to=3-3]
+		\arrow[from=3-1, to=5-1]
+		\arrow[color={rgb,255:red,253;green,53;blue,73}, curve={height=12pt}, no head, from=1-6, to=2-5]
+		\arrow[curve={height=-12pt}, no head, from=1-6, to=2-7]
+		\arrow[from=2-7, to=3-7]
+		\arrow[curve={height=12pt}, no head, from=2-9, to=3-8]
+		\arrow[draw={rgb,255:red,253;green,53;blue,73}, curve={height=-12pt}, no head, from=2-9, to=3-10]
+		\arrow[curve={height=12pt}, from=3-3, to=4-5]
+		\arrow[curve={height=-12pt}, from=3-8, to=4-5]
+		\arrow[color={rgb,255:red,253;green,53;blue,73}, curve={height=12pt}, from=2-5, to=4-8]
+		\arrow[color={rgb,255:red,253;green,53;blue,73}, curve={height=-12pt}, from=3-10, to=4-8]
+	\end{tikzcd}\]
+	% https://q.uiver.app/?q=WzAsOSxbMSwwLCJcXGF4Il0sWzAsMSwiXFxuZWcgWCJdLFsyLDEsIlgiXSxbMCwyLCJcXG9wZXJhdG9ybmFtZXtjfSJdLFs2LDEsIlgiXSxbNiwyLCJcXG9wZXJhdG9ybmFtZXtjfSJdLFs0LDEsIlxcbmVnIFgiXSxbNSwwLCJcXGF4Il0sWzMsMiwiXFxjdXQiXSxbMCwxLCIiLDAseyJjdXJ2ZSI6Miwic3R5bGUiOnsiaGVhZCI6eyJuYW1lIjoibm9uZSJ9fX1dLFswLDIsIiIsMix7ImN1cnZlIjotMiwiY29sb3VyIjpbMzUxLDEwMCw2MF0sInN0eWxlIjp7ImhlYWQiOnsibmFtZSI6Im5vbmUifX19XSxbMSwzXSxbNCw1LCIiLDAseyJjb2xvdXIiOlszNTEsMTAwLDYwXX1dLFs3LDYsIiIsMix7ImN1cnZlIjoyLCJjb2xvdXIiOlszNTEsMTAwLDYwXSwic3R5bGUiOnsiaGVhZCI6eyJuYW1lIjoibm9uZSJ9fX1dLFsyLDgsIiIsMix7ImN1cnZlIjoyLCJjb2xvdXIiOlszNTEsMTAwLDYwXX1dLFs2LDgsIiIsMSx7ImN1cnZlIjotMiwiY29sb3VyIjpbMzUxLDEwMCw2MF19XSxbNyw0LCIiLDAseyJjdXJ2ZSI6LTIsImNvbG91ciI6WzM1MSwxMDAsNjBdLCJzdHlsZSI6eyJoZWFkIjp7Im5hbWUiOiJub25lIn19fV1d
+	\[\begin{tikzcd}[column sep = small, row sep = small]
+		& \textcolor{red}{\ax} &&&& \textcolor{red}{\ax} \\
+		{\neg X} && \textcolor{red}{X} && \textcolor{red}{\neg X} && \textcolor{red}{X} \\
+		{\operatorname{c}} &&& \textcolor{red}{\cut} &&& \textcolor{red}{\operatorname{c}}
+		\arrow[curve={height=12pt}, no head, from=1-2, to=2-1]
+		\arrow[color={rgb,255:red,255;green,51;blue,82}, curve={height=-12pt}, no head, from=1-2, to=2-3]
+		\arrow[from=2-1, to=3-1]
+		\arrow[color={rgb,255:red,255;green,51;blue,82}, from=2-7, to=3-7]
+		\arrow[color={rgb,255:red,255;green,51;blue,82}, curve={height=12pt}, no head, from=1-6, to=2-5]
+		\arrow[color={rgb,255:red,255;green,51;blue,82}, curve={height=12pt}, from=2-3, to=3-4]
+		\arrow[color={rgb,255:red,255;green,51;blue,82}, curve={height=-12pt}, from=2-5, to=3-4]
+		\arrow[color={rgb,255:red,255;green,51;blue,82}, curve={height=-12pt}, no head, from=1-6, to=2-7]
+	\end{tikzcd}\]
+	% https://q.uiver.app/?q=WzAsNSxbMSwwLCJcXGF4Il0sWzAsMSwiXFxuZWcgWCJdLFswLDIsIlxcb3BlcmF0b3JuYW1le2N9Il0sWzIsMSwiWCJdLFsyLDIsIlxcb3BlcmF0b3JuYW1le2N9Il0sWzAsMSwiIiwwLHsiY3VydmUiOjIsInN0eWxlIjp7ImhlYWQiOnsibmFtZSI6Im5vbmUifX19XSxbMSwyXSxbMyw0XSxbMCwzLCIiLDEseyJjdXJ2ZSI6LTIsInN0eWxlIjp7ImhlYWQiOnsibmFtZSI6Im5vbmUifX19XV0=
+	\[\begin{tikzcd}
+		& \ax \\
+		{\neg X} && X \\
+		{\operatorname{c}} && {\operatorname{c}}
+		\arrow[curve={height=12pt}, no head, from=1-2, to=2-1]
+		\arrow[from=2-1, to=3-1]
+		\arrow[from=2-3, to=3-3]
+		\arrow[curve={height=-12pt}, no head, from=1-2, to=2-3]
+	\end{tikzcd}\]
+\end{example}
+
+\section{Elimination Theory}
+The problem of finding the defining equations of images of algebraic sets under algebraic maps is a classical area of algebraic geometry called \emph{elimination theory}, of which we will use only the most elementary parts.
+
+Choose an order $x_1 < \hdots < x_n$, this induces lexicographic order on the monic monomials of $k[x_1,...,x_n]$ with respect to the degrees.
+
+Consider $\bb{C}[x > y]$.
+\begin{equation*}
+	y < xy < x^2 < x^2y^{10} < x^3 < \hdots
+\end{equation*}
+Now, divide according to leading terms!
+\begin{equation*}
+	\begin{array}{rll}
+		\makecell{q_0: \\ q_1:} & \makecell{xy^2 \\ y^2}\\
+		\makecell{x^2y \\ x + y} & \showdiv{x^3y^3 + xy^2 - y}\\
+		%
+		&\hspace{0.45em} x^3 y^3\\
+		\CMidRule[0.0ex][0.0ex]{2-2}
+		&\hspace{0.45em} \hphantom{x^3 y^3 + {}}  xy^2 - y\\
+		& \hspace{0.45em} \hphantom{x^3 y^3 + {}} xy^2 + y^3\\
+		\CMidRule[9.0ex][0.0ex]{2-2}
+		& \hspace{0.45em} \hphantom{x^3 y^3 + xy^2} -y - y^3
+	\end{array}
+\end{equation*}
+
+Given polynomials $f_1,...,f_n$ generating an ideal $I$.
+\begin{equation*}
+	\langle \operatorname{LT}f_1,\hdots, \operatorname{LT}f_n \rangle \subseteq\langle \operatorname{LT} I\rangle
+\end{equation*}
+This reverse inclusion does \emph{not} hold in general. Indeed, consider the polynomial ring $k[x,y]$ with $y < x$. Let $f_1,f_2$ respectively denote the polynomials $x^3 - 2xy$ and $x^2y - 2y^2 + x$. We have:
+\begin{equation*}
+	\lbrace \operatorname{LT}f_1, \operatorname{LT}f_2\rbrace = \lbrace x^3, x^2y\rbrace
+\end{equation*}
+however, the following polynomial is in the ideal generated by $\lbrace f_1,f_2\rbrace$.
+\begin{equation*}
+	y(x^3 - 2xy) - x(x^2y - 2y^2 + x) = -x^2
+\end{equation*}
+Hence, $x^2$ is in the leading ideal. However, $x^2$ is not in the ideal generated by the polynomials $x^3, x^2y$.
+
+\begin{defn}
+	A generating set $f_1,\ldots, f_n$ for an ideal $I$ is a \emph{Gr\"{o}bner basis} if
+	\begin{equation}
+		\langle \operatorname{LT}f_1,\ldots, \operatorname{LT}f_n \rangle = \langle \operatorname{LT}I\rangle
+		\end{equation}
+	\end{defn}
+
+\begin{defn}\label{def:S_polynomial}
+	The \emph{$S$-polynomial} of polynomials $g,h \in k[x_1,...,x_n]$ is defined to be the following, where $\beta = (\beta_1,...,\beta_n)$ where $\beta_i = \operatorname{max}\big((\operatorname{deg}g)_i, (\operatorname{deg}h)_i\big)$..
+	\begin{equation*}
+		S(g,h) := \frac{x^\beta}{\operatorname{LT}g}g - \frac{x^\beta}{\operatorname{LT}h}h
+	\end{equation*}
+	This is indeed a polynomial, and is designed to obtain cancellation of leading terms.
+\end{defn}
+
+BUCHBERGER'S ALGORITHM.
+
+\section{Combining the two}
+\begin{defn}[Sequence of (un)oriented atoms]\label{def:seq_set}
+	Let $A$ be a formula with sequence of oriented atoms $\big((X_1,x_1),...,(X_n,x_n)\big)$. The \emph{sequence of unoriented atoms} of $A$ is $(X_1,...,X_n)$ and the \emph{set of unoriented atoms} of $A$ is the disjoint union $\lbrace X_1 \rbrace \coprod \hdots \coprod \lbrace X_n \rbrace$.
+\end{defn}
+EXAMPLE OF A COORDINATE RING. USE THE EXAMPLE BLOW, \emph{NOT} OUR FAVOURITE EXAMPLE.
+
+\begin{example}\label{ex:execution_example}
+	Let $\pi$ denote the following proof net. We assume that $X$ is an atomic formula, and we include artificial labels for clarity, in the following, $X_1, Y_2, Y_4$ all denote the formula $\neg X$ and $Y_1, Y_3, X_2$ denote the formula $X$.
+	% https://q.uiver.app/?q=WzAsMTMsWzEsMCwiXFxheCJdLFswLDEsIlhfMSJdLFswLDIsIlxcb3BlcmF0b3JuYW1le2N9Il0sWzIsMSwiWV8xIl0sWzMsMiwiXFxjdXQiXSxbNCwxLCJZXzIiXSxbNSwwLCJcXGF4Il0sWzYsMSwiWV8zIl0sWzcsMiwiXFxjdXQiXSxbOCwxLCJZXzQiXSxbMTAsMSwiWF8yIl0sWzksMCwiXFxheCJdLFsxMCwyLCJcXG9wZXJhdG9ybmFtZXtjfSJdLFswLDEsIiIsMCx7ImN1cnZlIjoyLCJzdHlsZSI6eyJoZWFkIjp7Im5hbWUiOiJub25lIn19fV0sWzEsMl0sWzAsMywiIiwyLHsiY3VydmUiOi0yLCJzdHlsZSI6eyJoZWFkIjp7Im5hbWUiOiJub25lIn19fV0sWzMsNCwiIiwyLHsiY3VydmUiOjJ9XSxbNSw0LCIiLDAseyJjdXJ2ZSI6LTJ9XSxbNiw1LCIiLDAseyJjdXJ2ZSI6Miwic3R5bGUiOnsiaGVhZCI6eyJuYW1lIjoibm9uZSJ9fX1dLFs2LDcsIiIsMix7ImN1cnZlIjotMiwic3R5bGUiOnsiaGVhZCI6eyJuYW1lIjoibm9uZSJ9fX1dLFsxMSw5LCIiLDAseyJjdXJ2ZSI6Miwic3R5bGUiOnsiaGVhZCI6eyJuYW1lIjoibm9uZSJ9fX1dLFsxMSwxMCwiIiwyLHsiY3VydmUiOi0yLCJzdHlsZSI6eyJoZWFkIjp7Im5hbWUiOiJub25lIn19fV0sWzEwLDEyXSxbOSw4LCIiLDAseyJjdXJ2ZSI6LTJ9XSxbNyw4LCIiLDIseyJjdXJ2ZSI6Mn1dXQ==
+	\[\begin{tikzcd}[column sep = small, row sep = small]
+		& \ax &&&& \ax &&&& \ax \\
+		{X_1} && {Y_1} && {Y_2} && {Y_3} && {Y_4} && {X_2} \\
+		{\operatorname{c}} &&& \cut &&&& \cut &&& {\operatorname{c}}
+		\arrow[curve={height=12pt}, no head, from=1-2, to=2-1]
+		\arrow[from=2-1, to=3-1]
+		\arrow[curve={height=-12pt}, no head, from=1-2, to=2-3]
+		\arrow[curve={height=12pt}, from=2-3, to=3-4]
+		\arrow[curve={height=-12pt}, from=2-5, to=3-4]
+		\arrow[curve={height=12pt}, no head, from=1-6, to=2-5]
+		\arrow[curve={height=-12pt}, no head, from=1-6, to=2-7]
+		\arrow[curve={height=12pt}, no head, from=1-10, to=2-9]
+		\arrow[curve={height=-12pt}, no head, from=1-10, to=2-11]
+		\arrow[from=2-11, to=3-11]
+		\arrow[curve={height=-12pt}, from=2-9, to=3-8]
+		\arrow[curve={height=12pt}, from=2-7, to=3-8]
+	\end{tikzcd}\]
+	The proof net $\pi$ is equivalent under cut elimination to the following proof net, which we denote by $\pi'$.
+	% https://q.uiver.app/?q=WzAsNSxbMSwwLCJcXGF4Il0sWzAsMSwiWF8xIl0sWzIsMSwiWF8yIl0sWzIsMiwiXFxvcGVyYXRvcm5hbWV7Y30iXSxbMCwyLCJcXG9wZXJhdG9ybmFtZXtjfSJdLFswLDEsIiIsMCx7ImN1cnZlIjoyLCJzdHlsZSI6eyJoZWFkIjp7Im5hbWUiOiJub25lIn19fV0sWzAsMiwiIiwyLHsiY3VydmUiOi0yLCJzdHlsZSI6eyJoZWFkIjp7Im5hbWUiOiJub25lIn19fV0sWzEsNF0sWzIsM11d
+	\[\begin{tikzcd}[column sep = small, row sep = small]
+		& \ax \\
+		{X_1} && {X_2} \\
+		{\operatorname{c}} && {\operatorname{c}}
+		\arrow[curve={height=12pt}, no head, from=1-2, to=2-1]
+		\arrow[curve={height=-12pt}, no head, from=1-2, to=2-3]
+		\arrow[from=2-1, to=3-1]
+		\arrow[from=2-3, to=3-3]
+	\end{tikzcd}\]
+	We define a total order $>$ on the monomials in $k[Y_1,Y_2,Y_3,Y_4,X_1,X_2]$ via lexicographic order with respect to the following.
+	\begin{equation}\label{eq:ordering}
+		Y_1 > Y_2 > Y_3 > Y_4 > X_2 > X_1
+	\end{equation}
+	We now consider the sequences of generators $\call{G}_\pi$, $\call{G}_{\pi'}$ respectively of the defining ideals of $\pi,\pi'$.
+	\begin{equation}
+		\call{G}_\pi := ( Y_1 - Y_2, Y_1, - X_1, Y_2 - Y_3, Y_3 - Y_4, Y_4 - X_2 ),\quad \call{G}_{\pi'} := ( X_2 - X_1 )
+	\end{equation}
+	To ease the notation, we respectively let $f_1,f_2,f_3,f_4,f_5$ denote the polynomials $Y_1 - Y_2, X_1 - Y_1, Y_2 - Y_3, Y_3 - Y_4, Y_4 - X_2$. We make the observation that $\call{G}_\pi$ is \emph{not} a Gr\"{o}bner basis. To see this, we notice that the leading terms of $f_1,...,f_5$ respectively are $Y_1, Y_1, Y_2, Y_3, Y_4$ and the leading term of $f_1 + \ldots + f_5$ is $X_1$. Since $X_1$ is not in the ideal generated by $Y_1, Y_1, Y_2, Y_3, Y_4$, the underlying set of $\call{G}_\pi$ cannot be a Gr\"{o}bner basis.
+	
+	The Buchberger Algorithm will calculate $S(f_1,f_2) = Y_2 - X_1$ and then divide this by the sequence $\call{G}_\pi$.
+	\begin{equation}\label{eq:elimination_example_division}
+		\begin{array}{rll}
+			& (0,0,1,1,1)\\
+			(f_1,f_2,f_3,f_4,f_5) & \showdiv{Y_2 - X_1}\\
+			%
+			&\hspace{0.55em}   Y_2 - Y_3\\
+			\CMidRule[0.0ex][10.0ex]{2-2}
+			&\hspace{0.55em} \hphantom{Y_2 +{}} Y_3 - X_1\\
+			&\hspace{0.55em}\hphantom{Y_3 +{}} Y_3 - Y_4\\
+			\CMidRule[4.0ex][5.0ex]{2-2}
+			&\hspace{0.55em} \hphantom{Y_2 + Y_3 + {}} Y_4 - X_1\\
+			&\hspace{0.55em}\hphantom{Y_2 + Y_3 + {}} Y_4 - X_2\\
+			\CMidRule[7.0ex][0.0ex]{2-2}
+			&\hspace{0.55em}\hphantom{Y_3 + Y_4 + X_2 + {}} X_2 - X_1
+		\end{array}
+	\end{equation}
+	We thus append the polynomial $X_2 - X_1$ to the end of $\call{G}_\pi$, this results is a sequence with underlying set a Gr\"{o}bner basis so this sequence is $\overline{\call{G}_{\pi}}$.
+	
+	The Elimination Theorem (Thorem 2 of \cite[\S 3.1]{Grobner}) states that $|\overline{\call{G}_{\pi}}| \cap k[X_1,X_2] = \lbrace X_2 - X_1\rbrace$ is a Gr\"{o}bner basis for the elimination ideal corresponding to eliminating the variables $Y_1,Y_2,Y_3,Y_4$. We notice that this set $\lbrace X_2 - X_1\rbrace$ is the underlying set of $\call{G}_{\pi'}$.
+\end{example}
+	
+	Consider the following system of equations.
+	\begin{align}
+		\label{eq:x1=x2}x_1 &= x_2\\
+		\label{eq:x2=y1}x_2 &= y_1\\
+		\label{eq:y1=y2}y_1 &= y_2\\
+		\label{eq:y2=x3}y_2 &= x_3
+	\end{align}
+	If we wish to eliminate the variables $y_1,y_2$, then we can substitute \eqref{eq:x2=y1} into \eqref{eq:y1=y2}, and then the result of this into \eqref{eq:y2=x3}, obtaining the following system.
+	\begin{align}
+		x_1 &= x_2\\
+		\label{eq:x2=x3}x_2 &= x_3
+	\end{align}
+	This successfully eliminates the variables $y_1,y_2$, but the Buchberger Algorithm would not arrive at these equations, instead a further substitution of \eqref{eq:x1=x2} into \eqref{eq:x2=x3} will be performed in order to arrive at the following equations.
+	\begin{align}
+		x_1 &= x_2\\
+		x_1 &= x_3
+	\end{align}
+	We will define the Lazy Division Algorithm  wway!!!!(Algorithm \ref{alg:division_adapted}) which is an adaptation to the Division Algorithm, and use this adaptation inside the Buchberger Algorithm (the resulting algorithm we call the Elimination Algorithm) which avoids some of these inefficiencies. This adaptation is what will be related to cut-elimination.
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	\end{document}

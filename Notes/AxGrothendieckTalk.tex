@@ -1,0 +1,528 @@
+\documentclass[12pt]{article}
+
+\usepackage{amsthm}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{mathrsfs}
+\usepackage{array}
+\usepackage{amssymb}
+\usepackage{units}
+\usepackage{graphicx}
+\usepackage{tikz-cd}
+\usepackage{nicefrac}
+\usepackage{hyperref}
+\usepackage{bbm}
+\usepackage{color}
+\usepackage{tensor}
+\usepackage{tipa}
+\usepackage{bussproofs}
+\usepackage{ stmaryrd }
+\usepackage{ textcomp }
+\usepackage{leftidx}
+\usepackage{afterpage}
+\usepackage{varwidth}
+\usepackage{tasks}
+\usepackage{ cmll }
+
+\newcommand\blankpage{
+	\null
+	\thispagestyle{empty}
+	\addtocounter{page}{-1}
+	\newpage
+}
+
+\graphicspath{ {images/} }
+
+\theoremstyle{plain}
+\newtheorem{thm}{Theorem}[subsection] % reset theorem numbering for each chapter
+\newtheorem{proposition}[thm]{Proposition}
+\newtheorem{lemma}[thm]{Lemma}
+\newtheorem{fact}[thm]{Fact}
+\newtheorem{cor}[thm]{Corollary}
+
+\theoremstyle{definition}
+\newtheorem{defn}[thm]{Definition} % definition numbers are dependent on theorem numbers
+\newtheorem{exmp}[thm]{Example} % same for example numbers
+\newtheorem{notation}[thm]{Notation}
+\newtheorem{remark}[thm]{Remark}
+\newtheorem{condition}[thm]{Condition}
+\newtheorem{question}[thm]{Question}
+\newtheorem{construction}[thm]{Construction}
+\newtheorem{exercise}[thm]{Exercise}
+\newtheorem{example}[thm]{Example}
+\newtheorem{aside}[thm]{Aside}
+\newtheorem{claim}[thm]{Claim}
+
+\def\doubleunderline#1{\underline{\underline{#1}}}
+\newcommand{\bb}[1]{\mathbb{#1}}
+\newcommand{\scr}[1]{\mathscr{#1}}
+\newcommand{\call}[1]{\mathcal{#1}}
+\newcommand{\psheaf}{\text{\underline{Set}}^{\scr{C}^{\text{op}}}}
+\newcommand{\und}[1]{\underline{\hspace{#1 cm}}}
+\newcommand{\adj}[1]{\text{\textopencorner}{#1}\text{\textcorner}}
+\newcommand{\comment}[1]{}
+\newcommand{\lto}{\longrightarrow}
+\newcommand{\rone}{(\operatorname{R}\bold{1})}
+\newcommand{\lone}{(\operatorname{L}\bold{1})}
+\newcommand{\rimp}{(\operatorname{R} \multimap)}
+\newcommand{\limp}{(\operatorname{L} \multimap)}
+\newcommand{\rtensor}{(\operatorname{R}\otimes)}
+\newcommand{\ltensor}{(\operatorname{L}\otimes)}
+\newcommand{\rtrue}{(\operatorname{R}\top)}
+\newcommand{\rwith}{(\operatorname{R}\&)}
+\newcommand{\lwithleft}{(\operatorname{L}\&)_{\operatorname{left}}}
+\newcommand{\lwithright}{(\operatorname{L}\&)_{\operatorname{right}}}
+\newcommand{\rplusleft}{(\operatorname{R}\oplus)_{\operatorname{left}}}
+\newcommand{\rplusright}{(\operatorname{R}\oplus)_{\operatorname{right}}}
+\newcommand{\lplus}{(\operatorname{L}\oplus)}
+\newcommand{\prom}{(\operatorname{prom})}
+\newcommand{\ctr}{(\operatorname{ctr})}
+\newcommand{\der}{(\operatorname{der})}
+\newcommand{\weak}{(\operatorname{weak})}
+\newcommand{\exi}{(\operatorname{exists})}
+\newcommand{\fa}{(\operatorname{for\text{ }all})}
+\newcommand{\ex}{(\operatorname{ex})}
+\newcommand{\cut}{(\operatorname{cut})}
+\newcommand{\ax}{(\operatorname{ax})}
+\newcommand{\negation}{\sim}
+\newcommand{\true}{\top}
+\newcommand{\false}{\bot}
+\DeclareRobustCommand{\diamondtimes}{%
+	\mathbin{\text{\rotatebox[origin=c]{45}{$\boxplus$}}}%
+}
+\newcommand{\tagarray}{\mbox{}\refstepcounter{equation}$(\theequation)$}
+\newcommand{\startproof}[1]{
+	\AxiomC{#1}
+	\noLine
+	\UnaryInfC{$\vdots$}
+}
+\newenvironment{scprooftree}[1]%
+{\gdef\scalefactor{#1}\begin{center}\proofSkipAmount \leavevmode}%
+	{\scalebox{\scalefactor}{\DisplayProof}\proofSkipAmount \end{center} }
+
+
+\title{Ax-Grothendieck talk(s)}
+\author{Will Troiani}
+\date{November 2021}
+
+\begin{document}
+\maketitle
+
+
+
+
+\begin{defn}\label{def:first_order_language}
+	A \textbf{first order signature} (or \textbf{first order language}) $\Sigma$ consists of the following data.
+	\begin{itemize}
+		\item A set $\Sigma$-Sort of $\textbf{sorts}$. For each sort $A$ of a signature $\Sigma$ there exists a countably infinite set $\call{V}_A$ of \textbf{variables} of sort $A$. We write $x:A$ for $x \in \call{V}_A$. 
+		\item A set $\Sigma$-Fun of \textbf{function symbols}, together with a map assigning to each $f \in \Sigma$-Fun its $\textbf{type}$, which consists of a finite, non-empty list of sorts (with the last sort in the list enjoying a distinguished status): we write
+		\begin{equation}
+			f: A_1 \times \hdots\times A_n \lto B
+		\end{equation}
+		to indicate that $f$ has type $A_1,...,A_n,B$. The integer $n$ is the \textbf{arity} of $f$, in the case $n = 0$,the function symbol $f$ is a \textbf{constant} of sort $B$.
+		\item A set $\Sigma$-Rel of \textbf{relation symbols}, together with a map assigning to each $R \in \Sigma$-Rel its \textbf{type}, which consists of a finite list of sorts: we write
+		\begin{equation}
+			R \rightarrowtail A_1 \times \hdots \times A_n
+		\end{equation}
+		to indicate that $R$ has type $A_1,...,A_n$. The integer $n$ is the \textbf{arity} of $R$, in the case $n = 0$, the relation symbol $R$ is an \textbf{atomic proposition}.
+	\end{itemize}
+\end{defn}
+
+\begin{enumerate}
+	\item\label{sus:sorts} A finite amount of \emph{sorts} (or types). We require the ability to identify particular sorts, and also to distinguish sorts. We also require that a new sort may be introduced if needed. The limit of the number of sorts is the limit of the ones abilities, means, and resources to perform the first two requirements of this dotpoint.
+	\item For each sort a finite set of \emph{variables} associated to that sort with the same requirements as that of \ref{sus:sorts}.
+	\item A finite amount of \emph{function symbols} and a finite amount of \emph{relation symbols}, both with the same requirements needed as \ref{sus:sorts}.
+\end{enumerate}
+
+\begin{example}
+	\begin{defn}\label{def:FoT_fields}
+		We define $\call{F}$, the first order theory of fields, beginning with the first order language of fields. Let $\Sigma$ be a signature consisting of a single sort $A$. We introduce 5 function symbols.
+		\begin{itemize}
+			\item $0,1: A$,
+			\item $-: A \lto A$,
+			\item $+, \cdot: A \times A \lto A$.
+		\end{itemize}
+		The first order language of fields has no relation symbols.
+	\end{defn}
+	\end{example}
+
+\begin{defn}
+	\textbf{Terms and their types}:
+	\begin{itemize}
+		\item \textbf{Variables}:
+		\begin{equation}
+			x:A
+			\end{equation}
+		\item \textbf{Compound terms and their types}: let $f: A_1 \times \hdots \times A_n \lto B$ be a function symbol and $t_1:A_1,...,t_n:A_n$ be terms.
+		\begin{equation}
+			f(t_1,...,t_n): B
+			\end{equation}
+	\end{itemize}
+\end{defn}
+
+\begin{defn}
+	\textbf{Formulas and their free variables}:
+	\begin{itemize}
+		\item \textbf{Relations}: if $R \rightarrowtail A_1 \times \hdots \times A_n$ is a relation symbol and $t_1: A_1 , \hdots, t_n: A_n$ are terms then
+		\begin{equation}
+			R(t_1,...,t_n), \qquad \operatorname{FV}(R(t_1,...,t_n)) = \bigcup_{i = 1}^n \operatorname{FV}(t_i)
+		\end{equation}
+	\item $s:A,t:A$ terms:
+	\begin{equation}
+		s = t,\qquad \operatorname{FV}(s = t) = \operatorname{FV}(s) \cup \operatorname{FV}(t)
+		\end{equation}
+	\item $\top, \bot$ are formulas, $\operatorname{FV}(\top) = \operatorname{FV}(\bot) = \varnothing$.
+	\item $\phi, \psi$ formulas, $x:A$ a variable.
+	\begin{equation}
+		\phi \vee \psi, \phi \wedge \psi, \phi \Rightarrow \psi, \neg \phi, \forall x:A \phi, \exists x:A \phi
+		\end{equation}
+	where
+	\begin{equation}
+		\operatorname{FV}(\phi \vee \psi) = \operatorname{FV}(\phi) \cup \operatorname{FV}(\psi), \text{etc}...
+		\end{equation}
+	\begin{equation}
+		\operatorname{FV}(\forall x:A, \phi) = \operatorname{FV}(\exists x:A, \phi) =  \operatorname{FV}(\phi)\setminus\lbrace x\rbrace
+		\end{equation}
+	\end{itemize}
+\end{defn}
+
+\begin{defn}
+	A \textbf{first order theory} over a first order language $\Sigma$ is a set of formulas on $\Sigma$.
+\end{defn}
+
+\begin{example}
+	We extend the first order language $\call{F}$ of fields to a first order theory.
+	
+	The axioms are given as follows.
+	\begin{align}
+		&(x + y) + z = x + (y + z)\\
+		&x + y = y + x\\
+		&x + 0 = x\\
+		&(x\cdot y)\cdot z = x \cdot (y \cdot z)\\
+		&x \cdot 1 = 1 \cdot x = x\\
+		&x\cdot (y + z) = x\cdot y + x \cdot z\\
+		&x + (-x) = 0\\
+		&x\neq 0 \Rightarrow \exists y, xy = 1
+	\end{align}
+	This set of formulas forms the axioms of $\call{F}$.
+	\end{example}
+
+We consider the special case when the number of sorts is equal to 1.
+\begin{defn}
+	An \textbf{interpretation} $\call{I}$ of a first order language consists of the following data.
+	\begin{itemize}
+		\item A non-empty set $\call{I}(D)$ called the \textbf{domain}.
+		\item For any function symbol $f: A_1 \times \hdots \times A_n \lto B$ a function
+		\begin{equation}
+			\call{I}(f): D^n \lto D
+		\end{equation}
+		If $f$ is $0$-ary then $\call{I}(f)$ is simply a choice of element from $D$.
+		\item For any relation symbol $R \rightarrowtail A_1 \times \hdots \times A_n$ a function
+		\begin{equation}
+			\call{I}(R): D^n \lto \lbrace 0,1\rbrace
+		\end{equation}
+	\end{itemize}
+\end{defn}
+
+\begin{defn}
+	Let $D$ be a set. A \textbf{valuation} over $\Sigma$ in a set $D$ is a function
+	\begin{equation}
+		\nu: \call{V} \lto D
+	\end{equation}
+	We also introduce the following notation. If $d \in D$ is an element of $D$, $x \in \call{V}$, and $\nu: \call{V} \lto D$ is some valuation, then we have the following valuation.
+	\begin{equation}
+		\nu_{x \mapsto d}(y) =
+		\begin{cases}
+			d, & x = y,\\
+			\nu(y), & x \neq y
+		\end{cases}
+	\end{equation}
+\end{defn}
+We now extend an interpretation of a language to a model of a first order theory (given a choice of valuation).
+
+\begin{defn}\label{def:interpretation}
+	Let $\bb{T}$ be a first order theory over a first order language $L$. Let $\call{I}$ be an interpretation of $L$ and $\nu$ a valuation in the domain $D$ of $\call{I}$. We extend the interpretation to terms in the following way.
+	\begin{itemize}
+		\item $\call{I}_{\nu}(x) = \nu(x)$, for any variable $x$,
+		\item $\call{I}_{\nu}(f(t_1,...,t_n)) = \call{I}(f)(\call{I}_{\nu}(t_1),...,\call{I}_{\nu}(t_n))$, where $f(t_1,...,t_n)$ is a term constructed from an $n$-ary function symbol $f$ and $n$ terms $t_i$.
+	\end{itemize}
+	Then the interpretation is extended to the formulas:
+	\begin{align}
+		\call{I}_{\nu}(R(t_1,...,t_n)) = 1 &\text{ iff } \call{I}(R)(\call{I}_{\nu}(t_1),...,\call{I}_{\nu}(t_n)) = 1\\
+		\call{I}_{\nu}(s = t) = 1 &\text{ iff }\call{I}_{\nu}(s) = \call{I}_{\nu}(t)\\
+		\call{I}_{\nu}(\top) = 1&\\
+		\call{I}_{\nu}(\bot) = 0&\\
+		\call{I}_{\nu}(\phi \vee \psi) = 1&\text{ iff }\call{I}_{\nu}(\phi) = 1\text{ or }\call{I}_{\nu}(\psi) = 1\\
+		\call{I}_{\nu}(\phi \wedge \psi) = 1&\text{ iff }\call{I}_{\nu}(\phi) = 1\text{ and }\call{I}_{\nu}(\psi) = 1\\
+		\call{I}_{\nu}(\phi \Rightarrow \psi) = 1&\text{ iff }\call{I}_{\nu}(\phi) = 0\text{ or }\call{I}_{\nu}(\psi) = 1\\
+		\call{I}_{\nu}(\neg \phi) = 1&\text{ iff }\call{I}_{\nu}(\phi) = 0\\
+		\call{I}_{\nu}((\exists x:A)\phi) = 1&\text{ iff there exists }d \in D\text{ such that }\call{I}_{\nu_{x \mapsto d}}(\phi) = 1\\
+		\call{I}_{\nu}((\forall x:A)\phi) = 1&\text{ iff for all }d \in D\text{ we have }\call{I}_{\nu_{x \mapsto d}}(\phi) = 1
+	\end{align}
+	Let $\bb{T}$ be a first order theory over a first order language $L$. Then a \textbf{model} for $\bb{T}$ is an interpretation $\call{I}$ of $L$ such that for all valuations $\nu$, each formula $\phi$ in $\bb{T}$ we have:
+	\begin{equation}
+		\call{I}_{\nu}(\phi) = 1
+	\end{equation}
+\end{defn}
+
+\begin{example}
+	Let $\bb{R}$ denote the real numbers. Set $\call{I}(A) = \bb{R}$. Define
+	\begin{align*}
+		\call{I}(0) &:= 0 \in \bb{R}\\
+		\call{I}(1) &:= 1 \in \bb{R}\\
+		\call{I}(-): \bb{R} &\lto \bb{R}\\
+		x &\longmapsto -x\\
+		\call{I}(+): \bb{R}^2 &\lto \bb{R}\\
+		(x,y) &\longmapsto x + y\\
+		\call{I}(\cdot): \bb{R}^2 &\lto \bb{R}\\
+		(x,y) &\longmapsto xy\\
+		\end{align*}
+	Then $\call{I}$ is a model of $\call{F}$.
+	\end{example}
+
+We recall also the Natural Deduction proof system, which consists of the following deduction rules.
+
+\section{Proof (natural deduction)}
+So far we have discussed \emph{language} and \emph{meaning}, or what is the same, \emph{syntax} and \emph{semantics}. Now we discuss \emph{proof}.
+
+\begin{defn}\label{def:natural_deduction_deduction_rules}
+	The deduction rules for the \textbf{natural deduction} are given as follows.
+	\begin{itemize}
+		\item Conjunction:
+		\begin{center}
+			\AxiomC{$A$}
+			\AxiomC{$B$}
+			\RightLabel{$\wedge I$}
+			\BinaryInfC{$A \wedge B$}
+			\DisplayProof
+			%
+			\qquad
+			%
+			\AxiomC{$A \wedge B$}
+			\RightLabel{$\wedge E1$}
+			\UnaryInfC{$A$}
+			\DisplayProof
+			%
+			\qquad
+			%
+			\AxiomC{$A \wedge B$}
+			\RightLabel{$\wedge E 2$}
+			\UnaryInfC{$B$}
+			\DisplayProof
+		\end{center}
+		\item Disjunction
+		\begin{center}
+			\AxiomC{$A$}
+			\RightLabel{$\vee I1$}
+			\UnaryInfC{$A \vee B$}
+			\DisplayProof
+			%
+			\qquad
+			%
+			\AxiomC{$B$}
+			\RightLabel{$\vee I2$}
+			\UnaryInfC{$A \vee B$}
+			\DisplayProof
+			%
+			\qquad
+			%
+			\AxiomC{$A \vee B$}
+			\AxiomC{$[A]^i$}
+			\noLine
+			\UnaryInfC{$\vdots$}
+			\noLine
+			\UnaryInfC{$C$}
+			\AxiomC{$[B]^j$}
+			\noLine
+			\UnaryInfC{$\vdots$}
+			\noLine
+			\UnaryInfC{$C$}
+			\RightLabel{$\wedge E^{i,j}$}
+			\TrinaryInfC{$C$}
+			\DisplayProof
+		\end{center}
+		\item Implication
+		\begin{center}
+			\AxiomC{$[A]^i$}
+			\noLine
+			\UnaryInfC{$\vdots$}
+			\noLine
+			\UnaryInfC{$B$}
+			\RightLabel{$\Rightarrow I^i$}
+			\UnaryInfC{$A \Rightarrow B$}
+			\DisplayProof
+			%
+			\qquad
+			%
+			\AxiomC{$A \Rightarrow B$}
+			\AxiomC{$A$}
+			\RightLabel{$\Rightarrow E$}
+			\BinaryInfC{$B$}
+			\DisplayProof
+		\end{center}
+		\item Negation
+		\begin{center}
+			\AxiomC{$[A]^i$}
+			\noLine
+			\UnaryInfC{$\vdots$}
+			\noLine
+			\UnaryInfC{$\bot$}
+			\RightLabel{$\neg I^i$}
+			\UnaryInfC{$\neg A$}
+			\DisplayProof
+			%
+			\qquad
+			%
+			\AxiomC{$\neg A$}
+			\AxiomC{$A$}
+			\RightLabel{$\neg E$}
+			\BinaryInfC{$\bot$}
+			\DisplayProof
+		\end{center}
+		\item Universal quantification. The $\forall I$ rule can only be employed in the context where the formula $B$ does not occur in $A$ nor in any assumption formula upon which $\forall x A$ depends.
+		\begin{center}
+			\AxiomC{$A[x := B]$}
+			\RightLabel{$\forall I$}
+			\UnaryInfC{$\forall x A$}
+			\DisplayProof
+			%
+			\qquad
+			%
+			\AxiomC{$\forall x A$}
+			\RightLabel{$\forall E$}
+			\UnaryInfC{$A[x := B]$}
+			\DisplayProof
+		\end{center}
+		\item Existential quantification. The $\exists E$ rule can only be employed in the context where the formula $B$ does not occur in $A$ nor in $C$.
+		\begin{center}
+			\AxiomC{$A[x := B]$}
+			\RightLabel{$\exists I$}
+			\UnaryInfC{$\exists x A$}
+			\DisplayProof
+			%
+			\qquad
+			%
+			\AxiomC{$\exists x A$}
+			\AxiomC{$[A[x:= B]]^i$}
+			\noLine
+			\UnaryInfC{$\vdots$}
+			\noLine
+			\UnaryInfC{$C$}
+			\RightLabel{$\exists E^i$}
+			\BinaryInfC{$C$}
+			\DisplayProof
+		\end{center}
+		\item (Respectively) equality, falsum, contradiction.
+		\begin{center}
+			\AxiomC{$A = B$}
+			\AxiomC{$C$}
+			\RightLabel{$=$}
+			\BinaryInfC{$C[B:= A]$}
+			\DisplayProof
+			%
+			\qquad
+			%
+			\AxiomC{$\bot$}
+			\RightLabel{$\bot E$}
+			\UnaryInfC{$A$}
+			\DisplayProof
+			%
+			\qquad
+			%
+			\AxiomC{$[\neg A]^i$}
+			\noLine
+			\UnaryInfC{$\vdots$}
+			\noLine
+			\UnaryInfC{$\bot$}
+			\RightLabel{$\bot C^i$}
+			\UnaryInfC{$A$}
+			\DisplayProof
+		\end{center}
+	\end{itemize}
+	A \textbf{proof} is a finite, rooted planar tree with edges labelled by formulas and all vertices except for the root vertex labelled by a valid instance of a deduction rule. The leaves of the proof are the \textbf{assumptions} and if there exists a proof $\pi$ where the edge connected to the root node is labelled by formula $A$ and $\Gamma$ is the set of assumptions of $\pi$ we write
+	\begin{equation}
+		\Gamma \vdash A
+	\end{equation}
+\end{defn}
+
+\begin{question}
+	How does proof relate to truth?
+	\end{question}
+
+\begin{defn}\label{def:models}
+	Let $\call{I}$ be an interpretation of a first order language $L$, let $A$ be a formula in $L$, and let $\Gamma$ be a set of formulas.
+	\begin{itemize}
+		\item $\call{I} \models A$ if $\call{I}_\nu(A) = 1$ for all valuations $\nu$.
+		\item $\call{I} \models \Gamma$ if $\call{I} \models A$ for all $A \in \Gamma$.
+		\item $\Gamma \models A$ if $\call{I} \models A$ for all interpretations $\call{I}$ which satisfy $\call{I} \models \Gamma$.
+	\end{itemize}
+\end{defn}
+
+\begin{thm}\label{thm:sound_complete}
+	In classical natural deduction, we have
+	\begin{equation}
+		\Gamma \vdash A \text{ if and only if }\Gamma \models A
+		\end{equation}
+	\end{thm}
+
+\begin{defn}
+	A first order theory $\bb{T}$ over a first order language $\Sigma$ is \textbf{complete} if every statement is either proveable or disproveable. That is, for every formula $\phi$ of $\Sigma$ we have
+	\begin{equation}
+		\bb{T} \vdash \phi \quad \text{or} \quad \bb{T} \vdash \neg \phi
+	\end{equation}
+\end{defn}
+
+The point: this has all been motivated from a philosophical perspective, but we will use this structure as a mathematical tool and use it to prove the following statement.
+
+\begin{thm}[Ax-Grothendieck Theorem]
+	Let $f: \bb{C}^n \lto \bb{C}^n$ be a polynomial (that is, a polynomial in each entry). If $f$ is injective then it is surjective.
+	\end{thm}
+\begin{proof}[Sketch]
+	\begin{itemize}
+		\item We will prove the stronger statement: 
+		\begin{claim}\label{claim:strong_ax_groth}
+			Let $k$ be a field and denote by $\overline{k}$ its algebraic closure. Let $f: k^n \lto k^n$ by a polynomial. If $f$ is injective then it is surjective.
+			\end{claim}
+		\item We will first prove the Claim \ref{claim:strong_ax_groth} for the case when $k = \bb{F}_p$, the finite field of characteristic $p$.
+		\item Define the first order theory $\call{ALG}_0$ of algebraically closed fields of characteristic 0 and prove that this theory is complete.
+		\item Write Claim \ref{claim:strong_ax_groth} in the case when $k = \bb{Q}$ as first order statement $\phi$.
+		\item Assume that Claim \ref{claim:strong_ax_groth} is \emph{false}. By completeness of the $\call{ALG}_0$ there exists a proof
+		\begin{center}
+			\AxiomC{$\pi$}
+			\noLine
+			\UnaryInfC{$\vdots$}
+			\noLine
+			\UnaryInfC{$\Gamma \vdash \neg \phi$}
+			\DisplayProof
+			\end{center}
+		\item Write Claim \ref{claim:strong_ax_groth} in the case when $k = \bb{F}_p$ as a first order statement $\psi$. 
+		\item Use $\pi$ to construct a proof $\Gamma \vdash \neg \psi$.
+		\begin{center}
+			\AxiomC{$\pi'$}
+			\noLine
+			\UnaryInfC{$\vdots$}
+			\noLine
+			\UnaryInfC{$\Gamma \vdash \neg \psi$}
+			\DisplayProof
+			\end{center}
+		\item Using the Completeness Theorem \ref{thm:sound_complete} 
+		\end{itemize}
+	
+	
+	
+	
+	
+	\end{proof}
+
+
+
+
+
+
+
+
+
+
+
+
+\end{document}

@@ -1,0 +1,1813 @@
+\documentclass[12pt]{article}
+
+\usepackage{amsthm}
+\usepackage{amsmath}
+\usepackage{array}
+\usepackage{amsfonts}
+\usepackage{mathrsfs}
+\usepackage{amssymb}
+\usepackage{units}
+\usepackage{graphicx}
+\usepackage{tikz-cd}
+\usepackage{nicefrac}
+\usepackage{hyperref}
+\usepackage{bbm}
+\usepackage{color}
+\usepackage{tensor}
+\usepackage{tipa}
+\usepackage{bussproofs}
+\usepackage{ stmaryrd }
+\usepackage{ textcomp }
+\usepackage{leftidx}
+\usepackage{afterpage}
+\usepackage{varwidth}
+
+\newcommand\blankpage{
+    \null
+    \thispagestyle{empty}
+    \addtocounter{page}{-1}
+    \newpage
+    }
+
+\graphicspath{ {images/} }
+
+\newtheorem{thm}{Theorem}
+\numberwithin{thm}{subsection}
+\newtheorem{defn}{Definition}
+\numberwithin{defn}{subsection}
+\newtheorem{lemma}{Lemma}
+\numberwithin{lemma}{subsection}
+\newtheorem{example}{Example}
+\numberwithin{example}{subsection}
+\newtheorem{notation}{Notation}
+\numberwithin{notation}{subsection}
+\newtheorem{cor}{Corollary}
+\numberwithin{cor}{subsection}
+\newtheorem{remark}{Remark}
+\numberwithin{remark}{subsection}
+\newtheorem{condition}{Condition}
+\numberwithin{condition}{subsection}
+\newtheorem{question}{Question}
+\numberwithin{question}{subsection}
+\newtheorem{construction}{Construction}
+\numberwithin{construction}{subsection}
+\newtheorem{exercise}{Exercise}
+
+% Bussproof things
+\def\ScoreOverhang{1pt}
+
+% a hack for vdots to decrease the vertical space above it; see https://tex.stackexchange.com/questions/169679/vdots-are-taller-than-the-rest-of-text
+\makeatletter
+\DeclareRobustCommand{\rvdots}{%
+  \vbox{
+    \baselineskip4\p@\lineskiplimit\z@
+    \kern-\p@
+    \hbox{}\hbox{.}\hbox{.}\hbox{.}
+  }}
+\makeatother
+
+% Commands
+\newcommand{\bb}[1]{\mathbb{#1}}
+\newcommand{\scr}[1]{\mathscr{#1}}
+\newcommand{\call}[1]{\mathcal{#1}}
+\newcommand{\psheaf}{\text{\underline{Set}}^{\scr{C}^{\text{op}}}}
+\newcommand{\und}[1]{\underline{\hspace{#1 cm}}}
+\newcommand{\adj}[1]{\text{\textopencorner}{#1}\text{\textcorner}}
+\newcommand{\comment}[1]{}
+\newcommand{\lto}{\longrightarrow}
+\newcommand{\ax}{(\operatorname{ax})}
+\newcommand{\cut}{(\operatorname{cut})}
+\newcommand{\wk}{(\operatorname{weak})}
+\newcommand{\ctr}{(\operatorname{ctr})}
+\newcommand{\ex}{(\operatorname{ex})}
+\newcommand{\rmult}{(R\multimap)}
+\newcommand{\lmult}{(L\multimap)}
+\newcommand{\prom}{(\operatorname{prom})}
+\newcommand{\lone}{(L1)}
+\newcommand{\rone}{(R1)}
+\newcommand{\der}{(\operatorname{der})}
+\newcommand{\ltensor}{(L\otimes)}
+\newcommand{\rtensor}{(R\otimes)}
+\newcommand{\imp}{\supset}
+\newcommand{\mix}{(\operatorname{mix})}
+\newcommand{\carry}{(\operatorname{carry})}
+\newcommand{\proofvdots}[1]{\overset{\displaystyle #1}{\rvdots}}
+\newcommand{\rquant}{(R\text{ }\forall)}
+\newcommand{\lquant}{(L\text{ }\forall)}
+\newcommand{\freevar}[1]{\operatorname{FV}(#1)}
+\newcommand{\op}[1]{\operatorname{#1}}
+\newcommand{\arbproof}[1]{\AxiomC{#1}
+\noLine
+\UnaryInfC{$\vdots$}
+\noLine}
+\def\Res{\res\!}
+\def\sus{\l}
+\def\l{\,|\,}
+\def\sgn{\textup{sgn}}
+\def\samp{\zeta}
+\def\Samp{Z}
+\def\traff{N}
+
+\newcommand{\tagarray}{\mbox{}\refstepcounter{equation}$(\theequation)$}
+
+\newtheoremstyle{example}{\topsep}{\topsep}
+	{}
+	{}
+	{\bfseries}
+	{.}
+	{2pt}
+	{\thmname{#1}\thmnumber{ #2}\thmnote{ #3}}
+	
+	\theoremstyle{example}
+
+\numberwithin{equation}{section}
+
+\usepackage[margin=1cm]{geometry}
+
+\title{Second Order Sequent Calculus}
+\author{Will Troiani}
+\date{August 2020}
+
+\begin{document}
+
+\maketitle
+
+%\section{System F}
+%\input{systemF}
+
+\section{Second order intuitionistic sequent calculus}
+
+\begin{notation}
+Our conventions are:
+\begin{itemize}
+    \item Atomic formulas will be upper case roman letters from the end of the alphabet $X,Y,Z, \hdots$,
+    \item Arbitrary formulas will be upper case roman letters from the midway - end through the alphabet $U,V,Q,R, \hdots$
+    \item Arbitrary contexts of term variables will be capitol greek letters $\Gamma, \Delta, \Theta, \Xi,\hdots$ but not $\Lambda$ nor $\Pi$,
+    \item Arbitrary contexts of type variables will be mathcal, $\call{S},\call{T},\hdots$
+    \item Arbitrary preproofs/proofs will be lower case Greek letters $\pi, \zeta, \theta, \hdots$ we write $\pi^T$ for a type proof.
+\end{itemize}
+\end{notation}
+There is a countably infinite set of atomic formulas $\scr{F}_0 = \lbrace X, Y, Z,\hdots \rbrace$ and a set of formulas $\scr{F}$ which is the smallest set subject to:
+\begin{itemize}
+    \item all atomic formulas are formulas, that is, if $X \in \scr{F}_0$ then $X \in \scr{F}$,
+    \item if $U$ and $V$ are formulas then so is $U \imp V$,
+    \item if $X$ is atomic and $U$ is arbitrary, then $\forall X. U$ is a formula. In this context all occurrences of $X$ in $U$ are \emph{bound} in $\forall X. U$.
+\end{itemize}
+Let $\Psi_{\imp,\forall}$ (or simply $\Psi$) denote the set of all formulas. For each formula $U$ let $Y_U$ be a countably infinite set of variables associated with $U$. For distinct formulas $U,V$ the sets $Y_U, Y_V$ are disjoint. We write $x : U$ for $x \in Y_U$ and say \emph{$x$ has type $U$}. Let $\call{P}^n$ be the set of all length $n$ sequences of variables with $\call{P}^0 := \lbrace \varnothing \rbrace$, and $\call{P} := \cup_{n = 0}^\infty \call{P}^n$. A \emph{sequent} is a triple $(\call{S},\Gamma,U)$ where $\call{S}$ is a sequence of atomic formulas, $\Gamma \in \call{P}$ and $U \in \Psi$, written $\call{S}\mid\Gamma \vdash U$. We call $\call{S}\mid\Gamma$ the \emph{antecedent} and $U$ the \emph{succedent} of the sequent. Given $\call{S}\mid\Gamma$ and a variable $x:U$ we write $\call{S}\mid\Gamma, x:U$ for the element of $\call{P}$ given by appending $x:U$ to the end of $\Gamma$. Similarly, for an atomic formula $X$ we write $\call{S},X\mid\Gamma$ for the antecedent given by appending $X$ to the end of $\call{S}$. We write $\mid\Gamma \vdash U$ for $\varnothing\mid\Gamma \vdash U$ and $\call{S} \mid \vdash U$ for $\call{S} \mid \varnothing \vdash U$.
+\begin{defn}\label{defn:deduction_rules}
+We adopt the attitude that the underlying set of what is to the left of $\mid$ contains the free variables of the type of the conclusion (not necessarily the free variables of the types of the variables inside the context). In what follows, the notation $\call{T}\setminus X$ means the sequence given by removing \emph{all} instances of $X$ from the sequence $\call{T}$. We allow the possibility that $X$ does not appear in $\call{T}$ (in which case $\call{T}\setminus X = \call{T}$): First we give the type tree rules:
+\begin{itemize}
+    \item \textbf{Type Axiom}:
+        \begin{prooftree}
+        \AxiomC{}
+        \RightLabel{$\ax^T$}
+        \UnaryInfC{$X \mid X$}
+        \end{prooftree}
+    \item \textbf{Type Mix}:
+        \begin{center}
+            \AxiomC{$\call{S} \mid U$}
+            \AxiomC{$\call{T} \mid V$}
+            \RightLabel{$\mix^T$}
+            \BinaryInfC{$\call{S},\call{T}\setminus X \mid V[X:= U]$}
+            \DisplayProof
+        \end{center}
+    \item \textbf{Type Contraction}:
+    \begin{center}
+        \AxiomC{$\call{S},X,X,\call{T} \mid M: U$}
+        \RightLabel{$\ctr^T$}
+        \UnaryInfC{$\call{S},X,\call{T}\mid M: U$}
+        \DisplayProof
+    \end{center}
+    \item \textbf{Type Weakening}:
+    \begin{center}
+        \AxiomC{$\call{S},\call{S}' \mid U$}
+        \RightLabel{$\wk^T$}
+        \UnaryInfC{$\call{S},X,\call{S}'\mid U$}
+        \DisplayProof
+    \end{center}
+    \item \textbf{Type Exchange}:
+        \begin{center}
+        \AxiomC{$\call{S},X,Y,\call{S}'\mid U$}
+        \RightLabel{$\ex^T$}
+        \UnaryInfC{$\call{S},Y,X,\call{S}'\mid U$}
+        \DisplayProof
+        \end{center}
+    \item \textbf{Type right implication}:
+        \begin{center}
+        \AxiomC{$\call{S} \mid U$}
+        \AxiomC{$\call{T} \mid V$}
+        \RightLabel{$(R\imp)^T$}
+        \BinaryInfC{$\call{S},\call{T} \mid U \imp V$}
+        \DisplayProof
+        \end{center}
+    \item \textbf{Type right quantification}:
+        \begin{center}
+        \AxiomC{$\call{S},X,\call{S}' \mid U$}
+        \RightLabel{$\rquant^T$}
+        \UnaryInfC{$\call{S},\call{S}' \mid \forall X.U$}
+        \DisplayProof
+        \end{center}
+\end{itemize}
+The following we call the \textbf{term rules}. We give the annotated versions:
+\label{sequentcalc} 
+\begin{itemize}
+    \item the \textbf{identity group}:
+    \begin{itemize}
+        \item \textbf{Axiom}
+        \begin{prooftree}
+        \AxiomC{$\call{S} \mid U$}
+        \RightLabel{$({\operatorname{ax}})$}
+        \UnaryInfC{$\call{S}\mid x:U \vdash x:U$}
+        \end{prooftree}
+        \item \textbf{Mix}:
+        \begin{center}
+            \AxiomC{$\call{S} \mid U$}
+            \AxiomC{$\call{T}\mid \Gamma \vdash M:V$}
+            \RightLabel{$\mix$}
+            \BinaryInfC{$\call{S},\call{T}\setminus X\mid \Gamma[X := U] \vdash M[X := U]:V[X:= U]$}
+            \DisplayProof
+        \end{center}
+        \item \textbf{Carry}:
+        \begin{center}
+            \AxiomC{$\call{S} \mid U$}
+            \AxiomC{$\call{T} \mid \Gamma, y:V[X:=U], \Gamma' \vdash V$}
+            \RightLabel{$\carry$}
+            \BinaryInfC{$\call{S},\call{T}\setminus \operatorname{FV}(U)\mid \Gamma, y:V[X:=U], \Gamma' \vdash V$}
+            \DisplayProof
+        \end{center}
+        \item \textbf{Cut}:
+        \begin{center}
+        \AxiomC{$\call{S} \mid \Gamma \vdash M:U$}
+        \AxiomC{$\call{T} \mid \Delta, x:U, \Delta' \vdash N:V$}
+        \RightLabel{$\cut$}
+        \BinaryInfC{$\call{S},\call{T}\setminus \operatorname{FV}(U)\mid \Gamma, \Delta, \Delta' \vdash N[x:= M]:V$}
+        \DisplayProof
+        \end{center}
+        \textcolor{red}{You might want to not delete $\operatorname{FV}(U)$ from $\call{T}$ in the cut rule, you can allow that, but you would have to remove it from $\carry$ too. So either they both have it or neither, to see why consider the axiom cut elimination rule.}
+    \end{itemize}
+    \item the \textbf{structural rules}:
+    \begin{itemize}
+        \item \textbf{Contraction}:
+        \begin{prooftree}
+        \AxiomC{$\call{S}, X, X, \call{T} \mid \Gamma \vdash M: U$}
+        \RightLabel{$\ctr_1$}
+        \UnaryInfC{$\call{S}, X, \call{T}\mid \Gamma \vdash M: U$}
+        \end{prooftree}
+        \begin{prooftree}
+        \AxiomC{$\call{S}\mid\Gamma, x:U, y:U, \Delta \vdash M: V$}
+        \RightLabel{$({\operatorname{ctr}})_2$}
+        \UnaryInfC{$\call{S}\mid\Gamma, x:U, \Delta \vdash M[y:= x]:V$}
+        \end{prooftree}
+        \item \textbf{Weakening}:
+        \begin{prooftree}
+        \AxiomC{$\call{S}, \call{T} \mid \Gamma \vdash M: U$}
+        \RightLabel{$\wk_1$}
+        \UnaryInfC{$\call{S}, X, \call{T} \mid \Gamma \vdash M: U$}
+        \end{prooftree}
+        \begin{prooftree}
+        \AxiomC{$\call{S}\mid\Gamma, \Delta \vdash M: U$}
+        \RightLabel{$({\operatorname{weak}})_2$}
+        \UnaryInfC{$\call{S}\mid\Gamma, x:V, \Delta \vdash M: U$}
+        \end{prooftree}
+        \item \textbf{Exchange}:
+        \begin{prooftree}
+        \AxiomC{$\call{S}, X, Y, \call{S}' \mid \Gamma \vdash M: U$}
+        \RightLabel{$\ex_1$}
+        \UnaryInfC{$\call{S}, Y, X, \call{S}'\mid \Gamma \vdash M: U$}
+        \end{prooftree}
+        \begin{prooftree}
+        \AxiomC{$\call{S}\mid\Gamma, x:U,y:V, \Delta \vdash M: W$}
+        \RightLabel{$({\operatorname{ex}})_2$}
+        \UnaryInfC{$\call{S}\mid\Gamma, y:V,x:U, \Delta \vdash M: W$}
+        \end{prooftree}
+    \end{itemize}
+    \item the \textbf{logical rules}:
+    \begin{itemize}
+        \item 
+        \textbf{Right implication}:
+        \begin{center}
+        \end{center}
+        \begin{prooftree}
+        \AxiomC{$\call{S}\mid\Gamma, x:U, \Delta \vdash M: V$}
+        \RightLabel{$(R\imp)$}
+        \UnaryInfC{$\call{S}\mid\Gamma, \Delta \vdash \lambda x. M:U \imp  V $}
+        \end{prooftree}
+        provided $\operatorname{FV}(U) \subseteq \bar{\call{S}}$.
+        \item
+        \textbf{Left implication}:
+        \begin{prooftree}
+        \AxiomC{$\call{S}\mid\Gamma \vdash M: U$}
+        \AxiomC{$\call{T}\mid\Delta, x:V, \Delta' \vdash N:W$}
+        \RightLabel{$(L \imp)$}
+        \BinaryInfC{$\call{S},\call{T}\mid y: U \imp V, \Gamma, \Delta, \Delta' \vdash M[x := yN]: W$}
+        \end{prooftree}
+        \item \textbf{Right quantification}: we write $U[X:=V]$ for the formula given by replacing all free occurrences of $X$ in $U$ by $V$ (where we rename bound variables if necessary):
+        \begin{center}
+            \AxiomC{$\call{S},X,\call{S}'\mid\Gamma \vdash M: U$}
+            \RightLabel{$\rquant$}
+            \UnaryInfC{$\call{S},\call{S}'\mid\Gamma \vdash \Lambda X. M: \forall X. U$}
+            \DisplayProof
+        \end{center}
+        provided $X$ does not occur as a free variable in the type of any variable in $\Gamma$.
+        \item \textbf{Left quantification}:
+        \begin{center}
+        \AxiomC{$\call{S} \mid U$}
+        \AxiomC{$\call{T} \mid \Gamma, x:V[X :=U],\Gamma' \vdash M:W$}
+        \RightLabel{$\lquant$}
+        \BinaryInfC{$\call{S},\call{T}\setminus\operatorname{FV}(U) \mid z: \forall X.V, \Gamma, \Gamma' \vdash M[x:= zU]: W$}
+        \DisplayProof
+        \end{center}
+    \end{itemize}
+\end{itemize}
+\end{defn}
+%
+\begin{remark}
+Perhaps we need this for the cut rule:
+\begin{center}
+        \begin{prooftree}
+        \AxiomC{$\call{S}\mid\Gamma \vdash p$}
+        \AxiomC{$\call{T}\mid\Delta, x:p,\Delta' \vdash q$}
+        \RightLabel{$({\operatorname{cut}})$}
+        \BinaryInfC{$\call{S},\call{T}\setminus\call{T}'\mid\Gamma, \Delta, \Delta' \vdash q$}
+        \end{prooftree}
+        where $\call{T}'$ is a subsequence of $\call{T}$ such that $\operatorname{FV}^{\text{seq}}(p)$ is a rearrangement of $\call{T}'$ and $\call{T}\setminus\call{T}'$ denotes the sequence given by removing the elements of $\call{T}'$ from $\call{T}$.
+\end{center}
+\end{remark}
+
+\begin{defn}
+\label{def:tau_equivalence} We define $\tau$-equivalence to be the smallest, compatible relation satisfying: \textcolor{red}{obviously incomplete}.
+\begin{itemize}
+    \item
+    \begin{center}
+        \begin{tabular}{ >{\centering}m{6cm} >{\centering}m{2cm} >{\centering}m{1cm} >{\centering}m{10cm}}
+        \AxiomC{$\call{S} \mid \Gamma \vdash U$}
+        \AxiomC{$\call{T} \mid \Delta, x:U,y:V,\Delta' \vdash W$}
+        \RightLabel{$({\operatorname{cut}})$}
+        \BinaryInfC{$\call{S},\call{T} \mid \Gamma, \Delta, y:V, \Delta' \vdash W$}
+        \DisplayProof
+        &
+        $\sim_\tau$
+        &
+        \AxiomC{$\call{S} \mid \Gamma \vdash p$}
+        \AxiomC{$\call{T} \mid \Delta, x:U,y:V,\Delta' \vdash W$}
+        \RightLabel{$(\operatorname{ex})$}
+        \UnaryInfC{$\call{T} \mid \Delta, y:V, x:U, \Delta' \vdash W$}
+        \RightLabel{$({\operatorname{cut}})$}
+        \BinaryInfC{$\call{S},\call{T} \mid \Gamma, \Delta, y:V, \Delta' \vdash W$}
+        \DisplayProof
+        &
+        \tagarray{\label{tau_cut}}
+    \end{tabular}
+    \end{center}
+\end{itemize}
+\end{defn}
+
+%\section{Second order, intuitionistic, linear logic sequent calculus}
+%\input{LinearStuff}
+
+\begin{defn}[Mix$^T$ elimination]
+$\mix^T$ elimination:
+\begin{itemize}
+    \item
+    \begin{center}
+    \begin{tabular}{ >{\centering}m{7cm} >{\centering}m{0.5cm} >{\centering}m{4cm} >{\centering}m{0.5cm}} 
+        \arbproof{$\zeta^T$}
+        \UnaryInfC{$\call{S} \mid U$}
+        \AxiomC{}
+        \RightLabel{$\ax^T$}
+        \UnaryInfC{$Y \mid Y$}
+        \RightLabel{$\mix^T$}
+        \BinaryInfC{$\call{S} \mid U$}
+        \DisplayProof
+        & $\to_{\mix^T}$ &
+        \arbproof{$\zeta^T$}
+        \UnaryInfC{$\call{S} \mid U$}
+        \DisplayProof
+        & \tagarray{\label{cut:ax_left}}
+\end{tabular}
+\end{center}
+\item 
+\begin{center}
+    \begin{tabular}{ >{\centering}m{8cm} >{\centering}m{0.5cm} >{\centering}m{7.1cm} >{\centering}m{0.5cm}}
+    \arbproof{$\zeta^T$}
+    \UnaryInfC{$\call{S}\mid U$}
+    \arbproof{$\pi_1$}
+    \UnaryInfC{$\call{T}, X,X,\call{T}' \mid V$}
+    \RightLabel{$\ctr^T$}
+    \UnaryInfC{$\call{T},X,\call{T}'\mid V$}
+    \RightLabel{$\mix^T$}
+    \BinaryInfC{$\call{S},(\call{T},\call{T}')\setminus X\mid V[U]$}
+    \DisplayProof
+    &
+    $\to_{\operatorname{mix}^T}$
+    &
+    \arbproof{$\zeta^T$}
+    \UnaryInfC{$\call{S}\mid U$}
+    \arbproof{$\pi_1$}
+    \UnaryInfC{$\call{T}, X,X,\call{T}' \mid V$}
+    \RightLabel{$\mix^T$}
+    \BinaryInfC{$\call{S},(\call{T},\call{T}')\setminus X\mid V[U]$}
+    \DisplayProof
+        &
+        \tagarray{}
+    \end{tabular}
+    \end{center}
+\item
+\begin{center}
+    \begin{tabular}{ >{\centering}m{8cm} >{\centering}m{0.5cm} >{\centering}m{7.1cm} >{\centering}m{0.5cm}}
+    \arbproof{$\zeta^T$}
+    \UnaryInfC{$\call{S} \mid U$}
+    \arbproof{$\pi$}
+    \UnaryInfC{$\call{T}, X, Y, \call{T}' \mid V$}
+    \RightLabel{$\ex^T$}
+    \UnaryInfC{$\call{T}, Y, X, \call{T} \mid  V$}
+    \RightLabel{$\mix^T$}
+    \BinaryInfC{$\call{S}, (\call{T}, Y, \call{T}')\setminus X \mid V[U]$}
+    \DisplayProof
+    &
+    $\to_{\operatorname{mix}^T}$
+    &
+    \arbproof{$\zeta^T$}
+    \UnaryInfC{$\call{S} \mid U$}
+    \arbproof{$\pi$}
+    \UnaryInfC{$\call{T}, X, Y, \call{T}' \mid V$}
+    \RightLabel{$\mix^T$}
+    \BinaryInfC{$\call{S},(\call{T}, Y, \call{T}')\setminus X \mid V[U]$}
+    \DisplayProof
+        &
+        \tagarray{}
+    \end{tabular}
+%
+\end{center}
+\item
+\begin{center}
+    \begin{tabular}{ >{\centering}m{8cm} >{\centering}m{0.5cm} >{\centering}m{7.1cm} >{\centering}m{0.5cm}}
+    \arbproof{$\zeta^T$}
+    \UnaryInfC{$\call{S} \mid U$}
+    \arbproof{$\pi$}
+    \UnaryInfC{$\call{T}, \call{T}' \mid V$}
+    \RightLabel{$\wk^T$}
+    \UnaryInfC{$\call{T}, X, \call{T}' \mid V$}
+    \RightLabel{$\mix^T$}
+    \BinaryInfC{$\call{S}, (\call{T}, \call{T}')\setminus X \mid V[U]$}
+    \DisplayProof
+    &
+    $\to_{\operatorname{mix}^T}$
+    &
+    \arbproof{$\zeta^T$}
+    \UnaryInfC{$\call{S} \mid U$}
+    \arbproof{$\pi$}
+    \UnaryInfC{$\call{T}, \call{T}' \mid V$}
+    \RightLabel{$\mix^T$}
+    \BinaryInfC{$\call{S}, (\call{T},\call{T}')\setminus X \mid V[U]$}
+    \DisplayProof
+        &
+        \tagarray{}
+    \end{tabular}
+\end{center}
+\item
+\begin{center}
+    \arbproof{$\zeta_1$}
+    \UnaryInfC{$\call{S} \mid U$}
+    \arbproof{$\zeta^T_2$}
+    \UnaryInfC{$\call{T} \mid V$}
+    \arbproof{$\zeta^T_3$}
+    \UnaryInfC{$\call{Q} \mid W$}
+    \RightLabel{$(R\imp)^T$}
+    \BinaryInfC{$\call{S}, \call{T} \mid V \imp W$}
+    \RightLabel{$\mix^T$}
+    \BinaryInfC{$\call{S}, (\call{T}, \call{Q})\setminus X \mid (V \imp W)[X:= U]$}
+    \DisplayProof\\\vspace{0.5cm}
+    $\to_{\operatorname{mix}^T}$\\\vspace{0.5cm}
+    \arbproof{$\zeta_1$}
+    \UnaryInfC{$\call{S} \mid U$}
+    \arbproof{$\zeta^T_2$}
+    \UnaryInfC{$\call{T} \mid U$}
+    \RightLabel{$\mix^T$}
+    \BinaryInfC{$\call{S}, \call{T}\setminus X \mid V[X := U]$}
+    \arbproof{$\zeta_1$}
+    \UnaryInfC{$\call{S} \mid U$}
+    \arbproof{$\zeta^T_3$}
+    \UnaryInfC{$\call{Q} \mid W$}
+    \RightLabel{$\mix$}
+    \BinaryInfC{$\call{S}, \call{Q}\setminus X \mid V[X:=W]$}
+    \RightLabel{$(R\imp)^T$}
+    \BinaryInfC{$\call{S}, \call{T}\setminus X, \call{S}, \call{Q}\setminus X \mid U[X:= W] \imp V[X:= W]$}
+    \doubleLine
+    \RightLabel{$\ex^T, \ctr^T$}
+    \UnaryInfC{$\call{S}, (\call{T}, \call{Q})\setminus X \mid U[X:= W] \imp V[X:= W]$}
+    \noLine
+    \UnaryInfC{$\call{S}, (\call{T}, \call{Q})\setminus X \mid (V \imp W)[X:= U]$}
+    \DisplayProof
+\end{center}
+\item
+\begin{center}
+    \begin{tabular}{ >{\centering}m{8cm} >{\centering}m{0.5cm} >{\centering}m{7.1cm} >{\centering}m{0.5cm}}
+    \arbproof{$\zeta_1^T$}
+    \UnaryInfC{$\call{S} \mid U$}
+    \arbproof{$\zeta_2^T$}
+    \UnaryInfC{$\call{T}, Y, \call{T}' \mid V$}
+    \RightLabel{$\rquant$}
+    \UnaryInfC{$\call{T}, \call{T}' \mid \forall Y. V$}
+    \RightLabel{$\mix^T$}
+    \BinaryInfC{$\call{S}, (\call{T}, \call{T}')\setminus X \mid \forall (Y. V)[X:= U]$}
+    \DisplayProof
+    &
+    $\to_{\operatorname{mix}^T}$
+    &
+    \arbproof{$\zeta_1^T$}
+    \UnaryInfC{$\call{S} \mid U$}
+    \arbproof{$\zeta_2^T$}
+    \UnaryInfC{$\call{T}, Y, \call{T}' \mid V$}
+    \RightLabel{$\mix^T$}
+    \BinaryInfC{$\call{S}, (\call{T}, Y, \call{T}')\setminus X \mid V[X := U]$}
+    \RightLabel{$\rquant$}
+    \UnaryInfC{$\call{S}, (\call{T}, \call{T}')\setminus X \mid \forall Y. V[X := U]$}
+    \noLine
+    \UnaryInfC{$\call{S}, (\call{T}, \call{T}')\setminus X \mid (\forall Y. V)[X := U]$}
+    \DisplayProof
+        &
+        \tagarray{}
+    \end{tabular}
+\end{center}
+\end{itemize}
+\end{defn}
+%
+\textcolor{red}{Need to define what a proof is, what a type proof is, what a $\mix^T$-free type proof is.}
+\begin{lemma}
+\label{lem:mixT_elim}
+Every type proof is equivalence to a $\mix^T$-free type proof.
+\end{lemma}
+\begin{proof}
+By induction on the height of the right branch. \textcolor{red}{This also uses the observation that if a proot ends in $\call{S} \mid U$ then it is a type proof.}
+\end{proof}
+
+\begin{defn}[Mix elimination]
+\label{def:mix_elim}
+\textcolor{red}{Lots of weakening rules are missing. Also the one present needs a subscript}
+Throughout, we abbreviate $[X:= U]$ by $[U]$
+\begin{itemize}
+    \item $\mix$ after contraction:
+    \begin{center}
+    \begin{tabular}{ >{\centering}m{8cm} >{\centering}m{0.5cm} >{\centering}m{7.1cm} >{\centering}m{0.5cm}}
+    \arbproof{$\zeta^T$}
+    \UnaryInfC{$\call{S}\mid U$}
+    \arbproof{$\pi_1$}
+    \UnaryInfC{$\call{T}, X,X,\call{T}' \mid \Gamma\vdash V$}
+    \RightLabel{$\ctr_1$}
+    \UnaryInfC{$\call{T},X,\call{T}'\mid \Gamma \vdash V$}
+    \RightLabel{$\mix$}
+    \BinaryInfC{$\call{S},(\call{T},\call{T}')\setminus X\mid \Gamma[U] \vdash V[U]$}
+    \DisplayProof
+    &
+    $\to_{\operatorname{mix}}$
+    &
+    \arbproof{$\zeta^T$}
+    \UnaryInfC{$\call{S}\mid U$}
+    \arbproof{$\pi_1$}
+    \UnaryInfC{$\call{T}, X,X,\call{T}' \mid \Gamma\vdash V$}
+    \RightLabel{$\mix$}
+    \BinaryInfC{$\call{S},(\call{T},\call{T}')\setminus X\mid \Gamma[U] \vdash V[U]$}
+    \DisplayProof
+        &
+        \tagarray{}
+    \end{tabular}
+    \end{center}
+    \item
+    For this next rule we assume $X \not\in U$ which we can always ensure using $\alpha$-equivalence. Notice that in this case we have $(S[X: =V])[Y:= U] = (S[Y := U])[X := V[Y := U]]$,
+\begin{center}
+    \arbproof{$\zeta_1^T$}
+    \UnaryInfC{$\call{S} \mid U$}
+    \arbproof{$\zeta_2^T$}
+    \UnaryInfC{$\call{T}\mid V$}
+    \arbproof{$\pi$}
+    \UnaryInfC{$\call{Q}, X, \call{Q}'\mid \Gamma, y:S[Y:= V], \Gamma' \vdash W$}
+    \RightLabel{$\lquant$}
+    \BinaryInfC{$\call{T}, \call{Q},X,  \call{Q}' \mid z: \forall Y. S, \Gamma, \Gamma' \vdash W$}
+    \RightLabel{$\mix$}
+    \BinaryInfC{$\call{S}, (\call{T}, \call{Q}, \call{Q}')\setminus X \mid (z:\forall Y. S, \Gamma, \Gamma')[U] \vdash W[U]$}
+    \DisplayProof\\\vspace{0.5cm}
+    $\to_{\operatorname{mix}}$\\\vspace{0.5cm}
+    \arbproof{$\zeta_1^T$}
+    \UnaryInfC{$\call{S} \mid U$}
+    \arbproof{$\zeta_2^T$}
+    \UnaryInfC{$\call{T} \mid V$}
+    \RightLabel{$\mix$}
+    \BinaryInfC{$\call{S},\call{T}\setminus X \mid V[U]$}
+    \arbproof{$\zeta_1^T$}
+    \UnaryInfC{$\call{S} \mid U$}
+    \arbproof{$\pi$}
+    \UnaryInfC{$\call{Q},X,\call{Q}'\mid \Gamma, y:S[Y := V], \Gamma' \vdash W$}
+    \RightLabel{$\mix$}
+    \BinaryInfC{$\call{S}, (\call{Q}, \call{Q}')\setminus X \mid (\Gamma, y:S[Y := V], \Gamma')[U] \vdash W[U]$}
+    \noLine
+    \UnaryInfC{$\call{S}, (\call{Q}, \call{Q}')\setminus X \mid \Gamma[U], x:(S[U])[Y := V[U]], \Gamma'[U] \vdash W[U]$}
+    \RightLabel{$\lquant$}
+    \BinaryInfC{$\call{S}, \call{T}\setminus X, \call{S},(\call{Q}, \call{Q}')\setminus X \mid z: \forall Y. S[U], \Gamma[U], \Gamma'[U] \vdash W[U]$}
+    \noLine
+    \UnaryInfC{$\call{S}, \call{T}\setminus X, \call{S},(\call{Q}, \call{Q}')\setminus X \mid (z: \forall Y. S, \Gamma, \Gamma')[U] \vdash W[U]$}
+    \doubleLine
+    \RightLabel{$\ex,\ctr$}
+    \UnaryInfC{$\call{S}, (\call{T}, \call{Q}, \call{Q}')\setminus X \mid (z:\forall Y. S, \Gamma, \Gamma')[U] \vdash W[U]$}
+    \DisplayProof
+\end{center}
+\item $\mix$ after $(L\imp)$:
+\begin{center}
+    \arbproof{$\zeta_1^T$}
+    \UnaryInfC{$\call{S} \mid U$}
+    \arbproof{$\pi_1$}
+    \UnaryInfC{$\call{T} \mid \Gamma \vdash V$}
+    \arbproof{$\pi_2$}
+    \UnaryInfC{$\call{Q} \mid \Delta, x:W, \Delta' \vdash S$}
+    \RightLabel{$(L\imp)$}
+    \BinaryInfC{$\call{T}, \call{Q} \mid z: V \imp W, \Gamma, \Delta, \Delta' \vdash S$}
+    \RightLabel{$\mix$}
+    \BinaryInfC{$\call{S}, (\call{T}, \call{Q})\setminus X \mid (z: V \imp W, \Gamma, \Delta, \Delta')[U] \vdash S[U]$}
+    \DisplayProof\\\vspace{0.5cm}
+    $\to_{\operatorname{mix}}$\\\vspace{0.5cm}
+    \arbproof{$\zeta_1^T$}
+    \UnaryInfC{$\call{S} \mid U$}
+    \arbproof{$\pi_1$}
+    \UnaryInfC{$\call{T} \mid \Gamma \vdash V$}
+    \RightLabel{$\mix$}
+    \BinaryInfC{$\call{S}, \call{T}\setminus X \mid \Gamma[U] \vdash V[U]$}
+    \arbproof{$\zeta_1^T$}
+    \UnaryInfC{$\call{S} \mid U$}
+    \arbproof{$\pi_2$}
+    \UnaryInfC{$\call{Q} \mid \Delta, x:W, \Delta' \vdash S$}
+    \RightLabel{$\mix$}
+    \BinaryInfC{$\call{S}, \call{Q}\setminus X \mid (\Delta, x:W, \Delta')[U] \vdash S[U]$}
+    \RightLabel{$(L\imp)$}
+    \BinaryInfC{$\call{S},\call{T}\setminus X,\call{S},\call{Q}\setminus X\mid z:(V\imp W)[U], (\Gamma, \Delta, \Delta')[U] \vdash S[U]$}
+    \RightLabel{$\ex,\ctr$}
+    \doubleLine
+    \UnaryInfC{$\call{S},(\call{T},\call{Q})\setminus X\mid (z:V\imp W, \Gamma, \Delta, \Delta')[U] \vdash S[U]$}
+    \DisplayProof
+\end{center}
+\item $\rquant$ before $\mix$, we abbreviate $[X:= U]$ by writing $[U]$:
+\begin{center}
+    \begin{tabular}{ >{\centering}m{8cm} >{\centering}m{0.5cm} >{\centering}m{7.1cm} >{\centering}m{0.5cm}}
+    \arbproof{$\zeta^T$}
+    \UnaryInfC{$\call{S} \mid U$}
+    \arbproof{$\pi$}
+    \UnaryInfC{$\call{T}, Y, \call{T}' \mid \Gamma \vdash V$}
+    \RightLabel{$\rquant$}
+    \UnaryInfC{$\call{T}, \call{T}' \mid \Gamma \vdash \forall Y. V$}
+    \RightLabel{$\mix$}
+    \BinaryInfC{$\call{S}, (\call{T},\call{T}')\setminus X \mid \Gamma[U] \vdash (\forall Y. V)[U]$}
+    \DisplayProof
+    &
+    $\to_{\operatorname{mix}}$
+    &
+    \arbproof{$\zeta^T$}
+    \UnaryInfC{$\call{S} \mid U$}
+    \arbproof{$\pi$}
+    \UnaryInfC{$\call{T}, Y, \call{T}' \mid \Gamma \vdash V$}
+    \RightLabel{$\mix$}
+    \BinaryInfC{$\call{S}, \call{T}\setminus X, Y, \call{T}'\setminus X \mid \Gamma[U] \vdash V[U]$}
+    \RightLabel{$\rquant$}
+    \UnaryInfC{$\call{S}, (\call{T},\call{T}')\setminus X \mid \Gamma[U] \vdash (\forall Y. V)[U]$}
+    \DisplayProof
+        &
+        \tagarray{}
+    \end{tabular}
+\end{center}
+    where we relable $Y$ if necessary to ensure $\forall Y. V[U] = (\forall Y. V)[U]$.
+\item $\mix$ after $(R\imp)$:
+\begin{center}
+    \begin{tabular}{ >{\centering}m{8cm} >{\centering}m{0.5cm} >{\centering}m{7.1cm} >{\centering}m{0.5cm}}
+    \arbproof{$\zeta^T$}
+    \UnaryInfC{$\call{S} \mid U$}
+    \arbproof{$\pi$}
+    \UnaryInfC{$\call{T} \mid \Gamma, x:V, \Gamma' \vdash W$}
+    \RightLabel{$(R\imp)$}
+    \UnaryInfC{$\call{T} \mid \Gamma, \Gamma' \vdash V \imp W$}
+    \RightLabel{$\mix$}
+    \BinaryInfC{$\call{S}, \call{T}\setminus X \mid (\Gamma, \Gamma')[U] \vdash (V \imp W)[U]$}
+    \DisplayProof
+    &
+    $\to_{\operatorname{mix}}$
+    &
+    \arbproof{$\zeta^T$}
+    \UnaryInfC{$\call{S} \mid U$}
+    \arbproof{$\pi$}
+    \UnaryInfC{$\call{T}\mid \Gamma, x:V, \Gamma' \vdash W$}
+    \RightLabel{$\mix$}
+    \BinaryInfC{$\call{S}, \call{T}\setminus X\mid (\Gamma, x:V, \Gamma')[U] \vdash W[U]$}
+    \RightLabel{$(R\imp)$}
+    \UnaryInfC{$\call{S}, \call{T}\setminus X \mid (\Gamma, \Gamma')[U] \vdash V[U] \imp W[U]$}
+    \noLine
+    \UnaryInfC{$\call{S}, \call{T}\setminus X \mid (\Gamma, \Gamma')[U] \vdash (V \imp W)[U]$}
+    \DisplayProof
+        &
+        \tagarray{}
+    \end{tabular}
+\end{center}
+\item $\mix$ after $\ex_i$ for $i = 1,2$:
+\begin{center}
+    \begin{tabular}{ >{\centering}m{8cm} >{\centering}m{0.5cm} >{\centering}m{7.1cm} >{\centering}m{0.5cm}}
+    \arbproof{$\zeta^T$}
+    \UnaryInfC{$\call{S} \mid U$}
+    \arbproof{$\pi$}
+    \UnaryInfC{$\call{T}, X, Y, \call{T}' \mid \Gamma \vdash V$}
+    \RightLabel{$\ex$}
+    \UnaryInfC{$\call{T}, Y, X, \call{T} \mid \Gamma \vdash V$}
+    \RightLabel{$\mix$}
+    \BinaryInfC{$\call{S}, (\call{T}, Y, \call{T}')\setminus X \mid \Gamma[U] \vdash V[U]$}
+    \DisplayProof
+    &
+    $\to_{\operatorname{mix}}$
+    &
+    \arbproof{$\zeta^T$}
+    \UnaryInfC{$\call{S} \mid U$}
+    \arbproof{$\pi$}
+    \UnaryInfC{$\call{T}, X, Y, \call{T}' \mid \Gamma \vdash V$}
+    \RightLabel{$\mix$}
+    \BinaryInfC{$\call{S},(\call{T}, Y, \call{T}')\setminus X \mid \Gamma \vdash V[U]$}
+    \DisplayProof
+        &
+        \tagarray{}
+    \end{tabular}
+%
+\end{center}
+\begin{center}
+    \begin{tabular}{ >{\centering}m{8cm} >{\centering}m{0.5cm} >{\centering}m{7.1cm} >{\centering}m{0.5cm}}
+    \arbproof{$\zeta^T$}
+    \UnaryInfC{$\call{S} \mid U$}
+    \arbproof{$\pi$}
+    \UnaryInfC{$\call{T} \mid \Gamma, x:V, y:W, \Gamma' \vdash S$}
+    \RightLabel{$\ex_2$}
+    \UnaryInfC{$\call{T} \mid \Gamma, y:W, x:V, \Gamma' \vdash S$}
+    \RightLabel{$\mix$}
+    \BinaryInfC{$\call{S}, \call{T}\setminus X \vdash (\Gamma, y:W, x:V, \Gamma')[U] \vdash S[U]$}
+    \DisplayProof
+    &
+    $\to_{\operatorname{mix}}$
+    &
+    \arbproof{$\zeta^T$}
+    \UnaryInfC{$\call{S} \mid U$}
+    \arbproof{$\pi$}
+    \UnaryInfC{$\call{T} \mid \Gamma, x:V, y:W, \Gamma' \vdash S$}
+    \RightLabel{$\mix$}
+    \BinaryInfC{$\call{S}, \call{T}\setminus X \mid (\Gamma, x:V, y:W, \Gamma')[U] \vdash S[U]$}
+    \RightLabel{$\ex_2$}
+    \UnaryInfC{$\call{S}, \call{T}\setminus X \mid (\Gamma, y:W, x:V, \Gamma')[U] \vdash S[U]$}
+    \DisplayProof
+        &
+        \tagarray{}
+    \end{tabular}
+\end{center}
+\item $\mix$ after $\wk$:
+\begin{center}
+    \begin{tabular}{ >{\centering}m{8cm} >{\centering}m{0.5cm} >{\centering}m{7.1cm} >{\centering}m{0.5cm}}
+    \arbproof{$\zeta^T$}
+    \UnaryInfC{$\call{S} \mid U$}
+    \arbproof{$\pi$}
+    \UnaryInfC{$\call{T}, \call{T}' \mid \Gamma \vdash V$}
+    \RightLabel{$\wk$}
+    \UnaryInfC{$\call{T}, X, \call{T}' \mid \Gamma \vdash V$}
+    \RightLabel{$\mix$}
+    \BinaryInfC{$\call{S}, (\call{T}, \call{T}')\setminus X \mid \Gamma[U] \vdash V[U]$}
+    \DisplayProof
+    &
+    $\to_{\operatorname{mix}}$
+    &
+    \arbproof{$\zeta^T$}
+    \UnaryInfC{$\call{S} \mid U$}
+    \arbproof{$\pi$}
+    \UnaryInfC{$\call{T}, \call{T}' \mid \Gamma \vdash V$}
+    \RightLabel{$\mix$}
+    \BinaryInfC{$\call{S}, (\call{T},\call{T}')\setminus X \mid \Gamma[U] \vdash V[U]$}
+    \DisplayProof
+        &
+        \tagarray{}
+    \end{tabular}
+\end{center}
+Assume $X \neq Y$:
+\begin{center}
+    \begin{tabular}{ >{\centering}m{8cm} >{\centering}m{0.5cm} >{\centering}m{7.1cm} >{\centering}m{0.5cm}}
+    \arbproof{$\zeta^T$}
+    \UnaryInfC{$\call{S} \mid U$}
+    \arbproof{$\pi$}
+    \UnaryInfC{$\call{T}, \call{T}' \mid \Gamma \vdash V$}
+    \RightLabel{$\wk$}
+    \UnaryInfC{$\call{T}, Y, \call{T}' \mid \Gamma \vdash V$}
+    \RightLabel{$\mix$}
+    \BinaryInfC{$\call{S}, (\call{T}, Y, \call{T}')\setminus X \mid \Gamma[U] \vdash V[U]$}
+    \DisplayProof
+    &
+    $\to_{\operatorname{mix}}$
+    &
+    \arbproof{$\zeta^T$}
+    \UnaryInfC{$\call{S} \mid U$}
+    \arbproof{$\pi$}
+    \UnaryInfC{$\call{T}, \call{T}' \mid \Gamma \vdash V$}
+    \RightLabel{$\mix$}
+    \BinaryInfC{$\call{S}, (\call{T},\call{T}')\setminus X \mid \Gamma[U] \vdash V[U]$}
+    \RightLabel{$\wk$}
+    \UnaryInfC{$\call{S}, (\call{T}, Y, \call{T}')\setminus X \mid \Gamma[U] \vdash V[U]$}
+    \DisplayProof
+        &
+        \tagarray{}
+    \end{tabular}
+\end{center}
+\item $\mix$ after $\ax$:
+\begin{center}
+    \begin{tabular}{ >{\centering}m{8cm} >{\centering}m{0.5cm} >{\centering}m{7.1cm} >{\centering}m{0.5cm}}
+    \arbproof{$\zeta_1^T$}
+    \UnaryInfC{$\call{S} \mid U$}
+    \arbproof{$\zeta_2^T$}
+    \UnaryInfC{$\call{T} \mid V$}
+    \RightLabel{$\ax$}
+    \UnaryInfC{$\call{T} \mid x:V \vdash V$}
+    \RightLabel{$\mix$}
+    \BinaryInfC{$\call{S}, \call{T}\setminus X \mid (x:V)[U] \vdash V[U]$}
+    \DisplayProof
+    &
+    $\to_{\operatorname{mix}}$
+    &
+    \arbproof{$\zeta_1^T$}
+    \UnaryInfC{$\call{S} \mid U$}
+    \arbproof{$\zeta_2^T$}
+    \UnaryInfC{$\call{T} \mid U$}
+    \RightLabel{$\mix^T$}
+    \BinaryInfC{$\call{S}, \call{T}\setminus X \mid V[U]$}
+    \RightLabel{$\ax$}
+    \UnaryInfC{$\call{S}, \call{T}\setminus X \mid x: V[U] \vdash V[U]$}
+    \noLine
+    \UnaryInfC{$\call{S}, \call{T}\setminus X \mid (x: V)[U] \vdash V[U]$}
+    \DisplayProof
+        &
+        \tagarray{}
+    \end{tabular}
+\end{center}
+\begin{center}
+    \arbproof{$\zeta^T$}
+    \UnaryInfC{$\call{S} \mid U$}
+    \arbproof{$\pi_1$}
+    \UnaryInfC{$\call{T} \mid \Gamma \vdash V$}
+    \arbproof{$\pi_2$}
+    \UnaryInfC{$\call{Q} \mid \Delta, x:V, \Delta' \vdash W$}
+    \RightLabel{$\cut$}
+    \BinaryInfC{$\call{T}, \call{Q} \mid \Gamma, \Delta, \Delta' \vdash W$}
+    \RightLabel{$\mix$}
+    \BinaryInfC{$\call{S}, (\call{T}, \call{Q}, \call{Q}')\setminus X \mid (\Gamma, \Delta, \Delta')[U] \vdash W[U]$}
+    \DisplayProof\\\vspace{0.5cm}
+    $\to_{\operatorname{mix}}$\\\vspace{0.5cm}
+    \arbproof{$\zeta^T$}
+    \UnaryInfC{$\call{S} \mid U$}
+    \arbproof{$\pi_1$}
+    \UnaryInfC{$\call{T} \mid \Gamma \vdash V$}
+    \RightLabel{$\mix$}
+    \BinaryInfC{$\call{S}, \call{T}\setminus X \mid \Gamma[U] \vdash V[U]$}
+    \arbproof{$\zeta^T$}
+    \UnaryInfC{$\call{S} \mid U$}
+    \arbproof{$\pi_2$}
+    \UnaryInfC{$\call{Q} \mid \Delta, x:V, \Delta' \vdash W$}
+    \RightLabel{$\mix$}
+    \BinaryInfC{$\call{S}, \call{Q}\setminus X \mid (\Delta, x:V, \Delta')[U] \vdash W[U] $}
+    \RightLabel{$\cut$}
+    \BinaryInfC{$\call{S}, \call{T}\setminus X, \call{S}, \call{Q}\setminus X \mid (\Gamma, \Delta, \Delta')[U] \vdash W[U]$}
+    \doubleLine
+    \RightLabel{$\ex, \ctr$}
+    \UnaryInfC{$\call{S}, (\call{T}, \call{Q}, \call{Q}')\setminus X \mid (\Gamma, \Delta, \Delta')[U] \vdash W[U]$}
+    \DisplayProof
+\end{center}
+\end{itemize}
+\end{defn}
+\textcolor{red}{Need to define $\mix$-free}.
+\begin{lemma}
+\label{lem:mix_free}
+Every proof is equivalent to a $\mix$-free preproof.
+\end{lemma}
+\begin{proof}
+By induction on the height of the right branch.
+\end{proof}
+\begin{defn}
+\label{def:carry_equivalence} \textbf{Carry elimination}
+\begin{itemize}
+    \item \textcolor{red}{This first one might be better classed as $\lambda$-equivalence}
+    \begin{center}
+\begin{tabular}{ >{\centering}m{7cm} >{\centering}m{0.5cm} >{\centering}m{11cm} >{\centering}m{0.5cm}} 
+        \arbproof{$\zeta_1^T$}
+        \UnaryInfC{$\call{S} \mid U$}
+        \arbproof{$\zeta_2^T$}
+        \UnaryInfC{$\call{T} \mid U$}
+        \arbproof{$\pi$}
+        \UnaryInfC{$\call{Q} \mid \Gamma, x:V[X:= U], \Gamma' \vdash W$}
+        \RightLabel{$\lquant$}
+        \BinaryInfC{$\call{T}, \call{Q} \mid z:\forall X.W, \Gamma, \Gamma' \vdash W$}
+        \RightLabel{$\carry$}
+        \BinaryInfC{$\call{S}, (\call{T},\call{Q})\setminus\operatorname{FV}(U) \mid z:\forall X.W, \Gamma, \Gamma' \vdash W$}
+        \DisplayProof
+        & $\to_{\operatorname{carry}}$ &
+        \arbproof{$\zeta_1^T$}
+        \UnaryInfC{$\call{S} \mid U$}
+        \arbproof{$\pi$}
+        \UnaryInfC{$\call{Q} \mid \Gamma, x:V[X:=U], \Gamma' \vdash W$}
+        \RightLabel{$\lquant$}
+        \BinaryInfC{$\call{S},\call{T}\setminus\operatorname{FV}(U) \mid z:\forall X.W, \Gamma, \Gamma' \vdash W$}
+        \RightLabel{$\wk$}
+        \doubleLine
+        \UnaryInfC{$\call{S},(\call{T},\call{Q})\setminus\operatorname{FV}(U) \mid z:\forall X. W, \Gamma, \Gamma'\vdash W$}
+        \DisplayProof
+        & \tagarray{\label{cut:ax_left}}
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{ >{\centering}m{7cm} >{\centering}m{0.5cm} >{\centering}m{8cm} >{\centering}m{0.5cm}} 
+        \begin{center}
+        \arbproof{$\zeta^T$}
+        \UnaryInfC{$\call{S} \mid U$}
+        \arbproof{$\xi^T$}
+        \UnaryInfC{$\call{T} \mid U$}
+        \RightLabel{$\ax$}
+        \UnaryInfC{$\call{T} \mid x:U\vdash U$}
+        \RightLabel{$\carry$}
+        \BinaryInfC{$\call{S},\call{T}\setminus\operatorname{FV}(U) \mid x:U \vdash V$}
+        \DisplayProof
+    \end{center}
+        & $\to_{\operatorname{carry}}$ &
+        \arbproof{$\zeta^T$}
+        \UnaryInfC{$\call{S} \mid U$}
+        \RightLabel{$\ax$}
+        \UnaryInfC{$\call{S} \mid x:U \vdash U$}
+        \RightLabel{$\wk$}
+        \doubleLine
+        \UnaryInfC{$\call{S},\call{T}\setminus\operatorname{FV}(U)\vdash U$}
+        \DisplayProof
+        & \tagarray{\label{cut:ax_left}}
+\end{tabular}
+\end{center}
+\end{itemize}
+\end{defn}
+\begin{defn}
+Cut elimination steps which don't come from the first order sequent calculus:
+\begin{itemize}
+    \item For any pair of proofs $\pi,\zeta^T$:
+\begin{center}
+\begin{tabular}{ >{\centering}m{7cm} >{\centering}m{0.5cm} >{\centering}m{8cm} >{\centering}m{0.5cm}} 
+        \arbproof{$\zeta^T$}
+        \UnaryInfC{$\call{S} \mid U$}
+        \RightLabel{$({\operatorname{ax}})$}
+        \UnaryInfC{$\call{S} \mid x:U \vdash U$}
+        \AxiomC{$\pi$}
+        \noLine
+        \UnaryInfC{$\vdots$}
+        \noLine
+        \UnaryInfC{$\call{T} \mid \Gamma, y:U, \Gamma' \vdash V$}
+        \RightLabel{$({\operatorname{cut}})$}
+        \BinaryInfC{$\call{S},\call{T}\setminus\operatorname{FV}(U) \mid  x:U, \Gamma, \Gamma' \vdash V$}
+        \DisplayProof
+        & $\to_{\operatorname{cut}}$ &
+        \arbproof{$\zeta^T$}
+        \UnaryInfC{$\call{S} \mid U$}
+        \AxiomC{$\operatorname{subst}^{str}(\pi,y,x)$}
+        \noLine
+        \UnaryInfC{$\vdots$}
+        \noLine
+        \UnaryInfC{$\call{T} \mid \Gamma, x:U, \Gamma' \vdash V$}
+        \RightLabel{$\carry$}
+        \BinaryInfC{$\call{S},\call{T}\setminus\operatorname{FV}(U) \mid \Gamma,x:U,  \Gamma'$}
+        \doubleLine
+        \RightLabel{$\ex$}
+        \UnaryInfC{$\call{S},\call{T}\setminus\operatorname{FV}(U) \mid x:U, \Gamma, \Gamma' \vdash V$}
+        \DisplayProof
+        & \tagarray{\label{cut:ax_left}}
+\end{tabular}
+\end{center}
+
+\begin{center}
+\begin{tabular}{>{\centering}m{7cm} >{\centering}m{0.5cm} >{\centering}m{4cm} >{\centering}m{0.5cm}} 
+        \AxiomC{$\pi$}
+        \noLine
+        \UnaryInfC{$\vdots$}
+        \RightLabel{$(r)$}
+        \UnaryInfC{$\call{S} \mid \Gamma\vdash U$}
+        \arbproof{$\zeta^T$}
+        \UnaryInfC{$\call{T} \mid U$}
+        \RightLabel{$({\operatorname{ax}})$}
+        \UnaryInfC{$\call{T} \mid x:U \vdash U$}
+        \RightLabel{$({\operatorname{cut}})$}
+        \BinaryInfC{$\call{S},\call{T}\mid\Gamma\vdash U$}
+        \DisplayProof
+        & $\to_{\operatorname{cut}}$ &
+        \AxiomC{$\pi$}
+        \noLine
+        \UnaryInfC{$\vdots$}
+        \RightLabel{$(r)$}
+        \UnaryInfC{$\call{S} \mid \Gamma\vdash U$}
+        \doubleLine
+        \RightLabel{$\wk$}
+        \UnaryInfC{$\call{S}, \call{T} \mid \Gamma \vdash U$}
+        \DisplayProof
+        & \tagarray{\label{cut:ax_right}}
+\end{tabular}
+\end{center}
+\item $\big(\rquant,\lquant\big)$ where the cut variable is introduced by the $\lquant$: Notice here that for the $\rquant$ rule to be valid it must be that $X$ does not appear as a free variable in the type of any variable in $\Gamma$, thus $\Gamma[X:= V] = \Gamma$.
+\begin{center}
+\begin{tabular}{>{\centering}m{10cm} >{\centering}m{3cm}}
+    \AxiomC{$\pi_1$}
+    \noLine
+    \UnaryInfC{$\vdots$}
+    \noLine
+    \UnaryInfC{$\call{S},X,\call{S}' \mid \Gamma \vdash U$}
+    \RightLabel{$\rquant$}
+    \UnaryInfC{$\call{S},\call{S}' \mid \Gamma \vdash \forall X.U$}
+    \AxiomC{$\zeta^T$}
+    \noLine
+    \UnaryInfC{$\vdots$}
+    \noLine
+    \UnaryInfC{$\call{T} \mid V$}
+    \AxiomC{$\pi_2$}
+    \noLine
+    \UnaryInfC{$\vdots$}
+    \noLine
+    \UnaryInfC{$\call{Q}\mid \Delta, x:U[X := V], \Delta' \vdash W$}
+    \RightLabel{$\lquant$}
+    \BinaryInfC{$\call{T},\call{Q}\mid z: \forall X.U, \Delta, \Delta' \vdash W$}
+    \RightLabel{$\cut$}
+    \BinaryInfC{$\call{S},\call{S}',\call{T},\call{Q} \mid \Gamma, \Delta, \Delta' \vdash W$}
+    \DisplayProof\\\vspace{0.5cm}
+    $\to_{\operatorname{cut}}$\\\vspace{0.5cm}
+    \AxiomC{$\zeta^T$}
+    \noLine
+    \UnaryInfC{$\vdots$}
+    \noLine
+    \UnaryInfC{$\call{T} \mid V$}
+    \AxiomC{$\pi_1$}
+    \noLine
+    \UnaryInfC{$\vdots$}
+    \noLine
+    \UnaryInfC{$\call{S},X,\call{S}' \mid \Gamma \vdash U$}
+    \RightLabel{$\mix$}
+    \BinaryInfC{$\call{T},(\call{S},\call{S}')\setminus X\mid \Gamma[X:=V] \vdash U[X:=V]$}
+    \noLine
+    \UnaryInfC{$\call{T},(\call{S},\call{S}')\setminus X\mid \Gamma \vdash U[X:=V]$}
+    \AxiomC{$\pi_2$}
+    \noLine
+    \UnaryInfC{$\vdots$}
+    \noLine
+    \UnaryInfC{$\call{Q}\mid \Delta, x:U[X := V], \Delta' \vdash W$}
+    \RightLabel{$\cut$}
+    \BinaryInfC{$\call{T},(\call{S},\call{S}')\setminus X,\call{Q} \mid \Gamma, \Delta, \Delta' \vdash W$}
+    \RightLabel{$\ex^T$}
+    \doubleLine
+    \UnaryInfC{$(\call{S},\call{S}')\setminus X,\call{T},\call{Q} \mid \Gamma, \Delta, \Delta' \vdash W$}
+    \doubleLine
+    \RightLabel{$\wk$}
+    \UnaryInfC{$\call{T},\call{S},\call{S}'\mid \Gamma, \Delta, \Delta' \vdash W$}
+    \DisplayProof
+        &
+    \tagarray{\label{cut:rquant_lquant}}
+\end{tabular}
+\end{center}
+\item $\big(\rquant, \lquant\big)$ where the cut variable is not introduced by the $\lquant$:
+\begin{center}
+\begin{tabular}{>{\centering}m{10cm} >{\centering}m{3cm}}
+    \AxiomC{$\pi_1$}
+    \noLine
+    \UnaryInfC{$\vdots$}
+    \RightLabel{$(R\imp)$}
+    \UnaryInfC{$\call{S}\mid \Gamma \vdash U$}
+    \AxiomC{$\zeta^T$}
+    \noLine
+    \UnaryInfC{$\vdots$}
+    \noLine
+    \UnaryInfC{$\call{T} \mid V$}
+    \AxiomC{$\pi_2$}
+    \noLine
+    \UnaryInfC{$\vdots$}
+    \noLine
+    \UnaryInfC{$\call{Q}\mid \Delta, y:W[X := V], \Delta', x:U, \Delta'' \vdash S$}
+    \RightLabel{$\lquant$}
+    \BinaryInfC{$\call{T},\call{Q}\mid z: \forall X.W, \Delta, \Delta', x:U, \Delta'' \vdash S$}
+    \RightLabel{$\cut$}
+    \BinaryInfC{$\call{S},\call{T},\call{Q} \mid z: \forall X. W, \Gamma, \Delta, \Delta' \vdash S$}
+    \DisplayProof\\\vspace{0.5cm}
+    $\to_{\operatorname{cut}}$\\\vspace{0.5cm}
+    \AxiomC{$\zeta^T$}
+    \noLine
+    \UnaryInfC{$\vdots$}
+    \noLine
+    \UnaryInfC{$\call{T} \mid V$}
+    \AxiomC{$\pi_1$}
+    \noLine
+    \UnaryInfC{$\vdots$}
+    \RightLabel{$(R\imp)$}
+    \UnaryInfC{$\call{S}\mid \Gamma \vdash U$}
+    \AxiomC{$\pi_2$}
+    \noLine
+    \UnaryInfC{$\vdots$}
+    \noLine
+    \UnaryInfC{$\call{Q}\mid \Delta, y:W[X := V], \Delta', x:U, \Delta'' \vdash S$}
+    \RightLabel{$\cut$}
+    \BinaryInfC{$\call{S},\call{Q}\mid \Gamma, \Delta, y:W[X:=V], \Delta', \Delta'' \vdash S$}
+    \RightLabel{$\lquant$}
+    \BinaryInfC{$ \call{T}, \call{S}, \call{Q} \mid \forall X. W,\Gamma, \Delta, \Delta', \Delta''\vdash S$}
+    \DisplayProof
+        &
+    \tagarray{\label{cut:rquant_lquant_nop}}
+\end{tabular}
+\end{center}
+
+\item for any pair $(\pi_1, \pi_2)$ of proofs:
+\begin{center}
+    \begin{tabular}{ >{\centering}m{8cm} >{\centering}m{0.5cm} >{\centering}m{7.1cm} >{\centering}m{0.5cm}}
+    \arbproof{$\pi_1$}
+    \UnaryInfC{$\call{S} \mid \Gamma \vdash U$}
+    \arbproof{$\pi_2$}
+    \UnaryInfC{$\call{T}, X, \call{T}' \mid \Delta, x:U, \Delta' \vdash V$}
+    \RightLabel{$\rquant$}
+    \UnaryInfC{$\call{T}, \call{T}' \mid \Delta, x:U, \Delta' \vdash \forall X. V$}
+    \RightLabel{$\cut$}
+    \BinaryInfC{$\call{S}, \call{T}, \call{T}' \mid \Gamma, \Delta, \Delta' \vdash \forall X. V$}
+    \DisplayProof
+    &
+    $\to_{\operatorname{cut}}$
+    &
+    \arbproof{$\pi_1$}
+    \UnaryInfC{$\call{S} \mid \Gamma \vdash U$}
+    \arbproof{$\pi_2$}
+    \UnaryInfC{$\call{T}, X, \call{T}' \mid \Delta, x:U, \Delta' \vdash V$}
+    \RightLabel{$\cut$}
+    \BinaryInfC{$\call{S}, \call{T}, X, \call{T}' \mid \Delta, \Delta' \vdash V$}
+    \RightLabel{$\rquant$}
+    \UnaryInfC{$\call{S}, \call{T}, \call{T}' \mid \Delta, \Delta' \vdash \forall X. V $}
+    \DisplayProof
+        &
+        \tagarray{}
+    \end{tabular}
+\end{center}
+\item If $(r)$ is any rule other than $\rquant$:
+\begin{center}
+\begin{tabular}{>{\centering}m{10cm} >{\centering}m{3cm}}
+    \AxiomC{$\pi_1$}
+    \noLine
+    \UnaryInfC{$\vdots$}
+    \RightLabel{$(r)$}
+    \UnaryInfC{$\call{S} \mid \Gamma \vdash U$}
+    \arbproof{$\zeta^T$}
+    \UnaryInfC{$\call{T} \mid V$}
+    \arbproof{$\pi_2$}
+    \UnaryInfC{$\call{Q} \mid \Delta, x:W[X:= V], \Delta', y:U, \Delta'' \vdash S$}
+    \RightLabel{$\lquant$}
+    \BinaryInfC{$\call{T}, \call{Q} \mid z: \forall X. W, \Delta, \Delta', y:U, \Delta'' \vdash S$}
+    \RightLabel{$\cut$}
+    \BinaryInfC{$\call{S}, \call{T}, \call{Q} \mid z: \forall X. W, \Gamma, \Delta, \Delta', \Delta'' \vdash S$}
+    \DisplayProof\\\vspace{0.5cm}
+    $\to_{\operatorname{cut}}$\\\vspace{0.5cm}
+    \arbproof{$\zeta^T$}
+    \UnaryInfC{$\call{T} \mid V$}
+    \AxiomC{$\pi_1$}
+    \noLine
+    \UnaryInfC{$\vdots$}
+    \RightLabel{$(r)$}
+    \UnaryInfC{$\call{S} \mid \Gamma \vdash U$}
+    \arbproof{$\pi_2$}
+    \UnaryInfC{$\call{Q} \mid \Delta, x:W[X:= V], \Delta', y:U, \Delta'' \vdash S$}
+    \RightLabel{$\cut$}
+    \BinaryInfC{$\call{S}, \call{Q} \mid \Gamma, \Delta, x: W[X:= V], \Delta', \Delta'' \vdash S$}
+    \RightLabel{$\lquant$}
+    \BinaryInfC{$\call{T}, \call{S}, \call{Q} \mid z: \forall X. W, \Gamma, \Delta, \Delta', \Delta'' \vdash S$}
+    \doubleLine
+    \RightLabel{$\ex$}
+    \UnaryInfC{$\call{S}, \call{T}, \call{Q} \mid z: \forall X. W, \Gamma, \Delta, \Delta', \Delta'' \vdash S$}
+    \DisplayProof
+        &
+    \tagarray{\label{cut:anybutrquant_vs_lquant}}
+\end{tabular}
+\end{center}
+\item If $(r)$ is any proper deduction rule:
+\begin{center}
+\begin{tabular}{>{\centering}m{10cm} >{\centering}m{6cm}}
+    \arbproof{$\zeta^T$}
+    \UnaryInfC{$\call{S} \mid U$}
+    \arbproof{$\pi_1$}
+    \UnaryInfC{$\call{T} \mid \Gamma, x:W[X:= U], \Gamma' \vdash V$}
+    \RightLabel{$\lquant$}
+    \BinaryInfC{$\call{S}, \call{T} \mid z: \forall X. W, \Gamma, \Gamma' \vdash V$}
+    \arbproof{$\pi_2$}
+    \UnaryInfC{$\call{Q} \mid \Delta, y:V, \Delta' \vdash S$}
+    \RightLabel{$\cut$}
+    \BinaryInfC{$\call{S}, \call{T}, \call{Q} \mid  z: \forall X. W,\Gamma, \Gamma', \Delta, \Delta' \vdash S$}
+    \DisplayProof\\\vspace{0.5cm}
+    $\to_{\operatorname{cut}}$\\\vspace{0.5cm}
+    \arbproof{$\zeta^T$}
+    \UnaryInfC{$\call{S} \mid U$}
+    \arbproof{$\pi_1$}
+    \UnaryInfC{$\call{T} \mid \Gamma, x:W[X:= U], \Gamma' \vdash V$}
+    \arbproof{$\pi_2$}
+    \UnaryInfC{$\call{Q} \mid \Delta, y:V, \Delta' \vdash S$}
+    \RightLabel{$\cut$}
+    \BinaryInfC{$\call{T}, \call{Q} \mid  \Gamma,x:W[X:= U],  \Gamma', \Delta, \Delta' \vdash S$}
+    \RightLabel{$\lquant$}
+    \BinaryInfC{$\call{S}, \call{T}, \call{Q} \mid z:\forall X. W, \Gamma, \Gamma', \Delta, \Delta' \vdash S$}
+    \DisplayProof
+        &
+    \tagarray{\label{cut:Lforall_any}}
+\end{tabular}
+\end{center}
+\end{itemize}
+\end{defn}
+%
+\begin{defn}
+A proof $\pi$ is \textbf{reduced} if it is $\mix^T$-free, $\mix$-free, and $\cut$-free.
+\end{defn}
+%
+\begin{defn}
+The \textbf{height} of a proof $\pi$, denoted $\operatorname{ht}(\pi)$ is the height of the tree \emph{without counting the contributions from the type proofs in the axioms}, see Remark \ref{rem:height}.
+\end{defn}
+\begin{remark}
+\label{rem:height}
+We do not count the height of the type tree at the top of the axioms. We need to not count this because we cannot reduce the general case to the axiom case necessarily, for example the $\cut$ in the following proof cannot have its height altered but can be eliminated:
+\begin{center}
+    \AxiomC{}
+    \RightLabel{$\ax^T$}
+    \UnaryInfC{$X \mid X$}
+    \AxiomC{}
+    \RightLabel{$\ax^T$}
+    \UnaryInfC{$X \mid X$}
+    \RightLabel{$(R\imp)^T$}
+    \BinaryInfC{$X,X \mid X \imp X$}
+    \RightLabel{$\ax$}
+    \UnaryInfC{$X,X \mid x:X \imp X \vdash X \imp X$}
+    \AxiomC{}
+    \RightLabel{$\ax^T$}
+    \UnaryInfC{$X \mid X$}
+    \AxiomC{}
+    \RightLabel{$\ax^T$}
+    \UnaryInfC{$X \mid X$}
+    \RightLabel{$(R\imp)^T$}
+    \BinaryInfC{$X,X \mid X \imp X$}
+    \RightLabel{$\ax$}
+    \UnaryInfC{$X,X \mid x:X \imp X \vdash X \imp X$}
+    \RightLabel{$\cut$}
+    \BinaryInfC{$X,X,X,X \mid x:X \imp X \vdash X \imp X$}
+    \DisplayProof
+\end{center}
+\end{remark}
+\begin{defn}
+The \textbf{width} of a type $U$ is the sum of the number of occurrences of $\imp$ and the number of occurrences of $\forall$.
+\end{defn}
+\begin{defn}
+The \textbf{type length} of a sequent $\call{S} \mid \Gamma \vdash U$ is the length of the sequence $\call{S}$.
+\end{defn}
+\begin{thm}
+\label{thm:cut_elimination}
+Any proof $\pi$ of the form
+\begin{center}
+    \AxiomC{$\pi_1$}
+    \noLine
+    \UnaryInfC{$\vdots$}
+    \RightLabel{$(r_1)$}
+    \UnaryInfC{$\call{S} \mid \Gamma \vdash U$}
+    \AxiomC{$\pi_2$}
+    \noLine
+    \UnaryInfC{$\vdots$}
+    \RightLabel{$(r_2)$}
+    \UnaryInfC{$\call{T} \mid \Delta, x:U, \Delta' \vdash V$}
+    \RightLabel{$\cut$}
+    \BinaryInfC{$\call{S}, \call{T} \mid \Gamma, \Delta, \Delta' \vdash V$}
+    \DisplayProof
+\end{center}
+where $\pi_1, \pi_2$ are reduced is equivalent \textcolor{red}{under $\sim_p$} to a reduced proof.
+\end{thm}
+We need the following Lemma:
+\begin{lemma}
+\label{lem:cut_elim_easy_case}
+Extend Lemma 2.31 of \cite{GMZ}.
+\end{lemma}
+\textcolor{red}{The $\big(\rquant,\lquant\big)$ elimination rule can explode both the height and the width, thus $l$ must come first in the induction. Also the $(R\imp, L\imp)$ rule might explode the height, so $w$ must come before $n$. Thus the order of induction must be $l, w, n$.}
+\begin{proof}[Proof of Theorem \ref{thm:cut_elimination}]
+Let $P(l,w,n)$ be the following statement: any proof $\pi$ with reduced branches $\pi_1,\pi_2$ and final cut variable $x:V$ (as above) type length of the final sequent $l$ satisfying $w(V) = w$ and $n = h(\pi_1) + h(\pi_2)$, is equivalence under $\sim_p$ to a reduced proof. Let $P(l)$ denote $\forall w, \forall n P(l,w,n)$, we prove $P(l)$ by strong induction on $l$. We refer to this as the \emph{outer induction}.\\\\
+%
+\textbf{Base case of the outer induction}: We prove $P(0)$, let $P(0,w)$ be the statement $\forall w\forall n, P(0,w,n)$, we proceed by induction on $w$, we refer to this as the \emph{middle induction}.\\\\
+%
+\textbf{Base case of the middle induction in the base case of $l$}: we need to prove $\forall n P(0,0,n)$, we proceed by induction on $n$, we refer to this as the \emph{inner induction}. In the base case $P(0,0,0)$ we see that both $(r_1)$ and $(r_2)$ are variables, so the result follows from \eqref{cut:ax_left}, \eqref{cut:ax_right}. Now assume that $n > 0$ and that $P(0,0,k)$ holds for all $k < n$. If $(r_1)$ is a structural rule then the result follows by applying the inner inductive hypothesis and \eqref{cut:struc_vs_any}. If $(r_1)$ is a logical rule then since $w = 0$ it is either $(L\imp)$ or $\lquant$ and the claim follows from \eqref{cut:L_vs_any} or \eqref{cut:Lforall_any} and the inner inductive hypothesis.\\\\
+%
+\textbf{Inductive step of the middle induction in the base case of $l$}: now suppose $w > 0$ and $\forall n P(0,v,n)$ holds for all $v < w$. We need to prove $\forall n P(0,w,n)$ and to do this, we proceed by induction on $n$, we call this the \emph{inner induction}. If $n \leq 1$ then one of $(r_1),(r_2)$ is $\ax$ and so the result follows from \eqref{cut:ax_left},\eqref{cut:ax_right}. Now assume that $n > 1$, we proceed by cases on the possible pairs $\big((r_1),(r_2)\big)$. Some of the cases follow from the inner inductive hypothesis as in the base case of the middle induction in the base case of $l$ above, so we will not repeat them. The new cases easily dispensed with are:
+\begin{itemize}
+\item $(r_1) = (r_2) = (R\imp)$ follows by \eqref{cut:R_vs_R} and the inner inductive hypothesis.
+\item $(r_1) = (R\imp)$ and $(r_2) = (L\imp)$ can be divided into two subcases. Either the cut variable is not introduced by the $(L\imp)$ rule, in which case the result follows by either \eqref{cut:R_vs_L_nonp} or \eqref{cut:R_vs_L_nonp2} and by the inner inductive hypothesis, or the the $(L\imp)$ \emph{does} introduce the cut variable $x$ of type $V_1 \imp V_2$, in which case $\pi$ is by \eqref{cut:R_vs_L} equivalent to:
+\begin{center}
+    \AxiomC{$\pi_2'$}
+            \noLine
+            \UnaryInfC{$\vdots$}
+            \noLine
+            \UnaryInfC{$\call{T}' \mid \Lambda \vdash V_1$}
+            \AxiomC{$\pi_1'$}
+            \noLine
+            \UnaryInfC{$\vdots$}
+            \noLine
+            \UnaryInfC{$\call{S} \mid \Gamma', x:V_1, \Gamma'' \vdash V_2$}
+            \RightLabel{$({\operatorname{cut}})$}
+            \BinaryInfC{$\call{T}',\call{S} \mid \Lambda, \Gamma', \Gamma'' \vdash V_2$}
+            \AxiomC{$\pi_2''$}
+            \noLine
+            \UnaryInfC{$\vdots$}
+            \noLine
+            \UnaryInfC{$\call{T}'' \mid \Omega, x':V_2, \Omega' \vdash S$}
+            \RightLabel{$({\operatorname{cut}})$}
+            \BinaryInfC{$\call{T}',\call{S},\call{T}'' \mid \Lambda, \Gamma', \Gamma'', \Omega, \Omega' \vdash S$}
+            \doubleLine
+            \RightLabel{$({\operatorname{ex}})_1,\ex_2$}
+            \UnaryInfC{$\call{S},\call{T}\mid\Gamma, \Delta,\Delta' \vdash S$}
+            \DisplayProof
+\end{center}
+\textcolor{red}{$V$'s should be $U$'s, what's $S$?}.\\\\
+%
+where $\call{T} = \call{T}',\call{T}''$, $\Gamma = \Gamma', \Gamma''$, and $\Delta,\Delta' = \Lambda,\Omega,\Omega'$. Since both of these cuts involve types of lower width than $V$ the claim follows from the middle inductive hypothesis.
+\item $(r_1) = \rquant$ and $(r_2) = \lquant$ can similarly be divided into two subcases. Either the cut variable is not introduced by the $\lquant$ rule, in which case the result follows by \eqref{cut:rquant_lquant_nop}, or the $\lquant$ rule \emph{does} introduce the cut variable $x$ of type $\forall X. U'$ in which case $\pi$ is by \eqref{cut:rquant_lquant} is equivalent to:
+\begin{center}
+\AxiomC{$\zeta^T$}
+    \noLine
+    \UnaryInfC{$\vdots$}
+    \noLine
+    \UnaryInfC{$\mid V$}
+    \AxiomC{$\pi_1'$}
+    \noLine
+    \UnaryInfC{$\vdots$}
+    \noLine
+    \UnaryInfC{$X \mid \Gamma \vdash U'$}
+    \RightLabel{$\mix$}
+    \BinaryInfC{$\mid \Gamma[X:=V] \vdash U'[X:=V]$}
+    \noLine
+    \UnaryInfC{$\mid \Gamma \vdash U'$}
+    \AxiomC{$\pi_2$}
+    \noLine
+    \UnaryInfC{$\vdots$}
+    \noLine
+    \UnaryInfC{$\mid \Delta, x:U', \Delta' \vdash V$}
+    \RightLabel{$\cut$}
+    \BinaryInfC{$\mid \Gamma, \Delta, \Delta' \vdash V$}
+    \DisplayProof
+\end{center}
+where since $l = 0$, the variable $X$ cannot occur freely in $U$, thus $U'[X:=V] = U'$. By Lemma \ref{lem:mix_free}, the $\mix$ rule can be eliminated, and since the width of $U'$ is strictly less than that of $U$, the $\cut$ can be removed by the middle inductive hypothesis.
+\item $(r_1)$ is a logical rule and $(r_2)$ is one of $\wk$ or $\ex$ follow from the inner inductive hypothesis and one of \eqref{cut:log_vs_struc_np}, \eqref{cut:log_vs_weak}, or \eqref{tau_cut}.
+\item $(r_1)$ is either $(L\imp)$ or $\lquant$ and $(r_2)$ is $\ctr$ follows as above in the base case of the middle induction, by the inner inductive hypothesis and either \eqref{cut:L_vs_any} or \eqref{cut:anybutrquant_vs_lquant}.
+\end{itemize}
+The remaining cases are when $(r_1)$ is either $(R\imp)$ or $\rquant$ and $(r_2)$ is $\ctr$. This follows in the exact same way as the case when $(r_1) = (R\imp)$ and $(r_2) = \ctr$ in the cut-elimination proof of \cite{GMZ}, once we note that Lemma 2.31 has been extended to the current circumstance by Lemma \ref{lem:cut_elim_easy_case} and \textcolor{red}{the commuting rules corresponding to $\lquant$.} This completes the base case of the outer induction.\\\\
+%
+\textbf{Inductive step of the outer induction}: Assume that $l > 0$ and $P(j)$ holds for all $j < l$. We simply make the observation that only one point in the base case did we use the fact that $l = 0$, which was the case corresponding to $(r_1) = (R\forall)$ and $(r_2) = (L\forall)$ in the inductive step of the middle induction. Thus the exact same argument holds and all we need to treat is this particular case.\\\\
+%
+There are two subcases, either the cut variable is not introduced by the $\lquant$ rule, which again follows by \eqref{cut:rquant_lquant_nop}, or the $\lquant$ rule \emph{does} introduce the cut variable $x$ of type $\forall X. U'$ in which case $\pi$ is by \ref{cut:rquant_lquant} equivalent to:
+\begin{center}
+    \AxiomC{$\zeta^T$}
+    \noLine
+    \UnaryInfC{$\vdots$}
+    \noLine
+    \UnaryInfC{$\call{T} \mid V$}
+    \AxiomC{$\pi_1'$}
+    \noLine
+    \UnaryInfC{$\vdots$}
+    \noLine
+    \UnaryInfC{$\call{S},X,\call{S}' \mid \Gamma \vdash U$}
+    \RightLabel{$\mix$}
+    \BinaryInfC{$\call{T},(\call{S},\call{S}')\setminus X\mid \Gamma[X:=V] \vdash U[X:=V]$}
+    \noLine
+    \UnaryInfC{$\call{T},(\call{S},\call{S}')\setminus X\mid \Gamma \vdash U[X:=V]$}
+    \AxiomC{$\pi_2$}
+    \noLine
+    \UnaryInfC{$\vdots$}
+    \noLine
+    \UnaryInfC{$\call{Q}\mid \Delta, x:U[X := V], \Delta' \vdash W$}
+    \RightLabel{$\cut$}
+    \BinaryInfC{$\call{T},(\call{S},\call{S}')\setminus X,\call{Q} \mid \Gamma, \Delta, \Delta' \vdash W$}
+    \RightLabel{$\ex^T$}
+    \doubleLine
+    \UnaryInfC{$(\call{S},\call{S}')\setminus X,\call{T},\call{Q} \mid \Gamma, \Delta, \Delta' \vdash W$}
+    \doubleLine
+    \RightLabel{$\wk$}
+    \UnaryInfC{$\call{T},\call{S},\call{S}'\mid \Gamma, \Delta, \Delta' \vdash W$}
+    \DisplayProof
+\end{center}
+The $\mix$ rule can be eliminated by Lemma \ref{lem:mix_free} and then there are two subcases, either $X \in \call{S},\call{S}'$ or not. If not, then $X$ does not occur freely in $U$ and the result follows from the middle inductive hypothesis as $U'$ must have strictly smaller width than $U$. If so, then the result follows from the outer inductive hypothesis.
+\end{proof}
+
+
+
+
+\appendix
+\section{Cut-elimination steps from first order sequent calculus}
+\begin{defn}[(Single step cut reduction)]
+\label{cutreduction}
+The only rules that effect the type variables are \ref{cut:log_vs_ctr} and \ref{cut:log_vs_weak} but its obvious what you do to those.\\\\
+%
+We define $\to_{\operatorname{cut}}$ to be the smallest compatible relation (not necessarily an equivalence relation) on preproofs containing:
+\begin{itemize}
+    \item Let $(r_0)$ be a structural rule, $(r)$ any proper deduction rule. Then %\textcolor{red}{$N[y := M] \to N[y := M]$}
+\begin{center}
+\begin{tabular}{>{\centering}m{7.5cm} >{\centering}m{0.5cm} >{\centering}m{7cm} >{\centering}m{0.5cm}}
+        \AxiomC{$\pi_1$}
+        \noLine
+        \UnaryInfC{$\vdots$}
+        \noLine
+        \UnaryInfC{$\call{S} \mid \Gamma \vdash U$}
+        \RightLabel{$(r_0)$}
+        \UnaryInfC{$\call{S} \mid \Gamma' \vdash U$}
+        \AxiomC{$\pi_2$}
+        \noLine
+        \UnaryInfC{$\vdots$}
+        \RightLabel{$(r)$}
+        \UnaryInfC{$\call{T} \mid \Delta, y:U, \Delta' \vdash V$}
+        \RightLabel{$({\operatorname{cut}})$}
+        \BinaryInfC{$\call{T}, \call{S} \mid \Gamma', \Delta, \Delta' \vdash V$}
+        \DisplayProof
+        &$\to_{\operatorname{cut}}$&
+        \AxiomC{$\pi_1$}
+        \noLine
+        \UnaryInfC{$\vdots$}
+        \noLine
+        \UnaryInfC{$\call{S} \mid \Gamma \vdash U$}
+        \AxiomC{$\pi_2$}
+        \noLine
+        \UnaryInfC{$\vdots$}
+        \RightLabel{$(r)$}
+        \UnaryInfC{$\call{T} \mid \Delta, y:U, \Delta' \vdash V$}
+        \RightLabel{$({\operatorname{cut}})$}
+        \BinaryInfC{$\call{S}, \call{T} \mid \Gamma, \Delta, \Delta' \vdash V$}
+        \RightLabel{$(r_0)$}
+        \UnaryInfC{$\call{S}, \call{T} \mid \Gamma', \Delta, \Delta' \vdash V$}
+        \DisplayProof
+        & \tagarray{\label{cut:struc_vs_any}}
+\end{tabular}
+\end{center}
+\item $(L \imp)$ on the left and $(r)$ any proper deduction rule %(\textcolor{red}{$O[z := (N[x := yM])] \to (O[z := N])[x := yM]$ (these do yield the same term.)}
+\begin{center}
+\begin{tabular}{>{\centering}m{10cm} >{\centering}m{6cm}}
+            \AxiomC{$\pi_1$}
+            \noLine
+            \UnaryInfC{$\vdots$}
+            \noLine
+            \UnaryInfC{$\call{S} \mid \Gamma \vdash U$}
+            \AxiomC{$\pi_2$}
+            \noLine
+            \UnaryInfC{$\vdots$}
+            \noLine
+            \UnaryInfC{$\call{T} \mid \Delta, x:V, \Delta' \vdash W$}
+            \RightLabel{$(L\imp)$}
+            \BinaryInfC{$\call{S}, \call{T} \mid y:U \imp V, \Gamma, \Delta, \Delta' \vdash W$}
+            \AxiomC{$\pi_3$}
+            \noLine
+            \UnaryInfC{$\vdots$}
+            \RightLabel{$(r)$}
+            \UnaryInfC{$\call{Q} \mid \Theta, z:W, \Theta' \vdash S$}
+            \RightLabel{$({\operatorname{cut}})$}
+            \BinaryInfC{$\call{S}, \call{T}, \call{Q} \mid y: U \imp V, \Gamma, \Delta, \Delta', \Theta, \Theta' \vdash S$}
+            \DisplayProof\\\vspace{0.5cm}
+            $\to_{\operatorname{cut}}$\\\vspace{0.5cm}
+            \AxiomC{$\pi_1$}
+            \noLine
+            \UnaryInfC{$\vdots$}
+            \noLine
+            \UnaryInfC{$\call{S} \mid \Gamma \vdash U$}
+            \AxiomC{$\pi_2$}
+            \noLine
+            \UnaryInfC{$\vdots$}
+            \noLine
+            \UnaryInfC{$\call{T} \mid \Delta, x:V, \Delta' \vdash W$}
+            \AxiomC{$\pi_3$}
+            \noLine
+            \UnaryInfC{$\vdots$}
+            \RightLabel{$(r)$}
+            \UnaryInfC{$\call{Q} \mid \Theta, z:W, \Theta' \vdash S$}
+            \RightLabel{$({\operatorname{cut}})$}
+            \BinaryInfC{$\call{T}, \call{Q} \mid \Delta, x:V, \Delta', \Theta, \Theta' \vdash S$}
+            \RightLabel{$(L \imp)$}
+            \BinaryInfC{$y: U \imp V, \Gamma, \Delta, \Delta', \Theta, \Theta' \vdash S$}
+            \DisplayProof
+            &
+            \tagarray{\label{cut:L_vs_any}}
+\end{tabular}
+\end{center}
+        
+\item For any logical rule $(r_1)$ and structural rule $(r_0)$, where the cut variable $x:p$ was not manipulated by $(r_0)$:
+\begin{center}
+\begin{tabular}{>{\centering}m{6.5cm} >{\centering}m{0.5cm} >{\centering}m{6.5cm} >{\centering}m{0.5cm}}
+        \AxiomC{$\pi_1$}
+        \noLine
+        \UnaryInfC{$\vdots$}
+        \RightLabel{$(r_1)$}
+        \UnaryInfC{$\Gamma \vdash p$}
+        \AxiomC{$\pi_2$}
+        \noLine
+        \UnaryInfC{$\vdots$}
+        \noLine
+        \UnaryInfC{$x:p, \Delta \vdash q$}
+        \RightLabel{$(r_0)$}
+        \UnaryInfC{$x:p, \Delta' \vdash q$}
+        \RightLabel{$(\operatorname{cut})$}
+        \BinaryInfC{$\Gamma, \Delta' \vdash q$}
+        \DisplayProof
+        & $\to_{\operatorname{cut}}$ &
+        \AxiomC{$\pi_1$}
+        \noLine
+        \UnaryInfC{$\vdots$}
+        \RightLabel{$(r_1)$}
+        \UnaryInfC{$\Gamma \vdash p$}
+        \AxiomC{$\pi_2$}
+        \noLine
+        \UnaryInfC{$\vdots$}
+        \noLine
+        \UnaryInfC{$x:p, \Delta \vdash q$}
+        \RightLabel{$(\operatorname{cut})$}
+        \BinaryInfC{$\Gamma, \Delta \vdash q$}
+        \RightLabel{$(r_0)$}
+        \UnaryInfC{$\Gamma, \Delta' \vdash q$}
+        \DisplayProof
+        & \tagarray{\label{cut:log_vs_struc_np}}
+\end{tabular}
+\end{center}
+
+\item For any logical rule $(r_1)$:% and proper structural rule $(r_0)$ where the cut variable was manipulated by $(r_0)$: % \textcolor{red}{($(N[y' := y])[y := M] \to (N[y' := M])[y := M]$)}
+\begin{center}
+\begin{tabular}{>{\centering}m{10cm} >{\centering}m{1cm}}
+        \AxiomC{$\pi_1$}
+        \noLine
+        \UnaryInfC{$\vdots$}
+        \RightLabel{$(r_1)$}
+        \UnaryInfC{$\Gamma \vdash p$}
+        \AxiomC{$\pi_2$}
+        \noLine
+        \UnaryInfC{$\vdots$}
+        \noLine
+        \UnaryInfC{$\Delta, y:p, y':p, \Theta \vdash s$}
+        \RightLabel{$({\operatorname{ctr}})$}
+        \UnaryInfC{$\Delta, y:p, \Theta \vdash s$}
+        \RightLabel{$({\operatorname{cut}})$}
+        \BinaryInfC{$\Gamma, \Delta, \Theta \vdash s$}
+        \DisplayProof\\\vspace{0.5cm}
+         $\to_{\operatorname{cut}}$\\\vspace{0.5cm}
+        \AxiomC{$\pi_1$}
+        \noLine
+        \UnaryInfC{$\vdots$}
+        \RightLabel{$(r_1)$}
+        \UnaryInfC{$\Gamma \vdash p$}
+        \AxiomC{$\pi_1$}
+        \noLine
+        \UnaryInfC{$\vdots$}
+        \RightLabel{$(r_1)$}
+        \UnaryInfC{$\Gamma \vdash p$}
+        \AxiomC{$\pi_2$}
+        \noLine
+        \UnaryInfC{$\vdots$}
+        \noLine
+        \UnaryInfC{$\Delta, y:p, y':p, \Theta \vdash s$}
+        \RightLabel{$({\operatorname{cut}})$}
+        \BinaryInfC{$\Gamma, \Delta, y':p, \Theta \vdash s$}
+        \RightLabel{$({\operatorname{cut}})$}
+        \BinaryInfC{$\Gamma, \Gamma, \Delta, \Theta \vdash s$}
+        \RightLabel{$({\operatorname{ctr/ex}})$}
+        \doubleLine
+        \UnaryInfC{$\Gamma, \Delta, \Theta \vdash s$}
+        \DisplayProof
+        & 
+        \tagarray{\label{cut:log_vs_ctr}}
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{>{\centering}m{6cm} >{\centering}m{0.5cm} >{\centering}m{4cm} >{\centering}m{0.5cm}}
+        \AxiomC{$\pi_1$}
+        \noLine
+        \UnaryInfC{$\vdots$}
+        \RightLabel{$(r_1)$}
+        \UnaryInfC{$\Gamma \vdash p$}
+        \AxiomC{$\pi_2$}
+        \noLine
+        \UnaryInfC{$\vdots$}
+        \noLine
+        \UnaryInfC{$\Delta, \Theta \vdash q$}
+        \RightLabel{$({\operatorname{weak}})$}
+        \UnaryInfC{$\Delta, x:p, \Theta \vdash q$}
+        \RightLabel{$({\operatorname{cut}})$}
+        \BinaryInfC{$\Gamma, \Delta, \Theta \vdash q$}
+        \DisplayProof
+        & $\to_{\operatorname{cut}}$ &
+        \AxiomC{$\pi_2$}
+        \noLine
+        \UnaryInfC{$\vdots$}
+        \noLine
+        \UnaryInfC{$\Delta, \Theta \vdash q$}
+        \RightLabel{$({\operatorname{weak}})$}
+        \doubleLine
+        \UnaryInfC{$\Gamma, \Delta, \Theta \vdash q$}
+        \DisplayProof
+        &
+        \tagarray{\label{cut:log_vs_weak}}
+\end{tabular}
+\end{center}
+
+\end{itemize}
+The remaining cases correspond to having a logical rule on both the left and right:
+\begin{itemize}
+\item $(R\imp)$ on the left and $(R\imp)$ on the right: %(\textcolor{red}{$(\lambda z. N)[y:= \lambda x. M] \to \lambda z.(N[y:= \lambda x. M])$})
+\begin{center}
+\begin{tabular}{>{\centering}m{10cm} >{\centering}m{1cm}}
+        \AxiomC{$\pi_1$}
+        \noLine
+        \UnaryInfC{$\vdots$}
+        \noLine
+        \UnaryInfC{$\call{S} \mid \Gamma, x:U, \Gamma' \vdash V$}
+        \RightLabel{$(R\imp)$}
+        \UnaryInfC{$\call{S} \mid \Gamma, \Gamma' \vdash U \imp V$}
+        \AxiomC{$\pi_2$}
+        \noLine
+        \UnaryInfC{$\vdots$}
+        \noLine
+        \UnaryInfC{$\call{T} \mid y: U \imp V, \Delta, z:W \vdash S$}
+        \RightLabel{$(R\imp)$}
+        \UnaryInfC{$\call{T} \mid y: U \imp V, \Delta \vdash W \imp S$}
+        \RightLabel{$({\operatorname{cut}})$}
+        \BinaryInfC{$\call{S}, \call{T} \mid \Gamma, \Gamma', \Delta \vdash W \imp S$}
+        \DisplayProof\\\vspace{0.5cm}
+        $\to_{\operatorname{cut}}$\\\vspace{0.5cm} 
+        \AxiomC{$\pi_1$}
+        \noLine
+        \UnaryInfC{$\vdots$}
+        \noLine
+        \UnaryInfC{$\call{S} \mid \Gamma, x:U, \Gamma' \vdash V$}
+        \RightLabel{$(R\imp)$}
+        \UnaryInfC{$\call{S} \mid \Gamma, \Gamma' \vdash U \imp V$}
+        \AxiomC{$\pi_2$}
+        \noLine
+        \UnaryInfC{$\vdots$}
+        \noLine
+        \UnaryInfC{$\call{T} \mid y: U \imp V, \Delta, z : W \vdash S$}
+        \RightLabel{$({\operatorname{cut}})$}
+        \BinaryInfC{$\call{S}, \call{T} \mid \Gamma, \Gamma', \Delta, z:W \vdash S$}
+        \RightLabel{$(R\imp)$}
+        \UnaryInfC{$\call{S},\call{T} \mid \Gamma, \Gamma', \Delta \vdash W \imp S$}
+        \DisplayProof
+        &
+        \tagarray{\label{cut:R_vs_R}}
+        \end{tabular}
+        \end{center}
+        
+    \item $(R\imp)$ on the left and $(L\imp)$ on the right: %(\textcolor{red}{$(O[x' := (\lambda x. M)N]) = (O[x':= yN])[y:= (\lambda x. M)] \to O[x' := M[x := N]]$ so this one actually changes the preterm (mod $\alpha$-equivalence) (provided no free occurrence of a variable in $N$ becomes bound in $M[x := N]$)})
+\begin{center}
+\begin{tabular}{>{\centering}m{10cm} >{\centering}m{1cm}}
+            \AxiomC{$\pi_1$}
+            \noLine
+            \UnaryInfC{$\vdots$}
+            \noLine
+            \UnaryInfC{$\call{S} \mid \Gamma, x:U, \Gamma' \vdash V$}
+            \RightLabel{$(R\imp)$}
+            \UnaryInfC{$\call{S} \mid \Gamma, \Gamma' \vdash U \imp V$}
+            \AxiomC{$\pi_2$}
+            \noLine
+            \UnaryInfC{$\vdots$}
+            \noLine
+            \UnaryInfC{$\call{T} \mid \Delta \vdash U$}
+            \AxiomC{$\pi_3$}
+            \noLine
+            \UnaryInfC{$\vdots$}
+            \noLine
+            \UnaryInfC{$\call{Q} \mid \Theta, x': V, \Theta' \vdash S$}
+            \RightLabel{$(L\imp)$}
+            \BinaryInfC{$\call{T},\call{Q} \mid y: U \imp V, \Delta, \Theta, \Theta' \vdash s$}
+            \RightLabel{$({\operatorname{cut}})$}
+            \BinaryInfC{$\call{S},\call{T},\call{Q} \mid \Gamma, \Gamma', \Delta, \Theta, \Theta' \vdash S$}
+            \DisplayProof\\\vspace{0.5cm}
+            $\to_{\operatorname{cut}}$\\\vspace{0.5cm}
+            \AxiomC{$\pi_2$}
+            \noLine
+            \UnaryInfC{$\vdots$}
+            \noLine
+            \UnaryInfC{$\call{T} \mid \Delta \vdash U$}
+            \AxiomC{$\pi_1$}
+            \noLine
+            \UnaryInfC{$\vdots$}
+            \noLine
+            \UnaryInfC{$\call{S} \mid \Gamma, x:U, \Gamma' \vdash V$}
+            \RightLabel{$({\operatorname{cut}})$}
+            \BinaryInfC{$\call{T},\call{S} \mid \Delta, \Gamma, \Gamma' \vdash V$}
+            \AxiomC{$\pi_3$}
+            \noLine
+            \UnaryInfC{$\vdots$}
+            \noLine
+            \UnaryInfC{$\call{Q} \mid \Theta, x':V, \Theta' \vdash S$}
+            \RightLabel{$({\operatorname{cut}})$}
+            \BinaryInfC{$\call{T},\call{S},\call{Q} \mid \Delta, \Gamma, \Gamma', \Theta, \Theta' \vdash S$}
+            \doubleLine
+            \RightLabel{$({\operatorname{ex}})_1,\ex_2$}
+            \UnaryInfC{$\call{S},\call{T},\call{Q}\mid\Gamma, \Gamma', \Delta, \Theta, \Theta' \vdash S$}
+            \DisplayProof
+            &
+        \tagarray{\label{cut:R_vs_L}}
+        \end{tabular}
+        \end{center}
+        \item $(R \imp)$ on the left and $(L \imp)$ on the right but $(L \imp)$ does not introduce the variable which is involved in the $(\operatorname{cut})$
+\begin{center}
+\begin{tabular}{>{\centering}m{10cm} >{\centering}m{1cm}}
+            \AxiomC{$\pi_1$}
+            \noLine
+            \UnaryInfC{$\vdots$}
+            \RightLabel{$(R\imp)$}
+            \UnaryInfC{$\call{S} \mid \Gamma \vdash U$}
+            \AxiomC{$\pi_2$}
+            \noLine
+            \UnaryInfC{$\vdots$}
+            \noLine
+            \UnaryInfC{$\call{T} \mid \Delta \vdash V$}
+            \AxiomC{$\pi_3$}
+            \noLine
+            \UnaryInfC{$\vdots$}
+            \noLine
+            \UnaryInfC{$\call{Q} \mid x:U, \Theta, y: W, \Theta' \vdash S$}
+            \RightLabel{$(L \imp)$}
+            \BinaryInfC{$\call{T}, \call{Q} \mid z: V \imp W, \Delta, x:U, \Theta, \Theta' \vdash S$}
+            \RightLabel{$(\operatorname{cut})$}
+            \BinaryInfC{$\call{S},\call{T},\call{Q} \mid \Gamma,z: V \imp W, \Delta, \Theta, \Theta' \vdash S$}
+            \DisplayProof\\\vspace{0.5cm}
+            $\to_{\operatorname{cut}}$\\\vspace{0.5cm}
+            \AxiomC{$\pi_2$}
+            \noLine
+            \UnaryInfC{$\vdots$}
+            \noLine
+            \UnaryInfC{$\call{T} \mid \Delta \vdash V$}
+            \AxiomC{$\pi_1$}
+            \noLine
+            \UnaryInfC{$\vdots$}
+            \RightLabel{$(R \imp)$}
+            \UnaryInfC{$\call{S} \mid \Gamma \vdash U$}
+            \AxiomC{$\pi_3$}
+            \noLine
+            \UnaryInfC{$\vdots$}
+            \noLine
+            \UnaryInfC{$\call{Q} \mid x:U, \Theta, y:W, \Theta' \vdash S$}
+            \RightLabel{$(\operatorname{cut})$}
+            \BinaryInfC{$\call{S},\call{Q} \mid \Gamma, \Theta, y:W, \Theta' \vdash S$}
+            \RightLabel{$(L \imp)$}
+            \BinaryInfC{$\call{T},\call{S},\call{Q} \mid z:V \imp W, \Delta, \Gamma, \Theta, \Theta' \vdash S$}
+            \doubleLine
+            \RightLabel{$(\operatorname{ex}_1),\ex_2$}
+            \UnaryInfC{$\call{S},\call{T},\call{Q} \mid \Gamma, z: V \imp W, \Delta, \Theta, \Theta' \vdash S$}
+            \DisplayProof
+            &
+            \tagarray{\label{cut:R_vs_L_nonp}}
+        \end{tabular}
+        \end{center}
+        and
+\begin{center}
+\begin{tabular}{>{\centering}m{10cm} >{\centering}m{1cm}}
+            \AxiomC{$\pi_1$}
+            \noLine
+            \UnaryInfC{$\vdots$}
+            \RightLabel{$(R\imp)$}
+            \UnaryInfC{$\call{S} \mid \Gamma \vdash U$}
+            \AxiomC{$\pi_2$}
+            \noLine
+            \UnaryInfC{$\vdots$}
+            \noLine
+            \UnaryInfC{$\call{T} \mid x:U, \Delta \vdash V$}
+            \AxiomC{$\pi_3$}
+            \noLine
+            \UnaryInfC{$\vdots$}
+            \noLine
+            \UnaryInfC{$\call{Q} \mid \Theta, y:W, \Theta' \vdash S$}
+            \RightLabel{$(L \imp)$}
+            \BinaryInfC{$\call{T}, \call{Q} \mid z: V \imp W, x:U, \Delta, \Theta, \Theta' \vdash S$}
+            \RightLabel{$(\operatorname{cut})$}
+            \BinaryInfC{$\call{S},\call{T},\call{Q} \mid \Gamma, z: V \imp W, \Delta, \Theta, \Theta' \vdash S$}
+            \DisplayProof\\\vspace{0.5cm}
+            $\to_{\operatorname{cut}}$\\\vspace{0.5cm}
+            \AxiomC{$\pi_1$}
+            \noLine
+            \UnaryInfC{$\vdots$}
+            \RightLabel{$(R \imp)$}
+            \UnaryInfC{$\call{S} \mid \Gamma \vdash U$}
+            \AxiomC{$\pi_2$}
+            \noLine
+            \UnaryInfC{$\vdots$}
+            \noLine
+            \UnaryInfC{$\call{T} \mid x:U, \Delta \vdash V$}
+            \RightLabel{$(\operatorname{cut})$}
+            \BinaryInfC{$\call{S}, \call{T} \mid\Gamma, \Delta \vdash V$}
+            \AxiomC{$\pi_3$}
+            \noLine
+            \UnaryInfC{$\vdots$}
+            \noLine
+            \UnaryInfC{$\call{Q} \mid \Theta, y:W, \Theta' \vdash V$}
+            \RightLabel{$(L \imp)$}
+            \BinaryInfC{$\call{S},\call{T},\call{Q} \mid z: V \imp W, \Gamma, \Delta, \Theta, \Theta' \vdash S$}
+            \doubleLine
+            \RightLabel{$(\operatorname{ex})_1$}
+            \UnaryInfC{$\call{S},\call{T},\call{Q} \mid \Gamma, z: V \imp W, \Delta, \Theta, \Lambda \vdash S$}
+            \DisplayProof
+            &
+            \tagarray{\label{cut:R_vs_L_nonp2}}
+        \end{tabular}
+        \end{center}
+    \end{itemize}
+\end{defn}
+
+
+\begin{thebibliography}{99}
+\bibitem{PaulMellies}
+Mellies' notes.
+
+\bibitem{GMZ} Gentzen-Mints-Zucker correspondence.
+
+\end{thebibliography}
+\end{document}

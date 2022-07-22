@@ -1,0 +1,5 @@
+\contentsline {section}{\numberline {1}Multiplicatives}{1}{section.1}%
+\contentsline {section}{\numberline {2}The Sequentialisation Theorem}{8}{section.2}%
+\contentsline {section}{\numberline {3}Proofs as permutations}{17}{section.3}%
+\contentsline {section}{\numberline {4}The dynamics of MLL}{20}{section.4}%
+\contentsline {section}{\numberline {5}Geometry of Interaction Zero, modelling the dynamics of MLL}{23}{section.5}%

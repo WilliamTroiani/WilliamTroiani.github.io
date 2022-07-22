@@ -1,0 +1,9 @@
+\contentsline {section}{\numberline {1}Abelian categories}{1}{section.1}%
+\contentsline {section}{\numberline {2}Resolutions}{4}{section.2}%
+\contentsline {subsection}{\numberline {2.1}Short exact sequences}{5}{subsection.2.1}%
+\contentsline {subsection}{\numberline {2.2}The tensor product}{6}{subsection.2.2}%
+\contentsline {subsection}{\numberline {2.3}Flat modules}{7}{subsection.2.3}%
+\contentsline {subsection}{\numberline {2.4}Chain complexes}{9}{subsection.2.4}%
+\contentsline {subsection}{\numberline {2.5}Injective modules}{11}{subsection.2.5}%
+\contentsline {subsection}{\numberline {2.6}Projective modules}{12}{subsection.2.6}%
+\contentsline {subsection}{\numberline {2.7}Derived functors}{16}{subsection.2.7}%

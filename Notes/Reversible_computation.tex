@@ -1,0 +1,475 @@
+\documentclass[12pt]{article}
+
+\usepackage{amsthm}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{mathrsfs}
+\usepackage{array}
+\usepackage{amssymb}
+\usepackage{units}
+\usepackage{graphicx}
+\usepackage{tikz-cd}
+\usepackage{nicefrac}
+\usepackage{hyperref}
+\usepackage{bbm}
+\usepackage{color}
+\usepackage{tensor}
+\usepackage{tipa}
+\usepackage{bussproofs}
+\usepackage{ stmaryrd }
+\usepackage{ textcomp }
+\usepackage{leftidx}
+\usepackage{afterpage}
+\usepackage{varwidth}
+\usepackage{tasks}
+\usepackage{ cmll }
+\usepackage{makecell}
+\usepackage{MnSymbol}
+\usepackage{adjustbox}
+\usepackage{multirow}
+\usepackage{booktabs}
+\usepackage{xparse}
+\usepackage{calc}
+\usetikzlibrary{positioning,calc}
+
+\newcommand\blankpage{
+	\null
+	\thispagestyle{empty}
+	\addtocounter{page}{-1}
+	\newpage
+}
+
+\newcommand{\PhantC}{\phantom{\colon}}%
+\newcommand{\PhantSQ}{\phantom{\sqrt{\hspace{0.3ex}}}}
+
+% https://tex.stackexchange.com/questions/63355/wrapping-cmidrule-in-a-macro
+\ExplSyntaxOn
+\makeatletter
+\newcommand{\CMidRule}{\noalign\bgroup\@CMidRule{}}
+\NewDocumentCommand{\@CMidRule}{
+	m % Material to reinsert before cmidrule.
+	O{0.0ex} % #1 = left adjust
+	O{0.0ex} % #1 = right adjust
+	m  %       #3 = columns to span
+}{
+	\peek_meaning_remove_ignore_spaces:NTF \CMidRule
+	{ \@CMidRule { #1 \cmidrule[\cmidrulewidth](l{#2}r{#3}){#4} } }
+	{ \egroup #1 \cmidrule[\cmidrulewidth](l{#2}r{#3}){#4} }
+}
+\makeatother
+\ExplSyntaxOff
+
+\graphicspath{ {images/} }
+
+\theoremstyle{plain}
+\newtheorem{thm}{Theorem}[subsection] % reset theorem numbering for each chapter
+\newtheorem{proposition}[thm]{Proposition}
+\newtheorem{lemma}[thm]{Lemma}
+\newtheorem{fact}[thm]{Fact}
+\newtheorem{cor}[thm]{Corollary}
+
+\theoremstyle{definition}
+\newtheorem{defn}[thm]{Definition} % definition numbers are dependent on theorem numbers
+\newtheorem{exmp}[thm]{Example} % same for example numbers
+\newtheorem{notation}[thm]{Notation}
+\newtheorem{remark}[thm]{Remark}
+\newtheorem{condition}[thm]{Condition}
+\newtheorem{question}[thm]{Question}
+\newtheorem{construction}[thm]{Construction}
+\newtheorem{exercise}[thm]{Exercise}
+\newtheorem{example}[thm]{Example}
+\newtheorem{aside}[thm]{Aside}
+\newtheorem{algorithm}[thm]{Algorithm}
+
+\def\doubleunderline#1{\underline{\underline{#1}}}
+\newcommand{\bb}[1]{\mathbb{#1}}
+\newcommand{\scr}[1]{\mathscr{#1}}
+\newcommand{\call}[1]{\mathcal{#1}}
+\newcommand{\psheaf}{\text{\underline{Set}}^{\scr{C}^{\text{op}}}}
+\newcommand{\und}[1]{\underline{\hspace{#1 cm}}}
+\newcommand{\adj}[1]{\text{\textopencorner}{#1}\text{\textcorner}}
+\newcommand{\comment}[1]{}
+\newcommand{\lto}{\longrightarrow}
+\newcommand{\rone}{(\operatorname{R}\bold{1})}
+\newcommand{\lone}{(\operatorname{L}\bold{1})}
+\newcommand{\rimp}{(\operatorname{R} \multimap)}
+\newcommand{\limp}{(\operatorname{L} \multimap)}
+\newcommand{\rtensor}{(\operatorname{R}\otimes)}
+\newcommand{\ltensor}{(\operatorname{L}\otimes)}
+\newcommand{\rtrue}{(\operatorname{R}\top)}
+\newcommand{\rwith}{(\operatorname{R}\&)}
+\newcommand{\lwithleft}{(\operatorname{L}\&)_{\operatorname{left}}}
+\newcommand{\lwithright}{(\operatorname{L}\&)_{\operatorname{right}}}
+\newcommand{\rplusleft}{(\operatorname{R}\oplus)_{\operatorname{left}}}
+\newcommand{\rplusright}{(\operatorname{R}\oplus)_{\operatorname{right}}}
+\newcommand{\lplus}{(\operatorname{L}\oplus)}
+\newcommand{\prom}{(\operatorname{prom})}
+\newcommand{\ctr}{(\operatorname{ctr})}
+\newcommand{\der}{(\operatorname{der})}
+\newcommand{\weak}{(\operatorname{weak})}
+\newcommand{\exi}{(\operatorname{exists})}
+\newcommand{\fa}{(\operatorname{for\text{ }all})}
+\newcommand{\ex}{(\operatorname{ex})}
+\newcommand{\cut}{(\operatorname{cut})}
+\newcommand{\ax}{(\operatorname{ax})}
+\newcommand{\negation}{\sim}
+\newcommand{\true}{\top}
+\newcommand{\false}{\bot}
+\newcommand{\blank}{\textvisiblespace}
+\DeclareRobustCommand{\diamondtimes}{%
+	\mathbin{\text{\rotatebox[origin=c]{45}{$\boxplus$}}}%
+}
+\newcommand{\tagarray}{\mbox{}\refstepcounter{equation}$(\theequation)$}
+\newcommand{\startproof}[1]{
+	\AxiomC{#1}
+	\noLine
+	\UnaryInfC{$\vdots$}
+}
+\newcommand\showdiv[1]{\overline{\smash{)}#1}}
+\newcommand{\set}{\operatorname{\underline{Set}}}
+
+
+
+\newenvironment{scprooftree}[1]%
+{\gdef\scalefactor{#1}\begin{center}\proofSkipAmount \leavevmode}%
+	{\scalebox{\scalefactor}{\DisplayProof}\proofSkipAmount \end{center} }
+
+\usepackage[margin=1cm]{geometry}
+
+\title{Reversible Computation}
+\author{William Troiani}
+\date{\today}
+
+\begin{document}
+	\maketitle
+	
+	Computation, considered as an invisible mental process, is a naive stance. The crucial point is that there are genuine mathematical and physical properties of computation which are independent of the choice of implementation.
+	
+	A historically significant indication that this might be the case, was the thought experiment often referred to as \emph{Maxwell's Demon}, where it appears as though heat is being transfered from a cooler body to a warmer body, which contradicts the second law of thermodynamics. This thought experiment includes an onlooker (the demon) who stands idle and makes decisions. A proposed solution was that the decision process inside the demon's mind was to be included as part of the physical system. That is, the \emph{computation} being performed by the Demon was a \emph{physically} relevant part of the experiment.
+	
+	Rigorous work following this thought experiment includes a result, first proved by Landauer, that irreversible computation is inherrently linked with physical irreversibility \cite{Landauer}. There, it is argued that practical computation fundamentally involves irreversible computation, however Bennett has proven this is not true \cite{Bennett}. In this note, we present Bennett's proof by showing that every terminating computation of a Turing machine can be simulated by a reversible Turing machine, see \ref{thm:reversible} for a precise statement.
+	
+	What, though, makes a Turing machine $M$ \emph{reversible}? A crucial yet subtle point is that the resources required for $M$ to produce output $w'$ from input $w$ may be wildly distinct from the resources required for some other Turing machine $N$ to produce $w$ from $w'$. For example, let $M$ be a Turing machine which on input $(M', y)$, consisting of a Turing machine $M'$ and a valid output $y$ for $M'$, calculates an input $z$ for $M'$ so that when $M'$ is run on $z$ the output is $y$. This Turing machine $M$ churns through all possible inputs, slowly increasing the time spent running on them, until such a $z$ is eventually found. This is an extremely slow and expensive computation. However, to retrieve the input $(M',y)$ from an output $(M',z)$ we simply run $M'$ on $z$.
+	
+	Thus, we need a more refined notion of what it means for a Turing machine $M$ to be \emph{reversible}. In essence, we want there to exist another Turing machine $N$ which performs every halting computation of $M$ backwards. There will be many technical subtleties involved in creating such a definition, the first of which is a restriction on the head movements of a Turing machine.
+		
+	\begin{defn}\label{def:Turing_machine}
+		A \textbf{Turing Machine} is a triple $(\Sigma, Q, \delta)$ consisting of:
+		\begin{itemize}
+			\item A finite alphabet (ie, a collection of symbols) $\Sigma$ containing a special symbol $`\textvisiblespace$'.
+			\item A finite set of \textbf{states} (again, symbols) $Q$ containing special states $q_{\texttt{Start}}, q_{\texttt{Finish}}$.
+			\item The \textbf{transition function}, ie, a function
+			\begin{equation}
+				\delta: \Sigma \times Q \lto \Sigma \times Q \times \lbrace \texttt{Left}, \texttt{Stay}, \texttt{Right}\rbrace
+				\end{equation}
+			The transition function is required to satisfy the following property: if $(\sigma, q) \in \Sigma \times Q$ is such that $\delta(\sigma, q) = (\sigma', q_{\texttt{Final}}, \texttt{Instr})$, for some $\sigma' \in \Sigma$, then $\texttt{Instr} = \texttt{Stay}$.
+			\end{itemize}
+		\end{defn}
+	\begin{remark}\label{rmk:polite_avoidance}
+		In \cite{Bennett}, \cite{Troiani} an adaptation to regular Turing machines was defined where the re-writing and the head movement stages were distinct. That is, the Turing machines were required to satisfy the following property, where we make use of the projection functions $\pi_1: \Sigma \times Q \times \{\texttt{Left},\texttt{Stay}, \texttt{Right}\} \lto \Sigma$, etc.
+		\begin{equation}
+			\text{If }\pi_3\delta(\sigma, q) \in \lbrace \texttt{Left}, \texttt{Right}\rbrace \text{ then } \pi_1\delta(\sigma, q) = \sigma, \pi_2\delta(\sigma, q) = q
+		\end{equation}
+	This can be avoided by requiring the final condition we have put in Definition \ref{def:Turing_machine}, that when a Turing machine transitions into the final state, it does not move its head. The cost for abandoning this is that the positions of the head in the reverse of a Turing machine do not match exactly the positions of the original Turing machine (at the corresponding computational step). We argue that this does not matter though, as it is the sequence of updates to the tape which are significant to a computation.
+		\end{remark}
+	The set of finite words over the alphabet $\Sigma$ will be denoted using the Kleene Star notation $\Sigma^\ast$.
+	
+	A Turing machine can be visualised as a mechanical machine which operates on an infinite tape. The tape is enriched with an infinite word $w$ where all but finitely many letters are the blank symbol $\blank$. The machine, whilst in some state $q$, ``reads" a letter $l$ on this tape, and calculates a rewrite $l'$ for this square, along with a new state $q'$ and a movement. This calculation depends only on the particular letter $l$ and the current state $q$. Moreover, only this letter and this state are manipulated during this step of computaiton, and so Turing machines are a \emph{local} notion of computation, we say more on locality later.
+	
+	The Turing machine $M$ and the \emph{computation} of a Turing machine $M$ on some input are not to be confused. We formally define computations as sequences of configurations of a Turing machine, where a \textbf{configuration} $(w, q, p)$ consists of an infinite word $w$ where all but finitely many letters are the blank symbol $\blank$, a state $q$, and an integer $p$, denoting the letter in the word $w$ currently being ``read". Note, we do not allow for the input to have any occurrences of the letter $\blank$.
+	\begin{defn}\label{def:computation}
+		A \textbf{computation} of a Turing Machine $M = (\Sigma, Q, \delta)$ on an input $w \in (\Sigma\setminus \{ \blank\})^\ast$ is a (possibly infinite) sequence of configurations
+		\begin{equation}
+			(w_0, q_0, p_0) \lto (w_1, q_1, p_1) \lto \ldots \lto (w_i, q_i, p_i) \lto \ldots
+			\end{equation}
+		satisfying the following conditions.
+		\begin{itemize}
+			\item \textbf{Initiality conditions:} The first triple $(w_1, q_1, p_1)$ is subject to
+			\begin{itemize}
+				\item $w_0 = w$.
+				\item $q_0 = q_{\texttt{Start}}$.
+				\item $p_0 = 0$. The words $w_i$ are sequences starting at index $0$, so this condition is saying that the Turing machine begins by reading the first letter in the input $w_1 = w$.
+				\end{itemize}
+			\item \textbf{Movement conditions:} For all $i \geq 0$, denote by $w_i^j$ the $j^{\text{th}}$ letter in the word $w_i$. If $\delta(w_i, q_i) = (\overline{w_i^j}, \overline{q_i}, \texttt{Instr})$, then
+			\begin{itemize}
+				\item $w_{i+1}^j = \overline{w_i^j}$.
+				\item $q_{i+1} = \overline{q_i}$.
+				\item and for $p_i$:
+				\begin{equation}
+					p_{i+1} =
+					\begin{cases}
+						p_i + 1& \texttt{Instr} = \texttt{Right}\\
+						p_i & \texttt{Instr} = \texttt{Stay}\\
+						p_i - 1 & \texttt{Instr} = \texttt{Left}
+						\end{cases}
+					\end{equation}
+				\end{itemize}
+			\item \textbf{Termination conditions: } There is at most one triple $(w,q,p)$ such that $q = q_{\texttt{Finish}}$, and if there is one it is the final element. If this exists, we require also that $p = 0$.
+			\end{itemize}
+		The integer $p_i$ is the \textbf{head position at step $i$}.
+		
+		If the computation of a word $w$ on a Turing Machine $M$ is finite, then $M$ \textbf{halts} on input $w$ and we denote the output $M(w)$.
+		\end{defn}
+	
+	\begin{remark}
+		Part of the termination conditions in Definition \ref{def:computation} are that the head position at step $1$ and the final step (assuming the computation halts) is equal to $0$. That is, the tape head position begins and ends at the start of the word.
+		
+		This condition is not always given in the definition of a Turing machine, but it is necessary for reversible computation. The reason is as follows, if $M$ is a Turing machine which halts on input $w$, then without this condition, the head position is some integer $p$. Thus, if we had a Turing machine $N$ which ``reversed" $M$, then $N$ would need to start with head position at step $1$ equal to $p$ \emph{which depends on the computation of $w$ by $M$}.
+		
+		To avoid this, we fix the initial and final head positions.
+		\end{remark}
+		
+\begin{defn}\label{def:reversible_machine}
+	A Turing Machine $M = (\Sigma, Q, \delta)$ is \textbf{reversible} if there exists a transition function $\delta'$ (with domain equal to that of $\delta$) and Turing machine $M^{-1} := (\Sigma, Q, \delta')$ subject to the following.
+	\begin{itemize}
+		\item If $M$ halts on input $w$, ie, there is a finite computation
+		\begin{equation}
+			(w_0, q_0 = q_{\texttt{Start}}, p_0 = 0) \lto \ldots \lto (w_n, q_n = q_\texttt{Finish}, p_n = 0)
+		\end{equation}
+		then the computation of the Turing machine $M^{-1} := (\Sigma, Q, \delta')$ which begins at $(w_n, q_{\texttt{Finish}}, 0)$ terminates at $(w_0, q_{\texttt{Start}}, 0)$ and so there is a computation
+		\begin{equation}
+			(w'_0 = w_n, q_0', p_0') \lto \ldots \lto (w'_m, q_m', p_m')
+		\end{equation}	
+		We require that this computation satisfies:
+		\begin{equation}
+			\text{For all }0 \leq i \leq n, (w_i, q_i) = (w_{n-i}', q_{n-i}')
+		\end{equation}
+	\end{itemize}
+\end{defn}
+	\begin{example}
+		consider the machine $M$ which scans the input and then returns to the start. This machine has alphabet $\Sigma = \{0, 1, \stackrel{\circ}{0}, \stackrel{\circ}{1}, \blank\}$, the marking $\circ$ is used to mark respectively the start and the end of the input. The states $Q = \{q_{\texttt{Start}}, q_{\texttt{MoveRight}}, q_{\texttt{MoveLeft}}, q_{\texttt{Finish}}\}$, and transition function given as follows.
+		\begin{itemize}
+			\item \textbf{Scan over the input from left to right and then turn around: }
+			\begin{align*}
+				(\sigma, q_{\texttt{Start}}) &\longmapsto (\stackrel{\circ}{\sigma}, q_{\texttt{MoveRight}}, \texttt{Right}) & (\sigma, q_{\texttt{MoveRight}}) &\longmapsto (\sigma, q_{\texttt{MoveRight}}, \texttt{Right})\\
+				(\blank, q_{\texttt{MoveRight}}) &\longmapsto (\blank, q_{\texttt{MoveLeft}}, \texttt{Left})
+			\end{align*}
+			\item \textbf{Scan over the input from the right to the left:}
+			\begin{align*}
+				(\sigma, q_{\texttt{Start}}) &\longmapsto (\sigma, q_{\texttt{MoveLeft}}, \texttt{Left}) & (\sigma, q_{\texttt{MoveLeft}}) &\longmapsto (\sigma, q_{\texttt{MoveLeft}}, \texttt{Left})
+			\end{align*}
+			\item \textbf{Finish the computation: }
+			\begin{equation}
+				(\stackrel{\circ}{\sigma}, q_{\texttt{MoveLeft}}) \longmapsto (\sigma, q_{\texttt{Finish}}, \texttt{Stay})
+			\end{equation}
+		\end{itemize}
+		This Turing machine is its own reverse.
+		\end{example}
+	As described earlier, for a Turing machine $M$ to be \emph{reversible}, more is required than just that the input can be restored from the output. We require the existence of some machine $N$ which produces the computations of $M$ but in reverse order. The following example shows a trivial way in which a reversible machine can have non-injective transition function.
+	\begin{example}
+		\item We are only interested in ``reversibility" for the components of the Turing machine which will actually be relevant to some computation. For example, consider the machine $M$ which moves to the end of the input and then prints 10 zeros and then stops. More precisely, consider the alphabet $\Sigma = \{0, 1, \blank\}$, the set of states 
+		\begin{equation}
+			Q = \{q_{\texttt{Start}}, q_2, \ldots, q_{10}, q_{\texttt{Done}}, q_{\texttt{Reset}}, q_{\texttt{Finish}}, q_{\texttt{Move}},q_{\texttt{Dummy}}\}
+		\end{equation}
+		and with the following transition function.
+		\begin{itemize}
+			\item \textbf{Pass over the input:}
+			\begin{align*}
+				(n, q_{\texttt{Start}}) &\longmapsto (n, q_{\texttt{Move}}, \texttt{Right}) & (n, q_{\texttt{Move}}) &\longmapsto (n, q_{\texttt{move}}, \texttt{Right}) & (\blank, q_{\texttt{Move}}) &\longmapsto (0, q_{2}, \texttt{Right})
+			\end{align*}
+			\item \textbf{Start printing zeros: }
+			\begin{align*}
+				(\blank, q_{\texttt{Start}}) &\longmapsto (0, q_2, \texttt{Right}) & (\blank, q_{\texttt{Move}}) &\longmapsto (0, q_2, \texttt{Right})
+			\end{align*}
+			\item \textbf{Continue printing zeros and then stop after 10:}
+			\begin{align*}
+				(\blank, q_{i}) &\longmapsto (0, q_{i+1}, \texttt{Right}), i = 2,\ldots, 9 & (\blank, q_{10}) &\longmapsto (0, q_{\texttt{Done}}, \texttt{Right})
+			\end{align*}
+			\item \textbf{Return the head to the start of the tape:}
+			\begin{align*}
+				(\sigma, q_{\texttt{Done}}) &\longmapsto (\sigma, q_{\texttt{Done}}, \texttt{Left}) & (\blank, q_{\texttt{Done}}) &\longmapsto (\blank, q_{\texttt{Reset}}, \texttt{Stay}) & (\sigma, q_{\texttt{Reset}}) &\longmapsto (\sigma, q_{\texttt{Finish}}, \texttt{Stay})
+			\end{align*}
+			\item \textbf{Plus a set of transitions which will never be used: }
+			\begin{equation}
+				(\sigma, q_{\texttt{Dummy}}) \longmapsto (\blank, q_{\texttt{Dummy}}, \texttt{Stay}), \sigma \in \Sigma
+			\end{equation}
+		Due to the final clase of transitions, the transition function is non-injective. However this is a reversible Turing machine.
+		\end{itemize}
+	\end{example}
+	The amazing result, is the following.
+	\begin{thm}\label{thm:reversible}
+		Every Turing machine $M = (\Sigma, Q, \delta)$ there exists a reversible Turing machine $N = (\Sigma', Q', \delta')$ satisfying the following.
+		\begin{itemize}
+			\item $\Sigma \subseteq \Sigma$.
+			\item If $M$ terminates on input $w$ with output $M(w)$ then $N$ terminates on input $w$ with output $w \# \# M(w)$, where $\#$ is some distinguished letter in $\Sigma'$.
+			\end{itemize}
+		\end{thm}
+	The proof is inspired by the standard way of making a non-injective function injective: given arbitrary $f: X \lto Y$ we define $\hat{f}: X \lto X \times Y$ which sends $x \lto (x,f(x))$. That is, $\hat{f}$ is the \emph{graph} of $f$.
+	
+	Similarly, we will add a tape to $M$ which will be used to write down a label representing which step of $\delta$ was just performed. The machine $N$ then uses this ``history" tape to unwind the performance of $M$, after adding a third tape to write down the output of $M$, that is. We will need to check that if a multi-tape Turing machine is reversible, then the corresponding single tape Turing machine is reversible. For this, it will be necessary to fix a method of simulating a multi-tape Turing machine on a single tape Turing machine.
+	
+	\begin{defn}
+		An \textbf{$n$-tape Turing machine} is a triple $(\Sigma, Q, \delta)$ consisting of an alphabet $\Sigma$ and a set of states $Q$, just as for Turing machines (Definition \ref{def:Turing_machine}). The \textbf{transition function} however is defined as a function
+		\begin{equation}
+			\Sigma^n \times Q \lto \Sigma^n \times Q \times \{\texttt{Left}, \texttt{Stay}, \texttt{Right}\}^n
+			\end{equation}
+		\end{defn}
+	
+	We notice that a $1$-tape Turing machine has the exact same Definition as a Turing machine. Similarly, a \emph{computation} of an $n$-tape Turing machine generalises computations of a Turing machine.
+	
+	\begin{defn}
+		A \textbf{configuration} is a triple $(\underline{w} = (w^0, \ldots, w^n), q, \underline{p} = (p^0, \ldots, p^n))$ so that for each $j$ the sequence $(w^j,q, p^j)$ is a configuration (of a ($1$-tape) Turing machine).
+		
+		A \textbf{computation} of an $n$-tape Turing machine $M = (\Sigma, Q, \delta)$ is a sequence of configurations
+		\begin{equation}
+			(\underline{w}_0, q_0, \underline{p}_0) \lto (\underline{w}_1, q_1, \underline{p}_1) \lto  \ldots \lto  (\underline{w}_i, q_i, \underline{p}_i) \lto \ldots
+			\end{equation}
+		so that for each $j = 1,\ldots, n$ the sequence
+		\begin{equation}
+			(w_{0j}, q_0, p_{0j}) \lto (w_{1j}, q_1, p_{1j}) \lto \ldots \lto (w_{ij}, q_i, p_{ij}) \lto \ldots
+			\end{equation}
+		is a computation (of a ($1$-tape) Turing machine).
+		\end{defn}
+	
+\begin{lemma}
+	Let $M$ be an $n$-tape Turing machine $M = (\Sigma, Q, \delta)$. There exists a ($1$-tape) Turing machine $N$ satisfying the following property.
+	\begin{itemize}
+		\item For every input $(w_1,\ldots, w_n)$ of $M$ for which $M$ terminates, say with output $(o_1,\ldots, o_n)$ we have $N(w_1 \# \ldots \# w_n) = o_1\#\ldots\#o_n$, where $\#$ is some distinguished letter in the alphabet of $N$.
+	\end{itemize}
+\end{lemma}
+\begin{proof}
+	We will compress all the tapes onto a single square and initiate a ``read" phase followed by a ``write" phase.
+	
+	Define the following alphabet
+	\begin{equation}
+		\Sigma' := (\Sigma \times \{\texttt{Y}, \texttt{N}\})^n
+	\end{equation}
+	The $\texttt{Y}$ is used to denote the position of the head for this particular tape.
+	
+	The states need to pick up the slack of only having a single tape and so is more complicated than the alphabet.
+	\begin{equation}
+		Q' := \Big((\Sigma \coprod \{ ? \})^n \times (Q \coprod \{ q_{\texttt{Read}} \}\Big) \coprod \Big( (\Sigma \coprod \{ ? \})^n \times Q \times \{\texttt{Left}, \texttt{Stay}, \texttt{Right}, \texttt{Update}\}^n \Big)
+	\end{equation}
+	The starting state is $((?,\ldots, ?), q_{\texttt{Start}})$ and the final state is $((?,\ldots, ?), q_{\texttt{Finish}})$.
+	
+	The transition function is defined so that the first symbol on the first square is read and then the state transitions into a state with second component $q_{\texttt{Read}}$. If a symbol of the form
+	\begin{equation}\label{eq:symbol_with_head}
+		\big((\sigma_1, \texttt{N}), \ldots, (\sigma_i, \texttt{Y}), \ldots, (\sigma_n, \texttt{N})\big)
+	\end{equation}
+	is read, the $i^{\text{th}}$ question mark symbol $`?$' in the first component of the state is changed to $\sigma_i$.
+	
+	Once the first component of the state has no more question mark symbols, we transition into the ``update" phase.
+	
+	The state is of the form $\big((\sigma_1, \ldots, \sigma_n), q_{\texttt{Read}}\big)$. We calculate $\delta((\sigma_1, \ldots, \sigma_n), q_{\texttt{Start}})$ and store the solution in the state. That is, if
+	\begin{equation}\label{eq:output_calculation}
+		\delta((\sigma_1, \ldots, \sigma_n), q_{\texttt{Start}}) = \big((\overline{\sigma_1},\ldots, \overline{\sigma_n}), q, (\texttt{Instr}_1, \ldots, \texttt{Instr}_n)\big)
+	\end{equation}
+	then we update the state to exactly this tuple.
+	
+	The Turing machine $N$ then passes from the right of the tape to the left updating the symbols. That is, if we come across a symbol of the form \eqref{eq:symbol_with_head}, the machine $N$ rewrites the portion of the symbol $(\sigma_i, \texttt{Y})$ as $(\overline{\sigma_i}, \texttt{N})$ if the $i^{\text{th}}$ element of the third entry of \eqref{eq:output_calculation} is $\texttt{Right}$ or $\texttt{Left}$. The $\texttt{Y}$ is left unchanged otherwise.
+	
+	Then the neighbouring tuple is updated to mark a $\texttt{Y}$ where the head on the $n$-tape Turing machine moved to. The $\texttt{Instr}_i$ components of the state are changed to $\texttt{Update}$ while this happens. If there are two portions of the symbol in \eqref{eq:symbol_with_head} with a $\texttt{Y}$, then we update the one which updates to the \emph{right} first. If this is none of them then we move to the left and update all of them.
+	
+	Once the head is at the far left of the tape contents, the state is updated to $((?,\ldots, ?), q_{\texttt{Start}})$ and the ``reading" phase of the Turing machine is reinitiated.
+	
+	We leave it to the reader to prove that from this, the output can be converted into the form appropriate for the Lemma.
+\end{proof}
+	
+	\begin{lemma}
+		If an $n$-tape Turing machine is reversible, then so is the simulating ($1$-tape) Turing machine.
+		\end{lemma}
+	\begin{proof}
+		All the intermediate steps of reading and rewriting are clearly reversible, the only non-trivial part is when the simulating machine computes $\delta((\sigma_1, \ldots, \sigma_n), q) = ((\overline{\sigma_1},\ldots, \overline{\sigma_n}), \overline{q}, (\texttt{Instr}_1, \ldots, \texttt{Instr}_n))$, we laboured the point that a reversible Turing machine is not equivalent to asking for an injective transition function, so we need to know how to restore this input from this output. The part of the transition function is applied \emph{in a computation}, so the existence of a reverse means there is another transition function which although may not be an inverse to $\delta$, at least calculates $((\sigma_1, \ldots, \sigma_n), q)$ from $((\overline{\sigma_1},\ldots, \overline{\sigma_n}), \overline{q})$. Thus we can construct a reverse to $N$ (the simulating Turing machine).
+		\end{proof}
+	
+	
+	
+	
+	
+	\begin{lemma}\label{lem:reversible_three_tapes}
+		To every Turing machine $M = (\Sigma, Q, \delta)$ there is a $4$-tape reversible Turing machine $N$ so that for every input $w$ upon which $M$ halts, the machine $N$ also halts, and the final position of $N$ has $w$ written on the first tape, the second and third tape is blank, and has $M(w)$ written on the fourth tape.
+		\end{lemma}
+	\begin{proof}
+		The machine $N$ will be described using three other machines $N_1, N_2, N_3$, all $3$-tape and all reversible. The machine $N$ will then be that given by performing $N_1$ followed by $N_2$ followed by $N_3$, which clearly remains reversible.
+		
+		The machine $N_1$ will not make use of the fourth tape at all, so we ignore it for now. Thus we consider a three tape Turing machine. The first tape will simulate $M$, and the other two tapes will record a ``history" or the steps performed on the first tape.
+		
+		Each input-output pair $(\sigma, q) \longmapsto (\overline{\sigma}, \overline{q}, \texttt{Instr})$ of the transition function $\delta$ will be split into two pieces of information. The first is the update $(\sigma, q) \longmapsto (\overline{\sigma}, \overline{q})$, and the second is $\texttt{Instr}$. When such a transition is performed on the first tape at step $j$, the second tape has the $j^{\text{th}}$ square updated to the tuple
+		\begin{equation}
+			\big((\sigma, q), (\overline{\sigma}, \overline{q})\big)
+			\end{equation}
+		and the $j^{\text{th}}$ square of the third tape is updated to $\texttt{Instr}$.
+		
+		When the state reaches $q_{\texttt{Finish}}$ the rightmost square of the third tape will necessarily read $\texttt{Stay}$ as per the final requirement of Turing machines (Definition \ref{def:Turing_machine}).
+		
+		We can then erase this symbol $\texttt{Stay}$, this step is reversible because we know that this symbol must have been $\texttt{Stay}$. Then we move every symbol in the third tape to the right by one square, and write the symbol $\texttt{Start}$ to the first square.
+		
+		The sequence of pairs consisting of the symbol on the second tape and the symbol on the third tape at the same position read from right to left, now give the opposite to a set of instructions for a Turing machine which unwinds the simulation on the first tape of the performance of $M$. Also, we have a valid Turing machine because the first square of the third tape, which is the final instruction of the reverse, is $\texttt{Stay}$.
+		
+		The machine $N_2$ simply coppies the output which is written on the first tape to the fourth tape. The machine $N_3$ is that which follows the opposite of the instructions on the two history tapes.
+		\end{proof}
+	\begin{example}
+		Say we had a Turing machine $M$ which performed the following simple computation, and underline denotes the position of the head.
+		\begin{equation}\label{eq:example}
+			\begin{tikzcd}[row sep = tiny]
+				{q_{\texttt{Start}}} & {q_1} & {q_2} & q_3 & {q_{\texttt{Finish}}}\\
+					{|\underline{\sigma_1}|\sigma_2|\ldots}\arrow[r] & {|\overline{\sigma_1}|\underline{\sigma_2}|\ldots}\arrow[r] & {|\overline{\sigma_1}|\underline{\overline{\sigma_2}}|\ldots}\arrow[r] & {|\underline{\overline{\sigma_1}}|\overline{\overline{\sigma_2}}|\ldots}\arrow[r] & {|\underline{\overline{\overline{\sigma_1}}}|\overline{\overline{\sigma_2}}|\ldots}
+				\end{tikzcd}
+			\end{equation}
+		This has its history recorded as follows.
+		\begin{equation*}
+			\begin{tikzcd}[row sep = tiny, column sep = tiny]
+				{q_{\texttt{Start}}} & {q_1} & {q_2} & q_3 & {q_{\texttt{Finish}}}\\
+				{|\underline{\sigma_1}|\sigma_2|\ldots}\arrow[r] & {\overline{\sigma_1}|\underline{\sigma_2}|\ldots}\arrow[r] & {|\overline{\sigma_1}|\underline{\overline{\sigma_2}}|\ldots}\arrow[r] & {|\underline{\overline{\sigma_1}}|\overline{\overline{\sigma_2}}|\ldots}\arrow[r] & {|\underline{\overline{\overline{\sigma_1}}}|\overline{\overline{\sigma_2}}|\ldots}\\
+				& {\big((\sigma_1, q_{\texttt{Start}}), (\overline{\sigma_1}, q_1)\big)} & {\big((\sigma_2, q_1), (\overline{\sigma_2}, q_2)\big)} & {\big((\overline{\sigma_2}, q_2), (\overline{\overline{\sigma_2}}, q_3)\big)} & {\big((\overline{\sigma_1}, q_3), (\overline{\overline{\sigma_1}}, q_{\texttt{Finish}})\big)}\\
+				& \texttt{Right} & \texttt{Stay} & \texttt{Left} & \texttt{Stay}
+			\end{tikzcd}
+		\end{equation*}
+	We then delete the final instance of $\texttt{Stay}$ and move the contents of the third tape one square to the right, adding an instance of $\texttt{Stay}$ to the beginning.
+	\begin{equation*}
+		\begin{tikzcd}[row sep = tiny, column sep = tiny]
+			{q_{\texttt{Start}}} & {q_1} & {q_2} & q_3 & {q_{\texttt{Finish}}}\\
+			{|\underline{\sigma_1}|\sigma_2|\ldots}\arrow[r] & {|\overline{\sigma_1}|\underline{\sigma_2}|\ldots}\arrow[r] & {|\overline{\sigma_1}|\underline{\overline{\sigma_2}}|\ldots}\arrow[r] & {|\underline{\overline{\sigma_1}}|\overline{\overline{\sigma_2}}|\ldots}\arrow[r] & {|\underline{\overline{\overline{\sigma_1}}}|\overline{\overline{\sigma_2}}|\ldots}\\
+			& {\big((\sigma_1, q_{\texttt{Start}}), (\overline{\sigma_1}, q_1)\big)} & {\big((\sigma_2, q_1), (\overline{\sigma_2}, q_2)\big)} & {\big((\overline{\sigma_2}, q_2), (\overline{\overline{\sigma_2}}, q_3)\big)} & {\big((\overline{\sigma_1}, q_3), (\overline{\overline{\sigma_1}}, q_{\texttt{Finish}})\big)}\\
+			& \texttt{Stay} & \texttt{Right} & \texttt{Stay} & \texttt{Left}
+		\end{tikzcd}
+	\end{equation*}
+We then ``turn these instructions around", but doing the opposite to what each step says.
+\begin{equation}
+	\begin{tikzcd}[row sep = tiny, row sep = tiny]
+		{\big( (\overline{\overline{\sigma_1}}, q_{\texttt{Finish}}),(\overline{\sigma_1}, q_3)\big)} & {\big( (\overline{\overline{\sigma_2}}, q_3),(\overline{\sigma_2}, q_2)\big)} & {\big( (\overline{\sigma_2}, q_2),(\sigma_2, q_1)\big)} & {\big( (\overline{\sigma_1}, q_1),(\sigma_1, q_{\texttt{Start}})\big)}\\
+		\texttt{Right} & \texttt{Stay} & \texttt{Left} & \texttt{Stay}
+		\end{tikzcd}
+	\end{equation}
+This, when acted on input ${|\underline{\overline{\overline{\sigma_1}}}|\overline{\overline{\sigma_2}}|\ldots}$ yields the following computation.
+\begin{equation}
+	\begin{tikzcd}[row sep = tiny]
+		{q_{\texttt{Finish}}} & q_3 & q_2 & q_1 & q_{\texttt{Start}}\\
+		{|\underline{\overline{\overline{\sigma_1}}}|\overline{\overline{\sigma_2}}|\ldots}\arrow[r] & {|\overline{\sigma_1}|\underline{\overline{\overline{\sigma_2}}}}|\ldots\arrow[r] & {|\overline{\sigma_1}|\underline{\overline{\sigma_2}}|\ldots}\arrow[r] & {|\underline{\overline{\sigma_1}}|\sigma_2|\ldots}\arrow[r] & {|\underline{\sigma_1}|\sigma_2|\ldots}
+		\end{tikzcd}
+	\end{equation}
+This is exactly the reverse of \eqref{eq:example}, up to head position.
+		\end{example}
+	
+	\begin{thebibliography}{9}
+		\bibitem{Landauer} R. Landauer, \emph{Irreversibility and heat generation in the computing process}
+		
+		\bibitem{Bennett} C. H. Bennet, \emph{Logical reversibility of computation}
+		
+		\bibitem{Clift} J. Clift, \emph{Universal Turing Machines}, \url{http://therisingsea.org/notes/talk-james-utm.pdf}
+		
+		\bibitem{Troiani} W. Troiani, \emph{Reversible Turing Machines}, \url{http://therisingsea.org/notes/talk-will-reversible.pdf}
+		\end{thebibliography}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	\end{document}

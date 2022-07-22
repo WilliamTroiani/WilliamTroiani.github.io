@@ -1,0 +1,6 @@
+\contentsline {section}{\numberline {1}Tethering}{1}{section.1}%
+\contentsline {section}{\numberline {2}Syntax (first order languages/theories)}{3}{section.2}%
+\contentsline {section}{\numberline {3}Semantics (models of first order theories)}{7}{section.3}%
+\contentsline {section}{\numberline {4}Proof (natural deduction)}{10}{section.4}%
+\contentsline {section}{\numberline {5}Completeness of a theory}{17}{section.5}%
+\contentsline {section}{\numberline {6}Topoi}{20}{section.6}%
