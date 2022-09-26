@@ -24,7 +24,11 @@
     <center>
     <iframe width="400" height="250" src="https://www.youtube.com/embed/jcqTq4a1kjY" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
     </center>
-    <p><b>2022</b>: <a href="http://williamtroiani.github.io/pdfs/FiniteColimitsInternalLanguageTaAC.pdf">The internal logic and topoi.</a> Topoi are often described as “generalised theories of sets”, but are they? This description is often given to topoi due to the similarities of the internal logic with ZF set theory. However, there are important differences, which extend further than just the fact that the internal language of a topos is an <em>intuitionistic</em> logic (and ZF <em>classical</em>). Even in Boolean topoi, where the law of exluded middle holds, <em>still</em> there is the following difference between the theories: the existence of the union of an arbitrary collection of sets is an axiom of ZF, and the product is intrinsically defined, but in the internal language this is reverseed; there is a product type constructor, and the union of two subobjects only makes sense in the context of a common parent object. This difference is not visible in ZF set theory during usual mathematical discorse, but when importing the usual set theoretic definitions of mathematical objects into the internal language, this distinction becomes significant. How these hurdles arrise and how they are solved is the content of this document.
+    <p><b>2022</b>:
+<p><a href=https://arxiv.org/abs/2207.10871?context=cs.LO>Elimination and cut-elimination.</a> Part of the content of a proof net is the identification of different occurrences of the same formula in a proof. Taking this seriously, we define a ring \( R_{\pi} \) associated to a proof net which is the quotient of a polynomial ring \( P_{\pi} \). The indeterminants of \( P_{\pi} \) come from the (atomic axioms of the) formulas in \( \pi \), and the kernel \( I_{\pi} \) of the quotient map \( P_{\pi} \longrightarrow R_{\pi} \) comes from the links of \( \pi \). If there exists a multi-step reduction of a proof \( \gamma: \pi \longrightarrow \pi' \) to a normal form \( \pi' \) then the generators of the ideals \( I_{\pi}, I_{\pi'} \) are related to one another via the Buchberger Algorithm, a <em>pre-existing</em> algorithm used to calculate Gr&#246;bner bases from generating sets. In the case where \( \pi' \) is not normal, the reduction can still be related to the Buchberger Algorithm, but with a small adaptation made. In fact, this altered version of the Buchberger Algorithm is more naturally expressed as a new algorithm which we present in this paper, the so called <em>falling roofs</em> algorithm.
+<center>
+<img src="FallingRoofs.png" width="500px", height="auto">
+</center> <a href="http://williamtroiani.github.io/pdfs/FiniteColimitsInternalLanguageTaAC.pdf">The internal logic and topoi.</a> Topoi are often described as “generalised theories of sets”, but are they? This description is often given to topoi due to the similarities of the internal logic with ZF set theory. However, there are important differences, which extend further than just the fact that the internal language of a topos is an <em>intuitionistic</em> logic (and ZF <em>classical</em>). Even in Boolean topoi, where the law of exluded middle holds, <em>still</em> there is the following difference between the theories: the existence of the union of an arbitrary collection of sets is an axiom of ZF, and the product is intrinsically defined, but in the internal language this is reverseed; there is a product type constructor, and the union of two subobjects only makes sense in the context of a common parent object. This difference is not visible in ZF set theory during usual mathematical discorse, but when importing the usual set theoretic definitions of mathematical objects into the internal language, this distinction becomes significant. How these hurdles arrise and how they are solved is the content of this document.
 <p><b>2020:</b> <a href="https://arxiv.org/abs/2008.10131">Gentzen-Mints-Zucker Duality.</a> A duality consists of two different points of view on the same object. The greater the difference between the two points of view, the more informative is the duality which relates them. Such correspondences are important because two independent discoveries of the same structure is strong evidence that the structure is natural. The duality between the simply typed λ-calculus (without product types) and the intuitionistic sequent calculus is the content of this document, and is interesting precisely because sequent calculus proofs and lambda terms are not tautologically the same thing: for example the cut-elimination relations are fundamentally local
 while the β-equivalence relation is global (see Section 4.3). In this sense sequent calculus and λ-calculus are respectively local and global points of view on a common logicocomputational mathematical structure.</p>
 <p><b>2017</b>: <a href="https://github.com/WilliamTroiani/linearlambdacalculus/tree/master/Working%20code"><span class="s2">A proof tree constructor for the Linear Lambda Calculus.</span></a> The λ-lambda calculus is a syntactic system designed with Girard's linear logic in sight. The idea is simple: since the Curry-Howard correspondence holds between intuitionistic natural deduction and the simply typed λ-calculus, and since the intuitionistic sequent calculus embeds into the linear logic sequent calculus, one may conjecture the existence of a "linear λ-calculus". Such a system has been designed, and the content of this document is a passer which takes as input a term in the linear λ-calculus and provides html code which displays the (necessarily unique) term-constructing tree corresponding to this term. For example, the term \( \lambda q \lambda p. \texttt{copy } q \texttt{ as } r, s \texttt{ in } \lambda z \texttt{derelict}(p)(\texttt{derelict}(s)(\texttt{derelict}(r)z)) \) has the following diagram associated to it.
@@ -34,18 +38,18 @@ while the β-equivalence relation is global (see Section 4.3). In this sense seq
     <hr>
     <center><h1><b>Notes</b></h1></center>
 <h2><b>Algebra/geometry</b></h2>
-<p><a href="https://williamtroiani.github.io/pdfs/CommutativeAlgebraWithLin.pdf">Elementary commutative algebra</a>
-<br><a href="https://williamtroiani.github.io/pdfs/Varieties.pdf">Introduction to varieties </a>
+<p><a href="https://williamtroiani.github.io/pdfs/CommutativeAlgebraWithLin.pdf">Elementary commutative algebra</a>: Linear algebra, rings and modules, polynomial rings, fields, field extensions, integral extensions and Jacobson rings, dimension theory, discrete valuation rings, graded rings/modules/algebras, Clifford algebras.
+<br><a href="https://williamtroiani.github.io/pdfs/Varieties.pdf">Introduction to varieties</a>: Affine varieties, projective varieties (Gr&#246;bner bases), morphisms, singularities.
 <h2><b>Logic/computation</b></h2>
 <p>
-    <a href="http://therisingsea.org/notes/talk-will-lambda.pdf">Introduction to the untyped &lambda;-Calculus</a>
-    <br><a href="https://williamtroiani.github.io/Notes/LinearLogic.pdf">Introduction to linear logic: multiplicatives</a>
-    <br><a href="https://williamtroiani.github.io/Notes/FirstIncompletenessTheorem.tex.pdf">G&#246;del's First Incompleteness Theorem</a>
-    <br><a href="https://williamtroiani.github.io/Notes/PredicateLogic.pdf"> First order logic</a>
-    <br><a href="https://williamtroiani.github.io/Notes/ax-grothendieck.pdf"> The Ax-Grothendieck Theorem</a>
-    <br><a href="https://williamtroiani.github.io/Notes/QuantumComputing.pdf">A mathematician's introduction to quantum error correction</a>
-    <br><a href="https://williamtroiani.github.io/pdfs/Reversible_computation"> Reversible computation</a>
-    <br><a href="https://williamtroiani.github.io/pdfs/Approximation_of_Continuous_Functions_by_ReLU_Nets.pdf">Approximation of Continuous Functions by ReLU Nets</a>
+    <a href="https://williamtroiani.github.io/pdfs/ChurchRosserTheorem.pdf">Introduction to the untyped &lambda;-Calculus</a>: Church-Rosser Theorem.
+    <br><a href="https://williamtroiani.github.io/Notes/LinearLogic.pdf">Introduction to linear logic: multiplicatives</a>: The sequentialisation theorem, geometry of interaction 0 (proofs as permutations), persistent paths, geometry of interaction 1 (proofs as operators).
+    <br><a href="https://williamtroiani.github.io/Notes/FirstIncompletenessTheorem.tex.pdf">G&#246;del's First Incompleteness Theorem</a>: General recursive functions, Chinese Remainder Theorem, &beta;-function, diagonalisation, G&#246;del's sentence.
+    <br><a href="https://williamtroiani.github.io/Notes/PredicateLogic.pdf"> First order logic</a>: Syntax, semantics, proof (natural deduction), Skolemisation, Lowenhiem-Skolem Theorem, Compactness Theorem.
+    <br><a href="https://williamtroiani.github.io/Notes/ax-grothendieck.pdf"> The Ax-Grothendieck Theorem</a>: Transporting proofs, algebraic completeness.
+    <br><a href="https://williamtroiani.github.io/Notes/QuantumComputing.pdf">A mathematician's introduction to quantum error correction</a>: Quantum computing, the density operator, error correction (examples), general error correction, stabilisers.
+    <br><a href="https://williamtroiani.github.io/pdfs/Reversible_computation_talk_notes"> Reversible computation</a>: "Reverse" of a Turing Machine, Turing Machines are reversible.
+    <br><a href="https://williamtroiani.github.io/pdfs/Approximation_of_Continuous_Functions_by_ReLU_Nets.pdf">Approximation of Continuous Functions by ReLU Nets</a>: Feed-forward ReLU activations, approximation by polynomials.
 </p>
     <hr>
     <center><h1><b>Seminars</b></h1></center>
@@ -54,14 +58,24 @@ while the β-equivalence relation is global (see Section 4.3). In this sense seq
     <center>
         <img src="foundations-shot1.png" style="width:740px;height:450px;">
         </center>
-<h3>Foundations</h3>
-<p>G&#246;del's First Incompleteness Theorem <a href="https://www.youtube.com/watch?v=TRhR88anv3M">link to first video</a>
+<h3>Foundations (2022)</h3>
+<p>First order logic <a href="https://youtu.be/2S83EcpCKBY">video</a>
+<br>Models of first order theories <a href="https://youtu.be/hI3WKeaHCkk">video</a>
+<br>G&#246;del's First Incompleteness Theorem Part 1 (proof sketch) <a href="https://youtu.be/TRhR88anv3M">video</a>
+<br>G&#246;del's First Incompleteness Theorem Part 2 (general recursive functions) <a href="https://youtu.be/GQ4DFMNKvwY">video</a>
+<br>G&#246;del's First Incompleteness Theorem Part 3 (Chinese Remainder Theorem and the &beta;-function trick) <a href="https://youtu.be/hz-IWh9CF9A">video</a>
+<br>G&#246;del's First Incompleteness Theorem Part 4 (properties of general recursive functions) <a href="https://youtu.be/KxnE1mwRG-k">video</a>
+<br>G&#246;del's First Incompleteness Theorem Part 5 (general recursive functions are representable 1) <a href="https://youtu.be/gw_rks-tLdI">video</a>
+<br>G&#246;del's First Incompleteness Theorem Part 6 (general recursive functions are representable 2) <a href="https://youtu.be/25ZGE0PiioE">video</a>
+<br>Ax–Grothendieck Theorem part 1 (proof sketch) <a href="https://youtu.be/Fccfv2DWUgM">video</a>
+<br>Ax–Grothendieck Theorem part 2 (the geometric part) <a href="https://youtu.be/49QuhzdEy50">video</a>
+<br>Ax–Grothendieck Theorem part 3 (Skolemisation) <a href="https://youtu.be/VXJUwWBDJmQ">video</a>
+<br>Ax–Grothendieck Theorem part 4 (Lower Lownehiem-Skolem Theorem) <a href="https://youtu.be/6qntBQHffNo">video</a>
 </p>
 <h3><b>Group de travail cat&eacute;gories (2022)</b></h3>
 <p>Introduction to Category Theory
 <br>Topoi and logic 1
 <br>Topoi and logic 2
-<br>Elimination theory and cut elimination</p>
 <h3><b>Institut de Mathématiques de Marseille, Logic and Interactions (2022)</b></h3>
 <p>Proofs, rings, and ideals, <a href="https://williamtroiani.github.io/pdfs/AlgPntSlides.pdf">slides</a></p>
 <h3><b>Computation, Geometry, Logic (2021)</b></h3>
@@ -73,7 +87,7 @@ while the β-equivalence relation is global (see Section 4.3). In this sense seq
 <h3><b>Topological Quantum Computing (2019)</b></h3>
 <p>Reversible Turing Machines", <a href="http://therisingsea.org/notes/talk-will-reversible.pdf">notes</a>
 <br>"A crash course in simplicial cohomology with coefficients in Z mod 2", <a href="http://therisingsea.org/notes/talk-will-homology.pdf">notes</a></p>
-<h3><b>Graduate Topology Seminar</b></h3>
+<h3><b>Graduate Topology Seminar (2019)</b></h3>
 <p>Arithmetisation and localisation, <a href="https://williamtroiani.github.io/pdfs/ArithmetisationandInteraction.pdf">notes</a></p>
 <h3><b>Deep Learning</b></h3>
 <p>Approximation of Continuous Functions by ReLU Nets, <a href="https://williamtroiani.github.io/pdfs/Approximation_of_Continuous_Functions_by_ReLU_Nets.pdf">notes</a></p>
