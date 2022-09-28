@@ -1,8 +1,0 @@
-\contentsline {section}{\numberline {1}Multiplicatives}{1}{section.1}%
-\contentsline {section}{\numberline {2}The Sequentialisation Theorem}{7}{section.2}%
-\contentsline {section}{\numberline {3}Cut}{16}{section.3}%
-\contentsline {section}{\numberline {4}Orthogonality}{18}{section.4}%
-\contentsline {section}{\numberline {5}Geometry of Interaction Zero}{19}{section.5}%
-\contentsline {section}{\numberline {6}Geometry of Interaction One}{21}{section.6}%
-\contentsline {subsection}{\numberline {6.1}Internalisation of direction sum and tensor product}{21}{subsection.6.1}%
-\contentsline {subsection}{\numberline {6.2}Proofs as operators}{23}{subsection.6.2}%

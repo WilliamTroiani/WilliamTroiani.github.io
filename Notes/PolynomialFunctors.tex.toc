@@ -1,6 +1,0 @@
-\contentsline {section}{\numberline {1}Forms}{1}{section.1}%
-\contentsline {section}{\numberline {2}Finite normal forms and analyticity}{2}{section.2}%
-\contentsline {section}{\numberline {3}Finite normal forms and normality}{5}{section.3}%
-\contentsline {section}{\numberline {4}Qualitative domains}{12}{section.4}%
-\contentsline {section}{\numberline {5}Coherence spaces}{16}{section.5}%
-\contentsline {section}{\numberline {A}Examples}{17}{appendix.A}%

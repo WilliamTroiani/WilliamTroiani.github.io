@@ -1,1 +1,0 @@
-\contentsline {section}{\numberline {1}In the topos of simplicial sets}{1}{section.1}%

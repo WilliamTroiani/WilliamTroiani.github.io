@@ -1,8 +1,0 @@
-\contentsline {section}{\numberline {1}Introduction}{1}{section.1}%
-\contentsline {section}{\numberline {2}Forms}{2}{section.2}%
-\contentsline {section}{\numberline {3}Finite normal forms and analyticity}{4}{section.3}%
-\contentsline {section}{\numberline {4}Finite normal forms and normality}{9}{section.4}%
-\contentsline {section}{\numberline {5}Qualitative domains}{18}{section.5}%
-\contentsline {section}{\numberline {6}Coherence spaces}{25}{section.6}%
-\contentsline {section}{\numberline {A}Examples}{26}{appendix.A}%
-\contentsline {section}{\numberline {B}Girard's LIES}{27}{appendix.B}%
