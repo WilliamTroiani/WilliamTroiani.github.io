@@ -27,58 +27,39 @@
 <h2>PhD thesis</h2>
 <p><a href=https://williamtroiani.github.io/Notes/Algebraic_Geometry_and_Linear_Logic.pdf>Algebraic Geometry and Linear Logic</a></p>
 
-<p>This thesis explores the relationship between linear logic and algebraic geometry, particularly focusing on how proofs in linear logic can be interpreted as polynomials in atomic formulas. These polynomials correspond to closed subschemes of projective space. The thesis connects these concepts to computational aspects, drawing on the Geometry of Interaction program to understand the dynamics of proof rewrites, such as cut-elimination.
+<p>This thesis develops a geometric model for shallow multiplicative exponential linear logic proofs using Hilbert schemes, interpreting proofs as polynomials that correspond to closed subschemes of projective space. It connects linear logic to algebraic geometry and computational aspects like cut-elimination, exploring links to error-correcting codes, matrix factorizations, and functional programming.</p>
 
-The primary contribution of the thesis is the development of a model for shallow multiplicative exponential linear logic proofs using Hilbert schemes, extending previous work that interpreted proofs as ideals in polynomial rings. This new model provides a geometric interpretation of the exponential fragment of linear logic, where proofs are patterns of equality between linear formulas. The thesis also discusses various models of linear logic, including those related to error-correcting codes and matrix factorizations, highlighting the relationships between these models and the process of cut-elimination.
-
-The work ties algebraic geometry with proof theory, offering new insights into how linear logic can be represented geometrically, particularly in the context of projective schemes and Hilbert schemes. The thesis includes several secondary contributions, such as reinterpreting the dynamics of proof systems and exploring connections to functional programming languages.</p>
-
-<h2>Publications:</h2>
+<h2>Publications/preprints:</h2>
 
 <p><a href=https://arxiv.org/abs/2405.19051>Linear Logic and Quantum Error Correcting Codes</a></p>
 
 <p>
-A connection between multiplicative proof nets in linear logic and quantum error-correcting codes is defined. They propose associating a quantum code with each proof net, with cut-elimination in logic corresponding to quantum error correction.
-
-A Hilbert space and stabilizer quantum code is associated to each proof net, where logical operations are represented by quantum system interactions. The cut-elimination process is modeled as a cooling procedure that reduces the system's energy to its ground state, which reflects the logical content of the proof net. Each reduction in a proof net corresponds to a quantum cooling operation, linking logical transformations to physical processes in quantum systems.
-
-The paper also introduces examples, such as Majorana chains, and defines a category of stabilizer codes to formalize these relationships, bridging logic, algebra, and quantum information.</p>
+A connection between multiplicative proof nets in linear logic and quantum error-correcting codes is defined, interpreting cut-elimination as a quantum cooling process that reduces a system to its ground state. It formalizes this relationship using stabilizer codes, associating logical transformations with physical quantum operations and introducing examples like Majorana chains.</p>
 
 <p><a href=https://arxiv.org/abs/2207.10871?context=cs.LO>Elimination and cut-elimination</a> </p>
-  <p>Part of the content of a proof net is the identification of different occurrences of the same formula in a proof. Taking this seriously, we define a ring \( R_{\pi} \) associated with a proof net, which is the quotient of a polynomial ring \( P_{\pi} \). The indeterminates of \( P_{\pi} \) are derived from the (atomic propositions of the) formulas in \( \pi \), and the kernel \( I_{\pi} \) of the quotient map \( P_{\pi} \longrightarrow R_{\pi} \) is determined by the links of \( \pi \).
-</p>
-<p>
-  If there exists a multi-step reduction of a proof \( \gamma: \pi \longrightarrow \pi' \) to a normal form \( \pi' \), then the generators of the ideals \( I_{\pi} \) and \( I_{\pi'} \) are related to one another via the Buchberger Algorithm, a <em>pre-existing</em> algorithm used to calculate Gröbner bases from generating sets. In cases where \( \pi' \) is not normal, the reduction can still be related to the Buchberger Algorithm, but with a small adaptation. This modified version of the Buchberger Algorithm is more naturally expressed as a new algorithm, which we introduce in this paper: the so-called <em>Falling Roofs</em> algorithm.
+  <p>This paper defines a ring associated with a proof net by quotienting a polynomial ring based on formula identifications, linking proof normalization to Gröbner bases via the Buchberger Algorithm. It introduces the Falling Roofs algorithm, an adapted version of Buchberger’s method, to handle cases where the proof net is not in normal form.
 </p>
 
 <center>
 <img src="FallingRoofs.png" width="500px" height="auto">
 </center>
 <p><a href="http://williamtroiani.github.io/pdfs/FiniteColimitsInternalLanguageTaAC.pdf">The internal logic and topoi</a> <p>
-  Topoi are often described as “generalized theories of sets,” but are they? This description is frequently attributed to topoi due to the similarities between their internal logic and ZF set theory. However, there are important differences that extend beyond the fact that the internal language of a topos is <em>intuitionistic</em> logic, while ZF set theory is <em>classical</em>. Even in Boolean topoi, where the law of excluded middle holds, there remains a critical distinction between the theories: the existence of the union of an arbitrary collection of sets is an axiom in ZF, and the product is intrinsically defined. However, in the internal language of a topos, this relationship is reversed; there is a product type constructor, while the union of two subobjects only makes sense in the context of a common parent object.
+  Topoi are often described as “generalized theories of sets,” but are they? This description is frequently attributed to topoi due to the similarities between their internal logic and ZF set theory. We examine the differences between topoi and ZF set theory, emphasizing how their internal logics handle unions and products differently. It explores the implications of these differences when translating set-theoretic definitions into the internal language of a topos.
 </p>
 <p>
-  This difference is not apparent in ZF set theory during typical mathematical discourse, but it becomes significant when importing the usual set-theoretic definitions of mathematical objects into the internal language of a topos. The way these challenges arise and how they are addressed is the subject of this document.
-</p>
-<p>
-Another implicit goal of this paper was to formalise the idea that finite simplicial sets are algorithms computing the geometric realisation of that simplicial set. Loosely speaking, the internal logic of a topos can be thought of as a programming language due to its constructive nature. Thus, terms correspond to algorithms and the relations given in a standard proof that all finite simplicial sets are colimits of finite diagrams appear explicitly inside the terms constructed in the above paper. An example of a simplicial set being interpreted as an algorithm is given <a href="https://williamtroiani.github.io/Notes/InSimplicialSets.pdf">here</a>
+We also implicitly formalise the idea that finite simplicial sets act as algorithms computing their geometric realisations, viewing the internal logic of a topos as a constructive programming language. Details <a href="https://williamtroiani.github.io/Notes/InSimplicialSets.pdf">here</a>
 </p>
 <p><b></b> <a href="https://arxiv.org/abs/2008.10131">Gentzen-Mints-Zucker Duality</a> <p>
-  A duality consists of two distinct perspectives on the same underlying object. The greater the disparity between these perspectives, the more informative the duality that relates them. Such correspondences are significant because two independent discoveries of the same structure strongly suggest that the structure is natural.  
-</p>
-<p>
-  This document explores the duality between the simply typed λ-calculus (without product types) and the intuitionistic sequent calculus. This duality is particularly interesting because sequent calculus proofs and lambda terms are not inherently identical: for instance, the cut-elimination relations in sequent calculus are fundamentally <em>local</em>, while the β-equivalence relation in λ-calculus is inherently <em>global</em> (see Section 4.3). In this sense, the sequent calculus and λ-calculus offer, respectively, local and global perspectives on a shared logico-computational mathematical structure.
+  We explore the duality between the simply typed λ-calculus and the intuitionistic sequent calculus, highlighting their local and global perspectives on the same structure. It emphasizes how their differences, particularly in cut-elimination and β-equivalence, make the duality both informative and natural.
 </p>
 <p><h2>Other projects:</h2></p>
 
 <p><a href="https://hal.science/hal-04500078"><span class="s2">Simplifying normal functors: an old and a new model of λ-calculus</a></p>
-<p>This paper examines two approaches to modeling Linear Logic: one focusing on models with syntax as a support, and the other on syntax with models in a supporting role. Categorical models fall into the first category, often requiring constraints like the exponential modality (!) to be a comonad. Our focus is on "models of cut-elimination," which emphasize the syntactic perspective, often overlooked.
-
-We simplify Girard’s complex "normal functors" model, removing the need for normal functors and focusing on simpler normal functions. This leads to a new model distinct from existing ones like coherence spaces. We also reconsider Girard's use of "analytic functors," showing that λ-calculus interpretation only requires that functions are determined by their restrictions to smaller domains, not by power series. Our work challenges the necessity of categorical models, highlighting that the key feature of Linear Logic is its inherent linearity.</p>
+<p>We contrast two approaches to modeling linear logic—one prioritizing categorical models and the other emphasizing syntax through cut-elimination. It simplifies Girard’s normal functors model, introduces a new syntactic perspective, and challenges the necessity of categorical models by emphasizing the inherent linearity of linear logic.</p>
 
 <p>
 <a href="https://github.com/WilliamTroiani/linearlambdacalculus/tree/master/Working%20code"><span class="s2">A proof tree constructor for the Linear Lambda Calculus</span></a></p> <p>
-  The λ-calculus is a syntactic system designed with Girard's linear logic in mind. The concept is straightforward: since the Curry-Howard correspondence connects intuitionistic natural deduction with the simply typed λ-calculus, and the intuitionistic sequent calculus embeds into the linear logic sequent calculus, one might conjecture the existence of a "linear λ-calculus." Such a system has been constructed, and the content of this document describes a parser that takes a term in the linear λ-calculus as input and generates HTML code displaying the (necessarily unique) term-constructing tree corresponding to the term.
+  A parser for the linear λ-calculus, generating HTML representations of unique term-constructing trees.
 </p>
 <p>
   For instance, the term 
@@ -112,6 +93,9 @@ We simplify Girard’s complex "normal functors" model, removing the need for no
     <center>
         <img src="foundations-shot1.png" style="width:740px;height:450px;">
         </center>
+<h3>ART <a href="http://math.soimeme.org/~arunram/ARTseminar.html">seminar</a> (2025)</h3>
+<p>A philosophical journey through mathematics and music</p>
+<h3>PhD completion seminar (2024)</h3>
 <h3>Cambridge seminar</h3>
 <p>Computation in logic as the splitting of idempotents in algebraic geometry; two models of multiplicative linear logic (repeat of ChoCoLa talk, slides are different)
 <h3>Trends in Linear Logic and Applications</h3>
