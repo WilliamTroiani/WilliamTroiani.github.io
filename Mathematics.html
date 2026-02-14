@@ -1,170 +1,641 @@
-<html>
+<!doctype html>
+<html lang="en">
 <head>
-<link rel="stylesheet" href="css/main.css">
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-  <meta http-equiv="Content-Style-Type" content="text/css">
-  <title>Mathematics</title>
-    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
-<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Will Troiani — Mathematics</title>
+  <meta name="description" content="Will Troiani — logic, algebraic geometry, semantics of computation, singular learning theory, and AI safety." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Serif+4:wght@400;600;700&display=swap" rel="stylesheet" />
+
+  <style>
+    :root{
+      --max: 1120px;
+
+      /* Deep navy + gold */
+      --bg: #050711;
+      --bg2:#070a18;
+      --surface:#0b1224;
+      --surface2:#0e1630;
+      --text:#e8ecf6;
+      --muted:#b3bdd6;
+      --line: rgba(255,255,255,.10);
+
+      --gold:#d4b35d;
+      --gold2:#f0d48b;
+
+      --shadow: 0 18px 55px rgba(0,0,0,.55);
+      --shadow2: 0 10px 26px rgba(0,0,0,.42);
+      --radius: 18px;
+    }
+
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+      line-height:1.6;
+      color:var(--text);
+      background:
+        radial-gradient(950px 520px at 10% -12%, rgba(212,179,93,.18), transparent 55%),
+        radial-gradient(850px 520px at 90% -10%, rgba(240,212,139,.12), transparent 60%),
+        radial-gradient(900px 640px at 70% 110%, rgba(212,179,93,.10), transparent 58%),
+        linear-gradient(180deg, var(--bg), var(--bg2));
+    }
+    a{color:var(--gold2);text-decoration:none}
+    a:hover{text-decoration:underline;text-decoration-color:rgba(240,212,139,.7)}
+    .wrap{max-width:var(--max);margin:0 auto;padding:18px 16px 76px}
+
+    .skip{position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden}
+    .skip:focus{
+      left:16px;top:16px;width:auto;height:auto;padding:10px 12px;
+      background:var(--surface);border:1px solid var(--line);border-radius:12px;
+      box-shadow:var(--shadow2);z-index:9999
+    }
+
+    nav{
+      display:flex;flex-wrap:wrap;gap:10px 14px;align-items:center;
+      padding:10px 10px;
+      border:1px solid var(--line);
+      border-radius:999px;
+      background:rgba(11,18,36,.62);
+      backdrop-filter: blur(10px);
+      box-shadow: 0 10px 24px rgba(0,0,0,.32);
+      position:sticky;top:12px;z-index:50;
+    }
+    nav a{
+      color:var(--muted);
+      padding:8px 10px;border-radius:999px;
+    }
+    nav a[aria-current="page"]{
+      color:var(--text);
+      border:1px solid rgba(212,179,93,.35);
+      background: linear-gradient(135deg, rgba(212,179,93,.16), rgba(240,212,139,.08));
+    }
+
+    .hero{
+      margin-top:16px;
+      padding:22px 22px 18px;
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      background: linear-gradient(135deg, rgba(212,179,93,.10), rgba(255,255,255,.03));
+      box-shadow: var(--shadow);
+      overflow:hidden;
+      position:relative;
+    }
+    .hero::after{
+      content:"";
+      position:absolute; inset:-80px -80px auto auto;
+      width:360px;height:360px;
+      background:
+        radial-gradient(circle at 35% 35%, rgba(212,179,93,.28), transparent 55%),
+        radial-gradient(circle at 70% 70%, rgba(240,212,139,.18), transparent 58%);
+      opacity:.95;
+      transform: rotate(8deg);
+      pointer-events:none;
+    }
+    .heroGrid{display:grid;grid-template-columns:1fr;gap:18px;align-items:end}
+    @media (min-width: 920px){
+      .heroGrid{grid-template-columns: 1.15fr .85fr}
+    }
+    .name{margin:0;font-family:"Source Serif 4", serif;font-weight:700;font-size:2.45rem;letter-spacing:-0.02em}
+    .tagline{margin:8px 0 0;color:var(--muted);font-size:1.05rem}
+    .meta{display:flex;flex-wrap:wrap;gap:10px 18px;margin-top:14px;color:var(--muted);font-size:.98rem}
+    .meta a{color:var(--muted);text-decoration:underline;text-decoration-color:rgba(179,189,214,.35)}
+    .meta a:hover{text-decoration-color:rgba(240,212,139,.85)}
+
+    .portrait{
+      justify-self:end;
+      display:flex;gap:14px;align-items:center;
+      padding:12px 12px 10px;
+      border:1px solid var(--line);
+      border-radius:16px;
+      background:rgba(11,18,36,.55);
+      backdrop-filter: blur(8px);
+      box-shadow: 0 10px 30px rgba(0,0,0,.30);
+      max-width:420px;
+    }
+    .portrait img{
+      width:96px;height:96px;border-radius:16px;object-fit:cover;
+      border:1px solid rgba(255,255,255,.12);
+    }
+    .portrait .who{font-weight:700}
+    .portrait .small{margin-top:2px;color:var(--muted);font-size:.92rem}
+
+    .toc{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+    .toc a{
+      font-size:.92rem;padding:7px 10px;border-radius:999px;
+      border:1px solid var(--line);
+      background:rgba(11,18,36,.48);
+      color:var(--muted);
+    }
+    .toc a:hover{border-color:rgba(240,212,139,.35);color:var(--text);text-decoration:none}
+
+    section{margin-top:18px}
+    .card{
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      background:rgba(11,18,36,.92);
+      box-shadow: var(--shadow2);
+      padding:18px 18px 14px;
+    }
+
+    .grid2{display:grid;grid-template-columns:1fr;gap:14px;margin-top:14px;align-items:start}
+    @media (min-width: 980px){ .grid2{grid-template-columns: 1.15fr .85fr} }
+    .stack{display:grid;grid-template-columns:1fr;gap:14px}
+
+    h2{margin:0 0 10px;font-family:"Source Serif 4", serif;font-size:1.38rem;letter-spacing:-0.01em}
+    h3{margin:12px 0 6px;font-size:1.05rem}
+    p{margin:10px 0}
+    ul{margin:10px 0;padding-left:18px}
+    li{margin:7px 0}
+    .muted{color:var(--muted)}
+    .small{font-size:.95rem;color:var(--muted)}
+    .rule{height:1px;background:var(--line);margin:14px 0}
+
+    blockquote{
+      margin:12px 0 0;
+      padding:12px 14px;
+      border-left:3px solid rgba(240,212,139,.55);
+      background: rgba(240,212,139,.06);
+      border-radius: 12px;
+      color: var(--text);
+    }
+    blockquote p{margin:0}
+    blockquote .muted{display:block;margin-top:8px}
+
+    figure{margin:14px 0 0}
+    figure img{
+      width:100%;
+      height:auto;
+      border-radius:14px;
+      border:1px solid rgba(255,255,255,.12);
+      background:rgba(255,255,255,.02);
+    }
+    figcaption{
+      margin-top:10px;
+      color:var(--muted);
+      font-size:.92rem;
+    }
+    figcaption strong{color:var(--text);font-weight:600}
+
+    .badge{
+      display:inline-flex;align-items:center;gap:8px;
+      font-size:.82rem;
+      padding:5px 10px;border-radius:999px;
+      border:1px solid rgba(240,212,139,.26);
+      background:rgba(240,212,139,.08);
+      color:var(--gold2);
+      white-space:nowrap;
+    }
+    .badge.accepted{
+      border-color: rgba(212,179,93,.36);
+      background: rgba(212,179,93,.10);
+      color: var(--gold2);
+    }
+    .badge.preprint{
+      border-color: rgba(179,189,214,.22);
+      background: rgba(179,189,214,.08);
+      color: var(--muted);
+    }
+
+    .role{padding:12px 0;border-top:1px solid var(--line)}
+    .role:first-child{border-top:none;padding-top:0}
+    .roleTop{display:flex;flex-wrap:wrap;gap:10px 14px;align-items:baseline;justify-content:space-between}
+    .roleTop .who{font-weight:700}
+    .roleTop .when{color:var(--muted)}
+    .pill{
+      display:inline-block;
+      padding:4px 10px;border-radius:999px;
+      border:1px solid rgba(240,212,139,.24);
+      background:rgba(240,212,139,.08);
+      color:var(--gold2);
+      font-size:.86rem;
+      margin-left:8px;
+      white-space:nowrap;
+    }
+
+    .pub{padding:12px 0;border-top:1px solid var(--line)}
+    .pub:first-child{border-top:none;padding-top:0}
+    .pub .t{font-weight:700}
+    .pub .m{color:var(--muted);font-size:.95rem;margin-top:4px}
+    .pub .d{margin-top:8px;color:var(--muted)}
+    .pub .links{margin-top:8px;display:flex;flex-wrap:wrap;gap:10px 14px}
+    .pub .links a{color:var(--gold2);text-decoration:underline;text-decoration-color:rgba(240,212,139,.35)}
+    .pub .links a:hover{text-decoration-color:rgba(240,212,139,.85)}
+
+    details{
+      border:1px solid var(--line);
+      border-radius:16px;
+      padding:10px 12px;
+      background:rgba(255,255,255,.02)
+    }
+    details>summary{cursor:pointer;font-weight:700}
+    details .inner{padding-top:10px}
+
+    footer{margin-top:26px;padding:14px 4px 0;color:var(--muted);font-size:.92rem}
+
+    @media print{
+      nav{display:none !important}
+      body{background:#fff;color:#000}
+      .hero,.card,details{background:#fff;border-color:#ddd;box-shadow:none}
+      a{color:#000;text-decoration:none}
+      .badge{border-color:#777;background:#fff;color:#000}
+      figure img{border-color:#ddd}
+    }
+  </style>
 </head>
 <body>
-    <nav>
-	   <ul>
-	       <li><a href="/">Home</a></li>
-	       <li><a href="https://williamtroiani.github.io/pdfs/resume.pdf">CV</a></li>
-           <li><a href="/Mathematics.html">Mathematics</a></li>
-            <li><a href="/Obdurate.html">Obdurate</a></li>
-           <li><a href="/Teaching.html">Teaching</a></li>
-	   </ul>
+  <a class="skip" href="#main">Skip to content</a>
+
+  <div class="wrap">
+    <nav aria-label="Site navigation">
+      <a href="index.html">Home</a>
+      <a href="CV.html">CV</a>
+      <a href="Mathematics.html" aria-current="page">Mathematics</a>
+      <a href="Obdurate.html">Obdurate</a>
+      <a href="Teaching.html">Teaching</a>
+      <a href="Seminars.html">Seminars</a>
     </nav>
-    
-    <center><h1>Our brains will never know</h1></center>
-    
-    <center>
-    <iframe width="400" height="250" src="https://www.youtube.com/embed/jcqTq4a1kjY" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-    </center>
 
-<h2>PhD thesis</h2>
-<p><a href=https://williamtroiani.github.io/Notes/Algebraic_Geometry_and_Linear_Logic.pdf>Algebraic Geometry and Linear Logic</a> This thesis develops a geometric model for shallow multiplicative exponential linear logic proofs using Hilbert schemes, interpreting proofs as polynomials that correspond to closed subschemes of projective space. It connects linear logic to algebraic geometry and computational aspects like cut-elimination, exploring links to error-correcting codes, matrix factorizations, and functional programming.</p>
+    <header class="hero">
+      <div class="heroGrid">
+        <div>
+          <h1 class="name">Will Troiani</h1>
+          <div class="tagline">
+            Mathematician (logic & geometry) • semantics of computation • singular learning theory • AI safety
+          </div>
 
-<h2>Publications/preprints:</h2>
+          <div class="meta">
+            <span>Melbourne / remote</span>
+            <a href="mailto:william.a.troiani@gmail.com">william.a.troiani@gmail.com</a>
+            <a href="https://github.com/WilliamTroiani">GitHub</a>
+          </div>
 
-<p><a href=https://arxiv.org/abs/2502.08911>Linear Logic and the Hilbert Scheme</a> Extending an algebraic model of multiplicative linear logic to shallow proofs using the Hilbert scheme.
-<br><a href=https://arxiv.org/abs/2405.19051>Linear Logic and Quantum Error Correcting Codes</a> A connection between multiplicative proof nets in linear logic and quantum error-correcting codes is defined, interpreting cut-elimination as a quantum cooling process that reduces a system to its ground state. It formalizes this relationship using stabilizer codes, associating logical transformations with physical quantum operations and introducing examples like Majorana chains.
-<br><a href=https://arxiv.org/abs/2207.10871?context=cs.LO>Elimination and cut-elimination</a> This paper defines a ring associated with a proof net by quotienting a polynomial ring based on formula identifications, linking proof normalization to Gröbner bases via the Buchberger Algorithm. It introduces the Falling Roofs algorithm, an adapted version of Buchberger’s method, to handle cases where the proof net is not in normal form.
-</p>
-<center>
-<img src="FallingRoofs.png" width="500px" height="auto">
-</center>
-<p><a href="http://williamtroiani.github.io/pdfs/FiniteColimitsInternalLanguageTaAC.pdf">The Internal Logic and Topoi</a> Topoi are often described as “generalized theories of sets,” but are they? This description is frequently attributed to topoi due to the similarities between their internal logic and ZF set theory. We examine the differences between topoi and ZF set theory, emphasizing how their internal logics handle unions and products differently. It explores the implications of these differences when translating set-theoretic definitions into the internal language of a topos.
-<br><a href="https://arxiv.org/abs/2008.10131">Gentzen-Mints-Zucker Duality</a> We explore the duality between the simply typed λ-calculus and the intuitionistic sequent calculus, highlighting their local and global perspectives on the same structure. It emphasizes how their differences, particularly in cut-elimination and β-equivalence, make the duality both informative and natural.
-</p>
-<h2>Other projects:</h2></p>
-<p><a href="https://hal.science/hal-04500078"><span class="s2">Simplifying normal functors: an old and a new model of λ-calculus</a> We contrast two approaches to modeling linear logic—one prioritizing categorical models and the other emphasizing syntax through cut-elimination. It simplifies Girard’s normal functors model, introduces a new syntactic perspective, and challenges the necessity of categorical models by emphasizing the inherent linearity of linear logic.
-<br><a href="https://williamtroiani.github.io/Notes/InSimplicialSets.pdf">Finite simplicial sets are algorithms</a> In reference to the paper 'the Internal Logic and Topoi', we also implicitly formalise the idea that finite simplicial sets act as algorithms computing their geometric realisations, viewing the internal logic of a topos as a constructive programming language.
-<br><a href="https://github.com/WilliamTroiani/linearlambdacalculus/tree/master/Working%20code"><span class="s2">A proof tree constructor for the Linear Lambda Calculus</span></a>
-  A parser for the linear λ-calculus, generating HTML representations of unique term-constructing trees.
-<br> For instance, the term 
-  \( \lambda q \lambda p.\, \texttt{copy } q \texttt{ as } r, s \texttt{ in } \lambda z.\, \texttt{derelict}(p)(\texttt{derelict}(s)(\texttt{derelict}(r)z)) \) 
-  has the following diagram associated with it.
-</p>
-    <center>
-    <img src="d3.png" style="width:100%;height:350px;">
-    </center></p>
-    <hr>
-    <center><h1><b>Notes</b></h1></center>
-<h2><b>Algebra/geometry</b></h2>
-<p><a href="https://williamtroiani.github.io/Notes/CommutativeAlgebra.pdf">Elementary commutative algebra</a>: Linear algebra, rings and modules, polynomial rings, fields, field extensions, integral extensions and Jacobson rings, dimension theory, discrete valuation rings, completions.
-<br><a href="https://williamtroiani.github.io/Notes/SecondaryCommutativeAlgebra.pdf">Secondary algebra</a>: Graded rings/modules/algebras, (quasi-)regular sequences, Clifford algebras.
-<br><a href="https://williamtroiani.github.io/pdfs/Varieties.pdf">Introduction to varieties</a>: Affine varieties, projective varieties (Gr&#246;bner bases), morphisms, singularities.
-<h2><b>Logic/computation</b></h2>
-<p>
-    <a href="https://williamtroiani.github.io/Notes/lambdacalcandChurchRosser.pdf">Introduction to the untyped &lambda;-Calculus</a>: Church-Rosser Theorem.
-    <br><a href="https://williamtroiani.github.io/Notes/LinearLogic.pdf">Introduction to linear logic: multiplicatives</a>: The sequentialisation theorem, geometry of interaction 0 (proofs as permutations), persistent paths, geometry of interaction 1 (proofs as operators).
-    <br><a href="https://williamtroiani.github.io/Notes/FirstIncompletenessTheorem.tex.pdf">G&#246;del's First Incompleteness Theorem</a>: General recursive functions, Chinese Remainder Theorem, &beta;-function, diagonalisation, G&#246;del's sentence.
-    <br><a href="https://williamtroiani.github.io/Notes/PredicateLogic.pdf"> First order logic</a>: Syntax, semantics, proof (natural deduction), Skolemisation, Lowenhiem-Skolem Theorem, Compactness Theorem.
-    <br><a href="https://williamtroiani.github.io/Notes/ax-grothendieck.pdf"> The Ax-Grothendieck Theorem</a>: Transporting proofs, algebraic completeness.
-    <br><a href="https://williamtroiani.github.io/Notes/QuantumComputing.pdf">A mathematician's introduction to quantum error correction</a>: Quantum computing, the density operator, error correction (examples), general error correction, stabilisers.
-    <br><a href="https://williamtroiani.github.io/Notes/Reversible_computation_talk_notes.pdf"> Reversible computation</a>: "Reverse" of a Turing Machine, Turing Machines are reversible.
-    <br><a href="https://williamtroiani.github.io/pdfs/Approximation_of_Continuous_Functions_by_ReLU_Nets.pdf">Approximation of Continuous Functions by ReLU Nets</a>: Feed-forward ReLU activations, approximation by polynomials.
-</p>
-    <hr>
-    <center><h1><b>Seminars</b></h1></center>
-    <p>Some of the following seminars took place at <a hre="https://metauni.org/">metauni</a>, a virtual and free-to-access campus. Come and join us on <a href="https://discord.com/invite/9yBaAxPSK8">discord</a>
-    </p>
-    <center>
-        <img src="foundations-shot1.png" style="width:740px;height:450px;">
-        </center>
-<h3>ART <a href="http://math.soimeme.org/~arunram/ARTseminar.html">seminar</a> (2025)</h3>
-<p>A philosophical journey through mathematics and music</p>
-<h3>PhD completion seminar (2024)</h3>
-<h3>Cambridge seminar</h3>
-<p>Computation in logic as the splitting of idempotents in algebraic geometry; two models of multiplicative linear logic (repeat of ChoCoLa talk, slides are different)
-<h3>Trends in Linear Logic and Applications</h3>
-<p>Normal funct<s>ors</s>[ions], [the irrelevance of] power series, and [a new model of] &lambda;-calculus
-<h3>CHoCoLa (2023)</h3>
-<p>Computation in logic as the splitting of idempotents in algebraic geometry; two models of multiplicative linear logic<a href="https://williamtroiani.github.io/pdfs/CatGoISlides.pdf"> slides</a></p>
-<h3>Anything at all seminar (metauni)</h3>
-<p>Story telling (in mathematics and music)<a href="https://www.youtube.com/watch?v=WmsXyUjZGHs&feature=youtu.be"> video<a href="https://williamtroiani.github.io/Notes/MusicandMathematics.pdf"> notes</a><a href="https://metauniservice.com/transcript?videoID=WmsXyUjZGHs"> synopsis/transcript</a>
-<br>An object is whole only with its contrary; composing music and creating mathematics<a href="https://www.youtube.com/watch?v=i1wM_Gd62ms"> video</a><a href="https://metauniservice.com/transcript?videoID=WmsXyUjZGHs"> synopsis/transcript </a></p>
-<h3>Axe Complexités (2022)</h3>
-<p>Quantum error correcting codes and cut-elimination<a href="https://bbb.lipn.univ-paris13.fr/b/sei-nlh-8vr-xvy"> video (scroll down)</a></p>
-<h3>Foundations</h3>
-<p>First order logic <a href="https://youtu.be/2S83EcpCKBY">video</a>
-<br>Models of first order theories <a href="https://youtu.be/hI3WKeaHCkk">video</a>
-<br>G&#246;del's First Incompleteness Theorem Part 1 (proof sketch) <a href="https://youtu.be/TRhR88anv3M">video</a>
-<br>G&#246;del's First Incompleteness Theorem Part 2 (general recursive functions) <a href="https://youtu.be/GQ4DFMNKvwY">video</a>
-<br>G&#246;del's First Incompleteness Theorem Part 3 (Chinese Remainder Theorem and the &beta;-function trick) <a href="https://youtu.be/hz-IWh9CF9A">video</a>
-<br>G&#246;del's First Incompleteness Theorem Part 4 (properties of general recursive functions) <a href="https://youtu.be/KxnE1mwRG-k">video</a>
-<br>G&#246;del's First Incompleteness Theorem Part 5 (general recursive functions are representable 1) <a href="https://youtu.be/gw_rks-tLdI">video</a>
-<br>G&#246;del's First Incompleteness Theorem Part 6 (general recursive functions are representable 2) <a href="https://youtu.be/25ZGE0PiioE">video</a>
-<br>Ax–Grothendieck Theorem part 1 (proof sketch) <a href="https://youtu.be/Fccfv2DWUgM">video</a>
-<br>Ax–Grothendieck Theorem part 2 (the geometric part) <a href="https://youtu.be/49QuhzdEy50">video</a>
-<br>Ax–Grothendieck Theorem part 3 (Skolemisation) <a href="https://youtu.be/VXJUwWBDJmQ">video</a>
-<br>Ax–Grothendieck Theorem part 4 (Lower Lownehiem-Skolem Theorem) <a href="https://youtu.be/6qntBQHffNo">video</a>
-<br>Ax-Grothendieck Theorem part 5 (Finishing the proof) <a href="https://youtu.be/m-LAhuMQZfM">video</a>
-</p>
-<h3><b>Group de travail cat&eacute;gories (2022)</b> (all the videos can be found <a href="https://bbb.lipn.univ-paris13.fr/b/rog-vao-uwm-s2j">here</a> by scrolling down)</h3>
-<p>Introduction to Category Theory
-<br>Topoi and logic 1
-<br>Topoi and logic 2
-<br>Elimination and cut-elimination</p>
-<h3><b>Institut de Mathématiques de Marseille, Logic and Interactions (2022)</b></h3>
-<p>Proofs, rings, and ideals, <a href="https://williamtroiani.github.io/pdfs/AlgPntSlides.pdf">slides</a></p>
-<h3><b>Computation, Geometry, Logic (2021)</b></h3>
-<p>Proof nets <a href="https://www.youtube.com/watch?v=OscoUN_kWUE">video</a>
-<br>The Sequentialisation Theorem <a href="https://www.youtube.com/watch?v=OscoUN_kWUE">video</a>
-<br>Geometry of Interaction Zero, proofs as permutations <a href="https://www.youtube.com/watch?v=jcqTq4a1kjY">video</a>
-<h3><b>Melbourne Haskell Group (2020)</b></h3>
-<p>Gentzen-Mints-Zucker Duality, <a href="https://www.youtube.com/watch?v=TEkQHyTBL54&amp;t">video</a></p>
-<h3><b>Topological Quantum Computing (2019)</b></h3>
-<p>Reversible Turing Machines, <a href="https://williamtroiani.github.io/Notes/Reversible_computation_talk_notes.pdf">notes</a>
-<br>A crash course in simplicial cohomology with coefficients in Z mod 2, <a href="http://therisingsea.org/notes/talk-will-homology.pdf">notes</a></p>
-<h3><b>Graduate Topology Seminar (2019)</b></h3>
-<p>Arithmetisation and localisation, <a href="https://williamtroiani.github.io/pdfs/ArithmetisationandInteraction.pdf">notes</a></p>
-<h3><b>Deep Learning</b></h3>
-<p>Approximation of Continuous Functions by ReLU Nets, <a href="https://williamtroiani.github.io/pdfs/Approximation_of_Continuous_Functions_by_ReLU_Nets.pdf">notes</a></p>
-<h3><b>Topos Theory and Categorical Logic (2018)</b></h3>
-<p>Monads and programs, <a href="http://therisingsea.org/notes/ch2018-lecture3.pdf">notes</a>
-<br>Higher-order Logic and Topoi, <a href="http://therisingsea.org/notes/ch2018-lecture8.pdf">notes</a>
-<br>The Classifying Space of Rings, <a href="http://therisingsea.org/notes/ch2018-lecture14.pdf">notes</a></p>
-<h3><b>DST Seminar (2017)</b></h3>
-<p>Monads and Programs, <a href="http://williamtroiani.github.io/pdfs/MonadsinCategoryTheoryandComputerScience.pdf">slides</a></p>
-<h3><b>Curry-Howard Correspondence (2016)</b></h3>
-<p>The Church-Rosser Theorem, <a href="http://therisingsea.org/notes/talk-will-churchrosser.pdf">notes</a>, <a href="https://williamtroiani.github.io/Notes/lambdacalcandChurchRosser.pdf">improved notes</a>
-<br>Introduction to Lambda-Calculus, <a href="http://therisingsea.org/notes/talk-will-lambda.pdf">notes</a>
-<br>System F in the real world: Haskell and functional programming, <a href="http://therisingsea.org/notes/talk-will-haskell.pdf">notes</a>, the referenced talk by Rich Hickey is <a href="https://www.infoq.com/presentations/Simple-Made-Easy/">Simple made easy</a></p>
+          <div class="toc" aria-label="On this page">
+            <a href="#summary">Research</a>
+            <a href="#experience">Experience</a>
+            <a href="#publications">Publications</a>
+            <a href="#talks">Talks</a>
+            <a href="#writing">Writing</a>
+            <a href="#funding">Funding</a>
+          </div>
+        </div>
 
-	<hr>
-<section>
-        <center><h1>Blog Posts</h1></center>
-        <p><a href="https://williamtroiani.github.io/Notes/PresentingMathematics.pdf">Presenting mathematics</a></p>
-</section>
+        <div class="portrait" aria-label="Portrait">
+          <img src="Me.jpg" alt="Portrait of Will Troiani in a suit." />
+          <div>
+            <div class="who">Will Troiani</div>
+            <div class="small">PhD (Melbourne / USPN). Research Scientist (Theory), Timaeus.</div>
+          </div>
+        </div>
+      </div>
+    </header>
 
-<hr>
-<center><h1><b>Art</b></h1></center>
-<h2><b>Taming the frame (2021),</b> a mathematical commentary on an artwork created by <a href="https://www.nobbyseymour.com.au/">Nobby Seymour</a></h2>
-<p>
-Nobby's statement:
-<br>
-<br><i>Nature (in the form of gravity and as a commanding higher voice) has had its say; now for a more rigorous formal approach.
-<br>    
-<br>Using the integer 1 and the first four prime numbers, 2, 3, 5 and 7, I constructed a Cartesian grid centred on x and y = 0. I plotted all possible positive and negative values of the x and y coordinates (48 in all) and these formed the vertices of a square grid. Then I selected the 24 outmost coordinates and these served as the centrepoint of circles whose circumference passed through the midpoint of the previously established grid squares. This formed an interlocking path of arc quadrants which form the (blue) trajectory above, reminiscent of patterns in in early Chinese and Islamic Design. The central void also appealed to me, for reasons at this stage unfathomable.
-<br>
-<br>I was pleased to see the frame as a trajectory, emerging from the geometric matrix that shapes much of our world.
-There is a famous optical illusion in which some people see a duck, others a rabbit. My friend Will Troiani, who has tutored me over the years in mathematics I have required for various projects, turns up at the studio, looks at my Trajectory and sees a beautiful algorithm lurking there.
-<br>
-        <br>Before we reach the concluding work, Taming the Frame, I am delighted by any confluence of visual theory and science, Take it away Will.</i>
-    </p>
-    <center>
-        <p><a href="Notes/Nobby.pdf">The algorithm</a></p>
-    <img src="tragectory.png" width=40%>
-    </center>
-    
-    <footer>
-	    		<ul>
-	        		<li><a href="mailto:william.a.troiani@gmail.com">email</a></li>
-	        		<li><a href="https://github.com/WilliamTroiani">github.com/WilliamTroiani</a></li>
-				</ul>
-			</footer>
-    </body>
+    <main id="main">
+
+      <section id="summary">
+        <div class="grid2">
+          <div class="card">
+            <h2>Research summary</h2>
+
+            <p>
+              I work at the boundary between <strong>logic</strong>, <strong>algebraic geometry</strong>, and <strong>computation</strong>.
+              A recurring theme is that <em>computation has geometry</em>:
+              normalization and cut-elimination can be represented as algebraic operations
+              (ideals, Gröbner bases, schemes) and—via <strong>singular learning theory</strong>—as local geometry near critical points.
+            </p>
+
+            <p class="muted">
+              I’m particularly interested in how this perspective can inform <strong>AI safety</strong>:
+              interpretability as structural inference, model selection for singular models, and understanding when
+              two systems that compute the same function nonetheless have meaningfully different internal structure.
+            </p>
+
+            <blockquote>
+              <p>
+                A romantic image comes to mind: as one performs deductive reasoning, a kind of geometric hologram
+                appears overhead, structures blooming in harmonic alignment with the logic, or else the contrary.
+              </p>
+            </blockquote>
+
+            <figure>
+              <a href="FallingRoofsAlgorithm.png">
+                <img src="FallingRoofsAlgorithm.png" alt="Diagram labeled X1, X2, ... illustrating a graphical presentation of the Falling Roofs algorithm." />
+              </a>
+              <figcaption>
+                <strong>A graphical presentation of the Falling Roofs algorithm</strong>, from the paper
+                <em>“Elimination and cut-elimination in multiplicative linear logic”</em>.
+              </figcaption>
+            </figure>
+          </div>
+
+          <div class="stack">
+            <div class="card">
+              <h2>Core interests</h2>
+              <ul>
+                <li>Linear logic, proof nets, cut-elimination</li>
+                <li>Algebraic geometry (Hilbert schemes; schemes and singularities)</li>
+                <li>Type theory (programs-as-proofs viewpoints)</li>
+                <li>Categorical logic and internal languages</li>
+                <li>Computability and denotational semantics</li>
+                <li>Singular learning theory (SLT)</li>
+                <li>Quantum error correction (via logical/semantic viewpoints)</li>
+              </ul>
+            </div>
+
+            <div class="card">
+              <h2>Adjacent interests & practice</h2>
+              <ul>
+                <li>Mathematical musicology; mathematical aesthetics</li>
+                <li>Perspective/projective geometry</li>
+                <li>Foundations of mathematics; philosophy of mathematics; philosophy of science</li>
+                <li>Quantum computing</li>
+                <li>Formal verification</li>
+                <li>Mathematical communication; storytelling as a research tool</li>
+                <li>Generative/algorithmic art; audio‑visual performance</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="experience" class="card">
+        <h2>Experience</h2>
+
+        <div class="role">
+          <div class="roleTop">
+            <div class="who">Research Scientist (Theory) <span class="pill">Timaeus</span></div>
+            <div class="when">Jul 2025 – Aug 2026 (fixed-term; remote)</div>
+          </div>
+          <ul class="small">
+            <li>Research focus: singular learning theory, geometry of computation, and implications for AI safety (model selection, structural inference, interpretability).</li>
+            <li>Employment administered via EOR arrangements (Deel Australia Services Pty Ltd; later Justworks Global Ventures Australia Pty Ltd), making the affiliation with <strong>Timaeus</strong> explicit.</li>
+          </ul>
+        </div>
+
+        <div class="role">
+          <div class="roleTop">
+            <div class="who">Postgraduate Researcher (ARC-funded), University of Melbourne</div>
+            <div class="when">2024 – Jul 2025</div>
+          </div>
+          <div class="small muted">Supervisors: Daniel Murfet, David Ridout.</div>
+        </div>
+
+        <div class="role">
+          <div class="roleTop">
+            <div class="who">Research Assistant (DST-funded), University of Melbourne</div>
+            <div class="when">2017 – 2018</div>
+          </div>
+          <div class="small muted">Supervisor: Daniel Murfet.</div>
+        </div>
+      </section>
+
+      <section id="education" class="card">
+        <h2>Education</h2>
+
+        <div class="role">
+          <div class="roleTop">
+            <div class="who">PhD in Mathematics, University of Melbourne (with study abroad at Université Sorbonne Paris Nord)</div>
+            <div class="when">2020 – 2024</div>
+          </div>
+          <ul class="small">
+            <li><strong>Thesis:</strong> <em>Algebraic Geometry and Linear Logic</em> • <a href="Notes/Algebraic_Geometry_and_Linear_Logic.pdf">PDF</a></li>
+            <li><strong>Supervisors:</strong> Daniel Murfet; Thomas Seiller (USPN)</li>
+          </ul>
+        </div>
+
+        <div class="role">
+          <div class="roleTop">
+            <div class="who">Master of Science (Mathematics & Statistics), University of Melbourne</div>
+            <div class="when">2017 – 2019</div>
+          </div>
+          <ul class="small">
+            <li><strong>Thesis:</strong> <em>Simplicial Sets are Algorithms</em> • <a href="https://therisingsea.org/notes/MScThesisWillTroiani.pdf">PDF</a></li>
+            <li><strong>Supervisor:</strong> Daniel Murfet</li>
+          </ul>
+        </div>
+
+        <div class="role">
+          <div class="roleTop">
+            <div class="who">Bachelor of Science (Mathematics & Statistics), University of Melbourne</div>
+            <div class="when">2013 – 2016</div>
+          </div>
+        </div>
+      </section>
+
+      <section id="publications" class="card">
+        <h2>Publications & research writing</h2>
+
+        <h3>Peer‑reviewed / accepted</h3>
+
+        <div class="pub">
+          <div class="t">The Internal Logic and Finite Colimits <span class="badge">Published</span></div>
+          <div class="m">Solo-authored • <em>Logica Universalis</em> • <a href="pdfs/FiniteColimitsInternalLanguageTaAC.pdf">PDF</a></div>
+          <div class="d">Internal languages of topoi; constructive descriptions of finite colimits; contrasts with ZF‑style set‑theoretic intuition.</div>
+        </div>
+
+        <div class="pub">
+          <div class="t"><a href="https://arxiv.org/abs/2207.10871">Elimination and cut-elimination in multiplicative linear logic</a> <span class="badge accepted">Accepted</span></div>
+          <div class="m">With Daniel Murfet • <em>Mathematical Structures in Computer Science</em> • arXiv:2207.10871</div>
+          <div class="d">Associates ideals to proof structures; links normalization to Gröbner bases via a Buchberger‑style “Falling Roofs” algorithm.</div>
+        </div>
+
+        <div class="pub">
+          <div class="t"><a href="https://arxiv.org/abs/2502.08911">Linear Logic and the Hilbert Scheme</a> <span class="badge accepted">Accepted</span></div>
+          <div class="m">With Daniel Murfet • arXiv:2502.08911 (2025)</div>
+          <div class="d">A geometric semantics for shallow MELL proofs via Hilbert schemes; invariance under cut‑elimination via explicit isomorphisms.</div>
+        </div>
+
+        <div class="pub">
+          <div class="t"><a href="https://arxiv.org/abs/2008.10131">Gentzen–Mints–Zucker duality</a> <span class="badge accepted">Accepted</span></div>
+          <div class="m">With Daniel Murfet • arXiv:2008.10131 (2020)</div>
+          <div class="d">Relates simply‑typed λ‑calculus and intuitionistic sequent calculus; local vs global perspectives on the same computational structure.</div>
+        </div>
+
+        <h3>Conference</h3>
+        <div class="pub">
+          <div class="t"><a href="https://arxiv.org/abs/2504.08075">Programs as Singularities</a> <span class="badge accepted">Accepted (ODYSSEY 2025)</span></div>
+          <div class="m">With Daniel Murfet • arXiv:2504.08075 (Apr 2025)</div>
+          <div class="d">
+            Develops a correspondence between Turing machine structure and singularities of real analytic functions by embedding discrete codes into a smooth “noisy” parameter space.
+            Relates Taylor coefficients of a likelihood potential to error syndromes, connecting linear‑logic derivatives with singular learning theory and Bayesian inference.
+          </div>
+        </div>
+
+        <h3>Preprints (submitted to MSCS)</h3>
+        <div class="pub">
+          <div class="t"><a href="https://arxiv.org/abs/2405.19051">Linear Logic and Quantum Error Correcting Codes</a> <span class="badge preprint">Preprint</span></div>
+          <div class="m">With Daniel Murfet • arXiv:2405.19051 (2024)</div>
+          <div class="d">Interprets multiplicative proof‑net reduction through stabilizer codes; cut‑elimination as a quantum cooling / correction process.</div>
+        </div>
+
+        <h3>Other research writing</h3>
+        <div class="pub">
+          <div class="t"><a href="https://hal.science/hal-04029063">Simplifying normal functors: an old and a new model of λ‑calculus</a> <span class="badge preprint">Note / preprint</span></div>
+          <div class="m">HAL preprint</div>
+          <div class="d">Contrasts categorical and syntactic perspectives on linear logic; revisits Girard’s normal functors model.</div>
+        </div>
+
+        <div class="pub">
+          <div class="t"><a href="https://therisingsea.org/notes/MScThesisWillTroiani.pdf">Simplicial Sets are Algorithms</a> <span class="badge preprint">MSc thesis</span></div>
+          <div class="m">University of Melbourne (2019)</div>
+          <div class="d">A constructive viewpoint on finite simplicial sets and the computation of geometric realisations.</div>
+        </div>
+      </section>
+
+      <section id="talks" class="card">
+        <h2>Selected talks & lecture series</h2>
+
+        <ul>
+          <li>
+            <strong>18 Feb 2025</strong> — ART Seminar, University of Melbourne:
+            <em>Patterns of Thought: A Philosophical Journey Through Mathematics and Music</em>
+            (<a href="http://math.soimeme.org/~arunram/ARTseminar.html">seminar page</a>).
+          </li>
+
+          <li>
+            <strong>30 Mar 2023</strong> — CHoCoLa (ENS Lyon):
+            <em>Computation in logic as the splitting of idempotents in algebraic geometry; two models of multiplicative linear logic</em>
+            (<a href="pdfs/CatGoISlides.pdf">slides</a>).
+          </li>
+
+          <li>
+            <strong>Nov 2023</strong> — <em>Derivatives in Logic and Learning</em> (bonus seminar on Differential Linear Logic).
+          </li>
+        </ul>
+
+        <details>
+          <summary>Seminar links (full index)</summary>
+          <div class="inner">
+            <h3>Metauni: Anything at all seminar</h3>
+            <ul>
+              <li>
+                <em>Story telling (in mathematics and music)</em> —
+                <a href="https://www.youtube.com/watch?v=WmsXyUjZGHs&feature=youtu.be">video</a>,
+                <a href="Notes/MusicandMathematics.pdf">notes</a>,
+                <a href="https://metauniservice.com/transcript?videoID=WmsXyUjZGHs">synopsis/transcript</a>
+              </li>
+              <li>
+                <em>An object is whole only with its contrary; composing music and creating mathematics</em> —
+                <a href="https://www.youtube.com/watch?v=i1wM_Gd62ms">video</a>,
+                <a href="https://metauniservice.com/transcript?videoID=i1wM_Gd62ms">synopsis/transcript</a>
+              </li>
+            </ul>
+
+            <h3>Metauni: Foundations (videos)</h3>
+            <ul>
+              <li>First order logic — <a href="https://youtu.be/2S83EcpCKBY">video</a></li>
+              <li>Models of first order theories — <a href="https://youtu.be/hI3WKeaHCkk">video</a></li>
+              <li>Gödel (Part 1) — <a href="https://youtu.be/TRhR88anv3M">video</a></li>
+              <li>Gödel (Part 2) — <a href="https://youtu.be/GQ4DFMNKvwY">video</a></li>
+              <li>Gödel (Part 3) — <a href="https://youtu.be/hz-IWh9CF9A">video</a></li>
+              <li>Gödel (Part 4) — <a href="https://youtu.be/KxnE1mwRG-k">video</a></li>
+              <li>Gödel (Part 5) — <a href="https://youtu.be/gw_rks-tLdI">video</a></li>
+              <li>Gödel (Part 6) — <a href="https://youtu.be/25ZGE0PiioE">video</a></li>
+              <li>Ax–Grothendieck (Part 1) — <a href="https://youtu.be/Fccfv2DWUgM">video</a></li>
+              <li>Ax–Grothendieck (Part 2) — <a href="https://youtu.be/49QuhzdEy50">video</a></li>
+              <li>Ax–Grothendieck (Part 3) — <a href="https://youtu.be/VXJUwWBDJmQ">video</a></li>
+              <li>Ax–Grothendieck (Part 4) — <a href="https://youtu.be/6qntBQHffNo">video</a></li>
+              <li>Ax–Grothendieck (Part 5) — <a href="https://youtu.be/m-LAhuMQZfM">video</a></li>
+            </ul>
+
+            <h3>Other seminars</h3>
+            <ul>
+              <li>
+                Axe Complexités (2022) — <em>Quantum error correcting codes and cut‑elimination</em> —
+                <a href="https://bbb.lipn.univ-paris13.fr/b/sei-nlh-8vr-xvy">video</a> (scroll down)
+              </li>
+              <li>
+                Institut de Mathématiques de Marseille, Logic and Interactions (2022) —
+                <em>Proofs, rings, and ideals</em> —
+                <a href="pdfs/AlgPntSlides.pdf">slides</a>
+              </li>
+              <li>
+                Computation, Geometry, Logic (2021) —
+                Proof nets (<a href="https://www.youtube.com/watch?v=OscoUN_kWUE">video</a>),
+                Sequentialisation (<a href="https://www.youtube.com/watch?v=OscoUN_kWUE">video</a>),
+                GoI0 (<a href="https://www.youtube.com/watch?v=jcqTq4a1kjY">video</a>)
+              </li>
+              <li>
+                Melbourne Haskell Group (2020) —
+                <em>Gentzen–Mints–Zucker duality</em> —
+                <a href="https://www.youtube.com/watch?v=TEkQHyTBL54&t">video</a>
+              </li>
+              <li>
+                Topological Quantum Computing (2019) —
+                <a href="Notes/Reversible_computation_talk_notes.pdf">Reversible Turing Machines (notes)</a>;
+                <a href="http://therisingsea.org/notes/talk-will-homology.pdf">Simplicial cohomology with Z/2 (notes)</a>
+              </li>
+              <li>
+                Graduate Topology Seminar (2019) —
+                <a href="pdfs/ArithmetisationandInteraction.pdf">Arithmetisation and localisation (notes)</a>
+              </li>
+              <li>
+                Topos Theory and Categorical Logic (2018) —
+                <a href="http://therisingsea.org/notes/ch2018-lecture3.pdf">Monads and programs</a>;
+                <a href="http://therisingsea.org/notes/ch2018-lecture8.pdf">Higher‑order logic and topoi</a>;
+                <a href="http://therisingsea.org/notes/ch2018-lecture14.pdf">Classifying space of rings</a>
+              </li>
+              <li>
+                DST Seminar (2017) —
+                <a href="pdfs/MonadsinCategoryTheoryandComputerScience.pdf">Monads and Programs (slides)</a>
+              </li>
+              <li>
+                Curry–Howard Correspondence (2016) —
+                <a href="http://therisingsea.org/notes/talk-will-churchrosser.pdf">Church–Rosser (notes)</a>,
+                <a href="Notes/lambdacalcandChurchRosser.pdf">improved notes</a>;
+                <a href="http://therisingsea.org/notes/talk-will-lambda.pdf">intro λ‑calculus (notes)</a>;
+                <a href="http://therisingsea.org/notes/talk-will-haskell.pdf">System F in the real world (notes)</a>
+              </li>
+            </ul>
+          </div>
+        </details>
+      </section>
+
+      <section id="writing" class="card">
+        <h2>Expository writing & essays</h2>
+        <ul>
+          <li><a href="Notes/PresentingMathematics.pdf">Presenting mathematics</a> <span class="muted">(essay)</span></li>
+          <li><a href="Notes/WhatIfImNotGoodEnough.pdf">What if I’m not good enough?</a> <span class="muted">(essay)</span></li>
+        </ul>
+        <p class="small muted">
+          If a filename differs on your repo, keep the title and update the link.
+        </p>
+      </section>
+
+      <section id="funding" class="card">
+        <h2>Scholarships & funding</h2>
+
+        <h3>Scholarships</h3>
+        <ul>
+          <li><strong>2016</strong> — AMSI Summer Research Scholarship (Vacation Research Scholarship), supervisor: Daniel Murfet.</li>
+          <li><strong>2016</strong> — AMSI Travel Grant.</li>
+          <li><strong>2015</strong> — University of Melbourne Vacation Research Scholarship, supervisor: Peter Forrester.</li>
+        </ul>
+
+        <h3>Grants / funding context</h3>
+        <ul>
+          <li><strong>ARC-funded</strong> postgraduate research position (University of Melbourne), 2024 – Jul 2025.</li>
+          <li><strong>ARIA (UK)</strong> — <em>Mathematics for Safe AI</em>: grant held by Timaeus; I was hired under this award as Research Scientist (Theory).</li>
+        </ul>
+      </section>
+
+      <footer>
+        <div>© 2026 Will Troiani. Last updated: <span id="lastUpdated"></span>.</div>
+      </footer>
+    </main>
+  </div>
+
+  <script>
+    (function(){
+      var el = document.getElementById('lastUpdated');
+      if(!el) return;
+      var d = new Date(document.lastModified);
+      el.textContent = isNaN(d.getTime()) ? '' : d.toLocaleDateString();
+    })();
+  </script>
+</body>
+</html>
