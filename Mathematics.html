@@ -1,641 +1,1294 @@
 <!doctype html>
 <html lang="en">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Will Troiani — Mathematics</title>
-  <meta name="description" content="Will Troiani — logic, algebraic geometry, semantics of computation, singular learning theory, and AI safety." />
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width,initial-scale=1" />
+        <title>Will Troiani — Mathematics</title>
+        <meta
+            name="description"
+            content="Will Troiani — logic, algebraic geometry, semantics of computation, singular learning theory, and AI safety."
+        />
 
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Serif+4:wght@400;600;700&display=swap" rel="stylesheet" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Serif+4:wght@400;600;700&display=swap"
+            rel="stylesheet"
+        />
 
-  <style>
-    :root{
-      --max: 1120px;
+        <style>
+            :root {
+                --max: 1120px;
 
-      /* Deep navy + gold */
-      --bg: #050711;
-      --bg2:#070a18;
-      --surface:#0b1224;
-      --surface2:#0e1630;
-      --text:#e8ecf6;
-      --muted:#b3bdd6;
-      --line: rgba(255,255,255,.10);
+                /* Deep navy + gold */
+                --bg: #050711;
+                --bg2: #070a18;
+                --surface: #0b1224;
+                --surface2: #0e1630;
+                --text: #e8ecf6;
+                --muted: #b3bdd6;
+                --line: rgba(255, 255, 255, 0.1);
 
-      --gold:#d4b35d;
-      --gold2:#f0d48b;
+                --gold: #d4b35d;
+                --gold2: #f0d48b;
 
-      --shadow: 0 18px 55px rgba(0,0,0,.55);
-      --shadow2: 0 10px 26px rgba(0,0,0,.42);
-      --radius: 18px;
-    }
+                --shadow: 0 18px 55px rgba(0, 0, 0, 0.55);
+                --shadow2: 0 10px 26px rgba(0, 0, 0, 0.42);
+                --radius: 18px;
+            }
 
-    *{box-sizing:border-box}
-    html,body{height:100%}
-    body{
-      margin:0;
-      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
-      line-height:1.6;
-      color:var(--text);
-      background:
-        radial-gradient(950px 520px at 10% -12%, rgba(212,179,93,.18), transparent 55%),
-        radial-gradient(850px 520px at 90% -10%, rgba(240,212,139,.12), transparent 60%),
-        radial-gradient(900px 640px at 70% 110%, rgba(212,179,93,.10), transparent 58%),
-        linear-gradient(180deg, var(--bg), var(--bg2));
-    }
-    a{color:var(--gold2);text-decoration:none}
-    a:hover{text-decoration:underline;text-decoration-color:rgba(240,212,139,.7)}
-    .wrap{max-width:var(--max);margin:0 auto;padding:18px 16px 76px}
+            * {
+                box-sizing: border-box;
+            }
+            html,
+            body {
+                height: 100%;
+            }
+            body {
+                margin: 0;
+                font-family:
+                    Inter,
+                    system-ui,
+                    -apple-system,
+                    Segoe UI,
+                    Roboto,
+                    Helvetica,
+                    Arial,
+                    sans-serif;
+                line-height: 1.6;
+                color: var(--text);
+                background:
+                    radial-gradient(
+                        950px 520px at 10% -12%,
+                        rgba(212, 179, 93, 0.18),
+                        transparent 55%
+                    ),
+                    radial-gradient(
+                        850px 520px at 90% -10%,
+                        rgba(240, 212, 139, 0.12),
+                        transparent 60%
+                    ),
+                    radial-gradient(
+                        900px 640px at 70% 110%,
+                        rgba(212, 179, 93, 0.1),
+                        transparent 58%
+                    ),
+                    linear-gradient(180deg, var(--bg), var(--bg2));
+            }
+            a {
+                color: var(--gold2);
+                text-decoration: none;
+            }
+            a:hover {
+                text-decoration: underline;
+                text-decoration-color: rgba(240, 212, 139, 0.7);
+            }
+            .wrap {
+                max-width: var(--max);
+                margin: 0 auto;
+                padding: 18px 16px 76px;
+            }
 
-    .skip{position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden}
-    .skip:focus{
-      left:16px;top:16px;width:auto;height:auto;padding:10px 12px;
-      background:var(--surface);border:1px solid var(--line);border-radius:12px;
-      box-shadow:var(--shadow2);z-index:9999
-    }
+            .skip {
+                position: absolute;
+                left: -9999px;
+                top: auto;
+                width: 1px;
+                height: 1px;
+                overflow: hidden;
+            }
+            .skip:focus {
+                left: 16px;
+                top: 16px;
+                width: auto;
+                height: auto;
+                padding: 10px 12px;
+                background: var(--surface);
+                border: 1px solid var(--line);
+                border-radius: 12px;
+                box-shadow: var(--shadow2);
+                z-index: 9999;
+            }
 
-    nav{
-      display:flex;flex-wrap:wrap;gap:10px 14px;align-items:center;
-      padding:10px 10px;
-      border:1px solid var(--line);
-      border-radius:999px;
-      background:rgba(11,18,36,.62);
-      backdrop-filter: blur(10px);
-      box-shadow: 0 10px 24px rgba(0,0,0,.32);
-      position:sticky;top:12px;z-index:50;
-    }
-    nav a{
-      color:var(--muted);
-      padding:8px 10px;border-radius:999px;
-    }
-    nav a[aria-current="page"]{
-      color:var(--text);
-      border:1px solid rgba(212,179,93,.35);
-      background: linear-gradient(135deg, rgba(212,179,93,.16), rgba(240,212,139,.08));
-    }
+            nav {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 10px 14px;
+                align-items: center;
+                padding: 10px 10px;
+                border: 1px solid var(--line);
+                border-radius: 999px;
+                background: rgba(11, 18, 36, 0.62);
+                backdrop-filter: blur(10px);
+                box-shadow: 0 10px 24px rgba(0, 0, 0, 0.32);
+                position: sticky;
+                top: 12px;
+                z-index: 50;
+            }
+            nav a {
+                color: var(--muted);
+                padding: 8px 10px;
+                border-radius: 999px;
+            }
+            nav a[aria-current="page"] {
+                color: var(--text);
+                border: 1px solid rgba(212, 179, 93, 0.35);
+                background: linear-gradient(
+                    135deg,
+                    rgba(212, 179, 93, 0.16),
+                    rgba(240, 212, 139, 0.08)
+                );
+            }
 
-    .hero{
-      margin-top:16px;
-      padding:22px 22px 18px;
-      border:1px solid var(--line);
-      border-radius:var(--radius);
-      background: linear-gradient(135deg, rgba(212,179,93,.10), rgba(255,255,255,.03));
-      box-shadow: var(--shadow);
-      overflow:hidden;
-      position:relative;
-    }
-    .hero::after{
-      content:"";
-      position:absolute; inset:-80px -80px auto auto;
-      width:360px;height:360px;
-      background:
-        radial-gradient(circle at 35% 35%, rgba(212,179,93,.28), transparent 55%),
-        radial-gradient(circle at 70% 70%, rgba(240,212,139,.18), transparent 58%);
-      opacity:.95;
-      transform: rotate(8deg);
-      pointer-events:none;
-    }
-    .heroGrid{display:grid;grid-template-columns:1fr;gap:18px;align-items:end}
-    @media (min-width: 920px){
-      .heroGrid{grid-template-columns: 1.15fr .85fr}
-    }
-    .name{margin:0;font-family:"Source Serif 4", serif;font-weight:700;font-size:2.45rem;letter-spacing:-0.02em}
-    .tagline{margin:8px 0 0;color:var(--muted);font-size:1.05rem}
-    .meta{display:flex;flex-wrap:wrap;gap:10px 18px;margin-top:14px;color:var(--muted);font-size:.98rem}
-    .meta a{color:var(--muted);text-decoration:underline;text-decoration-color:rgba(179,189,214,.35)}
-    .meta a:hover{text-decoration-color:rgba(240,212,139,.85)}
+            .hero {
+                margin-top: 16px;
+                padding: 22px 22px 18px;
+                border: 1px solid var(--line);
+                border-radius: var(--radius);
+                background: linear-gradient(
+                    135deg,
+                    rgba(212, 179, 93, 0.1),
+                    rgba(255, 255, 255, 0.03)
+                );
+                box-shadow: var(--shadow);
+                overflow: hidden;
+                position: relative;
+            }
+            .hero::after {
+                content: "";
+                position: absolute;
+                inset: -80px -80px auto auto;
+                width: 360px;
+                height: 360px;
+                background:
+                    radial-gradient(
+                        circle at 35% 35%,
+                        rgba(212, 179, 93, 0.28),
+                        transparent 55%
+                    ),
+                    radial-gradient(
+                        circle at 70% 70%,
+                        rgba(240, 212, 139, 0.18),
+                        transparent 58%
+                    );
+                opacity: 0.95;
+                transform: rotate(8deg);
+                pointer-events: none;
+            }
+            .heroGrid {
+                display: grid;
+                grid-template-columns: 1fr;
+                gap: 18px;
+                align-items: end;
+            }
+            @media (min-width: 920px) {
+                .heroGrid {
+                    grid-template-columns: 1.15fr 0.85fr;
+                }
+            }
+            .name {
+                margin: 0;
+                font-family: "Source Serif 4", serif;
+                font-weight: 700;
+                font-size: 2.45rem;
+                letter-spacing: -0.02em;
+            }
+            .tagline {
+                margin: 8px 0 0;
+                color: var(--muted);
+                font-size: 1.05rem;
+            }
+            .meta {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 10px 18px;
+                margin-top: 14px;
+                color: var(--muted);
+                font-size: 0.98rem;
+            }
+            .meta a {
+                color: var(--muted);
+                text-decoration: underline;
+                text-decoration-color: rgba(179, 189, 214, 0.35);
+            }
+            .meta a:hover {
+                text-decoration-color: rgba(240, 212, 139, 0.85);
+            }
 
-    .portrait{
-      justify-self:end;
-      display:flex;gap:14px;align-items:center;
-      padding:12px 12px 10px;
-      border:1px solid var(--line);
-      border-radius:16px;
-      background:rgba(11,18,36,.55);
-      backdrop-filter: blur(8px);
-      box-shadow: 0 10px 30px rgba(0,0,0,.30);
-      max-width:420px;
-    }
-    .portrait img{
-      width:96px;height:96px;border-radius:16px;object-fit:cover;
-      border:1px solid rgba(255,255,255,.12);
-    }
-    .portrait .who{font-weight:700}
-    .portrait .small{margin-top:2px;color:var(--muted);font-size:.92rem}
+            .portrait {
+                justify-self: end;
+                display: flex;
+                gap: 14px;
+                align-items: center;
+                padding: 12px 12px 10px;
+                border: 1px solid var(--line);
+                border-radius: 16px;
+                background: rgba(11, 18, 36, 0.55);
+                backdrop-filter: blur(8px);
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+                max-width: 420px;
+            }
+            .portrait img {
+                width: 96px;
+                height: 96px;
+                border-radius: 16px;
+                object-fit: cover;
+                border: 1px solid rgba(255, 255, 255, 0.12);
+            }
+            .portrait .who {
+                font-weight: 700;
+            }
+            .portrait .small {
+                margin-top: 2px;
+                color: var(--muted);
+                font-size: 0.92rem;
+            }
 
-    .toc{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
-    .toc a{
-      font-size:.92rem;padding:7px 10px;border-radius:999px;
-      border:1px solid var(--line);
-      background:rgba(11,18,36,.48);
-      color:var(--muted);
-    }
-    .toc a:hover{border-color:rgba(240,212,139,.35);color:var(--text);text-decoration:none}
+            .toc {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 8px;
+                margin-top: 14px;
+            }
+            .toc a {
+                font-size: 0.92rem;
+                padding: 7px 10px;
+                border-radius: 999px;
+                border: 1px solid var(--line);
+                background: rgba(11, 18, 36, 0.48);
+                color: var(--muted);
+            }
+            .toc a:hover {
+                border-color: rgba(240, 212, 139, 0.35);
+                color: var(--text);
+                text-decoration: none;
+            }
 
-    section{margin-top:18px}
-    .card{
-      border:1px solid var(--line);
-      border-radius:var(--radius);
-      background:rgba(11,18,36,.92);
-      box-shadow: var(--shadow2);
-      padding:18px 18px 14px;
-    }
+            section {
+                margin-top: 18px;
+            }
+            .card {
+                border: 1px solid var(--line);
+                border-radius: var(--radius);
+                background: rgba(11, 18, 36, 0.92);
+                box-shadow: var(--shadow2);
+                padding: 18px 18px 14px;
+            }
 
-    .grid2{display:grid;grid-template-columns:1fr;gap:14px;margin-top:14px;align-items:start}
-    @media (min-width: 980px){ .grid2{grid-template-columns: 1.15fr .85fr} }
-    .stack{display:grid;grid-template-columns:1fr;gap:14px}
+            .grid2 {
+                display: grid;
+                grid-template-columns: 1fr;
+                gap: 14px;
+                margin-top: 14px;
+                align-items: start;
+            }
+            @media (min-width: 980px) {
+                .grid2 {
+                    grid-template-columns: 1.15fr 0.85fr;
+                }
+            }
+            .stack {
+                display: grid;
+                grid-template-columns: 1fr;
+                gap: 14px;
+            }
 
-    h2{margin:0 0 10px;font-family:"Source Serif 4", serif;font-size:1.38rem;letter-spacing:-0.01em}
-    h3{margin:12px 0 6px;font-size:1.05rem}
-    p{margin:10px 0}
-    ul{margin:10px 0;padding-left:18px}
-    li{margin:7px 0}
-    .muted{color:var(--muted)}
-    .small{font-size:.95rem;color:var(--muted)}
-    .rule{height:1px;background:var(--line);margin:14px 0}
+            h2 {
+                margin: 0 0 10px;
+                font-family: "Source Serif 4", serif;
+                font-size: 1.38rem;
+                letter-spacing: -0.01em;
+            }
+            h3 {
+                margin: 12px 0 6px;
+                font-size: 1.05rem;
+            }
+            p {
+                margin: 10px 0;
+            }
+            ul {
+                margin: 10px 0;
+                padding-left: 18px;
+            }
+            li {
+                margin: 7px 0;
+            }
+            .muted {
+                color: var(--muted);
+            }
+            .small {
+                font-size: 0.95rem;
+                color: var(--muted);
+            }
+            .rule {
+                height: 1px;
+                background: var(--line);
+                margin: 14px 0;
+            }
 
-    blockquote{
-      margin:12px 0 0;
-      padding:12px 14px;
-      border-left:3px solid rgba(240,212,139,.55);
-      background: rgba(240,212,139,.06);
-      border-radius: 12px;
-      color: var(--text);
-    }
-    blockquote p{margin:0}
-    blockquote .muted{display:block;margin-top:8px}
+            blockquote {
+                margin: 12px 0 0;
+                padding: 12px 14px;
+                border-left: 3px solid rgba(240, 212, 139, 0.55);
+                background: rgba(240, 212, 139, 0.06);
+                border-radius: 12px;
+                color: var(--text);
+            }
+            blockquote p {
+                margin: 0;
+            }
+            blockquote .muted {
+                display: block;
+                margin-top: 8px;
+            }
 
-    figure{margin:14px 0 0}
-    figure img{
-      width:100%;
-      height:auto;
-      border-radius:14px;
-      border:1px solid rgba(255,255,255,.12);
-      background:rgba(255,255,255,.02);
-    }
-    figcaption{
-      margin-top:10px;
-      color:var(--muted);
-      font-size:.92rem;
-    }
-    figcaption strong{color:var(--text);font-weight:600}
+            figure {
+                margin: 14px 0 0;
+            }
+            figure img {
+                width: 100%;
+                height: auto;
+                border-radius: 14px;
+                border: 1px solid rgba(255, 255, 255, 0.12);
+                background: rgba(255, 255, 255, 0.02);
+            }
+            figcaption {
+                margin-top: 10px;
+                color: var(--muted);
+                font-size: 0.92rem;
+            }
+            figcaption strong {
+                color: var(--text);
+                font-weight: 600;
+            }
 
-    .badge{
-      display:inline-flex;align-items:center;gap:8px;
-      font-size:.82rem;
-      padding:5px 10px;border-radius:999px;
-      border:1px solid rgba(240,212,139,.26);
-      background:rgba(240,212,139,.08);
-      color:var(--gold2);
-      white-space:nowrap;
-    }
-    .badge.accepted{
-      border-color: rgba(212,179,93,.36);
-      background: rgba(212,179,93,.10);
-      color: var(--gold2);
-    }
-    .badge.preprint{
-      border-color: rgba(179,189,214,.22);
-      background: rgba(179,189,214,.08);
-      color: var(--muted);
-    }
+            .badge {
+                display: inline-flex;
+                align-items: center;
+                gap: 8px;
+                font-size: 0.82rem;
+                padding: 5px 10px;
+                border-radius: 999px;
+                border: 1px solid rgba(240, 212, 139, 0.26);
+                background: rgba(240, 212, 139, 0.08);
+                color: var(--gold2);
+                white-space: nowrap;
+            }
+            .badge.accepted {
+                border-color: rgba(212, 179, 93, 0.36);
+                background: rgba(212, 179, 93, 0.1);
+                color: var(--gold2);
+            }
+            .badge.preprint {
+                border-color: rgba(179, 189, 214, 0.22);
+                background: rgba(179, 189, 214, 0.08);
+                color: var(--muted);
+            }
 
-    .role{padding:12px 0;border-top:1px solid var(--line)}
-    .role:first-child{border-top:none;padding-top:0}
-    .roleTop{display:flex;flex-wrap:wrap;gap:10px 14px;align-items:baseline;justify-content:space-between}
-    .roleTop .who{font-weight:700}
-    .roleTop .when{color:var(--muted)}
-    .pill{
-      display:inline-block;
-      padding:4px 10px;border-radius:999px;
-      border:1px solid rgba(240,212,139,.24);
-      background:rgba(240,212,139,.08);
-      color:var(--gold2);
-      font-size:.86rem;
-      margin-left:8px;
-      white-space:nowrap;
-    }
+            .role {
+                padding: 12px 0;
+                border-top: 1px solid var(--line);
+            }
+            .role:first-child {
+                border-top: none;
+                padding-top: 0;
+            }
+            .roleTop {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 10px 14px;
+                align-items: baseline;
+                justify-content: space-between;
+            }
+            .roleTop .who {
+                font-weight: 700;
+            }
+            .roleTop .when {
+                color: var(--muted);
+            }
+            .pill {
+                display: inline-block;
+                padding: 4px 10px;
+                border-radius: 999px;
+                border: 1px solid rgba(240, 212, 139, 0.24);
+                background: rgba(240, 212, 139, 0.08);
+                color: var(--gold2);
+                font-size: 0.86rem;
+                margin-left: 8px;
+                white-space: nowrap;
+            }
 
-    .pub{padding:12px 0;border-top:1px solid var(--line)}
-    .pub:first-child{border-top:none;padding-top:0}
-    .pub .t{font-weight:700}
-    .pub .m{color:var(--muted);font-size:.95rem;margin-top:4px}
-    .pub .d{margin-top:8px;color:var(--muted)}
-    .pub .links{margin-top:8px;display:flex;flex-wrap:wrap;gap:10px 14px}
-    .pub .links a{color:var(--gold2);text-decoration:underline;text-decoration-color:rgba(240,212,139,.35)}
-    .pub .links a:hover{text-decoration-color:rgba(240,212,139,.85)}
+            .pub {
+                padding: 12px 0;
+                border-top: 1px solid var(--line);
+            }
+            .pub:first-child {
+                border-top: none;
+                padding-top: 0;
+            }
+            .pub .t {
+                font-weight: 700;
+            }
+            .pub .m {
+                color: var(--muted);
+                font-size: 0.95rem;
+                margin-top: 4px;
+            }
+            .pub .d {
+                margin-top: 8px;
+                color: var(--muted);
+            }
+            .pub .links {
+                margin-top: 8px;
+                display: flex;
+                flex-wrap: wrap;
+                gap: 10px 14px;
+            }
+            .pub .links a {
+                color: var(--gold2);
+                text-decoration: underline;
+                text-decoration-color: rgba(240, 212, 139, 0.35);
+            }
+            .pub .links a:hover {
+                text-decoration-color: rgba(240, 212, 139, 0.85);
+            }
 
-    details{
-      border:1px solid var(--line);
-      border-radius:16px;
-      padding:10px 12px;
-      background:rgba(255,255,255,.02)
-    }
-    details>summary{cursor:pointer;font-weight:700}
-    details .inner{padding-top:10px}
+            details {
+                border: 1px solid var(--line);
+                border-radius: 16px;
+                padding: 10px 12px;
+                background: rgba(255, 255, 255, 0.02);
+            }
+            details > summary {
+                cursor: pointer;
+                font-weight: 700;
+            }
+            details .inner {
+                padding-top: 10px;
+            }
 
-    footer{margin-top:26px;padding:14px 4px 0;color:var(--muted);font-size:.92rem}
+            footer {
+                margin-top: 26px;
+                padding: 14px 4px 0;
+                color: var(--muted);
+                font-size: 0.92rem;
+            }
 
-    @media print{
-      nav{display:none !important}
-      body{background:#fff;color:#000}
-      .hero,.card,details{background:#fff;border-color:#ddd;box-shadow:none}
-      a{color:#000;text-decoration:none}
-      .badge{border-color:#777;background:#fff;color:#000}
-      figure img{border-color:#ddd}
-    }
-  </style>
-</head>
-<body>
-  <a class="skip" href="#main">Skip to content</a>
+            @media print {
+                nav {
+                    display: none !important;
+                }
+                body {
+                    background: #fff;
+                    color: #000;
+                }
+                .hero,
+                .card,
+                details {
+                    background: #fff;
+                    border-color: #ddd;
+                    box-shadow: none;
+                }
+                a {
+                    color: #000;
+                    text-decoration: none;
+                }
+                .badge {
+                    border-color: #777;
+                    background: #fff;
+                    color: #000;
+                }
+                figure img {
+                    border-color: #ddd;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <a class="skip" href="#main">Skip to content</a>
 
-  <div class="wrap">
-    <nav aria-label="Site navigation">
-      <a href="index.html">Home</a>
-      <a href="CV.html">CV</a>
-      <a href="Mathematics.html" aria-current="page">Mathematics</a>
-      <a href="Obdurate.html">Obdurate</a>
-      <a href="Teaching.html">Teaching</a>
-      <a href="Seminars.html">Seminars</a>
-    </nav>
+        <div class="wrap">
+            <nav aria-label="Site navigation">
+                <a href="index.html">Home</a>
+                <a href="CV.html">CV</a>
+                <a href="Mathematics.html" aria-current="page">Mathematics</a>
+                <a href="Obdurate.html">Obdurate</a>
+                <a href="Teaching.html">Teaching</a>
+                <a href="Seminars.html">Seminars</a>
+            </nav>
 
-    <header class="hero">
-      <div class="heroGrid">
-        <div>
-          <h1 class="name">Will Troiani</h1>
-          <div class="tagline">
-            Mathematician (logic & geometry) • semantics of computation • singular learning theory • AI safety
-          </div>
+            <header class="hero">
+                <div class="heroGrid">
+                    <div>
+                        <h1 class="name">Will Troiani</h1>
+                        <div class="tagline">
+                            Mathematician (logic & geometry) • semantics of
+                            computation • singular learning theory • AI safety
+                        </div>
 
-          <div class="meta">
-            <span>Melbourne / remote</span>
-            <a href="mailto:william.a.troiani@gmail.com">william.a.troiani@gmail.com</a>
-            <a href="https://github.com/WilliamTroiani">GitHub</a>
-          </div>
+                        <div class="meta">
+                            <span>Melbourne / remote</span>
+                            <a href="mailto:william.a.troiani@gmail.com"
+                                >william.a.troiani@gmail.com</a
+                            >
+                            <a href="https://github.com/WilliamTroiani"
+                                >GitHub</a
+                            >
+                        </div>
 
-          <div class="toc" aria-label="On this page">
-            <a href="#summary">Research</a>
-            <a href="#experience">Experience</a>
-            <a href="#publications">Publications</a>
-            <a href="#talks">Talks</a>
-            <a href="#writing">Writing</a>
-            <a href="#funding">Funding</a>
-          </div>
+                        <div class="toc" aria-label="On this page">
+                            <a href="#summary">Research</a>
+                            <a href="#experience">Experience</a>
+                            <a href="#publications">Publications</a>
+                            <a href="#talks">Talks</a>
+                            <a href="#writing">Writing</a>
+                        </div>
+                    </div>
+
+                    <div class="portrait" aria-label="Portrait">
+                        <img
+                            src="Me.jpg"
+                            alt="Portrait of Will Troiani in a suit."
+                            style="width: 200px; height: auto"
+                        />
+                        <div>
+                            <div class="who">Will Troiani</div>
+                            <div class="small">
+                                Research Scientist<br />
+                                Performance Artist
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <main id="main">
+                <section id="summary">
+                    <div class="grid2">
+                        <div class="card">
+                            <h2>Research summary</h2>
+
+                            <p>
+                                I work at the boundary between
+                                <strong>logic</strong>,
+                                <strong>algebraic geometry</strong>, and
+                                <strong>computation</strong>. A recurring theme
+                                is that <em>computation has geometry</em>:
+                                normalization and cut-elimination can be
+                                represented as algebraic operations (ideals,
+                                Gröbner bases, schemes) and—via
+                                <strong>singular learning theory</strong>—as
+                                local geometry near critical points.
+                            </p>
+
+                            <p class="muted">
+                                I’m particularly interested in how this
+                                perspective can inform
+                                <strong>AI safety</strong>: interpretability as
+                                structural inference, model selection for
+                                singular models, and understanding when two
+                                systems that compute the same function
+                                nonetheless have meaningfully different internal
+                                structure.
+                            </p>
+
+                            <blockquote>
+                                <p>
+                                    A romantic image comes to mind: as one
+                                    performs deductive reasoning, a kind of
+                                    geometric hologram appears overhead,
+                                    structures blooming in harmonic alignment
+                                    with the logic, or else the contrary.
+                                </p>
+                            </blockquote>
+
+                            <figure>
+                                <a href="FallingRoofs.png">
+                                    <img
+                                        src="FallingRoofs.png"
+                                        alt="Diagram labeled X1, X2, ... illustrating a graphical presentation of the Falling Roofs algorithm."
+                                    />
+                                </a>
+                                <figcaption>
+                                    <strong
+                                        >A graphical presentation of the Falling
+                                        Roofs algorithm</strong
+                                    >, from the paper
+                                    <em
+                                        >“Elimination and cut-elimination in
+                                        multiplicative linear logic”</em
+                                    >.
+                                </figcaption>
+                            </figure>
+                        </div>
+
+                        <div class="stack">
+                            <div class="card">
+                                <h2>Core interests</h2>
+                                <ul>
+                                    <li>
+                                        Linear logic, proof nets,
+                                        cut-elimination
+                                    </li>
+                                    <li>
+                                        Algebraic geometry (Hilbert schemes;
+                                        schemes and singularities)
+                                    </li>
+                                    <li>
+                                        Type theory (programs-as-proofs
+                                        viewpoints)
+                                    </li>
+                                    <li>
+                                        Categorical logic and internal languages
+                                    </li>
+                                    <li>
+                                        Computability and denotational semantics
+                                    </li>
+                                    <li>Singular learning theory (SLT)</li>
+                                    <li>
+                                        Quantum error correction (via
+                                        logical/semantic viewpoints)
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <div class="card">
+                                <h2>Adjacent interests & practice</h2>
+                                <ul>
+                                    <li>
+                                        Mathematical musicology; mathematical
+                                        aesthetics
+                                    </li>
+                                    <li>Perspective/projective geometry</li>
+                                    <li>
+                                        Foundations of mathematics; philosophy
+                                        of mathematics; philosophy of science
+                                    </li>
+                                    <li>Quantum computing</li>
+                                    <li>Formal verification</li>
+                                    <li>
+                                        Mathematical communication; storytelling
+                                        as a research tool
+                                    </li>
+                                    <li>
+                                        Generative/algorithmic art; audio‑visual
+                                        performance
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="experience" class="card">
+                    <h2>Experience</h2>
+
+                    <div class="role">
+                        <div class="roleTop">
+                            <div class="who">
+                                Research Scientist (Theory)
+                                <span class="pill">Timaeus</span>
+                            </div>
+                            <div class="when">
+                                Jul 2025 – Aug 2026 (fixed-term; remote)
+                            </div>
+                        </div>
+                        <ul class="small">
+                            <li>
+                                Research focus: singular learning theory,
+                                geometry of computation, and implications for AI
+                                safety (model selection, structural inference,
+                                interpretability).
+                            </li>
+                            <li>
+                                Employment administered via EOR arrangements
+                                (Deel Australia Services Pty Ltd; later
+                                Justworks Global Ventures Australia Pty Ltd),
+                                making the affiliation with
+                                <strong>Timaeus</strong> explicit.
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="role">
+                        <div class="roleTop">
+                            <div class="who">
+                                Postgraduate Researcher (ARC-funded), University
+                                of Melbourne
+                            </div>
+                            <div class="when">2024 – Jul 2025</div>
+                        </div>
+                        <div class="small muted">
+                            Supervisors: Daniel Murfet, David Ridout.
+                        </div>
+                    </div>
+
+                    <div class="role">
+                        <div class="roleTop">
+                            <div class="who">
+                                Research Assistant (DST-funded), University of
+                                Melbourne
+                            </div>
+                            <div class="when">2017 – 2018</div>
+                        </div>
+                        <div class="small muted">
+                            Supervisor: Daniel Murfet.
+                        </div>
+                    </div>
+                </section>
+
+                <section id="education" class="card">
+                    <h2>Education</h2>
+
+                    <div class="role">
+                        <div class="roleTop">
+                            <div class="who">
+                                PhD in Mathematics, University of Melbourne
+                                (with study abroad at Université Sorbonne Paris
+                                Nord)
+                            </div>
+                            <div class="when">2020 – 2024</div>
+                        </div>
+                        <ul class="small">
+                            <li>
+                                <strong>Thesis:</strong>
+                                <em>Algebraic Geometry and Linear Logic</em> •
+                                <a
+                                    href="Notes/Algebraic_Geometry_and_Linear_Logic.pdf"
+                                    >PDF</a
+                                >
+                            </li>
+                            <li>
+                                <strong>Supervisors:</strong> Daniel Murfet;
+                                Thomas Seiller (USPN)
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="role">
+                        <div class="roleTop">
+                            <div class="who">
+                                Master of Science (Mathematics & Statistics),
+                                University of Melbourne
+                            </div>
+                            <div class="when">2017 – 2019</div>
+                        </div>
+                        <ul class="small">
+                            <li>
+                                <strong>Thesis:</strong>
+                                <em>Simplicial Sets are Algorithms</em> •
+                                <a
+                                    href="https://therisingsea.org/notes/MScThesisWillTroiani.pdf"
+                                    >PDF</a
+                                >
+                            </li>
+                            <li><strong>Supervisor:</strong> Daniel Murfet</li>
+                        </ul>
+                    </div>
+
+                    <div class="role">
+                        <div class="roleTop">
+                            <div class="who">
+                                Bachelor of Science (Mathematics & Statistics),
+                                University of Melbourne
+                            </div>
+                            <div class="when">2013 – 2016</div>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="publications" class="card">
+                    <h2>Publications & research writing</h2>
+
+                    <h3>Peer‑reviewed / accepted</h3>
+
+                    <div class="pub">
+                        <div class="t">
+                            The Internal Logic and Finite Colimits
+                            <span class="badge">Published</span>
+                        </div>
+                        <div class="m">
+                            Solo-authored • <em>Logica Universalis</em> •
+                            <a
+                                href="pdfs/FiniteColimitsInternalLanguageTaAC.pdf"
+                                >PDF</a
+                            >
+                        </div>
+                        <div class="d">
+                            Internal languages of topoi; constructive
+                            descriptions of finite colimits; contrasts with
+                            ZF‑style set‑theoretic intuition.
+                        </div>
+                    </div>
+
+                    <div class="pub">
+                        <div class="t">
+                            <a href="https://arxiv.org/abs/2207.10871"
+                                >Elimination and cut-elimination in
+                                multiplicative linear logic</a
+                            >
+                            <span class="badge accepted">Accepted</span>
+                        </div>
+                        <div class="m">
+                            With Daniel Murfet •
+                            <em>Mathematical Structures in Computer Science</em>
+                            • arXiv:2207.10871
+                        </div>
+                        <div class="d">
+                            Associates ideals to proof structures; links
+                            normalization to Gröbner bases via a
+                            Buchberger‑style “Falling Roofs” algorithm.
+                        </div>
+                    </div>
+
+                    <div class="pub">
+                        <div class="t">
+                            <a href="https://arxiv.org/abs/2502.08911"
+                                >Linear Logic and the Hilbert Scheme</a
+                            >
+                            <span class="badge accepted">Accepted</span>
+                        </div>
+                        <div class="m">
+                            With Daniel Murfet • arXiv:2502.08911 (2025)
+                        </div>
+                        <div class="d">
+                            A geometric semantics for shallow MELL proofs via
+                            Hilbert schemes; invariance under cut‑elimination
+                            via explicit isomorphisms.
+                        </div>
+                    </div>
+
+                    <div class="pub">
+                        <div class="t">
+                            <a href="https://arxiv.org/abs/2008.10131"
+                                >Gentzen–Mints–Zucker duality</a
+                            >
+                            <span class="badge accepted">Accepted</span>
+                        </div>
+                        <div class="m">
+                            With Daniel Murfet • arXiv:2008.10131 (2020)
+                        </div>
+                        <div class="d">
+                            Relates simply‑typed λ‑calculus and intuitionistic
+                            sequent calculus; local vs global perspectives on
+                            the same computational structure.
+                        </div>
+                    </div>
+
+                    <h3>Conference</h3>
+                    <div class="pub">
+                        <div class="t">
+                            <a href="https://arxiv.org/abs/2504.08075"
+                                >Programs as Singularities</a
+                            >
+                            <span class="badge accepted"
+                                >Accepted (ODYSSEY 2025)</span
+                            >
+                        </div>
+                        <div class="m">
+                            With Daniel Murfet • arXiv:2504.08075 (Apr 2025)
+                        </div>
+                        <div class="d">
+                            Develops a correspondence between Turing machine
+                            structure and singularities of real analytic
+                            functions by embedding discrete codes into a smooth
+                            “noisy” parameter space. Relates Taylor coefficients
+                            of a likelihood potential to error syndromes,
+                            connecting linear‑logic derivatives with singular
+                            learning theory and Bayesian inference.
+                        </div>
+                    </div>
+
+                    <h3>Preprints (submitted to MSCS)</h3>
+                    <div class="pub">
+                        <div class="t">
+                            <a href="https://arxiv.org/abs/2405.19051"
+                                >Linear Logic and Quantum Error Correcting
+                                Codes</a
+                            >
+                            <span class="badge preprint">Preprint</span>
+                        </div>
+                        <div class="m">
+                            With Daniel Murfet • arXiv:2405.19051 (2024)
+                        </div>
+                        <div class="d">
+                            Interprets multiplicative proof‑net reduction
+                            through stabilizer codes; cut‑elimination as a
+                            quantum cooling / correction process.
+                        </div>
+                    </div>
+
+                    <h3>Other research writing</h3>
+                    <div class="pub">
+                        <div class="t">
+                            <a href="https://hal.science/hal-04029063"
+                                >Simplifying normal functors: an old and a new
+                                model of λ‑calculus</a
+                            >
+                            <span class="badge preprint">Note / preprint</span>
+                        </div>
+                        <div class="m">HAL preprint</div>
+                        <div class="d">
+                            Contrasts categorical and syntactic perspectives on
+                            linear logic; revisits Girard’s normal functors
+                            model.
+                        </div>
+                    </div>
+
+                    <div class="pub">
+                        <div class="t">
+                            <a
+                                href="https://therisingsea.org/notes/MScThesisWillTroiani.pdf"
+                                >Simplicial Sets are Algorithms</a
+                            >
+                            <span class="badge preprint">MSc thesis</span>
+                        </div>
+                        <div class="m">University of Melbourne (2019)</div>
+                        <div class="d">
+                            A constructive viewpoint on finite simplicial sets
+                            and the computation of geometric realisations.
+                        </div>
+                    </div>
+                </section>
+
+                <section id="talks" class="card">
+                    <h2>Selected talks & lecture series</h2>
+
+                    <ul>
+                        <li>
+                            <strong>18 Feb 2025</strong> — ART Seminar,
+                            University of Melbourne:
+                            <em
+                                >Patterns of Thought: A Philosophical Journey
+                                Through Mathematics and Music</em
+                            >
+                            (<a
+                                href="http://math.soimeme.org/~arunram/ARTseminar.html"
+                                >seminar page</a
+                            >).
+                        </li>
+
+                        <li>
+                            <strong>30 Mar 2023</strong> — CHoCoLa (ENS Lyon):
+                            <em
+                                >Computation in logic as the splitting of
+                                idempotents in algebraic geometry; two models of
+                                multiplicative linear logic</em
+                            >
+                            (<a href="pdfs/CatGoISlides.pdf">slides</a>).
+                        </li>
+
+                        <li>
+                            <strong>Nov 2023</strong> —
+                            <em>Derivatives in Logic and Learning</em> (bonus
+                            seminar on Differential Linear Logic).
+                        </li>
+                    </ul>
+
+                    <details>
+                        <summary>Seminar links (full index)</summary>
+                        <div class="inner">
+                            <h3>Metauni: Anything at all seminar</h3>
+                            <ul>
+                                <li>
+                                    <em
+                                        >Story telling (in mathematics and
+                                        music)</em
+                                    >
+                                    —
+                                    <a
+                                        href="https://www.youtube.com/watch?v=WmsXyUjZGHs&feature=youtu.be"
+                                        >video</a
+                                    >,
+                                    <a href="Notes/MusicandMathematics.pdf"
+                                        >notes</a
+                                    >,
+                                    <a
+                                        href="https://metauniservice.com/transcript?videoID=WmsXyUjZGHs"
+                                        >synopsis/transcript</a
+                                    >
+                                </li>
+                                <li>
+                                    <em
+                                        >An object is whole only with its
+                                        contrary; composing music and creating
+                                        mathematics</em
+                                    >
+                                    —
+                                    <a
+                                        href="https://www.youtube.com/watch?v=i1wM_Gd62ms"
+                                        >video</a
+                                    >,
+                                    <a
+                                        href="https://metauniservice.com/transcript?videoID=i1wM_Gd62ms"
+                                        >synopsis/transcript</a
+                                    >
+                                </li>
+                            </ul>
+
+                            <h3>Metauni: Foundations (videos)</h3>
+                            <ul>
+                                <li>
+                                    First order logic —
+                                    <a href="https://youtu.be/2S83EcpCKBY"
+                                        >video</a
+                                    >
+                                </li>
+                                <li>
+                                    Models of first order theories —
+                                    <a href="https://youtu.be/hI3WKeaHCkk"
+                                        >video</a
+                                    >
+                                </li>
+                                <li>
+                                    Gödel (Part 1) —
+                                    <a href="https://youtu.be/TRhR88anv3M"
+                                        >video</a
+                                    >
+                                </li>
+                                <li>
+                                    Gödel (Part 2) —
+                                    <a href="https://youtu.be/GQ4DFMNKvwY"
+                                        >video</a
+                                    >
+                                </li>
+                                <li>
+                                    Gödel (Part 3) —
+                                    <a href="https://youtu.be/hz-IWh9CF9A"
+                                        >video</a
+                                    >
+                                </li>
+                                <li>
+                                    Gödel (Part 4) —
+                                    <a href="https://youtu.be/KxnE1mwRG-k"
+                                        >video</a
+                                    >
+                                </li>
+                                <li>
+                                    Gödel (Part 5) —
+                                    <a href="https://youtu.be/gw_rks-tLdI"
+                                        >video</a
+                                    >
+                                </li>
+                                <li>
+                                    Gödel (Part 6) —
+                                    <a href="https://youtu.be/25ZGE0PiioE"
+                                        >video</a
+                                    >
+                                </li>
+                                <li>
+                                    Ax–Grothendieck (Part 1) —
+                                    <a href="https://youtu.be/Fccfv2DWUgM"
+                                        >video</a
+                                    >
+                                </li>
+                                <li>
+                                    Ax–Grothendieck (Part 2) —
+                                    <a href="https://youtu.be/49QuhzdEy50"
+                                        >video</a
+                                    >
+                                </li>
+                                <li>
+                                    Ax–Grothendieck (Part 3) —
+                                    <a href="https://youtu.be/VXJUwWBDJmQ"
+                                        >video</a
+                                    >
+                                </li>
+                                <li>
+                                    Ax–Grothendieck (Part 4) —
+                                    <a href="https://youtu.be/6qntBQHffNo"
+                                        >video</a
+                                    >
+                                </li>
+                                <li>
+                                    Ax–Grothendieck (Part 5) —
+                                    <a href="https://youtu.be/m-LAhuMQZfM"
+                                        >video</a
+                                    >
+                                </li>
+                            </ul>
+
+                            <h3>Other seminars</h3>
+                            <ul>
+                                <li>
+                                    Axe Complexités (2022) —
+                                    <em
+                                        >Quantum error correcting codes and
+                                        cut‑elimination</em
+                                    >
+                                    —
+                                    <a
+                                        href="https://bbb.lipn.univ-paris13.fr/b/sei-nlh-8vr-xvy"
+                                        >video</a
+                                    >
+                                    (scroll down)
+                                </li>
+                                <li>
+                                    Institut de Mathématiques de Marseille,
+                                    Logic and Interactions (2022) —
+                                    <em>Proofs, rings, and ideals</em> —
+                                    <a href="pdfs/AlgPntSlides.pdf">slides</a>
+                                </li>
+                                <li>
+                                    Computation, Geometry, Logic (2021) — Proof
+                                    nets (<a
+                                        href="https://www.youtube.com/watch?v=OscoUN_kWUE"
+                                        >video</a
+                                    >), Sequentialisation (<a
+                                        href="https://www.youtube.com/watch?v=OscoUN_kWUE"
+                                        >video</a
+                                    >), GoI0 (<a
+                                        href="https://www.youtube.com/watch?v=jcqTq4a1kjY"
+                                        >video</a
+                                    >)
+                                </li>
+                                <li>
+                                    Melbourne Haskell Group (2020) —
+                                    <em>Gentzen–Mints–Zucker duality</em> —
+                                    <a
+                                        href="https://www.youtube.com/watch?v=TEkQHyTBL54&t"
+                                        >video</a
+                                    >
+                                </li>
+                                <li>
+                                    Topological Quantum Computing (2019) —
+                                    <a
+                                        href="Notes/Reversible_computation_talk_notes.pdf"
+                                        >Reversible Turing Machines (notes)</a
+                                    >;
+                                    <a
+                                        href="http://therisingsea.org/notes/talk-will-homology.pdf"
+                                        >Simplicial cohomology with Z/2
+                                        (notes)</a
+                                    >
+                                </li>
+                                <li>
+                                    Graduate Topology Seminar (2019) —
+                                    <a
+                                        href="pdfs/ArithmetisationandInteraction.pdf"
+                                        >Arithmetisation and localisation
+                                        (notes)</a
+                                    >
+                                </li>
+                                <li>
+                                    Topos Theory and Categorical Logic (2018) —
+                                    <a
+                                        href="http://therisingsea.org/notes/ch2018-lecture3.pdf"
+                                        >Monads and programs</a
+                                    >;
+                                    <a
+                                        href="http://therisingsea.org/notes/ch2018-lecture8.pdf"
+                                        >Higher‑order logic and topoi</a
+                                    >;
+                                    <a
+                                        href="http://therisingsea.org/notes/ch2018-lecture14.pdf"
+                                        >Classifying space of rings</a
+                                    >
+                                </li>
+                                <li>
+                                    DST Seminar (2017) —
+                                    <a
+                                        href="pdfs/MonadsinCategoryTheoryandComputerScience.pdf"
+                                        >Monads and Programs (slides)</a
+                                    >
+                                </li>
+                                <li>
+                                    Curry–Howard Correspondence (2016) —
+                                    <a
+                                        href="http://therisingsea.org/notes/talk-will-churchrosser.pdf"
+                                        >Church–Rosser (notes)</a
+                                    >,
+                                    <a
+                                        href="Notes/lambdacalcandChurchRosser.pdf"
+                                        >improved notes</a
+                                    >;
+                                    <a
+                                        href="http://therisingsea.org/notes/talk-will-lambda.pdf"
+                                        >intro λ‑calculus (notes)</a
+                                    >;
+                                    <a
+                                        href="http://therisingsea.org/notes/talk-will-haskell.pdf"
+                                        >System F in the real world (notes)</a
+                                    >
+                                </li>
+                            </ul>
+                        </div>
+                    </details>
+                </section>
+
+                <section id="writing" class="card">
+                    <h2>Expository writing & essays</h2>
+                    <ul>
+                        <li>
+                            <a href="Notes/PresentingMathematics.pdf"
+                                >Presenting mathematics</a
+                            >
+                            <span class="muted">(essay)</span>
+                        </li>
+                        <li>
+                            <a href="Notes/WhatIfImNotGoodEnough.pdf"
+                                >What if I’m not good enough?</a
+                            >
+                            <span class="muted">(essay)</span>
+                        </li>
+                    </ul>
+                    <p class="small muted">
+                        If a filename differs on your repo, keep the title and
+                        update the link.
+                    </p>
+                </section>
+
+                <section id="funding" class="card">
+                    <h2>Scholarships & funding</h2>
+
+                    <h3>Scholarships</h3>
+                    <ul>
+                        <li>
+                            <strong>2016</strong> — AMSI Summer Research
+                            Scholarship (Vacation Research Scholarship),
+                            supervisor: Daniel Murfet.
+                        </li>
+                        <li><strong>2016</strong> — AMSI Travel Grant.</li>
+                        <li>
+                            <strong>2015</strong> — University of Melbourne
+                            Vacation Research Scholarship, supervisor: Peter
+                            Forrester.
+                        </li>
+                    </ul>
+
+                    <h3>Grants / funding context</h3>
+                    <ul>
+                        <li>
+                            <strong>ARC-funded</strong> postgraduate research
+                            position (University of Melbourne), 2024 – Jul 2025.
+                        </li>
+                        <li>
+                            <strong>ARIA (UK)</strong> —
+                            <em>Mathematics for Safe AI</em>: grant held by
+                            Timaeus; I was hired under this award as Research
+                            Scientist (Theory).
+                        </li>
+                    </ul>
+                </section>
+
+                <footer>
+                    <div>
+                        © 2026 Will Troiani. Last updated:
+                        <span id="lastUpdated"></span>.
+                    </div>
+                </footer>
+            </main>
         </div>
 
-        <div class="portrait" aria-label="Portrait">
-          <img src="Me.jpg" alt="Portrait of Will Troiani in a suit." />
-          <div>
-            <div class="who">Will Troiani</div>
-            <div class="small">PhD (Melbourne / USPN). Research Scientist (Theory), Timaeus.</div>
-          </div>
-        </div>
-      </div>
-    </header>
-
-    <main id="main">
-
-      <section id="summary">
-        <div class="grid2">
-          <div class="card">
-            <h2>Research summary</h2>
-
-            <p>
-              I work at the boundary between <strong>logic</strong>, <strong>algebraic geometry</strong>, and <strong>computation</strong>.
-              A recurring theme is that <em>computation has geometry</em>:
-              normalization and cut-elimination can be represented as algebraic operations
-              (ideals, Gröbner bases, schemes) and—via <strong>singular learning theory</strong>—as local geometry near critical points.
-            </p>
-
-            <p class="muted">
-              I’m particularly interested in how this perspective can inform <strong>AI safety</strong>:
-              interpretability as structural inference, model selection for singular models, and understanding when
-              two systems that compute the same function nonetheless have meaningfully different internal structure.
-            </p>
-
-            <blockquote>
-              <p>
-                A romantic image comes to mind: as one performs deductive reasoning, a kind of geometric hologram
-                appears overhead, structures blooming in harmonic alignment with the logic, or else the contrary.
-              </p>
-            </blockquote>
-
-            <figure>
-              <a href="FallingRoofsAlgorithm.png">
-                <img src="FallingRoofsAlgorithm.png" alt="Diagram labeled X1, X2, ... illustrating a graphical presentation of the Falling Roofs algorithm." />
-              </a>
-              <figcaption>
-                <strong>A graphical presentation of the Falling Roofs algorithm</strong>, from the paper
-                <em>“Elimination and cut-elimination in multiplicative linear logic”</em>.
-              </figcaption>
-            </figure>
-          </div>
-
-          <div class="stack">
-            <div class="card">
-              <h2>Core interests</h2>
-              <ul>
-                <li>Linear logic, proof nets, cut-elimination</li>
-                <li>Algebraic geometry (Hilbert schemes; schemes and singularities)</li>
-                <li>Type theory (programs-as-proofs viewpoints)</li>
-                <li>Categorical logic and internal languages</li>
-                <li>Computability and denotational semantics</li>
-                <li>Singular learning theory (SLT)</li>
-                <li>Quantum error correction (via logical/semantic viewpoints)</li>
-              </ul>
-            </div>
-
-            <div class="card">
-              <h2>Adjacent interests & practice</h2>
-              <ul>
-                <li>Mathematical musicology; mathematical aesthetics</li>
-                <li>Perspective/projective geometry</li>
-                <li>Foundations of mathematics; philosophy of mathematics; philosophy of science</li>
-                <li>Quantum computing</li>
-                <li>Formal verification</li>
-                <li>Mathematical communication; storytelling as a research tool</li>
-                <li>Generative/algorithmic art; audio‑visual performance</li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section id="experience" class="card">
-        <h2>Experience</h2>
-
-        <div class="role">
-          <div class="roleTop">
-            <div class="who">Research Scientist (Theory) <span class="pill">Timaeus</span></div>
-            <div class="when">Jul 2025 – Aug 2026 (fixed-term; remote)</div>
-          </div>
-          <ul class="small">
-            <li>Research focus: singular learning theory, geometry of computation, and implications for AI safety (model selection, structural inference, interpretability).</li>
-            <li>Employment administered via EOR arrangements (Deel Australia Services Pty Ltd; later Justworks Global Ventures Australia Pty Ltd), making the affiliation with <strong>Timaeus</strong> explicit.</li>
-          </ul>
-        </div>
-
-        <div class="role">
-          <div class="roleTop">
-            <div class="who">Postgraduate Researcher (ARC-funded), University of Melbourne</div>
-            <div class="when">2024 – Jul 2025</div>
-          </div>
-          <div class="small muted">Supervisors: Daniel Murfet, David Ridout.</div>
-        </div>
-
-        <div class="role">
-          <div class="roleTop">
-            <div class="who">Research Assistant (DST-funded), University of Melbourne</div>
-            <div class="when">2017 – 2018</div>
-          </div>
-          <div class="small muted">Supervisor: Daniel Murfet.</div>
-        </div>
-      </section>
-
-      <section id="education" class="card">
-        <h2>Education</h2>
-
-        <div class="role">
-          <div class="roleTop">
-            <div class="who">PhD in Mathematics, University of Melbourne (with study abroad at Université Sorbonne Paris Nord)</div>
-            <div class="when">2020 – 2024</div>
-          </div>
-          <ul class="small">
-            <li><strong>Thesis:</strong> <em>Algebraic Geometry and Linear Logic</em> • <a href="Notes/Algebraic_Geometry_and_Linear_Logic.pdf">PDF</a></li>
-            <li><strong>Supervisors:</strong> Daniel Murfet; Thomas Seiller (USPN)</li>
-          </ul>
-        </div>
-
-        <div class="role">
-          <div class="roleTop">
-            <div class="who">Master of Science (Mathematics & Statistics), University of Melbourne</div>
-            <div class="when">2017 – 2019</div>
-          </div>
-          <ul class="small">
-            <li><strong>Thesis:</strong> <em>Simplicial Sets are Algorithms</em> • <a href="https://therisingsea.org/notes/MScThesisWillTroiani.pdf">PDF</a></li>
-            <li><strong>Supervisor:</strong> Daniel Murfet</li>
-          </ul>
-        </div>
-
-        <div class="role">
-          <div class="roleTop">
-            <div class="who">Bachelor of Science (Mathematics & Statistics), University of Melbourne</div>
-            <div class="when">2013 – 2016</div>
-          </div>
-        </div>
-      </section>
-
-      <section id="publications" class="card">
-        <h2>Publications & research writing</h2>
-
-        <h3>Peer‑reviewed / accepted</h3>
-
-        <div class="pub">
-          <div class="t">The Internal Logic and Finite Colimits <span class="badge">Published</span></div>
-          <div class="m">Solo-authored • <em>Logica Universalis</em> • <a href="pdfs/FiniteColimitsInternalLanguageTaAC.pdf">PDF</a></div>
-          <div class="d">Internal languages of topoi; constructive descriptions of finite colimits; contrasts with ZF‑style set‑theoretic intuition.</div>
-        </div>
-
-        <div class="pub">
-          <div class="t"><a href="https://arxiv.org/abs/2207.10871">Elimination and cut-elimination in multiplicative linear logic</a> <span class="badge accepted">Accepted</span></div>
-          <div class="m">With Daniel Murfet • <em>Mathematical Structures in Computer Science</em> • arXiv:2207.10871</div>
-          <div class="d">Associates ideals to proof structures; links normalization to Gröbner bases via a Buchberger‑style “Falling Roofs” algorithm.</div>
-        </div>
-
-        <div class="pub">
-          <div class="t"><a href="https://arxiv.org/abs/2502.08911">Linear Logic and the Hilbert Scheme</a> <span class="badge accepted">Accepted</span></div>
-          <div class="m">With Daniel Murfet • arXiv:2502.08911 (2025)</div>
-          <div class="d">A geometric semantics for shallow MELL proofs via Hilbert schemes; invariance under cut‑elimination via explicit isomorphisms.</div>
-        </div>
-
-        <div class="pub">
-          <div class="t"><a href="https://arxiv.org/abs/2008.10131">Gentzen–Mints–Zucker duality</a> <span class="badge accepted">Accepted</span></div>
-          <div class="m">With Daniel Murfet • arXiv:2008.10131 (2020)</div>
-          <div class="d">Relates simply‑typed λ‑calculus and intuitionistic sequent calculus; local vs global perspectives on the same computational structure.</div>
-        </div>
-
-        <h3>Conference</h3>
-        <div class="pub">
-          <div class="t"><a href="https://arxiv.org/abs/2504.08075">Programs as Singularities</a> <span class="badge accepted">Accepted (ODYSSEY 2025)</span></div>
-          <div class="m">With Daniel Murfet • arXiv:2504.08075 (Apr 2025)</div>
-          <div class="d">
-            Develops a correspondence between Turing machine structure and singularities of real analytic functions by embedding discrete codes into a smooth “noisy” parameter space.
-            Relates Taylor coefficients of a likelihood potential to error syndromes, connecting linear‑logic derivatives with singular learning theory and Bayesian inference.
-          </div>
-        </div>
-
-        <h3>Preprints (submitted to MSCS)</h3>
-        <div class="pub">
-          <div class="t"><a href="https://arxiv.org/abs/2405.19051">Linear Logic and Quantum Error Correcting Codes</a> <span class="badge preprint">Preprint</span></div>
-          <div class="m">With Daniel Murfet • arXiv:2405.19051 (2024)</div>
-          <div class="d">Interprets multiplicative proof‑net reduction through stabilizer codes; cut‑elimination as a quantum cooling / correction process.</div>
-        </div>
-
-        <h3>Other research writing</h3>
-        <div class="pub">
-          <div class="t"><a href="https://hal.science/hal-04029063">Simplifying normal functors: an old and a new model of λ‑calculus</a> <span class="badge preprint">Note / preprint</span></div>
-          <div class="m">HAL preprint</div>
-          <div class="d">Contrasts categorical and syntactic perspectives on linear logic; revisits Girard’s normal functors model.</div>
-        </div>
-
-        <div class="pub">
-          <div class="t"><a href="https://therisingsea.org/notes/MScThesisWillTroiani.pdf">Simplicial Sets are Algorithms</a> <span class="badge preprint">MSc thesis</span></div>
-          <div class="m">University of Melbourne (2019)</div>
-          <div class="d">A constructive viewpoint on finite simplicial sets and the computation of geometric realisations.</div>
-        </div>
-      </section>
-
-      <section id="talks" class="card">
-        <h2>Selected talks & lecture series</h2>
-
-        <ul>
-          <li>
-            <strong>18 Feb 2025</strong> — ART Seminar, University of Melbourne:
-            <em>Patterns of Thought: A Philosophical Journey Through Mathematics and Music</em>
-            (<a href="http://math.soimeme.org/~arunram/ARTseminar.html">seminar page</a>).
-          </li>
-
-          <li>
-            <strong>30 Mar 2023</strong> — CHoCoLa (ENS Lyon):
-            <em>Computation in logic as the splitting of idempotents in algebraic geometry; two models of multiplicative linear logic</em>
-            (<a href="pdfs/CatGoISlides.pdf">slides</a>).
-          </li>
-
-          <li>
-            <strong>Nov 2023</strong> — <em>Derivatives in Logic and Learning</em> (bonus seminar on Differential Linear Logic).
-          </li>
-        </ul>
-
-        <details>
-          <summary>Seminar links (full index)</summary>
-          <div class="inner">
-            <h3>Metauni: Anything at all seminar</h3>
-            <ul>
-              <li>
-                <em>Story telling (in mathematics and music)</em> —
-                <a href="https://www.youtube.com/watch?v=WmsXyUjZGHs&feature=youtu.be">video</a>,
-                <a href="Notes/MusicandMathematics.pdf">notes</a>,
-                <a href="https://metauniservice.com/transcript?videoID=WmsXyUjZGHs">synopsis/transcript</a>
-              </li>
-              <li>
-                <em>An object is whole only with its contrary; composing music and creating mathematics</em> —
-                <a href="https://www.youtube.com/watch?v=i1wM_Gd62ms">video</a>,
-                <a href="https://metauniservice.com/transcript?videoID=i1wM_Gd62ms">synopsis/transcript</a>
-              </li>
-            </ul>
-
-            <h3>Metauni: Foundations (videos)</h3>
-            <ul>
-              <li>First order logic — <a href="https://youtu.be/2S83EcpCKBY">video</a></li>
-              <li>Models of first order theories — <a href="https://youtu.be/hI3WKeaHCkk">video</a></li>
-              <li>Gödel (Part 1) — <a href="https://youtu.be/TRhR88anv3M">video</a></li>
-              <li>Gödel (Part 2) — <a href="https://youtu.be/GQ4DFMNKvwY">video</a></li>
-              <li>Gödel (Part 3) — <a href="https://youtu.be/hz-IWh9CF9A">video</a></li>
-              <li>Gödel (Part 4) — <a href="https://youtu.be/KxnE1mwRG-k">video</a></li>
-              <li>Gödel (Part 5) — <a href="https://youtu.be/gw_rks-tLdI">video</a></li>
-              <li>Gödel (Part 6) — <a href="https://youtu.be/25ZGE0PiioE">video</a></li>
-              <li>Ax–Grothendieck (Part 1) — <a href="https://youtu.be/Fccfv2DWUgM">video</a></li>
-              <li>Ax–Grothendieck (Part 2) — <a href="https://youtu.be/49QuhzdEy50">video</a></li>
-              <li>Ax–Grothendieck (Part 3) — <a href="https://youtu.be/VXJUwWBDJmQ">video</a></li>
-              <li>Ax–Grothendieck (Part 4) — <a href="https://youtu.be/6qntBQHffNo">video</a></li>
-              <li>Ax–Grothendieck (Part 5) — <a href="https://youtu.be/m-LAhuMQZfM">video</a></li>
-            </ul>
-
-            <h3>Other seminars</h3>
-            <ul>
-              <li>
-                Axe Complexités (2022) — <em>Quantum error correcting codes and cut‑elimination</em> —
-                <a href="https://bbb.lipn.univ-paris13.fr/b/sei-nlh-8vr-xvy">video</a> (scroll down)
-              </li>
-              <li>
-                Institut de Mathématiques de Marseille, Logic and Interactions (2022) —
-                <em>Proofs, rings, and ideals</em> —
-                <a href="pdfs/AlgPntSlides.pdf">slides</a>
-              </li>
-              <li>
-                Computation, Geometry, Logic (2021) —
-                Proof nets (<a href="https://www.youtube.com/watch?v=OscoUN_kWUE">video</a>),
-                Sequentialisation (<a href="https://www.youtube.com/watch?v=OscoUN_kWUE">video</a>),
-                GoI0 (<a href="https://www.youtube.com/watch?v=jcqTq4a1kjY">video</a>)
-              </li>
-              <li>
-                Melbourne Haskell Group (2020) —
-                <em>Gentzen–Mints–Zucker duality</em> —
-                <a href="https://www.youtube.com/watch?v=TEkQHyTBL54&t">video</a>
-              </li>
-              <li>
-                Topological Quantum Computing (2019) —
-                <a href="Notes/Reversible_computation_talk_notes.pdf">Reversible Turing Machines (notes)</a>;
-                <a href="http://therisingsea.org/notes/talk-will-homology.pdf">Simplicial cohomology with Z/2 (notes)</a>
-              </li>
-              <li>
-                Graduate Topology Seminar (2019) —
-                <a href="pdfs/ArithmetisationandInteraction.pdf">Arithmetisation and localisation (notes)</a>
-              </li>
-              <li>
-                Topos Theory and Categorical Logic (2018) —
-                <a href="http://therisingsea.org/notes/ch2018-lecture3.pdf">Monads and programs</a>;
-                <a href="http://therisingsea.org/notes/ch2018-lecture8.pdf">Higher‑order logic and topoi</a>;
-                <a href="http://therisingsea.org/notes/ch2018-lecture14.pdf">Classifying space of rings</a>
-              </li>
-              <li>
-                DST Seminar (2017) —
-                <a href="pdfs/MonadsinCategoryTheoryandComputerScience.pdf">Monads and Programs (slides)</a>
-              </li>
-              <li>
-                Curry–Howard Correspondence (2016) —
-                <a href="http://therisingsea.org/notes/talk-will-churchrosser.pdf">Church–Rosser (notes)</a>,
-                <a href="Notes/lambdacalcandChurchRosser.pdf">improved notes</a>;
-                <a href="http://therisingsea.org/notes/talk-will-lambda.pdf">intro λ‑calculus (notes)</a>;
-                <a href="http://therisingsea.org/notes/talk-will-haskell.pdf">System F in the real world (notes)</a>
-              </li>
-            </ul>
-          </div>
-        </details>
-      </section>
-
-      <section id="writing" class="card">
-        <h2>Expository writing & essays</h2>
-        <ul>
-          <li><a href="Notes/PresentingMathematics.pdf">Presenting mathematics</a> <span class="muted">(essay)</span></li>
-          <li><a href="Notes/WhatIfImNotGoodEnough.pdf">What if I’m not good enough?</a> <span class="muted">(essay)</span></li>
-        </ul>
-        <p class="small muted">
-          If a filename differs on your repo, keep the title and update the link.
-        </p>
-      </section>
-
-      <section id="funding" class="card">
-        <h2>Scholarships & funding</h2>
-
-        <h3>Scholarships</h3>
-        <ul>
-          <li><strong>2016</strong> — AMSI Summer Research Scholarship (Vacation Research Scholarship), supervisor: Daniel Murfet.</li>
-          <li><strong>2016</strong> — AMSI Travel Grant.</li>
-          <li><strong>2015</strong> — University of Melbourne Vacation Research Scholarship, supervisor: Peter Forrester.</li>
-        </ul>
-
-        <h3>Grants / funding context</h3>
-        <ul>
-          <li><strong>ARC-funded</strong> postgraduate research position (University of Melbourne), 2024 – Jul 2025.</li>
-          <li><strong>ARIA (UK)</strong> — <em>Mathematics for Safe AI</em>: grant held by Timaeus; I was hired under this award as Research Scientist (Theory).</li>
-        </ul>
-      </section>
-
-      <footer>
-        <div>© 2026 Will Troiani. Last updated: <span id="lastUpdated"></span>.</div>
-      </footer>
-    </main>
-  </div>
-
-  <script>
-    (function(){
-      var el = document.getElementById('lastUpdated');
-      if(!el) return;
-      var d = new Date(document.lastModified);
-      el.textContent = isNaN(d.getTime()) ? '' : d.toLocaleDateString();
-    })();
-  </script>
-</body>
+        <script>
+            (function () {
+                var el = document.getElementById("lastUpdated");
+                if (!el) return;
+                var d = new Date(document.lastModified);
+                el.textContent = isNaN(d.getTime())
+                    ? ""
+                    : d.toLocaleDateString();
+            })();
+        </script>
+    </body>
 </html>
