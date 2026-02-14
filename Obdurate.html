@@ -1,145 +1,752 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Will Troiani - Artist & Musician</title>
-    <link rel="stylesheet" href="css/main.css">
-    <style>
-        .center-embed {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin: 20px 0;
-        }
-        iframe {
-            max-width: 100%;
-        }
-    </style>
-    <script async src="https://www.instagram.com/embed.js"></script>
-</head>
-<body>
-    <!-- Navigation -->
-    <nav>
-        <ul>
-            <li><a href="/">Home</a></li>
-            <li><a href="https://williamtroiani.github.io/pdfs/resume.pdf">CV</a></li>
-            <li><a href="/Mathematics.html">Mathematics</a></li>
-            <li><a href="/Obdurate.html">Obdurate</a></li>
-            <li><a href="/Teaching.html">Teaching</a></li>
-        </ul>
-    </nav>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width,initial-scale=1" />
+        <title>Obdurate — Will Troiani</title>
+        <meta
+            name="description"
+            content="Obdurate — progressive music performance art by Will Troiani."
+        />
+        <style>
+            :root {
+                --page-max: 1040px;
+                --bg: #050b1a; /* deep navy */
+                --panel: rgba(255, 255, 255, 0.06);
+                --panel-2: rgba(255, 255, 255, 0.04);
+                --text: rgba(255, 255, 255, 0.92);
+                --muted: rgba(255, 255, 255, 0.72);
+                --faint: rgba(255, 255, 255, 0.56);
+                --rule: rgba(255, 255, 255, 0.14);
+                --accent: #d8b35a; /* gold */
+                --accent-2: #f1d27a; /* brighter gold */
+                --shadow: 0 18px 55px rgba(0, 0, 0, 0.38);
+                --radius: 18px;
+            }
 
-    <!-- Hero Section -->
-    <section class="hero">
-        <div class="container">
-            <h1>Will Troiani</h1>
-            <p class="tagline">Mathematician. Musician. Artist. Philosopher.</p>
+            html,
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            body {
+                background:
+                    radial-gradient(
+                        1100px 720px at 85% -10%,
+                        rgba(216, 179, 90, 0.18),
+                        transparent 62%
+                    ),
+                    radial-gradient(
+                        860px 560px at 12% 0%,
+                        rgba(90, 140, 255, 0.14),
+                        transparent 65%
+                    ),
+                    radial-gradient(
+                        1000px 900px at 40% 105%,
+                        rgba(216, 179, 90, 0.1),
+                        transparent 55%
+                    ),
+                    var(--bg);
+                color: var(--text);
+                font-family:
+                    ui-sans-serif,
+                    system-ui,
+                    -apple-system,
+                    Segoe UI,
+                    Roboto,
+                    Helvetica,
+                    Arial,
+                    "Apple Color Emoji",
+                    "Segoe UI Emoji";
+                line-height: 1.65;
+                -webkit-font-smoothing: antialiased;
+                text-rendering: optimizeLegibility;
+                overflow-x: hidden;
+            }
+
+            /* Low-opacity handwritten texture */
+            body::before {
+                content: "";
+                position: fixed;
+                inset: 0;
+                pointer-events: none;
+                z-index: 0;
+                background-image: url("Math%201.png"), url("Math%202.png");
+                background-repeat: repeat;
+                background-size:
+                    980px auto,
+                    1240px auto;
+                background-position:
+                    0 0,
+                    240px 160px;
+                opacity: 0.03;
+                mix-blend-mode: screen;
+                filter: contrast(1.05) brightness(1.12);
+            }
+
+            a {
+                color: var(--accent-2);
+                text-decoration: none;
+            }
+            a:hover {
+                text-decoration: underline;
+            }
+
+            .wrap {
+                max-width: var(--page-max);
+                margin: 0 auto;
+                padding: 22px 18px 72px;
+                position: relative;
+                z-index: 1;
+            }
+
+            nav {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 10px;
+                align-items: center;
+                padding: 10px 0 18px;
+                border-bottom: 1px solid var(--rule);
+                margin-bottom: 18px;
+            }
+            nav a {
+                color: var(--muted);
+                border: 1px solid transparent;
+                padding: 7px 10px;
+                border-radius: 999px;
+                background: transparent;
+            }
+            nav a:hover {
+                border-color: var(--rule);
+                background: rgba(255, 255, 255, 0.03);
+                text-decoration: none;
+            }
+
+            .card {
+                border: 1px solid var(--rule);
+                background: linear-gradient(
+                    180deg,
+                    var(--panel),
+                    var(--panel-2)
+                );
+                border-radius: var(--radius);
+                padding: 16px 16px 14px;
+                box-shadow: 0 10px 32px rgba(0, 0, 0, 0.22);
+            }
+
+            .kicker {
+                font-size: 0.88rem;
+                letter-spacing: 0.14em;
+                text-transform: uppercase;
+                color: rgba(255, 255, 255, 0.66);
+            }
+            h1 {
+                margin: 0;
+                font-size: 2.55rem;
+                letter-spacing: -0.02em;
+            }
+            .tagline {
+                margin: 8px 0 0;
+                color: var(--muted);
+                max-width: 70ch;
+            }
+
+            .chips {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 8px;
+                margin-top: 14px;
+            }
+            .chip {
+                border: 1px solid var(--rule);
+                background: rgba(255, 255, 255, 0.03);
+                color: rgba(255, 255, 255, 0.86);
+                padding: 6px 10px;
+                border-radius: 999px;
+                font-size: 0.92rem;
+            }
+
+            .metaLine {
+                margin-top: 12px;
+                color: var(--muted);
+                font-size: 0.98rem;
+                display: flex;
+                flex-wrap: wrap;
+                gap: 10px 14px;
+            }
+            .metaLine a {
+                color: var(--muted);
+            }
+            .metaLine a:hover {
+                color: var(--accent-2);
+                text-decoration: none;
+            }
+
+            header.hero {
+                display: grid;
+                grid-template-columns: 1fr;
+                gap: 14px;
+                align-items: start;
+                margin-top: 10px;
+            }
+            @media (min-width: 980px) {
+                header.hero {
+                    grid-template-columns: 1.3fr 0.7fr; /* image column smaller */
+                    gap: 16px;
+                }
+            }
+
+            .heroMedia {
+                display: flex;
+                flex-direction: column;
+                gap: 12px;
+            }
+            .heroImage {
+                border-radius: var(--radius);
+                overflow: hidden;
+                border: 1px solid rgba(216, 179, 90, 0.28);
+                background: rgba(255, 255, 255, 0.02);
+                box-shadow: var(--shadow);
+            }
+            .heroImage img {
+                width: 100%;
+                height: auto;
+                display: block;
+                object-fit: cover;
+            }
+
+            section {
+                margin-top: 22px;
+            }
+            h2 {
+                margin: 0 0 10px;
+                font-size: 1.22rem;
+                letter-spacing: 0.01em;
+                color: rgba(255, 255, 255, 0.92);
+            }
+            h3 {
+                margin: 16px 0 8px;
+                font-size: 1.05rem;
+            }
+            p {
+                margin: 10px 0;
+            }
+            ul {
+                margin: 10px 0;
+                padding-left: 18px;
+            }
+            li {
+                margin: 7px 0;
+                color: rgba(255, 255, 255, 0.86);
+            }
+            .muted {
+                color: var(--muted);
+            }
+            .faint {
+                color: var(--faint);
+            }
+            .small {
+                font-size: 0.95rem;
+                color: var(--muted);
+            }
+
+            .banner {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 10px 14px;
+                align-items: center;
+                justify-content: space-between;
+                border: 1px solid rgba(216, 179, 90, 0.45);
+                background: linear-gradient(
+                    90deg,
+                    rgba(216, 179, 90, 0.14),
+                    rgba(255, 255, 255, 0.03)
+                );
+                border-radius: 18px;
+                padding: 14px 14px;
+            }
+            .banner strong {
+                color: rgba(255, 255, 255, 0.95);
+            }
+            .btn {
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                gap: 8px;
+                padding: 10px 14px;
+                border-radius: 999px;
+                border: 1px solid rgba(216, 179, 90, 0.55);
+                background: rgba(216, 179, 90, 0.16);
+                color: rgba(255, 255, 255, 0.95);
+                text-decoration: none;
+                font-weight: 700;
+                white-space: nowrap;
+            }
+            .btn:hover {
+                background: rgba(216, 179, 90, 0.22);
+                text-decoration: none;
+            }
+
+            .videoGrid {
+                display: grid;
+                grid-template-columns: 1fr;
+                gap: 14px;
+                align-items: start;
+            }
+            @media (min-width: 980px) {
+                .videoGrid {
+                    grid-template-columns: 1fr 1fr;
+                }
+            }
+            .video {
+                border-radius: 14px;
+                overflow: hidden;
+                border: 1px solid var(--rule);
+                background: rgba(0, 0, 0, 0.18);
+                aspect-ratio: 16 / 9;
+                width: 100%;
+            }
+            .video iframe {
+                width: 100%;
+                height: 100%;
+                border: 0;
+            }
+
+            .embedWrap {
+                margin-top: 10px;
+            }
+            .embedWrap iframe {
+                width: 100%;
+            }
+
+            .event {
+                border-top: 1px solid var(--rule);
+                padding-top: 12px;
+                margin-top: 12px;
+            }
+            .event:first-child {
+                border-top: none;
+                padding-top: 0;
+                margin-top: 0;
+            }
+            .eventTop {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 10px 12px;
+                align-items: baseline;
+                justify-content: space-between;
+            }
+            .eventTop .t {
+                font-weight: 750;
+            }
+            .eventTop .when {
+                color: var(--muted);
+                font-size: 0.95rem;
+            }
+            .pill {
+                display: inline-flex;
+                align-items: center;
+                gap: 7px;
+                border: 1px solid rgba(255, 255, 255, 0.2);
+                background: rgba(255, 255, 255, 0.06);
+                color: rgba(255, 255, 255, 0.88);
+                padding: 3px 10px;
+                border-radius: 999px;
+                font-size: 0.86rem;
+                margin-left: 8px;
+            }
+
+            footer {
+                margin-top: 44px;
+                padding-top: 16px;
+                border-top: 1px solid var(--rule);
+                color: var(--muted);
+                font-size: 0.95rem;
+            }
+
+            @media print {
+                body {
+                    background: #fff;
+                    color: #000;
+                }
+                body::before {
+                    display: none;
+                }
+                a {
+                    color: #000;
+                    text-decoration: none;
+                }
+                .wrap {
+                    max-width: none;
+                    padding: 0;
+                }
+                nav {
+                    display: none !important;
+                }
+                .card,
+                .heroImage {
+                    box-shadow: none;
+                    border-color: #ddd;
+                    background: #fff;
+                }
+                .chip,
+                .btn {
+                    border-color: #ddd;
+                    background: #fff;
+                    color: #000;
+                }
+                .banner {
+                    border-color: #ddd;
+                    background: #fff;
+                }
+                .pill {
+                    border-color: #ddd;
+                    background: #fff;
+                    color: #000;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <div class="wrap">
+            <nav aria-label="Site navigation">
+                <a href="index.html">Home</a>
+                <a href="CV.html">CV</a>
+                <a href="Mathematics.html">Mathematics</a>
+                <a href="Obdurate.html" aria-current="page">Obdurate</a>
+                <a href="Teaching.html">Teaching</a>
+            </nav>
+
+            <!-- Spotify player at the very top -->
+            <section class="card" aria-label="Out now">
+                <div class="kicker">Out now</div>
+                <h2
+                    style="
+                        margin-top: 6px;
+                        font-size: 1.55rem;
+                        color: rgba(255, 255, 255, 0.95);
+                    "
+                >
+                    Threnody%
+                </h2>
+                <p class="muted" style="margin-top: 6px">
+                    My latest single is live. If you want the fastest way into
+                    the world of <strong>Obdurate</strong>, start here.
+                </p>
+                <div class="embedWrap">
+                    <iframe
+                        data-testid="embed-iframe"
+                        style="border-radius: 12px"
+                        src="https://open.spotify.com/embed/album/61VhszCDAnNxCniBYQDqkI?utm_source=generator"
+                        width="100%"
+                        height="352"
+                        frameborder="0"
+                        allowfullscreen=""
+                        allow="
+                            autoplay;
+                            clipboard-write;
+                            encrypted-media;
+                            fullscreen;
+                            picture-in-picture;
+                        "
+                        loading="lazy"
+                    ></iframe>
+                </div>
+            </section>
+
+            <!-- Big banner early -->
+            <section
+                class="banner"
+                aria-label="Album launch banner"
+                style="margin-top: 14px"
+            >
+                <div>
+                    <strong>Hamartia — album launch</strong>
+                    <div class="muted">
+                        Sat 14 Mar 2026 • Tickets available now
+                    </div>
+                </div>
+                <a
+                    class="btn"
+                    href="https://tinyurl.com/Obdur"
+                    target="_blank"
+                    rel="noopener"
+                    >Get tickets</a
+                >
+            </section>
+
+            <header class="hero" aria-label="Header">
+                <div class="card">
+                    <div class="kicker">Obdurate</div>
+                    <h1>Obdurate</h1>
+                    <p class="tagline">
+                        <strong>Progressive music performance art</strong>
+                    </p>
+
+                    <div class="chips" aria-label="Quick highlights">
+                        <span class="chip">Live drums + composition</span>
+                        <span class="chip">Spoken word / projected text</span>
+                        <span class="chip">Video collaborations</span>
+                    </div>
+
+                    <div class="metaLine" aria-label="Contact">
+                        <span
+                            ><a href="mailto:william.a.troiani@gmail.com"
+                                >william.a.troiani@gmail.com</a
+                            ></span
+                        >
+                        <span
+                            ><a href="https://www.youtube.com/@WilliamTroiani"
+                                >YouTube</a
+                            ></span
+                        >
+                        <span class="muted"
+                            >Melbourne / lutruwita / online</span
+                        >
+                    </div>
+
+                    <p class="small" style="margin-top: 12px">
+                        Formats: live set, short-form performance spots, video
+                        collaborations.<br />
+                        Tools: drum kit, small percussion, synth layers /
+                        processing (when amplified), visuals
+                        (projector-ready)<br />
+                        Availability: Melbourne-based, touring by arrangement
+                    </p>
+                </div>
+
+                <div class="heroMedia" aria-label="Images">
+                    <div class="heroImage">
+                        <img
+                            src="Me3.jpg"
+                            alt="Portrait photo of Will Troiani"
+                            loading="lazy"
+                        />
+                    </div>
+                </div>
+            </header>
+
+            <main id="content">
+                <section class="card" id="statement">
+                    <h2>Artist statement</h2>
+
+                    <p>
+                        <strong>Obdurate</strong> names a heightened form of
+                        stubbornness. A will set like stone. There is beauty in
+                        such resolve: mastery, rigor, and moral conviction often
+                        depend on the refusal to give in.
+                    </p>
+                    <p>
+                        Yet stone does not bend. And when life demands movement,
+                        refusal becomes friction. Friction becomes dissonance.
+                        Dissonance becomes pain.
+                    </p>
+                    <p>
+                        I have carried both the strength and the cost of this
+                        trait. With this piece, I invite others who have been
+                        both punished and rewarded by their own inflexibility to
+                        consider a shared question: what do we do when we are
+                        the Obdurate one?
+                    </p>
+                    <p class="muted">
+                        In terms of orchestration: in the piece, mastery is
+                        represented by drum-kit performance, that of beauty in
+                        musical composition. The philosophy is carried by a mix
+                        of spoken word, poetry presented visually by video
+                        projection, and various other forms of obduracy are
+                        explored through various artistic collaborations.
+                    </p>
+                </section>
+
+                <section class="card" id="media">
+                    <h2>Video & collaborations</h2>
+                    <div class="videoGrid" aria-label="Video embeds">
+                        <div class="video">
+                            <iframe
+                                src="https://www.youtube.com/embed/KrZtcGieejc"
+                                title="Obdurate — video"
+                                allow="
+                                    accelerometer;
+                                    autoplay;
+                                    clipboard-write;
+                                    encrypted-media;
+                                    gyroscope;
+                                    picture-in-picture;
+                                    web-share;
+                                "
+                                allowfullscreen
+                            ></iframe>
+                        </div>
+                        <div class="video">
+                            <iframe
+                                src="https://www.youtube.com/embed/wbXM2J4UK6M"
+                                title="Melbourne Fringe Flavours Night Market (video)"
+                                allow="
+                                    accelerometer;
+                                    autoplay;
+                                    clipboard-write;
+                                    encrypted-media;
+                                    gyroscope;
+                                    picture-in-picture;
+                                    web-share;
+                                "
+                                allowfullscreen
+                            ></iframe>
+                        </div>
+                        <div class="video">
+                            <iframe
+                                src="https://www.youtube.com/embed/sPo8X1iXNP8"
+                                title="Dance piece collaboration with Victoria Gunning (video)"
+                                allow="
+                                    accelerometer;
+                                    autoplay;
+                                    clipboard-write;
+                                    encrypted-media;
+                                    gyroscope;
+                                    picture-in-picture;
+                                    web-share;
+                                "
+                                allowfullscreen
+                            ></iframe>
+                        </div>
+                        <div class="video">
+                            <iframe
+                                src="https://www.youtube.com/embed/HwqCXB6FFPc"
+                                title="GoldenEye 007 speedrunner collaboration (video)"
+                                allow="
+                                    accelerometer;
+                                    autoplay;
+                                    clipboard-write;
+                                    encrypted-media;
+                                    gyroscope;
+                                    picture-in-picture;
+                                    web-share;
+                                "
+                                allowfullscreen
+                            ></iframe>
+                        </div>
+                    </div>
+                    <p class="small" style="margin-top: 10px">
+                        More videos:
+                        <a href="https://www.youtube.com/@WilliamTroiani"
+                            >YouTube channel</a
+                        >.
+                    </p>
+                </section>
+
+                <section class="card" id="performances">
+                    <h2>Performances (selected)</h2>
+
+                    <h3>Upcoming / confirmed</h3>
+
+                    <div class="event">
+                        <div class="eventTop">
+                            <div class="t">
+                                MONA — Container Stage
+                                <span class="pill">Performance</span>
+                            </div>
+                            <div class="when">Mon 13 Oct 2025 • 2pm–4pm</div>
+                        </div>
+                        <p class="muted" style="margin: 6px 0 0">
+                            Venue: MONA Container Stage.
+                        </p>
+                    </div>
+
+                    <div class="event">
+                        <div class="eventTop">
+                            <div class="t">
+                                Melbourne Fringe — Fringe Flavours Night Market
+                                (roving)
+                            </div>
+                            <div class="when">
+                                Wed 1 Oct 2025 • approx. 6:30–7:45pm &
+                                8:45–10:00pm
+                            </div>
+                        </div>
+                        <p class="muted" style="margin: 6px 0 0">
+                            Queen Victoria Market • Acoustic roving set • PG
+                            audience
+                        </p>
+                    </div>
+
+                    <div class="event">
+                        <div class="eventTop">
+                            <div class="t">
+                                Melbourne Fringe — CLUB FRINGE: “3 Minutes to
+                                Save the World”
+                            </div>
+                            <div class="when">Fri 17 Oct 2025</div>
+                        </div>
+                        <p class="muted" style="margin: 6px 0 0">
+                            Short-form performance spot.
+                        </p>
+                    </div>
+
+                    <div class="event">
+                        <div class="eventTop">
+                            <div class="t">Hamartia — album launch</div>
+                            <div class="when">Sat 14 Mar 2026</div>
+                        </div>
+                        <p class="muted" style="margin: 6px 0 0">
+                            Tickets:
+                            <a
+                                href="https://tinyurl.com/Obdur"
+                                target="_blank"
+                                rel="noopener"
+                                >tinyurl.com/Obdur</a
+                            >
+                        </p>
+                    </div>
+                </section>
+
+                <section class="card" id="writing">
+                    <h2>Notes</h2>
+                    <ul>
+                        <li>
+                            <a href="Notes/MusicandMathematics.pdf"
+                                >Music and mathematics</a
+                            >
+                            (notes)
+                        </li>
+                    </ul>
+                    <p class="faint">
+                        If any filenames differ in your repo, keep the titles
+                        and update the links.
+                    </p>
+                </section>
+
+                <section class="card" id="contact">
+                    <h2>Contact / bookings</h2>
+                    <p>
+                        Collaborations, commissions, performance bookings, or
+                        anything living between art, music, and mathematics:
+                    </p>
+                    <p>
+                        <strong>Email:</strong>
+                        <a href="mailto:william.a.troiani@gmail.com"
+                            >william.a.troiani@gmail.com</a
+                        >
+                    </p>
+                </section>
+
+                <footer>
+                    © <span id="year"></span> Will Troiani • Last updated:
+                    <span id="lastUpdated"></span>
+                </footer>
+            </main>
         </div>
-    </section>
 
-    <!-- About Me Section -->
-    <section class="intro">
-        <div class="container">
-            <h2>Obdurate, the Performance Piece</h2>
-            <p>
-                An audio-visual synth-prog music performance featuring live drums paired with storytelling visuals and poetry, pulling you into the abstract imagination of Will Troiani.
-            </p>
-        </div>
-    </section>
-
-    <!-- Bandcamp Embed -->
-    <div class="center-embed">
-        <iframe 
-            style="border: 0; width: 100%; height: 120px; max-width: 540px;" 
-            src="https://bandcamp.com/EmbeddedPlayer/album=3168103766/size=large/bgcol=ffffff/linkcol=0687f5/tracklist=false/artwork=small/transparent=true/" 
-            seamless>
-        </iframe>
-    </div>
-
-
-    <!-- Instagram Embed -->
-    <div class="center-embed">
-        <blockquote 
-            class="instagram-media" 
-            data-instgrm-captioned 
-            data-instgrm-permalink="https://www.instagram.com/reel/DCD5iHpvGpW/?utm_source=ig_embed&amp;utm_campaign=loading" 
-            style="background:#FFF; border:0; border-radius:3px; box-shadow:0 0 1px rgba(0,0,0,0.5),0 1px 10px rgba(0,0,0,0.15); margin:1px; max-width:540px; min-width:326px; padding:0; width:calc(100% - 2px);">
-        </blockquote>
-    </div>
-
-    <!-- YouTube Embed -->
-    <div class="center-embed">
-        <iframe 
-            width="560" 
-            height="315" 
-            src="https://www.youtube.com/embed/0_Vheo8sONQ?si=vuBQs9m6sovXM4yr" 
-            title="YouTube Video Player" 
-            frameborder="0" 
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-            allowfullscreen>
-        </iframe>
-    </div>
-
-    <h1>Pieces:</h1>
-
-    <!-- Performance Details -->
-    <section class="media">
-        <div class="container">
-            <h2>The Rigor of Logic and the Fluidity of Human Emotion</h2>
-            <p>
-                Obdurate was performed at Club Voltaire as part of the 2024 Melbourne Fringe Festival.
-            </p>
-            <div class="image-container" style="text-align: center;">
-                <img src="fringe.jpg" alt="Fringe Festival Performance" width="380" height="400">
-            </div>
-        </div>
-    </section>
-
-    <!-- Speedrunning Variant -->
-    <section class="media">
-        <div class="container">
-            <h2>Perfectionism in Speedrunning and Music</h2>
-            <p>
-                This variant of the Obdurate performance piece features four world-class speedrunners of the 1997 video game <em>GoldenEye 007</em>, including the former world champion, for live commentary and speedruns of the game.
-            </p>
-            <div class="center-embed">
-                <iframe 
-                    width="560" 
-                    height="315" 
-                    src="https://www.youtube.com/embed/40Kr34IzZLk?si=O0l7ZFY8cUtZRQoa" 
-                    title="GoldenEye 007 Speedrunning Performance" 
-                    frameborder="0" 
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-                    allowfullscreen>
-                </iframe>
-            </div>
-        </div>
-    </section>
-
-    <section>
-    <div class="container">
-        <h1>Blog Posts</h1>
-        <p><a href="https://williamtroiani.github.io/Notes/HowtoWriteaSong.pdf">How to Write a Song</a>
-        <br><a href="https://williamtroiani.github.io/Notes/WhatifIamNotGoodEnough.pdf">What if I'm Not Good Enough?</a></p></div>
-</section>
-
-    <!-- Contact Section -->
-    <section class="contact">
-        <div class="container">
-            <h2>Contact</h2>
-            <p>
-                Feel free to reach out for collaborations, inquiries, or just a conversation about art, music, and mathematics.
-            </p>
-            <p>Email: <a href="mailto:william.a.troiani@gmail.com">william.a.troiani@gmail.com</a></p>
-        </div>
-    </section>
-
-    <!-- Footer -->
-    <footer>
-        <div class="container">
-            <p>&copy; 2025 Will Troiani. All rights reserved.</p>
-        </div>
-    </footer>
-</body>
+        <script>
+            (function () {
+                var y = document.getElementById("year");
+                if (y) y.textContent = String(new Date().getFullYear());
+                var el = document.getElementById("lastUpdated");
+                if (!el) return;
+                var d = new Date(document.lastModified);
+                el.textContent = isNaN(d.getTime())
+                    ? ""
+                    : d.toLocaleDateString();
+            })();
+        </script>
+    </body>
 </html>
