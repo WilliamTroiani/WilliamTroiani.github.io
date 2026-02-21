@@ -17,6 +17,20 @@
         />
 
         <style>
+            /* Notes index: single column on mobile, two columns on wider screens */
+            .notesList {
+                margin: 10px 0;
+                padding-left: 18px; /* match your existing ul padding */
+            }
+            @media (min-width: 920px) {
+                .notesList {
+                    columns: 2;
+                    column-gap: 28px;
+                }
+                .notesList li {
+                    break-inside: avoid;
+                }
+            }
             :root {
                 --max: 1120px;
 
@@ -513,8 +527,6 @@
                 <a href="CV.html">CV</a>
                 <a href="Mathematics.html" aria-current="page">Mathematics</a>
                 <a href="Obdurate.html">Obdurate</a>
-                <a href="Teaching.html">Teaching</a>
-                <a href="Seminars.html">Seminars</a>
             </nav>
 
             <header class="hero">
@@ -542,6 +554,7 @@
                             <a href="#publications">Publications</a>
                             <a href="#talks">Talks</a>
                             <a href="#writing">Writing</a>
+                            <a href="#notes">Notes</a>
                         </div>
                     </div>
 
@@ -1263,6 +1276,89 @@
                             <em>Mathematics for Safe AI</em>: grant held by
                             Timaeus; I was hired under this award as Research
                             Scientist (Theory).
+                        </li>
+                    </ul>
+                </section>
+
+                <section id="notes" class="card">
+                    <h2>Notes</h2>
+                    <p class="muted small">
+                        A small index of notes hosted on this site.
+                    </p>
+
+                    <ul class="notesList">
+                        <li>
+                            <a href="Notes/CommutativeAlgebra.pdf"
+                                >Commutative Algebra</a
+                            >
+                        </li>
+                        <li>
+                            <a href="Notes/HartshorneSolutions.pdf"
+                                >Hartshorne Solutions</a
+                            >
+                        </li>
+                        <li>
+                            <a href="Notes/Varieties.pdf">Varieties</a>
+                        </li>
+                        <li>
+                            <a href="pdfs/ArithmetisationandInteraction.pdf"
+                                >Arithmetisation and Interaction</a
+                            >
+                        </li>
+                        <li>
+                            <a
+                                href="pdfs/Approximation_of_Continuous_Functions_by_ReLU_Nets.pdf"
+                                >Approximation of Continuous Functions by ReLU
+                                Nets</a
+                            >
+                        </li>
+                        <li>
+                            <a href="pdfs/ChurchRosserTheorem.pdf"
+                                >Church–Rosser Theorem</a
+                            >
+                        </li>
+                        <li>
+                            <a href="pdfs/CommutativeAlgebraWithLin.pdf"
+                                >Commutative Algebra (with Lin)</a
+                            >
+                        </li>
+                        <li>
+                            <a href="Notes/FirstIncompletenessTheorem.tex.pdf"
+                                >First Incompleteness Theorem</a
+                            >
+                        </li>
+                        <li>
+                            <a href="Notes/QuantumComputing.pdf"
+                                >Quantum Computing</a
+                            >
+                        </li>
+                        <li>
+                            <a href="Notes/Nobby.pdf">Nobby</a>
+                        </li>
+                        <li>
+                            <a href="Notes/PredicateLogic.pdf"
+                                >Predicate Logic</a
+                            >
+                        </li>
+                        <li>
+                            <a href="Notes/Reversible_computation.pdf"
+                                >Reversible Computation</a
+                            >
+                        </li>
+                        <li>
+                            <a href="Notes/SecondaryCommutativeAlgebra.pdf"
+                                >Secondary Commutative Algebra</a
+                            >
+                        </li>
+                        <li>
+                            <a href="Notes/ThreeAlgorithms.pdf"
+                                >Three Algorithms</a
+                            >
+                        </li>
+                        <li>
+                            <a href="Notes/ax-grothendieck.pdf"
+                                >Ax–Grothendieck</a
+                            >
                         </li>
                     </ul>
                 </section>
