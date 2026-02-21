@@ -1,69 +1,565 @@
 <!doctype html>
 <html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Will Troiani</title>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width,initial-scale=1" />
+        <title>Will Troiani</title>
+        <meta
+            name="description"
+            content="Will Troiani — mathematician and performance artist. Research in logic, geometry, semantics of computation, singular learning theory, and AI safety; performance work under Obdurate."
+        />
 
-  <link rel="stylesheet" href="/css/main.css">
-</head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Serif+4:wght@400;600;700&display=swap"
+            rel="stylesheet"
+        />
 
-<body>
-  <nav>
-    <ul>
-      <li><a href="/">Home</a></li>
-      <li><a href="https://williamtroiani.github.io/pdfs/resume.pdf">CV</a></li>
-      <li><a href="/Mathematics.html">Mathematics</a></li>
-      <li><a href="/Obdurate.html">Obdurate</a></li>
-    </ul>
-  </nav>
+        <style>
+            :root {
+                --max: 1120px;
 
-  <div class="container">
-    <div class="blurb">
-      <header>
-        <h1>Will Troiani</h1>
+                /* Deep navy + gold */
+                --bg: #050711;
+                --bg2: #070a18;
+                --surface: #0b1224;
+                --surface2: #0e1630;
+                --text: #e8ecf6;
+                --muted: #b3bdd6;
+                --line: rgba(255, 255, 255, 0.1);
 
-        <blockquote>
-          <p>
-            “As humans we could never be content with knowing all, yet we can't be content with the fact that our brains will never know.”
-            <a href="https://www.youtube.com/watch?v=OwK4MKYxbZE">~ Tommy Rogers</a>
-          </p>
-        </blockquote>
-      </header>
+                --gold: #d4b35d;
+                --gold2: #f0d48b;
 
-      <main>
-        <figure style="margin: 1.5rem 0;">
-          <img
-            src="Will.png"
-            alt="Will Troiani"
-            style="display:block; margin: 0 auto; max-width: 100%; height: auto;"
-          >
-        </figure>
+                --shadow: 0 18px 55px rgba(0, 0, 0, 0.55);
+                --shadow2: 0 10px 26px rgba(0, 0, 0, 0.42);
+                --radius: 18px;
+            }
 
-        <section>
-          <h2><a href="/Mathematics.html">Mathematics</a></h2>
-          <p>
-            I am a mathematician. On the Mathematics page you’ll find my research-focused work—such as my interests,
-            papers/preprints, and other academic materials.
-          </p>
-        </section>
+            * {
+                box-sizing: border-box;
+            }
+            html,
+            body {
+                height: 100%;
+            }
+            body {
+                margin: 0;
+                font-family:
+                    Inter,
+                    system-ui,
+                    -apple-system,
+                    Segoe UI,
+                    Roboto,
+                    Helvetica,
+                    Arial,
+                    sans-serif;
+                line-height: 1.6;
+                color: var(--text);
+                background:
+                    radial-gradient(
+                        950px 520px at 10% -12%,
+                        rgba(212, 179, 93, 0.18),
+                        transparent 55%
+                    ),
+                    radial-gradient(
+                        850px 520px at 90% -10%,
+                        rgba(240, 212, 139, 0.12),
+                        transparent 60%
+                    ),
+                    radial-gradient(
+                        900px 640px at 70% 110%,
+                        rgba(212, 179, 93, 0.1),
+                        transparent 58%
+                    ),
+                    linear-gradient(180deg, var(--bg), var(--bg2));
+            }
+            a {
+                color: var(--gold2);
+                text-decoration: none;
+            }
+            a:hover {
+                text-decoration: underline;
+                text-decoration-color: rgba(240, 212, 139, 0.7);
+            }
 
-        <section>
-          <h2><a href="/Obdurate.html">Obdurate</a></h2>
-          <p>
-            I am also a performance artist. The Obdurate page is my professional performance-art page, where you’ll find
-            work/documentation and materials related to that side of my career.
-          </p>
-        </section>
-      </main>
-    </div>
-  </div>
+            .wrap {
+                max-width: var(--max);
+                margin: 0 auto;
+                padding: 18px 16px 76px;
+            }
 
-  <footer>
-    <ul>
-      <li><a href="mailto:william.a.troiani@gmail.com">email</a></li>
-      <li><a href="https://github.com/WilliamTroiani">github.com/WilliamTroiani</a></li>
-    </ul>
-  </footer>
-</body>
+            .skip {
+                position: absolute;
+                left: -9999px;
+                top: auto;
+                width: 1px;
+                height: 1px;
+                overflow: hidden;
+            }
+            .skip:focus {
+                left: 16px;
+                top: 16px;
+                width: auto;
+                height: auto;
+                padding: 10px 12px;
+                background: var(--surface);
+                border: 1px solid var(--line);
+                border-radius: 12px;
+                box-shadow: var(--shadow2);
+                z-index: 9999;
+            }
+
+            nav {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 10px 14px;
+                align-items: center;
+                padding: 10px 10px;
+                border: 1px solid var(--line);
+                border-radius: 999px;
+                background: rgba(11, 18, 36, 0.62);
+                backdrop-filter: blur(10px);
+                box-shadow: 0 10px 24px rgba(0, 0, 0, 0.32);
+                position: sticky;
+                top: 12px;
+                z-index: 50;
+            }
+            nav a {
+                color: var(--muted);
+                padding: 8px 10px;
+                border-radius: 999px;
+            }
+            nav a[aria-current="page"] {
+                color: var(--text);
+                border: 1px solid rgba(212, 179, 93, 0.35);
+                background: linear-gradient(
+                    135deg,
+                    rgba(212, 179, 93, 0.16),
+                    rgba(240, 212, 139, 0.08)
+                );
+            }
+
+            .hero {
+                margin-top: 16px;
+                padding: 22px 22px 18px;
+                border: 1px solid var(--line);
+                border-radius: var(--radius);
+                background: linear-gradient(
+                    135deg,
+                    rgba(212, 179, 93, 0.1),
+                    rgba(255, 255, 255, 0.03)
+                );
+                box-shadow: var(--shadow);
+                overflow: hidden;
+                position: relative;
+            }
+            .hero::after {
+                content: "";
+                position: absolute;
+                inset: -80px -80px auto auto;
+                width: 360px;
+                height: 360px;
+                background:
+                    radial-gradient(
+                        circle at 35% 35%,
+                        rgba(212, 179, 93, 0.28),
+                        transparent 55%
+                    ),
+                    radial-gradient(
+                        circle at 70% 70%,
+                        rgba(240, 212, 139, 0.18),
+                        transparent 58%
+                    );
+                opacity: 0.95;
+                transform: rotate(8deg);
+                pointer-events: none;
+            }
+            .heroGrid {
+                display: grid;
+                grid-template-columns: 1fr;
+                gap: 18px;
+                align-items: end;
+            }
+            @media (min-width: 920px) {
+                .heroGrid {
+                    grid-template-columns: 1.15fr 0.85fr;
+                }
+            }
+
+            .name {
+                margin: 0;
+                font-family: "Source Serif 4", serif;
+                font-weight: 700;
+                font-size: 2.45rem;
+                letter-spacing: -0.02em;
+            }
+            .tagline {
+                margin: 8px 0 0;
+                color: var(--muted);
+                font-size: 1.05rem;
+            }
+            .meta {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 10px 18px;
+                margin-top: 14px;
+                color: var(--muted);
+                font-size: 0.98rem;
+            }
+            .meta a {
+                color: var(--muted);
+                text-decoration: underline;
+                text-decoration-color: rgba(179, 189, 214, 0.35);
+            }
+            .meta a:hover {
+                text-decoration-color: rgba(240, 212, 139, 0.85);
+            }
+
+            .portrait {
+                justify-self: end;
+                display: flex;
+                gap: 14px;
+                align-items: center;
+                padding: 12px 12px 10px;
+                border: 1px solid var(--line);
+                border-radius: 16px;
+                background: rgba(11, 18, 36, 0.55);
+                backdrop-filter: blur(8px);
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+                max-width: 420px;
+            }
+            .portrait img {
+                width: 96px;
+                height: 96px;
+                border-radius: 16px;
+                object-fit: cover;
+                border: 1px solid rgba(255, 255, 255, 0.12);
+            }
+            .portrait .who {
+                font-weight: 700;
+            }
+            .portrait .small {
+                margin-top: 2px;
+                color: var(--muted);
+                font-size: 0.92rem;
+            }
+
+            .toc {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 8px;
+                margin-top: 14px;
+            }
+            .toc a {
+                font-size: 0.92rem;
+                padding: 7px 10px;
+                border-radius: 999px;
+                border: 1px solid var(--line);
+                background: rgba(11, 18, 36, 0.48);
+                color: var(--muted);
+            }
+            .toc a:hover {
+                border-color: rgba(240, 212, 139, 0.35);
+                color: var(--text);
+                text-decoration: none;
+            }
+
+            section {
+                margin-top: 18px;
+            }
+            .card {
+                border: 1px solid var(--line);
+                border-radius: var(--radius);
+                background: rgba(11, 18, 36, 0.92);
+                box-shadow: var(--shadow2);
+                padding: 18px 18px 14px;
+            }
+
+            .grid2 {
+                display: grid;
+                grid-template-columns: 1fr;
+                gap: 14px;
+                margin-top: 14px;
+                align-items: start;
+            }
+            @media (min-width: 980px) {
+                .grid2 {
+                    grid-template-columns: 1fr 1fr;
+                }
+            }
+
+            h2 {
+                margin: 0 0 10px;
+                font-family: "Source Serif 4", serif;
+                font-size: 1.38rem;
+                letter-spacing: -0.01em;
+            }
+            p {
+                margin: 10px 0;
+            }
+            ul {
+                margin: 10px 0;
+                padding-left: 18px;
+            }
+            li {
+                margin: 7px 0;
+            }
+            .muted {
+                color: var(--muted);
+            }
+            .small {
+                font-size: 0.95rem;
+                color: var(--muted);
+            }
+            .rule {
+                height: 1px;
+                background: var(--line);
+                margin: 14px 0;
+            }
+
+            blockquote {
+                margin: 12px 0 0;
+                padding: 12px 14px;
+                border-left: 3px solid rgba(240, 212, 139, 0.55);
+                background: rgba(240, 212, 139, 0.06);
+                border-radius: 12px;
+                color: var(--text);
+            }
+            blockquote p {
+                margin: 0;
+            }
+
+            figure {
+                margin: 14px 0 0;
+            }
+            figure img {
+                width: 100%;
+                height: auto;
+                border-radius: 14px;
+                border: 1px solid rgba(255, 255, 255, 0.12);
+                background: rgba(255, 255, 255, 0.02);
+            }
+            figcaption {
+                margin-top: 10px;
+                color: var(--muted);
+                font-size: 0.92rem;
+            }
+            figcaption strong {
+                color: var(--text);
+                font-weight: 600;
+            }
+
+            .badge {
+                display: inline-flex;
+                align-items: center;
+                gap: 8px;
+                font-size: 0.82rem;
+                padding: 5px 10px;
+                border-radius: 999px;
+                border: 1px solid rgba(240, 212, 139, 0.26);
+                background: rgba(240, 212, 139, 0.08);
+                color: var(--gold2);
+                white-space: nowrap;
+            }
+
+            footer {
+                margin-top: 26px;
+                padding: 14px 4px 0;
+                color: var(--muted);
+                font-size: 0.92rem;
+            }
+
+            @media print {
+                nav {
+                    display: none !important;
+                }
+                body {
+                    background: #fff;
+                    color: #000;
+                }
+                .hero,
+                .card {
+                    background: #fff;
+                    border-color: #ddd;
+                    box-shadow: none;
+                }
+                a {
+                    color: #000;
+                    text-decoration: none;
+                }
+                figure img {
+                    border-color: #ddd;
+                }
+            }
+        </style>
+    </head>
+
+    <body>
+        <a class="skip" href="#main">Skip to content</a>
+
+        <div class="wrap">
+            <nav aria-label="Site navigation">
+                <a href="index.html" aria-current="page">Home</a>
+                <a href="CV.html">CV</a>
+                <a href="Mathematics.html">Mathematics</a>
+                <a href="Obdurate.html">Obdurate</a>
+            </nav>
+
+            <header class="hero">
+                <div class="heroGrid">
+                    <div>
+                        <h1 class="name">Will Troiani</h1>
+                        <div class="tagline">
+                            Mathematician • Performance artist • research and
+                            practice across computation, geometry, and form
+                        </div>
+
+                        <div class="meta">
+                            <span>Melbourne / remote</span>
+                            <a href="mailto:william.a.troiani@gmail.com"
+                                >william.a.troiani@gmail.com</a
+                            >
+                            <a href="https://github.com/WilliamTroiani"
+                                >GitHub</a
+                            >
+                        </div>
+
+                        <div class="toc" aria-label="On this page">
+                            <a href="#about">About</a>
+                            <a href="#mathematics">Mathematics</a>
+                            <a href="#obdurate">Obdurate</a>
+                            <a href="#contact">Contact</a>
+                        </div>
+                    </div>
+
+                    <div class="portrait" aria-label="Portrait">
+                        <img
+                            src="Me.jpg"
+                            alt="Portrait of Will Troiani in a suit."
+                            style="width: 200px; height: auto"
+                        />
+                        <div>
+                            <div class="who">Will Troiani</div>
+                            <div class="small">
+                                Research Scientist<br />
+                                Mathematician &amp; Performance artist
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <main id="main">
+                <section id="about" class="card">
+                    <h2>About</h2>
+                    <p>
+                        This site is split into two professional pages that
+                        reflect the two sides of my work: a research page
+                        (<a href="Mathematics.html">Mathematics</a>) and an
+                        artistic page (<a href="Obdurate.html">Obdurate</a>).
+                    </p>
+
+                    <blockquote>
+                        <p>
+                            “As humans we could never be content with knowing
+                            all, yet we can't be content with the fact that our
+                            brains will never know.”
+                            <a href="https://www.youtube.com/watch?v=OwK4MKYxbZE"
+                                >~ Tommy Rogers</a
+                            >
+                        </p>
+                    </blockquote>
+
+                    <figure>
+                        <a href="Will.png">
+                            <img
+                                src="Will.png"
+                                alt="Header image of Will Troiani."
+                            />
+                        </a>
+                        <figcaption>
+                            <strong>Two tracks, one practice:</strong> research
+                            (mathematics/computation) and performance (Obdurate).
+                        </figcaption>
+                    </figure>
+                </section>
+
+                <section class="grid2" aria-label="Professional pages">
+                    <div id="mathematics" class="card">
+                        <h2><a href="Mathematics.html">Mathematics</a></h2>
+                        <p>
+                            My mathematicis research page.
+                        </p>
+                        <ul class="small">
+                            <li>Research summary and core interests</li>
+                            <li>Publications, preprints, and research writing</li>
+                            <li>Talks, lecture series, and seminar links</li>
+                            <li>Notes and expository writing hosted on this site</li>
+                        </ul>
+                        <div class="toc" aria-label="Mathematics links">
+                            <a href="Mathematics.html#summary">Research</a>
+                            <a href="Mathematics.html#publications">Publications</a>
+                            <a href="Mathematics.html#talks">Talks</a>
+                            <a href="Mathematics.html#notes">Notes</a>
+                        </div>
+                    </div>
+
+                    <div id="obdurate" class="card">
+                        <h2><a href="Obdurate.html">Obdurate</a></h2>
+                        <p>
+                            My musician artist's page.
+                        </p>
+                        <ul class="small">
+                            <li>Performance projects and documentation</li>
+                            <li>Video/audio/visual materials and write-ups</li>
+                            <li>Selected statements, concepts, and ongoing pieces</li>
+                            <li>Links for collaborators / presenters</li>
+                        </ul>
+                        <div class="toc" aria-label="Obdurate links">
+                            <a href="Obdurate.html">Open Obdurate</a>
+                            <a href="#contact">Contact</a>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="contact" class="card">
+                    <h2>Contact</h2>
+                    <p class="muted">
+                        For academic correspondence, collaborations, or
+                        performance enquiries, email is best.
+                    </p>
+                    <div class="rule"></div>
+                    <p>
+                        <span class="badge">Email</span>
+                        <a href="mailto:william.a.troiani@gmail.com"
+                            >william.a.troiani@gmail.com</a
+                        >
+                        <br />
+                        <span class="badge">GitHub</span>
+                        <a href="https://github.com/WilliamTroiani"
+                            >github.com/WilliamTroiani</a
+                        >
+                    </p>
+                </section>
+
+                <footer>
+                    <div>
+                        © 2026 Will Troiani. Last updated:
+                        <span id="lastUpdated"></span>.
+                    </div>
+                </footer>
+            </main>
+        </div>
+
+        <script>
+            (function () {
+                var el = document.getElementById("lastUpdated");
+                if (!el) return;
+                var d = new Date(document.lastModified);
+                el.textContent = isNaN(d.getTime()) ? "" : d.toLocaleDateString();
+            })();
+        </script>
+    </body>
 </html>
