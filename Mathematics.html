@@ -3,10 +3,10 @@
     <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width,initial-scale=1" />
-        <title>Will Troiani — Mathematics</title>
+        <title>Will Troiani: Mathematics</title>
         <meta
             name="description"
-            content="Will Troiani — logic, algebraic geometry, semantics of computation, singular learning theory, and AI safety."
+            content="Will Troiani: logic, algebraic geometry, semantics of computation, and singular learning theory."
         />
 
         <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -15,6 +15,26 @@
             href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Serif+4:wght@400;600;700&display=swap"
             rel="stylesheet"
         />
+
+        <script>
+            window.MathJax = {
+                tex: {
+                    inlineMath: [['\\(', '\\)']],
+                    displayMath: [['\\[', '\\]']],
+                    macros: {
+                        parr: "\\mathbin{\\unicode{x214B}}",
+                        wth: "\\mathbin{\\&}"
+                    }
+                },
+                svg: { fontCache: 'global' }
+            };
+        </script>
+        <script
+            type="text/javascript"
+            id="MathJax-script"
+            async
+            src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js"
+        ></script>
 
         <style>
             /* Notes index: single column on mobile, two columns on wider screens */
@@ -34,21 +54,29 @@
             :root {
                 --max: 1120px;
 
-                /* Deep navy + gold */
-                --bg: #050711;
-                --bg2: #070a18;
-                --surface: #0b1224;
-                --surface2: #0e1630;
-                --text: #e8ecf6;
-                --muted: #b3bdd6;
-                --line: rgba(255, 255, 255, 0.1);
+                /* Editorial cream paper + terracotta */
+                --bg: #ede5d2;
+                --bg2: #e6dbc1;
+                --surface: #faf3e1;
+                --surface2: #f5ecd6;
+                --text: #1d2433;
+                --muted: #4f5b6b;
+                --line: rgba(29, 36, 51, 0.13);
 
-                --gold: #d4b35d;
-                --gold2: #f0d48b;
+                --gold: #b8462e;
+                --gold2: #8c2d1a;
 
-                --shadow: 0 18px 55px rgba(0, 0, 0, 0.55);
-                --shadow2: 0 10px 26px rgba(0, 0, 0, 0.42);
-                --radius: 18px;
+                --accentTint: rgba(184, 70, 46, 0.08);
+                --accentTintStrong: rgba(184, 70, 46, 0.16);
+
+                --shadow: 0 18px 50px rgba(29, 36, 51, 0.12);
+                --shadow2: 0 8px 22px rgba(29, 36, 51, 0.08);
+                --radius: 14px;
+
+                --serif: "Source Serif 4", Georgia, "Iowan Old Style",
+                    "Times New Roman", serif;
+                --mono: ui-monospace, "SF Mono", "Cascadia Code", Consolas,
+                    monospace;
             }
 
             * {
@@ -60,34 +88,10 @@
             }
             body {
                 margin: 0;
-                font-family:
-                    Inter,
-                    system-ui,
-                    -apple-system,
-                    Segoe UI,
-                    Roboto,
-                    Helvetica,
-                    Arial,
-                    sans-serif;
-                line-height: 1.6;
+                font-family: var(--serif);
+                line-height: 1.65;
                 color: var(--text);
-                background:
-                    radial-gradient(
-                        950px 520px at 10% -12%,
-                        rgba(212, 179, 93, 0.18),
-                        transparent 55%
-                    ),
-                    radial-gradient(
-                        850px 520px at 90% -10%,
-                        rgba(240, 212, 139, 0.12),
-                        transparent 60%
-                    ),
-                    radial-gradient(
-                        900px 640px at 70% 110%,
-                        rgba(212, 179, 93, 0.1),
-                        transparent 58%
-                    ),
-                    linear-gradient(180deg, var(--bg), var(--bg2));
+                background: var(--bg);
             }
             a {
                 color: var(--gold2);
@@ -95,7 +99,7 @@
             }
             a:hover {
                 text-decoration: underline;
-                text-decoration-color: rgba(240, 212, 139, 0.7);
+                text-decoration-color: rgba(184, 70, 46, 0.6);
             }
             .wrap {
                 max-width: var(--max);
@@ -132,37 +136,36 @@
                 padding: 10px 10px;
                 border: 1px solid var(--line);
                 border-radius: 999px;
-                background: rgba(11, 18, 36, 0.62);
+                background: rgba(250, 244, 226, 0.78);
                 backdrop-filter: blur(10px);
-                box-shadow: 0 10px 24px rgba(0, 0, 0, 0.32);
+                box-shadow: 0 6px 20px rgba(29, 36, 51, 0.08);
                 position: sticky;
                 top: 12px;
                 z-index: 50;
+                font-family: var(--mono);
+                font-size: 0.88rem;
+                letter-spacing: 0.02em;
             }
             nav a {
                 color: var(--muted);
-                padding: 8px 10px;
+                padding: 8px 12px;
                 border-radius: 999px;
             }
             nav a[aria-current="page"] {
-                color: var(--text);
-                border: 1px solid rgba(212, 179, 93, 0.35);
-                background: linear-gradient(
-                    135deg,
-                    rgba(212, 179, 93, 0.16),
-                    rgba(240, 212, 139, 0.08)
-                );
+                color: var(--gold2);
+                border: 1px solid rgba(184, 70, 46, 0.32);
+                background: rgba(184, 70, 46, 0.08);
             }
 
             .hero {
                 margin-top: 16px;
-                padding: 22px 22px 18px;
+                padding: 28px 28px 24px;
                 border: 1px solid var(--line);
                 border-radius: var(--radius);
                 background: linear-gradient(
                     135deg,
-                    rgba(212, 179, 93, 0.1),
-                    rgba(255, 255, 255, 0.03)
+                    rgba(184, 70, 46, 0.10),
+                    rgba(250, 243, 225, 0.6)
                 );
                 box-shadow: var(--shadow);
                 overflow: hidden;
@@ -177,12 +180,12 @@
                 background:
                     radial-gradient(
                         circle at 35% 35%,
-                        rgba(212, 179, 93, 0.28),
+                        rgba(184, 70, 46, 0.20),
                         transparent 55%
                     ),
                     radial-gradient(
                         circle at 70% 70%,
-                        rgba(240, 212, 139, 0.18),
+                        rgba(140, 45, 26, 0.12),
                         transparent 58%
                     );
                 opacity: 0.95;
@@ -202,15 +205,17 @@
             }
             .name {
                 margin: 0;
-                font-family: "Source Serif 4", serif;
+                font-family: var(--serif);
                 font-weight: 700;
-                font-size: 2.45rem;
-                letter-spacing: -0.02em;
+                font-size: 3rem;
+                line-height: 1.05;
+                letter-spacing: -0.025em;
             }
             .tagline {
-                margin: 8px 0 0;
+                margin: 12px 0 0;
                 color: var(--muted);
-                font-size: 1.05rem;
+                font-size: 1.02rem;
+                font-style: italic;
             }
             .meta {
                 display: flex;
@@ -226,7 +231,7 @@
                 text-decoration-color: rgba(179, 189, 214, 0.35);
             }
             .meta a:hover {
-                text-decoration-color: rgba(240, 212, 139, 0.85);
+                text-decoration-color: rgba(184, 70, 46, 0.75);
             }
 
             .portrait {
@@ -237,7 +242,7 @@
                 padding: 12px 12px 10px;
                 border: 1px solid var(--line);
                 border-radius: 16px;
-                background: rgba(11, 18, 36, 0.55);
+                background: rgba(250, 243, 225, 0.7);
                 backdrop-filter: blur(8px);
                 box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
                 max-width: 420px;
@@ -269,11 +274,11 @@
                 padding: 7px 10px;
                 border-radius: 999px;
                 border: 1px solid var(--line);
-                background: rgba(11, 18, 36, 0.48);
+                background: rgba(250, 243, 225, 0.6);
                 color: var(--muted);
             }
             .toc a:hover {
-                border-color: rgba(240, 212, 139, 0.35);
+                border-color: rgba(184, 70, 46, 0.35);
                 color: var(--text);
                 text-decoration: none;
             }
@@ -281,12 +286,75 @@
             section {
                 margin-top: 18px;
             }
+            section + section {
+                margin-top: 44px;
+            }
+            .plain {
+                padding: 0 4px;
+            }
             .card {
                 border: 1px solid var(--line);
                 border-radius: var(--radius);
-                background: rgba(11, 18, 36, 0.92);
+                background: var(--surface);
                 box-shadow: var(--shadow2);
-                padding: 18px 18px 14px;
+                padding: 22px 22px 18px;
+            }
+
+            .card.featured {
+                background: linear-gradient(
+                    135deg,
+                    rgba(184, 70, 46, 0.10) 0%,
+                    var(--surface) 65%
+                );
+                border-color: rgba(184, 70, 46, 0.28);
+                position: relative;
+                overflow: hidden;
+            }
+            .card.featured::after {
+                content: "";
+                position: absolute;
+                top: -60px;
+                right: -60px;
+                width: 320px;
+                height: 320px;
+                background: radial-gradient(
+                    circle at 35% 35%,
+                    rgba(184, 70, 46, 0.16),
+                    transparent 62%
+                );
+                pointer-events: none;
+                z-index: 0;
+            }
+            .card.featured > * {
+                position: relative;
+                z-index: 1;
+            }
+
+            .featuredEq {
+                margin: 22px 0 18px;
+                padding: 22px 24px 20px;
+                border-left: 3px solid var(--gold);
+                background: rgba(184, 70, 46, 0.05);
+                border-radius: 0 14px 14px 0;
+            }
+            .featuredEqLabel {
+                font-family: var(--mono);
+                color: var(--gold2);
+                font-size: 0.72rem;
+                text-transform: uppercase;
+                letter-spacing: 0.18em;
+                margin-bottom: 4px;
+                font-weight: 500;
+            }
+            .featuredEqMath {
+                font-size: 1.2rem;
+                margin: 8px 0 6px;
+            }
+            .featuredEqCaption {
+                margin-top: 8px;
+                color: var(--muted);
+                font-size: 0.95rem;
+                font-style: italic;
             }
 
             .grid2 {
@@ -302,15 +370,106 @@
                 gap: 14px;
             }
 
+            .twoCol {
+                display: grid;
+                grid-template-columns: 1fr;
+                gap: 6px 32px;
+                margin-top: 4px;
+            }
+            @media (min-width: 720px) {
+                .twoCol {
+                    grid-template-columns: 1fr 1fr;
+                }
+            }
+            .twoCol h3 {
+                margin-top: 6px;
+            }
+            .twoCol ul {
+                margin-top: 6px;
+            }
+
+            .entryList {
+                list-style: none;
+                margin: 14px 0 0;
+                padding: 0;
+            }
+            .entryList > li {
+                display: grid;
+                grid-template-columns: 1fr;
+                gap: 4px 22px;
+                padding: 14px 0;
+                border-top: 1px solid var(--line);
+            }
+            .entryList > li:first-child {
+                border-top: none;
+                padding-top: 6px;
+            }
+            @media (min-width: 720px) {
+                .entryList > li {
+                    grid-template-columns: 130px 1fr;
+                }
+            }
+            .entryDate {
+                font-family: var(--mono);
+                font-size: 0.78rem;
+                color: var(--muted);
+                text-transform: uppercase;
+                letter-spacing: 0.06em;
+                padding-top: 3px;
+                white-space: nowrap;
+            }
+            .entryBody {
+                color: var(--text);
+            }
+            .entryVenue {
+                color: var(--muted);
+                font-size: 0.96rem;
+            }
+            .entryTitle {
+                margin-top: 2px;
+                font-style: italic;
+            }
+            .entryMeta {
+                margin-top: 4px;
+                color: var(--muted);
+                font-size: 0.92rem;
+            }
+
+            .compactList {
+                list-style: none;
+                margin: 14px 0 0;
+                padding: 0;
+                column-gap: 32px;
+            }
+            @media (min-width: 720px) {
+                .compactList {
+                    columns: 2;
+                }
+            }
+            .compactList > li {
+                padding: 8px 0;
+                border-top: 1px solid var(--line);
+                break-inside: avoid;
+            }
+            .compactList > li:first-child {
+                border-top: none;
+                padding-top: 0;
+            }
+
             h2 {
-                margin: 0 0 10px;
-                font-family: "Source Serif 4", serif;
-                font-size: 1.38rem;
-                letter-spacing: -0.01em;
+                margin: 0 0 14px;
+                font-family: var(--serif);
+                font-size: 1.55rem;
+                font-weight: 700;
+                letter-spacing: -0.015em;
+                padding-bottom: 8px;
+                border-bottom: 1px solid var(--line);
             }
             h3 {
-                margin: 12px 0 6px;
-                font-size: 1.05rem;
+                margin: 18px 0 8px;
+                font-family: var(--serif);
+                font-size: 1.1rem;
+                font-weight: 600;
             }
             p {
                 margin: 10px 0;
@@ -338,10 +497,11 @@
             blockquote {
                 margin: 12px 0 0;
                 padding: 12px 14px;
-                border-left: 3px solid rgba(240, 212, 139, 0.55);
-                background: rgba(240, 212, 139, 0.06);
+                border-left: 3px solid rgba(184, 70, 46, 0.45);
+                background: rgba(184, 70, 46, 0.05);
                 border-radius: 12px;
                 color: var(--text);
+                font-style: italic;
             }
             blockquote p {
                 margin: 0;
@@ -359,7 +519,7 @@
                 height: auto;
                 border-radius: 14px;
                 border: 1px solid rgba(255, 255, 255, 0.12);
-                background: rgba(255, 255, 255, 0.02);
+                background: rgba(184, 70, 46, 0.04);
             }
             figcaption {
                 margin-top: 10px;
@@ -378,14 +538,14 @@
                 font-size: 0.82rem;
                 padding: 5px 10px;
                 border-radius: 999px;
-                border: 1px solid rgba(240, 212, 139, 0.26);
-                background: rgba(240, 212, 139, 0.08);
+                border: 1px solid rgba(184, 70, 46, 0.26);
+                background: rgba(184, 70, 46, 0.08);
                 color: var(--gold2);
                 white-space: nowrap;
             }
             .badge.accepted {
-                border-color: rgba(212, 179, 93, 0.36);
-                background: rgba(212, 179, 93, 0.1);
+                border-color: rgba(184, 70, 46, 0.36);
+                background: rgba(184, 70, 46, 0.1);
                 color: var(--gold2);
             }
             .badge.preprint {
@@ -419,8 +579,8 @@
                 display: inline-block;
                 padding: 4px 10px;
                 border-radius: 999px;
-                border: 1px solid rgba(240, 212, 139, 0.24);
-                background: rgba(240, 212, 139, 0.08);
+                border: 1px solid rgba(184, 70, 46, 0.32);
+                background: rgba(184, 70, 46, 0.08);
                 color: var(--gold2);
                 font-size: 0.86rem;
                 margin-left: 8px;
@@ -456,17 +616,17 @@
             .pub .links a {
                 color: var(--gold2);
                 text-decoration: underline;
-                text-decoration-color: rgba(240, 212, 139, 0.35);
+                text-decoration-color: rgba(184, 70, 46, 0.35);
             }
             .pub .links a:hover {
-                text-decoration-color: rgba(240, 212, 139, 0.85);
+                text-decoration-color: rgba(184, 70, 46, 0.75);
             }
 
             details {
                 border: 1px solid var(--line);
                 border-radius: 16px;
                 padding: 10px 12px;
-                background: rgba(255, 255, 255, 0.02);
+                background: rgba(184, 70, 46, 0.04);
             }
             details > summary {
                 cursor: pointer;
@@ -519,7 +679,7 @@
         <div class="wrap">
             <nav aria-label="Site navigation">
                 <a href="index.html">Home</a>
-                <a href="CV.html">CV</a>
+                <a href="CV.pdf">CV</a>
                 <a href="Mathematics.html" aria-current="page">Mathematics</a>
                 <a href="Obdurate.html">Obdurate</a>
             </nav>
@@ -530,7 +690,7 @@
                         <h1 class="name">Will Troiani</h1>
                         <div class="tagline">
                             Mathematician (logic & geometry) • semantics of
-                            computation • singular learning theory • AI safety
+                            computation • singular learning theory
                         </div>
 
                         <div class="meta">
@@ -573,105 +733,345 @@
             <main id="main">
                 <section id="summary">
                     <div class="grid2">
-                        <div class="card">
-                            <h2>Research summary</h2>
+                        <div class="card featured">
+                            <h2>Research</h2>
 
                             <p>
-                                I work at the boundary between
-                                <strong>logic</strong>,
-                                <strong>algebraic geometry</strong>, and
-                                <strong>computation</strong>. A recurring theme
-                                is that <em>computation has geometry</em>:
-                                normalization and cut-elimination can be
-                                represented as algebraic operations (ideals,
-                                Gröbner bases, schemes) and—via
-                                <strong>singular learning theory</strong>—as
-                                local geometry near critical points.
+                                A common thread runs through my work:
+                                <em>proofs are geometric</em>. Cut-elimination
+                                in linear logic can be realised as elimination
+                                in commutative algebra, as isomorphisms of
+                                moduli spaces, and as composition followed by
+                                the splitting of an idempotent in the
+                                bicategory of Landau&ndash;Ginzburg models.
                             </p>
 
-                            <p class="muted">
-                                I’m particularly interested in how this
-                                perspective can inform
-                                <strong>AI safety</strong>: interpretability as
-                                structural inference, model selection for
-                                singular models, and understanding when two
-                                systems that compute the same function
-                                nonetheless have meaningfully different internal
-                                structure.
-                            </p>
-
-                            <blockquote>
-                                <p>
-                                    A romantic image comes to mind: as one
-                                    performs deductive reasoning, a kind of
-                                    geometric hologram appears overhead,
-                                    structures blooming in harmonic alignment
-                                    with the logic, or else the contrary.
-                                </p>
-                            </blockquote>
-
-
-                        </div>
-
-                        <div class="stack">
-                            <div class="card">
-                                <h2>Core interests</h2>
-                                <ul>
-                                    <li>
-                                        Linear logic, proof nets,
-                                        cut-elimination
-                                    </li>
-                                    <li>
-                                        Algebraic geometry (Hilbert schemes;
-                                        schemes and singularities)
-                                    </li>
-                                    <li>
-                                        Type theory (programs-as-proofs
-                                        viewpoints)
-                                    </li>
-                                    <li>
-                                        Categorical logic and internal languages
-                                    </li>
-                                    <li>
-                                        Computability and denotational semantics
-                                    </li>
-                                    <li>Singular learning theory (SLT)</li>
-                                    <li>
-                                        Quantum error correction (via
-                                        logical/semantic viewpoints)
-                                    </li>
-                                </ul>
+                            <div class="featuredEq">
+                                <div class="featuredEqMath">
+                                    \[
+                                    \mathbb{S}(!X) \;=\;
+                                    \operatorname{Hilb}\bigl(\mathbb{S}(X)\bigr)
+                                    \]
+                                </div>
+                                <div class="featuredEqCaption">
+                                    The exponential modality of linear logic,
+                                    interpreted as the Hilbert scheme.
+                                </div>
                             </div>
 
-                            <div class="card">
-                                <h2>Adjacent interests & practice</h2>
-                                <ul>
-                                    <li>
-                                        Mathematical musicology; mathematical
-                                        aesthetics
-                                    </li>
-                                    <li>Perspective/projective geometry</li>
-                                    <li>
-                                        Foundations of mathematics; philosophy
-                                        of mathematics; philosophy of science
-                                    </li>
-                                    <li>Quantum computing</li>
-                                    <li>Formal verification</li>
-                                    <li>
-                                        Mathematical communication; storytelling
-                                        as a research tool
-                                    </li>
-                                    <li>
-                                        Generative/algorithmic art; audio‑visual
-                                        performance
-                                    </li>
-                                </ul>
+                            <details>
+                                <summary>Read more</summary>
+                                <div class="inner">
+
+                            <h3>1. Linear logic and the Hilbert scheme</h3>
+
+                            <p>
+                                Multiplicative exponential linear logic has
+                                the multiplicative connectives tensor
+                                (\(\otimes\)) and par (\(\parr\)), with the
+                                exponential modality \(!\). The connectives
+                                have meanings familiar from tensor algebra:
+                                \(\otimes\) is the tensor product, and the
+                                linear implication \(A \multimap B = A^\perp
+                                \parr B\) is the space of linear maps. The
+                                exception is the exponential, which has the
+                                semantics of a cofree cocommutative coalgebra.
+                                Linear logic is in this way a formal language
+                                for constructions in a canonical nonlinear
+                                extension of tensor algebra. While the
+                                connectives are familiar to mathematicians,
+                                the fact that the structural maps associated
+                                to their universal properties can be used to
+                                encode algorithms is less familiar.
+                            </p>
+
+                            <p>
+                                In
+                                <a href="https://arxiv.org/abs/2207.10871"
+                                    >Elimination and cut-elimination in
+                                    multiplicative linear logic</a
+                                >
+                                (with Murfet), each proof net \(\pi\)
+                                determines a polynomial ideal \(I(\pi)\).
+                                Cut-elimination then becomes variable
+                                elimination in commutative algebra.
+                            </p>
+
+                            <p>
+                                In
+                                <a href="https://arxiv.org/abs/2502.08911"
+                                    >Linear Logic and the Hilbert Scheme</a
+                                >
+                                (with Murfet), this picture is extended to
+                                shallow MELL by interpreting the exponential
+                                modality using the Hilbert scheme. Writing
+                                \(\mathbb{S}(X)\) for the scheme attached to
+                                a formula \(X\),
+                            </p>
+
+                            <p>
+                                \[
+                                \mathbb{S}(!X) \;=\;
+                                \operatorname{Hilb}\bigl(\mathbb{S}(X)\bigr),
+                                \]
+                            </p>
+
+                            <p>
+                                where \(\operatorname{Hilb}(Y)\) parameterises
+                                closed subschemes of \(Y\). To each shallow
+                                proof net \(\pi\) we associate a closed
+                                immersion \(\iota_\pi : \mathbb{X}(\pi)
+                                \hookrightarrow \mathbb{S}(\pi)\) of locally
+                                projective schemes, and the main theorem of
+                                the paper says that for any cut-reduction
+                                \(\gamma : \pi \to \pi'\) between shallow
+                                proof nets there is an explicit isomorphism
+                                \(\mathbb{X}(\pi) \cong \mathbb{X}(\pi')\).
+                            </p>
+
+                            <p>
+                                Geometrically, the multiplicative part of a
+                                proof net is a system of linear equations
+                                between atomic degrees of freedom, such as
+                                \(x - y, \; y - z\). The exponential introduces
+                                additional parameters
+                                \(\theta, \phi, \psi, \kappa, \ldots\) that
+                                parametrise a <em>space</em> of such
+                                equations,
+                            </p>
+
+                            <p>
+                                \[
+                                x - \theta y - \phi z, \quad
+                                y - \psi w - \kappa t, \quad \ldots,
+                                \]
+                            </p>
+
+                            <p>
+                                and structural rules like contraction impose
+                                equations between these parameters, such as
+                                \(\theta = \phi\). In this way the exponential
+                                modality has the geometric content of
+                                <em>equations between equations</em>.
+                            </p>
+
+                            <h3>
+                                2. Matrix factorisations and quantum error
+                                correction
+                            </h3>
+
+                            <p>
+                                A second line studies cut-elimination inside
+                                the bicategory \(\mathrm{LG}\) of
+                                Landau&ndash;Ginzburg models. A
+                                <em>matrix factorisation</em> of a polynomial
+                                \(W \in k[x_1, \ldots, x_n]\) is a
+                                \(\mathbb{Z}/2\)-graded free module \(M\) with
+                                an odd endomorphism \(d\) satisfying \(d^2 = W
+                                \cdot \mathrm{id}\); these encode the
+                                singularity theory of the hypersurface \(\{W =
+                                0\}\). Each proof net determines a matrix
+                                factorisation of a sum of potentials, and
+                                cut-elimination is bicategorical composition
+                                followed by the splitting of an idempotent
+                                \(e = e^2\), computed concretely by the
+                                Falling Roofs algorithm of
+                                <a href="https://arxiv.org/abs/2207.10871"
+                                    >Elimination and cut-elimination in
+                                    multiplicative linear logic</a
+                                >.
+                            </p>
+
+                            <p>
+                                The central observation of
+                                <a href="https://arxiv.org/abs/2405.19051"
+                                    >Linear Logic and Quantum Error Correcting
+                                    Codes</a
+                                >
+                                (with Murfet) is that this idempotent splitting
+                                is the recovery map of a quantum
+                                error-correcting code. The image of \(e\) is
+                                the code space \(\mathcal{C}\); the components
+                                of the composed factorisation lying in
+                                \(\ker(e)\) are the errors; the idempotent
+                                itself is the recovery map \(\mathcal{R}\); and
+                                the correction condition \(\mathcal{R} \circ
+                                \mathcal{E}|_{\mathcal{C}} =
+                                \mathrm{Id}_{\mathcal{C}}\) holds because
+                                \(e\) is idempotent. No error-correction
+                                structure was imposed on the construction: the
+                                code space, error model, and recovery map are
+                                all determined by the proof theory.
+                            </p>
+
+                            <p>
+                                The bicategorical setting is essential. The
+                                coherence and functoriality data of composition
+                                in \(\mathrm{LG}\) are absent from
+                                one-categorical models, and they are precisely
+                                what produces the idempotent and its splitting.
+                            </p>
+
+                            <h3>3. Singular learning theory</h3>
+
+                            <p>
+                                A more recent line applies algebraic-geometric
+                                methods to statistical learning, in
+                                collaboration with the singular learning theory
+                                programme at
+                                <a href="https://timaeus.co/"
+                                    ><strong>Timaeus</strong></a
+                                >.
+                            </p>
+
+                            <p>
+                                A noisy Turing-machine code is a point \(w\) in
+                                a product of probability simplices,
+                                parameterising a smooth statistical model
+                                \(p(y \mid x, w)\). The smooth family arises
+                                from the differential treatment of copying and
+                                reuse in linear logic, in particular from the
+                                Sweedler semantics of the exponential modality.
+                                The Bayesian evidence integral
+                            </p>
+
+                            <p>
+                                \[
+                                Z_n \;=\; \int_W e^{-n L_n(w)} \,
+                                \varphi(w)\, dw
+                                \]
+                            </p>
+
+                            <p>
+                                is the partition function of the synthesis
+                                problem. The model is typically singular: the
+                                solution set of exact codes is not a smooth
+                                manifold, and the relevant asymptotic theory is
+                                Watanabe&rsquo;s singular learning theory.
+                            </p>
+
+                            <p>
+                                In
+                                <a href="https://arxiv.org/abs/2504.08075"
+                                    ><em>Programs as Singularities</em></a
+                                >
+                                (with Murfet), the Taylor coefficients of a
+                                polynomial surrogate of the loss are controlled
+                                by error-syndrome combinatorics, and the real
+                                log canonical threshold (the learning
+                                coefficient) is computable from the
+                                multiplicities of the monomials produced by the
+                                Sweedler semantics. The exponential modality of
+                                linear logic produces precisely the singular
+                                geometry that controls Bayesian learning.
+                            </p>
+
+                            <p>
+                                A second recent development, joint with
+                                Salazar, Snikkers, and Murfet, is
+                                <em>Susceptibilities for Turing Machines</em>.
+                                There the susceptibility to upweighting an
+                                input \(x\) is the covariance \(\chi_x(A) =
+                                -\operatorname{Cov}_\beta(A, \ell_x - L)\), a
+                                Bayesian form of the fluctuation-dissipation
+                                principle. Control-flow decompositions of a
+                                program produce rank-one off-diagonal blocks in
+                                the centred susceptibility matrix, and
+                                symmetries of subroutines appear as
+                                equivariances.
+                            </p>
+
+                            <p>
+                                The susceptibility framework should extend
+                                from
+                                noisy Turing machines to neural networks,
+                                giving a mathematically grounded approach to
+                                interpretability: detecting when a learned
+                                computation is robust or brittle, identifying
+                                when two networks computing the same function
+                                differ in their internal structure, and
+                                quantifying the Bayesian complexity of the
+                                algorithms a model has actually learned.
+                                Singular learning theory is the right
+                                asymptotic framework for the model-selection,
+                                structural-inference, and interpretability
+                                problems that govern whether a learned system
+                                can be understood and controlled.
+                            </p>
+
+                                </div>
+                            </details>
+                        </div>
+
+                        <div class="card">
+                            <h2>Interests</h2>
+                            <div class="twoCol">
+                                <div>
+                                    <h3>Core interests</h3>
+                                    <ul>
+                                        <li>
+                                            Linear logic, proof nets,
+                                            cut-elimination
+                                        </li>
+                                        <li>
+                                            Algebraic geometry (Hilbert
+                                            schemes; schemes and
+                                            singularities)
+                                        </li>
+                                        <li>
+                                            Type theory (programs-as-proofs
+                                            viewpoints)
+                                        </li>
+                                        <li>
+                                            Categorical logic and internal
+                                            languages
+                                        </li>
+                                        <li>
+                                            Computability and denotational
+                                            semantics
+                                        </li>
+                                        <li>
+                                            Singular learning theory (SLT)
+                                        </li>
+                                        <li>
+                                            Quantum error correction (via
+                                            logical/semantic viewpoints)
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div>
+                                    <h3>Adjacent interests &amp; practice</h3>
+                                    <ul>
+                                        <li>
+                                            Mathematical musicology;
+                                            mathematical aesthetics
+                                        </li>
+                                        <li>
+                                            Perspective/projective geometry
+                                        </li>
+                                        <li>
+                                            Foundations of mathematics;
+                                            philosophy of mathematics;
+                                            philosophy of science
+                                        </li>
+                                        <li>Quantum computing</li>
+                                        <li>Formal verification</li>
+                                        <li>
+                                            Mathematical communication;
+                                            storytelling as a research tool
+                                        </li>
+                                        <li>
+                                            Generative/algorithmic art;
+                                            audio‑visual performance
+                                        </li>
+                                    </ul>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </section>
 
-                <section id="experience" class="card">
+                <section id="experience" class="plain">
                     <h2>Experience</h2>
 
                     <div class="role">
@@ -728,7 +1128,7 @@
                     </div>
                 </section>
 
-                <section id="education" class="card">
+                <section id="education" class="plain">
                     <h2>Education</h2>
 
                     <div class="role">
@@ -788,189 +1188,126 @@
                     </div>
                 </section>
 
-                <section id="publications" class="card">
-                    <h2>Publications & research writing</h2>
+                <section id="publications" class="plain">
+                    <h2>Publications</h2>
 
-                    <h3>Peer‑reviewed / accepted</h3>
-
-                    <div class="pub">
-                        <div class="t">
-                            <a href="pdfs/FiniteColimitsInternalLanguageTaAC.pdf"
+                    <ul>
+                        <li>
+                            <a
+                                href="pdfs/FiniteColimitsInternalLanguageTaAC.pdf"
                                 >The internal logic and finite colimits</a
                             >
-                            <span class="badge">Published</span>
-                        </div>
-                        <div class="m">
-                            Solo-authored • <em>Logica Universalis</em>
-                        </div>
-                        <div class="d">
-                            Internal languages of topoi; constructive
-                            descriptions of finite colimits; contrasts with
-                            ZF‑style set‑theoretic intuition.
-                        </div>
-                    </div>
-
-                    <div class="pub">
-                        <div class="t">
+                        </li>
+                        <li>
                             <a href="https://arxiv.org/abs/2207.10871"
                                 >Elimination and cut-elimination in
                                 multiplicative linear logic</a
                             >
-                            <span class="badge accepted">Accepted</span>
-                        </div>
-                        <div class="m">
-                            With Daniel Murfet •
-                            <em>Mathematical Structures in Computer Science</em>
-                            • arXiv:2207.10871
-                        </div>
-                        <div class="d">
-                            Associates ideals to proof structures; links
-                            normalization to Gröbner bases via a
-                            Buchberger‑style “Falling Roofs” algorithm.
-                        </div>
-                    </div>
-
-                    <div class="pub">
-                        <div class="t">
+                        </li>
+                        <li>
                             <a href="https://arxiv.org/abs/2502.08911"
                                 >Linear Logic and the Hilbert Scheme</a
                             >
-                            <span class="badge accepted">Accepted</span>
-                        </div>
-                        <div class="m">
-                            With Daniel Murfet • arXiv:2502.08911 (2025)
-                        </div>
-                        <div class="d">
-                            A geometric semantics for shallow MELL proofs via
-                            Hilbert schemes; invariance under cut‑elimination
-                            via explicit isomorphisms.
-                        </div>
-                    </div>
-
-                    <div class="pub">
-                        <div class="t">
+                        </li>
+                        <li>
                             <a href="https://arxiv.org/abs/2008.10131"
                                 >Gentzen–Mints–Zucker duality</a
                             >
-                            <span class="badge accepted">Accepted</span>
-                        </div>
-                        <div class="m">
-                            With Daniel Murfet • arXiv:2008.10131 (2020)
-                        </div>
-                        <div class="d">
-                            Relates simply‑typed λ‑calculus and intuitionistic
-                            sequent calculus; local vs global perspectives on
-                            the same computational structure.
-                        </div>
-                    </div>
-
-                    <h3>Conference</h3>
-                    <div class="pub">
-                        <div class="t">
+                        </li>
+                        <li>
                             <a href="https://arxiv.org/abs/2504.08075"
                                 >Programs as Singularities</a
                             >
-                            <span class="badge accepted"
-                                >Accepted (ODYSSEY 2025)</span
-                            >
-                        </div>
-                        <div class="m">
-                            With Daniel Murfet • arXiv:2504.08075 (Apr 2025)
-                        </div>
-                        <div class="d">
-                            Develops a correspondence between Turing machine
-                            structure and singularities of real analytic
-                            functions by embedding discrete codes into a smooth
-                            “noisy” parameter space. Relates Taylor coefficients
-                            of a likelihood potential to error syndromes,
-                            connecting linear‑logic derivatives with singular
-                            learning theory and Bayesian inference.
-                        </div>
-                    </div>
+                        </li>
+                    </ul>
 
-                    <h3>Preprints (submitted to MSCS)</h3>
-                    <div class="pub">
-                        <div class="t">
+                    <h3>Preprints</h3>
+                    <ul>
+                        <li>
                             <a href="https://arxiv.org/abs/2405.19051"
                                 >Linear Logic and Quantum Error Correcting
                                 Codes</a
                             >
-                            <span class="badge preprint">Preprint</span>
-                        </div>
-                        <div class="m">
-                            With Daniel Murfet • arXiv:2405.19051 (2024)
-                        </div>
-                        <div class="d">
-                            Interprets multiplicative proof‑net reduction
-                            through stabilizer codes; cut‑elimination as a
-                            quantum cooling / correction process.
-                        </div>
-                    </div>
+                        </li>
+                        <li>
+                            <a href="Notes/dill_des.pdf"
+                                >Differential equations on plain proofs in
+                                differential linear logic</a
+                            >
+                        </li>
+                        <li>
+                            <a href="Notes/InSimplicialSets.pdf"
+                                >Finite simplicial sets as internal
+                                programs</a
+                            >
+                        </li>
+                    </ul>
 
                     <h3>Other research writing</h3>
-                    <div class="pub">
-                        <div class="t">
+                    <ul>
+                        <li>
                             <a href="https://hal.science/hal-04029063"
                                 >Simplifying normal functors: an old and a new
                                 model of λ‑calculus</a
                             >
-                            <span class="badge preprint">Note / preprint</span>
-                        </div>
-                        <div class="m">HAL preprint</div>
-                        <div class="d">
-                            Contrasts categorical and syntactic perspectives on
-                            linear logic; revisits Girard’s normal functors
-                            model.
-                        </div>
-                    </div>
-
-                    <div class="pub">
-                        <div class="t">
+                        </li>
+                        <li>
                             <a
                                 href="https://therisingsea.org/notes/MScThesisWillTroiani.pdf"
                                 >Simplicial Sets are Algorithms</a
                             >
-                            <span class="badge preprint">MSc thesis</span>
-                        </div>
-                        <div class="m">University of Melbourne (2019)</div>
-                        <div class="d">
-                            A constructive viewpoint on finite simplicial sets
-                            and the computation of geometric realisations.
-                        </div>
-                    </div>
+                        </li>
+                    </ul>
                 </section>
 
-                <section id="talks" class="card">
+                <section id="talks" class="plain">
                     <h2>Selected talks & lecture series</h2>
 
-                    <ul>
+                    <ul class="entryList">
                         <li>
-                            <strong>18 Feb 2025</strong> — ART Seminar,
-                            University of Melbourne:
-                            <em
-                                >Patterns of Thought: A Philosophical Journey
-                                Through Mathematics and Music</em
-                            >
-                            (<a
-                                href="http://math.soimeme.org/~arunram/ARTseminar.html"
-                                >seminar page</a
-                            >).
+                            <div class="entryDate">18 Feb 2025</div>
+                            <div class="entryBody">
+                                <div class="entryVenue">
+                                    ART Seminar, University of Melbourne
+                                </div>
+                                <div class="entryTitle">
+                                    Patterns of Thought: A Philosophical
+                                    Journey Through Mathematics and Music
+                                </div>
+                                <div class="entryMeta">
+                                    <a
+                                        href="http://math.soimeme.org/~arunram/ARTseminar.html"
+                                        >seminar page</a
+                                    >
+                                </div>
+                            </div>
                         </li>
-
                         <li>
-                            <strong>30 Mar 2023</strong> — CHoCoLa (ENS Lyon):
-                            <em
-                                >Computation in logic as the splitting of
-                                idempotents in algebraic geometry; two models of
-                                multiplicative linear logic</em
-                            >
-                            (<a href="pdfs/CatGoISlides.pdf">slides</a>).
+                            <div class="entryDate">30 Mar 2023</div>
+                            <div class="entryBody">
+                                <div class="entryVenue">CHoCoLa (ENS Lyon)</div>
+                                <div class="entryTitle">
+                                    Computation in logic as the splitting of
+                                    idempotents in algebraic geometry; two
+                                    models of multiplicative linear logic
+                                </div>
+                                <div class="entryMeta">
+                                    <a href="pdfs/CatGoISlides.pdf"
+                                        >slides</a
+                                    >
+                                </div>
+                            </div>
                         </li>
-
                         <li>
-                            <strong>Nov 2023</strong> —
-                            <em>Derivatives in Logic and Learning</em> (bonus
-                            seminar on Differential Linear Logic).
+                            <div class="entryDate">Nov 2023</div>
+                            <div class="entryBody">
+                                <div class="entryTitle">
+                                    Derivatives in Logic and Learning
+                                </div>
+                                <div class="entryMeta">
+                                    Bonus seminar on Differential Linear Logic
+                                </div>
+                            </div>
                         </li>
                     </ul>
 
@@ -983,8 +1320,7 @@
                                     <em
                                         >Story telling (in mathematics and
                                         music)</em
-                                    >
-                                    —
+                                    >,
                                     <a
                                         href="https://www.youtube.com/watch?v=WmsXyUjZGHs&feature=youtu.be"
                                         >video</a
@@ -1002,8 +1338,7 @@
                                         >An object is whole only with its
                                         contrary; composing music and creating
                                         mathematics</em
-                                    >
-                                    —
+                                    >,
                                     <a
                                         href="https://www.youtube.com/watch?v=i1wM_Gd62ms"
                                         >video</a
@@ -1018,79 +1353,79 @@
                             <h3>Metauni: Foundations (videos)</h3>
                             <ul>
                                 <li>
-                                    First order logic —
+                                    First order logic:
                                     <a href="https://youtu.be/2S83EcpCKBY"
                                         >video</a
                                     >
                                 </li>
                                 <li>
-                                    Models of first order theories —
+                                    Models of first order theories:
                                     <a href="https://youtu.be/hI3WKeaHCkk"
                                         >video</a
                                     >
                                 </li>
                                 <li>
-                                    Gödel (Part 1) —
+                                    Gödel (Part 1):
                                     <a href="https://youtu.be/TRhR88anv3M"
                                         >video</a
                                     >
                                 </li>
                                 <li>
-                                    Gödel (Part 2) —
+                                    Gödel (Part 2):
                                     <a href="https://youtu.be/GQ4DFMNKvwY"
                                         >video</a
                                     >
                                 </li>
                                 <li>
-                                    Gödel (Part 3) —
+                                    Gödel (Part 3):
                                     <a href="https://youtu.be/hz-IWh9CF9A"
                                         >video</a
                                     >
                                 </li>
                                 <li>
-                                    Gödel (Part 4) —
+                                    Gödel (Part 4):
                                     <a href="https://youtu.be/KxnE1mwRG-k"
                                         >video</a
                                     >
                                 </li>
                                 <li>
-                                    Gödel (Part 5) —
+                                    Gödel (Part 5):
                                     <a href="https://youtu.be/gw_rks-tLdI"
                                         >video</a
                                     >
                                 </li>
                                 <li>
-                                    Gödel (Part 6) —
+                                    Gödel (Part 6):
                                     <a href="https://youtu.be/25ZGE0PiioE"
                                         >video</a
                                     >
                                 </li>
                                 <li>
-                                    Ax–Grothendieck (Part 1) —
+                                    Ax–Grothendieck (Part 1):
                                     <a href="https://youtu.be/Fccfv2DWUgM"
                                         >video</a
                                     >
                                 </li>
                                 <li>
-                                    Ax–Grothendieck (Part 2) —
+                                    Ax–Grothendieck (Part 2):
                                     <a href="https://youtu.be/49QuhzdEy50"
                                         >video</a
                                     >
                                 </li>
                                 <li>
-                                    Ax–Grothendieck (Part 3) —
+                                    Ax–Grothendieck (Part 3):
                                     <a href="https://youtu.be/VXJUwWBDJmQ"
                                         >video</a
                                     >
                                 </li>
                                 <li>
-                                    Ax–Grothendieck (Part 4) —
+                                    Ax–Grothendieck (Part 4):
                                     <a href="https://youtu.be/6qntBQHffNo"
                                         >video</a
                                     >
                                 </li>
                                 <li>
-                                    Ax–Grothendieck (Part 5) —
+                                    Ax–Grothendieck (Part 5):
                                     <a href="https://youtu.be/m-LAhuMQZfM"
                                         >video</a
                                     >
@@ -1100,12 +1435,11 @@
                             <h3>Other seminars</h3>
                             <ul>
                                 <li>
-                                    Axe Complexités (2022) —
+                                    Axe Complexités (2022):
                                     <em
                                         >Quantum error correcting codes and
                                         cut‑elimination</em
-                                    >
-                                    —
+                                    >,
                                     <a
                                         href="https://bbb.lipn.univ-paris13.fr/b/sei-nlh-8vr-xvy"
                                         >video</a
@@ -1114,12 +1448,12 @@
                                 </li>
                                 <li>
                                     Institut de Mathématiques de Marseille,
-                                    Logic and Interactions (2022) —
-                                    <em>Proofs, rings, and ideals</em> —
+                                    Logic and Interactions (2022):
+                                    <em>Proofs, rings, and ideals</em>,
                                     <a href="pdfs/AlgPntSlides.pdf">slides</a>
                                 </li>
                                 <li>
-                                    Computation, Geometry, Logic (2021) — Proof
+                                    Computation, Geometry, Logic (2021): Proof
                                     nets (<a
                                         href="https://www.youtube.com/watch?v=OscoUN_kWUE"
                                         >video</a
@@ -1132,15 +1466,15 @@
                                     >)
                                 </li>
                                 <li>
-                                    Melbourne Haskell Group (2020) —
-                                    <em>Gentzen–Mints–Zucker duality</em> —
+                                    Melbourne Haskell Group (2020):
+                                    <em>Gentzen–Mints–Zucker duality</em>,
                                     <a
                                         href="https://www.youtube.com/watch?v=TEkQHyTBL54&t"
                                         >video</a
                                     >
                                 </li>
                                 <li>
-                                    Topological Quantum Computing (2019) —
+                                    Topological Quantum Computing (2019):
                                     <a
                                         href="Notes/Reversible_computation_talk_notes.pdf"
                                         >Reversible Turing Machines (notes)</a
@@ -1152,7 +1486,7 @@
                                     >
                                 </li>
                                 <li>
-                                    Graduate Topology Seminar (2019) —
+                                    Graduate Topology Seminar (2019):
                                     <a
                                         href="pdfs/ArithmetisationandInteraction.pdf"
                                         >Arithmetisation and localisation
@@ -1160,7 +1494,7 @@
                                     >
                                 </li>
                                 <li>
-                                    Topos Theory and Categorical Logic (2018) —
+                                    Topos Theory and Categorical Logic (2018):
                                     <a
                                         href="http://therisingsea.org/notes/ch2018-lecture3.pdf"
                                         >Monads and programs</a
@@ -1175,14 +1509,14 @@
                                     >
                                 </li>
                                 <li>
-                                    DST Seminar (2017) —
+                                    DST Seminar (2017):
                                     <a
                                         href="pdfs/MonadsinCategoryTheoryandComputerScience.pdf"
                                         >Monads and Programs (slides)</a
                                     >
                                 </li>
                                 <li>
-                                    Curry–Howard Correspondence (2016) —
+                                    Curry–Howard Correspondence (2016):
                                     <a
                                         href="http://therisingsea.org/notes/talk-will-churchrosser.pdf"
                                         >Church–Rosser (notes)</a
@@ -1205,58 +1539,88 @@
                     </details>
                 </section>
 
-                <section id="writing" class="card">
-                    <h2>Expository writing & essays</h2>
+                <section id="writing" class="plain">
+                    <h2>Expository writing</h2>
                     <ul>
                         <li>
                             <a href="Notes/PresentingMathematics.pdf"
                                 >Presenting mathematics</a
                             >
-                            <span class="muted">(essay)</span>
                         </li>
                         <li>
                             <a href="Notes/WhatifIamNotGoodEnough.pdf"
                                 >What if I’m not good enough?</a
                             >
-                            <span class="muted">(essay)</span>
                         </li>
                     </ul>
                 </section>
 
-                <section id="funding" class="card">
+                <section id="funding" class="plain">
                     <h2>Scholarships & funding</h2>
 
                     <h3>Scholarships</h3>
-                    <ul>
+                    <ul class="entryList">
                         <li>
-                            <strong>2016</strong> — AMSI Summer Research
-                            Scholarship (Vacation Research Scholarship),
-                            supervisor: Daniel Murfet.
+                            <div class="entryDate">2016</div>
+                            <div class="entryBody">
+                                <div class="entryVenue">
+                                    AMSI Summer Research Scholarship
+                                    (Vacation Research Scholarship)
+                                </div>
+                                <div class="entryMeta">
+                                    Supervisor: Daniel Murfet
+                                </div>
+                            </div>
                         </li>
-                        <li><strong>2016</strong> — AMSI Travel Grant.</li>
                         <li>
-                            <strong>2015</strong> — University of Melbourne
-                            Vacation Research Scholarship, supervisor: Peter
-                            Forrester.
+                            <div class="entryDate">2016</div>
+                            <div class="entryBody">
+                                <div class="entryVenue">AMSI Travel Grant</div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="entryDate">2015</div>
+                            <div class="entryBody">
+                                <div class="entryVenue">
+                                    University of Melbourne Vacation Research
+                                    Scholarship
+                                </div>
+                                <div class="entryMeta">
+                                    Supervisor: Peter Forrester
+                                </div>
+                            </div>
                         </li>
                     </ul>
 
                     <h3>Grants / funding context</h3>
-                    <ul>
+                    <ul class="entryList">
                         <li>
-                            <strong>ARC-funded</strong> postgraduate research
-                            position (University of Melbourne), 2024 – Jul 2025.
+                            <div class="entryDate">2024 – Jul 2025</div>
+                            <div class="entryBody">
+                                <div class="entryVenue">
+                                    ARC-funded postgraduate research position
+                                </div>
+                                <div class="entryMeta">
+                                    University of Melbourne
+                                </div>
+                            </div>
                         </li>
                         <li>
-                            <strong>ARIA (UK)</strong> —
-                            <em>Mathematics for Safe AI</em>: grant held by
-                            Timaeus; I was hired under this award as Research
-                            Scientist (Theory).
+                            <div class="entryDate">ARIA (UK)</div>
+                            <div class="entryBody">
+                                <div class="entryTitle">
+                                    Mathematics for Safe AI
+                                </div>
+                                <div class="entryMeta">
+                                    Grant held by Timaeus; hired under this
+                                    award as Research Scientist (Theory)
+                                </div>
+                            </div>
                         </li>
                     </ul>
                 </section>
 
-                <section id="notes" class="card">
+                <section id="notes" class="plain">
                     <h2>Notes</h2>
                     <p class="muted small">
                         A small index of notes hosted on this site.
