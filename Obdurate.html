@@ -11,7 +11,7 @@
 
         <style>
             :root {
-                --max: 1380px;
+                --max: 980px;
                 --bg: #050b1a;
                 --bg2: #070d20;
                 --panel: rgba(255, 255, 255, 0.06);
@@ -186,13 +186,6 @@
 
             main {
                 margin-top: 10px;
-                columns: 1;
-                column-gap: 28px;
-            }
-            @media (min-width: 760px) {
-                main {
-                    columns: 2;
-                }
             }
             section {
                 break-inside: avoid;
@@ -289,9 +282,19 @@
 
             .videoGrid {
                 display: grid;
-                grid-template-columns: 1fr;
+                grid-template-columns: repeat(4, 1fr);
                 gap: 8px;
                 margin-top: 8px;
+            }
+            @media (max-width: 800px) {
+                .videoGrid {
+                    grid-template-columns: repeat(2, 1fr);
+                }
+            }
+            @media (max-width: 480px) {
+                .videoGrid {
+                    grid-template-columns: 1fr;
+                }
             }
             .video {
                 border-radius: 8px;
@@ -417,12 +420,14 @@
             </header>
 
             <main>
-                <section class="card featured" id="hamartia">
-                    <div class="kicker">Out now</div>
-                    <h2>Hamartia</h2>
-                    <div class="embedWrap">
+                <section class="card featured" id="hamartia" style="display: grid; grid-template-columns: auto 1fr; align-items: center; gap: 28px;">
+                    <div>
+                        <div class="kicker">Out now</div>
+                        <h2 style="border-bottom: none; padding-bottom: 0; margin: 4px 0 0;">Hamartia</h2>
+                    </div>
+                    <div class="embedWrap" style="margin-top: 0; min-width: 0;">
                         <iframe
-                            style="height: 120px"
+                            style="height: 120px; display: block;"
                             src="https://bandcamp.com/EmbeddedPlayer/album=4001658365/size=large/bgcol=ffffff/linkcol=0687f5/tracklist=false/artwork=small/transparent=true/"
                             seamless
                             ><a
