@@ -52,7 +52,7 @@
                 }
             }
             :root {
-                --max: 1120px;
+                --max: 1380px;
 
                 /* Editorial cream paper + terracotta */
                 --bg: #ede5d2;
@@ -89,9 +89,48 @@
             body {
                 margin: 0;
                 font-family: var(--serif);
-                line-height: 1.65;
+                font-size: 14.5px;
+                line-height: 1.45;
                 color: var(--text);
                 background: var(--bg);
+                position: relative;
+            }
+            body::before {
+                content: "";
+                position: fixed;
+                inset: 0;
+                z-index: -2;
+                pointer-events: none;
+                background:
+                    radial-gradient(
+                        1100px 700px at 8% 18%,
+                        rgba(184, 70, 46, 0.10),
+                        transparent 55%
+                    ),
+                    radial-gradient(
+                        900px 600px at 96% 88%,
+                        rgba(140, 45, 26, 0.07),
+                        transparent 60%
+                    );
+                animation: drift 80s ease-in-out infinite alternate;
+            }
+            @keyframes drift {
+                0% {
+                    transform: translate3d(0, 0, 0);
+                }
+                100% {
+                    transform: translate3d(40px, 24px, 0);
+                }
+            }
+            body::after {
+                content: "";
+                position: fixed;
+                inset: 0;
+                z-index: -1;
+                pointer-events: none;
+                opacity: 0.55;
+                mix-blend-mode: multiply;
+                background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 256 256'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.11 0 0 0 0 0.08 0 0 0 0 0.05 0 0 0 0.4 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
             }
             a {
                 color: var(--gold2);
@@ -104,7 +143,7 @@
             .wrap {
                 max-width: var(--max);
                 margin: 0 auto;
-                padding: 18px 16px 76px;
+                padding: 10px 14px 28px;
             }
 
             .skip {
@@ -158,18 +197,54 @@
             }
 
             .hero {
-                margin-top: 16px;
-                padding: 28px 28px 24px;
+                display: flex;
+                align-items: center;
+                gap: 14px;
+                margin-top: 8px;
+                padding: 10px 16px;
                 border: 1px solid var(--line);
-                border-radius: var(--radius);
+                border-radius: 10px;
                 background: linear-gradient(
                     135deg,
                     rgba(184, 70, 46, 0.10),
                     rgba(250, 243, 225, 0.6)
                 );
-                box-shadow: var(--shadow);
+                box-shadow: var(--shadow2);
                 overflow: hidden;
                 position: relative;
+            }
+            .avatar {
+                width: 64px;
+                height: 64px;
+                border-radius: 8px;
+                object-fit: cover;
+                flex-shrink: 0;
+                border: 1px solid var(--line);
+            }
+            .heroBody {
+                flex: 1;
+                min-width: 0;
+                position: relative;
+                z-index: 1;
+            }
+            .metaLine {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 0 14px;
+                font-size: 0.8rem;
+                color: var(--muted);
+                align-items: center;
+                margin-top: 4px;
+            }
+            .metaLine a {
+                color: var(--muted);
+            }
+            .metaLine a:hover {
+                color: var(--gold2);
+            }
+            .metaLine .dot {
+                color: var(--line);
+                font-weight: bold;
             }
             .hero::after {
                 content: "";
@@ -207,23 +282,23 @@
                 margin: 0;
                 font-family: var(--serif);
                 font-weight: 700;
-                font-size: 3rem;
+                font-size: 1.85rem;
                 line-height: 1.05;
-                letter-spacing: -0.025em;
+                letter-spacing: -0.02em;
             }
             .tagline {
-                margin: 12px 0 0;
+                margin: 6px 0 0;
                 color: var(--muted);
-                font-size: 1.02rem;
+                font-size: 0.92rem;
                 font-style: italic;
             }
             .meta {
                 display: flex;
                 flex-wrap: wrap;
-                gap: 10px 18px;
-                margin-top: 14px;
+                gap: 6px 14px;
+                margin-top: 8px;
                 color: var(--muted);
-                font-size: 0.98rem;
+                font-size: 0.88rem;
             }
             .meta a {
                 color: var(--muted);
@@ -248,9 +323,9 @@
                 max-width: 420px;
             }
             .portrait img {
-                width: 96px;
-                height: 96px;
-                border-radius: 16px;
+                width: 70px;
+                height: 70px;
+                border-radius: 12px;
                 object-fit: cover;
                 border: 1px solid rgba(255, 255, 255, 0.12);
             }
@@ -283,21 +358,32 @@
                 text-decoration: none;
             }
 
+            main {
+                margin-top: 10px;
+                columns: 1;
+                column-gap: 28px;
+            }
+            @media (min-width: 760px) {
+                main {
+                    columns: 2;
+                }
+            }
             section {
-                margin-top: 18px;
+                break-inside: avoid;
+                margin: 0 0 18px;
             }
             section + section {
-                margin-top: 44px;
+                margin-top: 0;
             }
             .plain {
-                padding: 0 4px;
+                padding: 0 2px;
             }
             .card {
                 border: 1px solid var(--line);
                 border-radius: var(--radius);
                 background: var(--surface);
                 box-shadow: var(--shadow2);
-                padding: 22px 22px 18px;
+                padding: 14px 16px 12px;
             }
 
             .card.featured {
@@ -331,29 +417,29 @@
             }
 
             .featuredEq {
-                margin: 22px 0 18px;
-                padding: 22px 24px 20px;
+                margin: 12px 0 10px;
+                padding: 12px 16px 10px;
                 border-left: 3px solid var(--gold);
                 background: rgba(184, 70, 46, 0.05);
-                border-radius: 0 14px 14px 0;
+                border-radius: 0 10px 10px 0;
             }
             .featuredEqLabel {
                 font-family: var(--mono);
                 color: var(--gold2);
-                font-size: 0.72rem;
+                font-size: 0.68rem;
                 text-transform: uppercase;
                 letter-spacing: 0.18em;
-                margin-bottom: 4px;
+                margin-bottom: 2px;
                 font-weight: 500;
             }
             .featuredEqMath {
-                font-size: 1.2rem;
-                margin: 8px 0 6px;
+                font-size: 1rem;
+                margin: 4px 0 2px;
             }
             .featuredEqCaption {
-                margin-top: 8px;
+                margin-top: 4px;
                 color: var(--muted);
-                font-size: 0.95rem;
+                font-size: 0.84rem;
                 font-style: italic;
             }
 
@@ -388,34 +474,63 @@
                 margin-top: 6px;
             }
 
+            .flowList {
+                list-style: none;
+                margin: 6px 0 0;
+                padding: 0;
+                font-size: 0.85rem;
+                line-height: 1.55;
+                color: var(--text);
+            }
+            .flowList > li {
+                display: inline;
+                margin: 0;
+            }
+            .flowList > li:not(:last-child)::after {
+                content: " · ";
+                color: var(--gold);
+                font-weight: 600;
+                margin: 0 2px;
+            }
+            .flowList a {
+                color: inherit;
+                text-decoration: none;
+                border-bottom: 1px dotted rgba(184, 70, 46, 0.5);
+                padding-bottom: 1px;
+            }
+            .flowList a:hover {
+                color: var(--gold2);
+                border-bottom-color: var(--gold);
+            }
+
             .entryList {
                 list-style: none;
-                margin: 14px 0 0;
+                margin: 8px 0 0;
                 padding: 0;
             }
             .entryList > li {
                 display: grid;
                 grid-template-columns: 1fr;
-                gap: 4px 22px;
-                padding: 14px 0;
+                gap: 2px 18px;
+                padding: 7px 0;
                 border-top: 1px solid var(--line);
             }
             .entryList > li:first-child {
                 border-top: none;
-                padding-top: 6px;
+                padding-top: 2px;
             }
             @media (min-width: 720px) {
                 .entryList > li {
-                    grid-template-columns: 130px 1fr;
+                    grid-template-columns: 110px 1fr;
                 }
             }
             .entryDate {
                 font-family: var(--mono);
-                font-size: 0.78rem;
+                font-size: 0.7rem;
                 color: var(--muted);
                 text-transform: uppercase;
-                letter-spacing: 0.06em;
-                padding-top: 3px;
+                letter-spacing: 0.05em;
+                padding-top: 2px;
                 white-space: nowrap;
             }
             .entryBody {
@@ -423,31 +538,32 @@
             }
             .entryVenue {
                 color: var(--muted);
-                font-size: 0.96rem;
+                font-size: 0.88rem;
             }
             .entryTitle {
-                margin-top: 2px;
+                margin-top: 1px;
                 font-style: italic;
             }
             .entryMeta {
-                margin-top: 4px;
+                margin-top: 2px;
                 color: var(--muted);
-                font-size: 0.92rem;
+                font-size: 0.84rem;
             }
 
             .compactList {
                 list-style: none;
-                margin: 14px 0 0;
+                margin: 8px 0 0;
                 padding: 0;
-                column-gap: 32px;
+                column-gap: 24px;
+                font-size: 0.9rem;
             }
             @media (min-width: 720px) {
                 .compactList {
-                    columns: 2;
+                    columns: 3;
                 }
             }
             .compactList > li {
-                padding: 8px 0;
+                padding: 4px 0;
                 border-top: 1px solid var(--line);
                 break-inside: avoid;
             }
@@ -457,35 +573,35 @@
             }
 
             h2 {
-                margin: 0 0 14px;
+                margin: 0 0 8px;
                 font-family: var(--serif);
-                font-size: 1.55rem;
+                font-size: 1.15rem;
                 font-weight: 700;
-                letter-spacing: -0.015em;
-                padding-bottom: 8px;
+                letter-spacing: -0.01em;
+                padding-bottom: 5px;
                 border-bottom: 1px solid var(--line);
             }
             h3 {
-                margin: 18px 0 8px;
+                margin: 10px 0 4px;
                 font-family: var(--serif);
-                font-size: 1.1rem;
+                font-size: 0.95rem;
                 font-weight: 600;
             }
             p {
-                margin: 10px 0;
+                margin: 6px 0;
             }
             ul {
-                margin: 10px 0;
+                margin: 6px 0;
                 padding-left: 18px;
             }
             li {
-                margin: 7px 0;
+                margin: 3px 0;
             }
             .muted {
                 color: var(--muted);
             }
             .small {
-                font-size: 0.95rem;
+                font-size: 0.85rem;
                 color: var(--muted);
             }
             .rule {
@@ -555,12 +671,12 @@
             }
 
             .role {
-                padding: 12px 0;
+                padding: 6px 0;
                 border-top: 1px solid var(--line);
             }
             .role:first-child {
                 border-top: none;
-                padding-top: 0;
+                padding-top: 2px;
             }
             .roleTop {
                 display: flex;
@@ -685,55 +801,29 @@
             </nav>
 
             <header class="hero">
-                <div class="heroGrid">
-                    <div>
-                        <h1 class="name">Will Troiani</h1>
-                        <div class="tagline">
-                            Mathematician (logic & geometry) • semantics of
-                            computation • singular learning theory
-                        </div>
-
-                        <div class="meta">
-                            <span>Melbourne / remote</span>
-                            <a href="mailto:william.a.troiani@gmail.com"
-                                >william.a.troiani@gmail.com</a
-                            >
-                            <a href="https://github.com/WilliamTroiani"
-                                >GitHub</a
-                            >
-                        </div>
-
-                        <div class="toc" aria-label="On this page">
-                            <a href="#summary">Research</a>
-                            <a href="#experience">Experience</a>
-                            <a href="#publications">Publications</a>
-                            <a href="#talks">Talks</a>
-                            <a href="#writing">Writing</a>
-                            <a href="#notes">Notes</a>
-                        </div>
+                <img
+                    class="avatar"
+                    src="Me.jpg"
+                    alt="Portrait of Will Troiani in a suit."
+                />
+                <div class="heroBody">
+                    <h1 class="name">Will Troiani</h1>
+                    <div class="tagline">
+                        Mathematician (logic &amp; geometry) • semantics of
+                        computation • singular learning theory
                     </div>
-
-                    <div class="portrait" aria-label="Portrait">
-                        <img
-                            src="Me.jpg"
-                            alt="Portrait of Will Troiani in a suit."
-                            style="width: 200px; height: auto"
-                        />
-                        <div>
-                            <div class="who">Will Troiani</div>
-                            <div class="small">
-                                Research Scientist<br />
-                                Performance Artist
-                            </div>
-                        </div>
+                    <div class="metaLine">
+                        <span>Melbourne / remote</span>
+                        <a href="mailto:william.a.troiani@gmail.com"
+                            >william.a.troiani@gmail.com</a
+                        >
+                        <a href="https://github.com/WilliamTroiani">GitHub</a>
                     </div>
                 </div>
             </header>
 
             <main id="main">
-                <section id="summary">
-                    <div class="grid2">
-                        <div class="card featured">
+                <section id="summary" class="card featured">
                             <h2>Research</h2>
 
                             <p>
@@ -1001,14 +1091,14 @@
 
                                 </div>
                             </details>
-                        </div>
+                </section>
 
-                        <div class="card">
+                <section id="interests" class="plain">
                             <h2>Interests</h2>
                             <div class="twoCol">
                                 <div>
                                     <h3>Core interests</h3>
-                                    <ul>
+                                    <ul class="flowList">
                                         <li>
                                             Linear logic, proof nets,
                                             cut-elimination
@@ -1041,7 +1131,7 @@
                                 </div>
                                 <div>
                                     <h3>Adjacent interests &amp; practice</h3>
-                                    <ul>
+                                    <ul class="flowList">
                                         <li>
                                             Mathematical musicology;
                                             mathematical aesthetics
@@ -1067,8 +1157,6 @@
                                     </ul>
                                 </div>
                             </div>
-                        </div>
-                    </div>
                 </section>
 
                 <section id="experience" class="plain">
@@ -1626,12 +1714,7 @@
                         A small index of notes hosted on this site.
                     </p>
 
-                    <ul class="notesList">
-                        <li>
-                            <a href="Notes/CommutativeAlgebra.pdf"
-                                >Commutative Algebra</a
-                            >
-                        </li>
+                    <ul class="flowList">
                         <li>
                             <a href="Notes/HartshorneSolutions.pdf"
                                 >Hartshorne Solutions</a
