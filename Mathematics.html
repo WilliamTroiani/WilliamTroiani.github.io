@@ -344,6 +344,23 @@
                 break-inside: avoid;
                 margin: 0 0 18px;
             }
+            /* On phones: single column with publications right after talks
+               so it isn't buried at the bottom of the page. */
+            @media (max-width: 759px) {
+                main {
+                    display: flex;
+                    flex-direction: column;
+                    columns: auto;
+                }
+                #summary { order: 1; }
+                #interests { order: 2; }
+                #talks { order: 3; }
+                #publications { order: 4; }
+                #notes { order: 5; }
+                #writing { order: 6; }
+                #art { order: 7; }
+                #publications[style] { break-before: auto !important; }
+            }
             section + section {
                 margin-top: 0;
             }
@@ -1467,7 +1484,7 @@
                     </ul>
                 </section>
 
-                <section id="publications" class="plain" style="break-before: column;">
+                <section id="publications" class="plain" style="break-before: column">
                     <h2>Publications</h2>
 
                     <ul>
