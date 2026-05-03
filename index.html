@@ -6,399 +6,335 @@
         <title>Will Troiani</title>
         <meta
             name="description"
-            content="Will Troiani — mathematician and performance artist. Research in logic, geometry, semantics of computation, singular learning theory, and AI safety; performance work under Obdurate."
+            content="Will Troiani — mathematician and performance artist."
         />
 
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
         <link
-            href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Serif+4:wght@400;600;700&display=swap"
+            href="https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@400;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap"
             rel="stylesheet"
         />
 
         <style>
             :root {
-                --max: 1120px;
-
-                /* Deep navy + gold */
-                --bg: #050711;
-                --bg2: #070a18;
-                --surface: #0b1224;
-                --surface2: #0e1630;
-                --text: #e8ecf6;
-                --muted: #b3bdd6;
-                --line: rgba(255, 255, 255, 0.1);
-
-                --gold: #d4b35d;
-                --gold2: #f0d48b;
-
-                --shadow: 0 18px 55px rgba(0, 0, 0, 0.55);
-                --shadow2: 0 10px 26px rgba(0, 0, 0, 0.42);
-                --radius: 18px;
+                --max: 1100px;
+                --bg: #0f0508;
+                --bg2: #1a070c;
+                --surface: #25101a;
+                --text: #ede4d0;
+                --muted: #b89992;
+                --line: rgba(255, 255, 255, 0.08);
+                --accent: #8b1f29;
+                --accent-2: #c44a4a;
+                --accent-3: #d4663b;
+                --serif: "Source Serif 4", Georgia, serif;
+                --mono: "IBM Plex Mono", ui-monospace, monospace;
+                --radius: 16px;
+                --shadow: 0 18px 60px rgba(0, 0, 0, 0.55);
+                --shadow2: 0 8px 26px rgba(0, 0, 0, 0.42);
             }
-
             * {
                 box-sizing: border-box;
             }
             html,
             body {
                 height: 100%;
+                margin: 0;
             }
             body {
-                margin: 0;
-                font-family:
-                    Inter,
-                    system-ui,
-                    -apple-system,
-                    Segoe UI,
-                    Roboto,
-                    Helvetica,
-                    Arial,
-                    sans-serif;
-                line-height: 1.6;
+                font-family: var(--serif);
+                font-size: 14px;
+                line-height: 1.42;
                 color: var(--text);
                 background:
                     radial-gradient(
-                        950px 520px at 10% -12%,
-                        rgba(212, 179, 93, 0.18),
+                        900px 480px at 90% -10%,
+                        rgba(196, 74, 74, 0.2),
                         transparent 55%
                     ),
                     radial-gradient(
-                        850px 520px at 90% -10%,
-                        rgba(240, 212, 139, 0.12),
+                        800px 560px at 0% 110%,
+                        rgba(139, 31, 41, 0.24),
                         transparent 60%
                     ),
-                    radial-gradient(
-                        900px 640px at 70% 110%,
-                        rgba(212, 179, 93, 0.1),
-                        transparent 58%
-                    ),
                     linear-gradient(180deg, var(--bg), var(--bg2));
+                -webkit-font-smoothing: antialiased;
+                display: flex;
+                flex-direction: column;
+            }
+            body::before {
+                content: "";
+                position: fixed;
+                inset: 0;
+                z-index: -1;
+                pointer-events: none;
+                opacity: 0.16;
+                background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 320 320'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='1.4' numOctaves='1' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1 0 0 0 0 0.85 0 0 0 0 0.78 0 0 0 0.5 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
             }
             a {
-                color: var(--gold2);
+                color: var(--accent-2);
                 text-decoration: none;
             }
             a:hover {
                 text-decoration: underline;
-                text-decoration-color: rgba(240, 212, 139, 0.7);
+                text-decoration-color: rgba(196, 74, 74, 0.45);
             }
 
             .wrap {
                 max-width: var(--max);
+                width: 100%;
                 margin: 0 auto;
-                padding: 18px 16px 76px;
-            }
-
-            .skip {
-                position: absolute;
-                left: -9999px;
-                top: auto;
-                width: 1px;
-                height: 1px;
-                overflow: hidden;
-            }
-            .skip:focus {
-                left: 16px;
-                top: 16px;
-                width: auto;
-                height: auto;
-                padding: 10px 12px;
-                background: var(--surface);
-                border: 1px solid var(--line);
-                border-radius: 12px;
-                box-shadow: var(--shadow2);
-                z-index: 9999;
+                padding: 8px 16px 12px;
+                position: relative;
+                z-index: 1;
+                flex: 1 0 auto;
+                display: flex;
+                flex-direction: column;
             }
 
             nav {
                 display: flex;
                 flex-wrap: wrap;
-                gap: 10px 14px;
+                gap: 8px 12px;
                 align-items: center;
-                padding: 10px 10px;
+                padding: 6px 10px;
                 border: 1px solid var(--line);
                 border-radius: 999px;
-                background: rgba(11, 18, 36, 0.62);
+                background: rgba(31, 8, 12, 0.72);
                 backdrop-filter: blur(10px);
-                box-shadow: 0 10px 24px rgba(0, 0, 0, 0.32);
-                position: sticky;
-                top: 12px;
-                z-index: 50;
+                box-shadow: 0 6px 20px rgba(0, 0, 0, 0.32);
+                font-family: var(--mono);
+                font-size: 0.82rem;
+                letter-spacing: 0.02em;
             }
             nav a {
                 color: var(--muted);
-                padding: 8px 10px;
+                padding: 5px 10px;
                 border-radius: 999px;
             }
             nav a[aria-current="page"] {
-                color: var(--text);
-                border: 1px solid rgba(212, 179, 93, 0.35);
-                background: linear-gradient(
-                    135deg,
-                    rgba(212, 179, 93, 0.16),
-                    rgba(240, 212, 139, 0.08)
-                );
+                color: var(--accent-2);
+                border: 1px solid rgba(196, 74, 74, 0.32);
+                background: rgba(196, 74, 74, 0.12);
             }
 
             .hero {
-                margin-top: 16px;
-                padding: 22px 22px 18px;
+                display: flex;
+                align-items: center;
+                gap: 14px;
+                margin-top: 10px;
+                padding: 10px 14px;
                 border: 1px solid var(--line);
                 border-radius: var(--radius);
                 background: linear-gradient(
                     135deg,
-                    rgba(212, 179, 93, 0.1),
-                    rgba(255, 255, 255, 0.03)
+                    rgba(196, 74, 74, 0.1),
+                    rgba(255, 255, 255, 0.02)
                 );
-                box-shadow: var(--shadow);
-                overflow: hidden;
+                box-shadow: var(--shadow2);
                 position: relative;
+                overflow: hidden;
             }
             .hero::after {
                 content: "";
                 position: absolute;
-                inset: -80px -80px auto auto;
-                width: 360px;
-                height: 360px;
-                background:
-                    radial-gradient(
-                        circle at 35% 35%,
-                        rgba(212, 179, 93, 0.28),
-                        transparent 55%
-                    ),
-                    radial-gradient(
-                        circle at 70% 70%,
-                        rgba(240, 212, 139, 0.18),
-                        transparent 58%
-                    );
-                opacity: 0.95;
-                transform: rotate(8deg);
+                inset: -90px -90px auto auto;
+                width: 280px;
+                height: 280px;
+                background: radial-gradient(
+                    circle at 35% 35%,
+                    rgba(212, 102, 59, 0.2),
+                    transparent 60%
+                );
                 pointer-events: none;
+                z-index: 0;
             }
-            .heroGrid {
-                display: grid;
-                grid-template-columns: 1fr;
-                gap: 18px;
-                align-items: end;
+            .avatar {
+                width: 76px;
+                height: 76px;
+                border-radius: 12px;
+                object-fit: cover;
+                border: 1px solid rgba(196, 74, 74, 0.32);
+                flex-shrink: 0;
+                position: relative;
+                z-index: 1;
             }
-            @media (min-width: 920px) {
-                .heroGrid {
-                    grid-template-columns: 1.15fr 0.85fr;
-                }
+            .heroBody {
+                flex: 1;
+                min-width: 0;
+                position: relative;
+                z-index: 1;
             }
-
-            .name {
+            h1.name {
                 margin: 0;
-                font-family: "Source Serif 4", serif;
                 font-weight: 700;
-                font-size: 2.45rem;
+                font-size: 1.55rem;
                 letter-spacing: -0.02em;
+                line-height: 1.04;
             }
             .tagline {
-                margin: 8px 0 0;
+                margin: 2px 0 0;
                 color: var(--muted);
-                font-size: 1.05rem;
+                font-style: italic;
+                font-size: 0.9rem;
             }
-            .meta {
+
+            main {
+                flex: 1;
                 display: flex;
-                flex-wrap: wrap;
-                gap: 10px 18px;
-                margin-top: 14px;
-                color: var(--muted);
-                font-size: 0.98rem;
+                flex-direction: column;
+                justify-content: center;
+                gap: 12px;
+                padding: 12px 0 6px;
+                min-height: 0;
             }
-            .meta a {
-                color: var(--muted);
-                text-decoration: underline;
-                text-decoration-color: rgba(179, 189, 214, 0.35);
-            }
-            .meta a:hover {
-                text-decoration-color: rgba(240, 212, 139, 0.85);
-            }
-
-            .portrait {
-                justify-self: end;
-                display: flex;
-                gap: 14px;
-                align-items: center;
-                padding: 12px 12px 10px;
-                border: 1px solid var(--line);
-                border-radius: 16px;
-                background: rgba(11, 18, 36, 0.55);
-                backdrop-filter: blur(8px);
-                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-                max-width: 420px;
-            }
-            .portrait img {
-                width: 96px;
-                height: 96px;
-                border-radius: 16px;
-                object-fit: cover;
-                border: 1px solid rgba(255, 255, 255, 0.12);
-            }
-            .portrait .who {
-                font-weight: 700;
-            }
-            .portrait .small {
-                margin-top: 2px;
-                color: var(--muted);
-                font-size: 0.92rem;
-            }
-
-            .toc {
-                display: flex;
-                flex-wrap: wrap;
-                gap: 8px;
-                margin-top: 14px;
-            }
-            .toc a {
-                font-size: 0.92rem;
-                padding: 7px 10px;
-                border-radius: 999px;
-                border: 1px solid var(--line);
-                background: rgba(11, 18, 36, 0.48);
-                color: var(--muted);
-            }
-            .toc a:hover {
-                border-color: rgba(240, 212, 139, 0.35);
-                color: var(--text);
-                text-decoration: none;
-            }
-
-            section {
-                margin-top: 18px;
-            }
-            .card {
-                border: 1px solid var(--line);
-                border-radius: var(--radius);
-                background: rgba(11, 18, 36, 0.92);
-                box-shadow: var(--shadow2);
-                padding: 18px 18px 14px;
-            }
-
-            .grid2 {
+            .splitGrid {
                 display: grid;
-                grid-template-columns: 1fr;
-                gap: 14px;
-                margin-top: 14px;
-                align-items: start;
+                grid-template-columns: 1fr 1fr;
+                gap: 18px;
             }
-            @media (min-width: 980px) {
-                .grid2 {
-                    grid-template-columns: 1fr 1fr;
+            @media (max-width: 720px) {
+                .splitGrid {
+                    grid-template-columns: 1fr;
                 }
             }
 
-            h2 {
-                margin: 0 0 10px;
-                font-family: "Source Serif 4", serif;
-                font-size: 1.38rem;
-                letter-spacing: -0.01em;
-            }
-            p {
-                margin: 10px 0;
-            }
-            ul {
-                margin: 10px 0;
-                padding-left: 18px;
-            }
-            li {
-                margin: 7px 0;
-            }
-            .muted {
-                color: var(--muted);
-            }
-            .small {
-                font-size: 0.95rem;
-                color: var(--muted);
-            }
-            .rule {
-                height: 1px;
-                background: var(--line);
-                margin: 14px 0;
-            }
-
-            blockquote {
-                margin: 12px 0 0;
-                padding: 12px 14px;
-                border-left: 3px solid rgba(240, 212, 139, 0.55);
-                background: rgba(240, 212, 139, 0.06);
-                border-radius: 12px;
+            .pathBtn {
+                position: relative;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                gap: 8px;
+                min-height: 200px;
+                padding: 24px 22px;
+                border: 1px solid rgba(196, 74, 74, 0.25);
+                border-radius: var(--radius);
+                background:
+                    radial-gradient(
+                        420px 240px at 50% 0%,
+                        rgba(212, 102, 59, 0.22),
+                        transparent 65%
+                    ),
+                    linear-gradient(
+                        160deg,
+                        rgba(139, 31, 41, 0.55),
+                        rgba(31, 8, 12, 0.92)
+                    );
+                box-shadow: var(--shadow);
                 color: var(--text);
+                text-decoration: none;
+                overflow: hidden;
+                transition:
+                    transform 0.22s ease,
+                    border-color 0.22s ease,
+                    box-shadow 0.22s ease;
             }
-            blockquote p {
+            .pathBtn::after {
+                content: "";
+                position: absolute;
+                inset: -100px -100px auto auto;
+                width: 320px;
+                height: 320px;
+                background: radial-gradient(
+                    circle,
+                    rgba(212, 102, 59, 0.18),
+                    transparent 60%
+                );
+                pointer-events: none;
+            }
+            .pathBtn:hover {
+                transform: translateY(-3px);
+                border-color: rgba(212, 102, 59, 0.55);
+                box-shadow:
+                    0 24px 60px rgba(0, 0, 0, 0.6),
+                    0 0 0 1px rgba(212, 102, 59, 0.2);
+                text-decoration: none;
+            }
+            .pathBtn .kicker {
+                font-family: var(--mono);
+                font-size: 0.74rem;
+                letter-spacing: 0.22em;
+                text-transform: uppercase;
+                color: var(--muted);
+                position: relative;
+                z-index: 1;
+            }
+            .pathBtn h2 {
                 margin: 0;
+                font-family: var(--serif);
+                font-size: 2.6rem;
+                font-weight: 700;
+                letter-spacing: -0.02em;
+                color: var(--text);
+                position: relative;
+                z-index: 1;
+                line-height: 1;
+            }
+            .pathBtn .arrow {
+                font-family: var(--mono);
+                color: var(--accent-2);
+                font-size: 1.05rem;
+                opacity: 0.85;
+                position: relative;
+                z-index: 1;
             }
 
-            figure {
-                margin: 14px 0 0;
+            .banner {
+                position: relative;
+                border: 1px solid var(--line);
+                border-radius: var(--radius);
+                overflow: hidden;
+                box-shadow: var(--shadow2);
+                background: rgba(31, 8, 12, 0.5);
             }
-            figure img {
+            .banner img {
+                display: block;
                 width: 100%;
                 height: auto;
-                border-radius: 14px;
-                border: 1px solid rgba(255, 255, 255, 0.12);
-                background: rgba(255, 255, 255, 0.02);
-            }
-            figcaption {
-                margin-top: 10px;
-                color: var(--muted);
-                font-size: 0.92rem;
-            }
-            figcaption strong {
-                color: var(--text);
-                font-weight: 600;
+                opacity: 0.92;
             }
 
-            .badge {
-                display: inline-flex;
-                align-items: center;
-                gap: 8px;
-                font-size: 0.82rem;
-                padding: 5px 10px;
-                border-radius: 999px;
-                border: 1px solid rgba(240, 212, 139, 0.26);
-                background: rgba(240, 212, 139, 0.08);
-                color: var(--gold2);
-                white-space: nowrap;
+            .quote {
+                margin: 0;
+                padding: 8px 14px;
+                border-left: 3px solid var(--accent);
+                background: rgba(37, 16, 26, 0.55);
+                border-radius: 0 var(--radius) var(--radius) 0;
+                font-size: 0.92rem;
+                font-style: italic;
+                color: var(--muted);
+            }
+            .quote p {
+                margin: 0;
+            }
+            .quote a {
+                color: var(--accent-2);
+                font-style: normal;
             }
 
             footer {
-                margin-top: 26px;
-                padding: 14px 4px 0;
+                padding: 8px 0 0;
                 color: var(--muted);
-                font-size: 0.92rem;
+                font-size: 0.72rem;
+                font-family: var(--mono);
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: space-between;
+                gap: 6px 14px;
+                border-top: 1px solid var(--line);
+                margin-top: 8px;
             }
-
-            @media print {
-                nav {
-                    display: none !important;
-                }
-                body {
-                    background: #fff;
-                    color: #000;
-                }
-                .hero,
-                .card {
-                    background: #fff;
-                    border-color: #ddd;
-                    box-shadow: none;
-                }
-                a {
-                    color: #000;
-                    text-decoration: none;
-                }
-                figure img {
-                    border-color: #ddd;
-                }
+            footer a {
+                color: var(--muted);
+            }
+            footer a:hover {
+                color: var(--accent-2);
             }
         </style>
     </head>
-
     <body>
-        <a class="skip" href="#main">Skip to content</a>
-
         <div class="wrap">
             <nav aria-label="Site navigation">
                 <a href="index.html" aria-current="page">Home</a>
@@ -408,115 +344,55 @@
             </nav>
 
             <header class="hero">
-                <div class="heroGrid">
-                    <div>
-                        <h1 class="name">Will Troiani</h1>
-                        <div class="tagline">
-                            Mathematician • Performance artist • research and
-                            practice across computation, geometry, and form
-                        </div>
-
-                        <div class="meta">
-                            <span>Melbourne / remote</span>
-                            <a href="mailto:william.a.troiani@gmail.com"
-                                >william.a.troiani@gmail.com</a
-                            >
-                            <a href="https://github.com/WilliamTroiani"
-                                >GitHub</a
-                            >
-                        </div>
-
-                        <div class="toc" aria-label="On this page">
-                            <a href="#about">About</a>
-                            <a href="#mathematics">Mathematics</a>
-                            <a href="#obdurate">Obdurate</a>
-                            <a href="#contact">Contact</a>
-                        </div>
-                    </div>
-
-                    <div class="portrait" aria-label="Portrait">
-                        <div>
-                            <div class="who">Will Troiani</div>
-                            <div class="small">
-                                Research Scientist<br />
-                                Mathematician &amp; Performance artist
-                            </div>
-                        </div>
+                <div class="heroBody">
+                    <h1 class="name">Will Troiani</h1>
+                    <div class="tagline">
+                        Mathematician &amp; performance artist
                     </div>
                 </div>
             </header>
 
             <main id="main">
-                <section id="about" class="card">
-                    <h2>About</h2>
+                <div class="splitGrid">
+                    <a class="pathBtn" href="Mathematics.html">
+                        <div class="kicker">Research</div>
+                        <h2>Mathematics</h2>
+                        <div class="arrow">→</div>
+                    </a>
+                    <a class="pathBtn" href="Obdurate.html">
+                        <div class="kicker">Performance</div>
+                        <h2>Music</h2>
+                        <div class="arrow">→</div>
+                    </a>
+                </div>
+
+                <div class="banner">
+                    <img src="Will.png" alt="Will Troiani." />
+                </div>
+
+                <blockquote class="quote">
                     <p>
-                        This site is split into two professional pages that
-                        reflect the two sides of my work: a research page
-                        (<a href="Mathematics.html">Mathematics</a>) and an
-                        artistic page (<a href="Obdurate.html">Obdurate</a>).
-                    </p>
-
-                    <blockquote>
-                        <p>
-                            “As humans we could never be content with knowing
-                            all, yet we can't be content with the fact that our
-                            brains will never know.”
-                            <a href="https://www.youtube.com/watch?v=OwK4MKYxbZE"
-                                >~ Tommy Rogers</a
-                            >
-                        </p>
-                    </blockquote>
-
-                    <figure>
-                        <a href="Will.png">
-                            <img
-                                src="Will.png"
-                                alt="Header image of Will Troiani."
-                            />
-                        </a>
-                        <figcaption>
-                            <strong>Two tracks, one practice:</strong> research
-                            (mathematics/computation) and performance (Obdurate).
-                        </figcaption>
-                    </figure>
-                </section>
-
-                <section id="contact" class="card">
-                    <h2>Contact</h2>
-                    <p class="muted">
-                        For academic correspondence, collaborations, or
-                        performance enquiries, email is best.
-                    </p>
-                    <div class="rule"></div>
-                    <p>
-                        <span class="badge">Email</span>
-                        <a href="mailto:william.a.troiani@gmail.com"
-                            >william.a.troiani@gmail.com</a
-                        >
-                        <br />
-                        <span class="badge">GitHub</span>
-                        <a href="https://github.com/WilliamTroiani"
-                            >github.com/WilliamTroiani</a
+                        “As humans we could never be content with knowing all,
+                        yet we can't be content with the fact that our brains
+                        will never know.”
+                        <a
+                            href="https://www.youtube.com/watch?v=OwK4MKYxbZE"
+                            >~ Tommy Rogers</a
                         >
                     </p>
-                </section>
-
-                <footer>
-                    <div>
-                        © 2026 Will Troiani. Last updated:
-                        <span id="lastUpdated"></span>.
-                    </div>
-                </footer>
+                </blockquote>
             </main>
-        </div>
 
-        <script>
-            (function () {
-                var el = document.getElementById("lastUpdated");
-                if (!el) return;
-                var d = new Date(document.lastModified);
-                el.textContent = isNaN(d.getTime()) ? "" : d.toLocaleDateString();
-            })();
-        </script>
+            <footer>
+                <span>
+                    <a href="mailto:william.a.troiani@gmail.com"
+                        >william.a.troiani@gmail.com</a
+                    >
+                    ·
+                    <a href="https://github.com/WilliamTroiani">GitHub</a>
+                </span>
+                <span>© 2026 Will Troiani</span>
+            </footer>
+        </div>
     </body>
 </html>
