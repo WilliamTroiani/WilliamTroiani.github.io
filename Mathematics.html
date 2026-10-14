@@ -15,7 +15,7 @@
         <title>Will Troiani: Mathematics</title>
         <meta
             name="description"
-            content="Will Troiani: logic, algebraic geometry, semantics of computation, and singular learning theory."
+            content="Will Troiani, research scientist at Resolution: logic, algebraic geometry, semantics of computation, and singular learning theory."
         />
 
         <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -811,6 +811,7 @@
                         computation • singular learning theory
                     </div>
                     <div class="metaLine">
+                        <span>Research scientist at <a href="https://resolution.org/">Resolution</a></span>
                         <span>Melbourne / remote</span>
                         <a href="mailto:william.a.troiani@gmail.com"
                             >william.a.troiani@gmail.com</a
@@ -1003,13 +1004,9 @@
                             <h3>3. Singular learning theory</h3>
 
                             <p>
-                                A more recent line applies algebraic-geometric
-                                methods to statistical learning, in
-                                collaboration with the singular learning theory
-                                programme at
-                                <a href="https://timaeus.co/"
-                                    ><strong>Timaeus</strong></a
-                                >.
+                                My current research applies algebraic-geometric
+                                methods to statistical learning and
+                                interpretability.
                             </p>
 
                             <p>
@@ -1055,36 +1052,46 @@
                             </p>
 
                             <p>
-                                A second recent development, joint with
-                                Salazar, Snikkers, and Murfet, is
-                                <em>Susceptibilities for Turing Machines</em>.
-                                There the susceptibility to upweighting an
-                                input \(x\) is the covariance \(\chi_x(A) =
-                                -\operatorname{Cov}_\beta(A, \ell_x - L)\), a
-                                Bayesian form of the fluctuation-dissipation
-                                principle. Control-flow decompositions of a
-                                program produce rank-one off-diagonal blocks in
-                                the centred susceptibility matrix, and
-                                symmetries of subroutines appear as
-                                equivariances.
+                                In
+                                <a href="https://arxiv.org/abs/2609.04661"
+                                    ><em>Interpretability for Turing Machines</em></a
+                                >
+                                (with Snikkers, Salazar, and Murfet), we use
+                                susceptibilities to probe the local loss
+                                geometry around noisy Turing-machine codes.
+                                We prove that path separation and symmetries
+                                of a machine produce low-rank blocks and
+                                permutation symmetries in its susceptibility
+                                matrix. Experiments with deterministic finite
+                                automata recover algorithmic features through
+                                principal component analysis and clustering
+                                in susceptibility space.
                             </p>
 
                             <p>
-                                The susceptibility framework should extend
-                                from
-                                noisy Turing machines to neural networks,
-                                giving a mathematically grounded approach to
-                                interpretability: detecting when a learned
-                                computation is robust or brittle, identifying
-                                when two networks computing the same function
-                                differ in their internal structure, and
-                                quantifying the Bayesian complexity of the
-                                algorithms a model has actually learned.
-                                Singular learning theory is the right
-                                asymptotic framework for the model-selection,
-                                structural-inference, and interpretability
-                                problems that govern whether a learned system
-                                can be understood and controlled.
+                                Susceptibilities were developed as an
+                                interpretability technique for neural networks.
+                                The Turing-machine setting lets us test what
+                                they reveal about computation when the
+                                underlying algorithm is known exactly.
+                            </p>
+
+                            <p>
+                                In
+                                <a href="https://arxiv.org/abs/2609.01666"
+                                    ><em>Solomonoff Induction and Singular Integrals</em></a
+                                >
+                                (with Murfet), we connect algorithmic
+                                probability to Bayesian evidence. For every
+                                computable Bayesian model, we construct a
+                                monotone Turing machine whose induced
+                                semimeasure agrees with the evidence up to a
+                                uniform multiplicative constant. When
+                                Watanabe&rsquo;s asymptotic theory applies,
+                                the learning coefficient appears in an upper
+                                bound on Solomonoff code length, connecting
+                                a geometric measure of model complexity with
+                                algorithmic information theory.
                             </p>
 
                                 </div>
@@ -1528,6 +1535,16 @@
 
                     <h3>Preprints</h3>
                     <ul>
+                        <li>
+                            <a href="https://arxiv.org/abs/2609.04661"
+                                >Interpretability for Turing Machines</a
+                            >
+                        </li>
+                        <li>
+                            <a href="https://arxiv.org/abs/2609.01666"
+                                >Solomonoff Induction and Singular Integrals</a
+                            >
+                        </li>
                         <li>
                             <a href="https://arxiv.org/abs/2405.19051"
                                 >Linear Logic and Quantum Error Correcting

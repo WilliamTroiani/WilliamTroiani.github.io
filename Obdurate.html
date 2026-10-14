@@ -289,20 +289,55 @@
                 border: 0;
             }
 
+            .albumCard {
+                display: grid;
+                grid-template-columns: 130px minmax(0, 1fr);
+                align-items: center;
+                gap: 18px;
+            }
+            .albumCard h2 {
+                border-bottom: 0;
+                padding-bottom: 0;
+                margin: 4px 0 0;
+            }
+            .albumCard .embedWrap {
+                margin-top: 0;
+                min-width: 0;
+            }
+            .albumCard iframe {
+                height: 120px;
+                display: block;
+            }
+            .featureCopy {
+                max-width: 76ch;
+                margin: 8px 0 12px;
+            }
+            .featureVideo {
+                margin: 0;
+            }
+            figure {
+                margin: 0;
+                min-width: 0;
+            }
+            figcaption {
+                padding: 7px 0 2px;
+                font-size: 0.88rem;
+                color: var(--muted);
+            }
+
             .videoGrid {
                 display: grid;
-                grid-template-columns: repeat(4, 1fr);
-                gap: 8px;
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+                gap: 14px;
                 margin-top: 8px;
-            }
-            @media (max-width: 800px) {
-                .videoGrid {
-                    grid-template-columns: repeat(2, 1fr);
-                }
             }
             @media (max-width: 480px) {
                 .videoGrid {
                     grid-template-columns: 1fr;
+                }
+                .albumCard {
+                    grid-template-columns: minmax(0, 1fr);
+                    gap: 10px;
                 }
             }
             .video {
@@ -314,9 +349,27 @@
                 width: 100%;
             }
             .video iframe {
+                display: block;
                 width: 100%;
                 height: 100%;
                 border: 0;
+            }
+
+            .songLinks {
+                display: grid;
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+                gap: 0 24px;
+                list-style: none;
+                padding: 0;
+            }
+            .songLinks li {
+                padding: 6px 0;
+                border-bottom: 1px solid var(--rule);
+            }
+            @media (max-width: 480px) {
+                .songLinks {
+                    grid-template-columns: minmax(0, 1fr);
+                }
             }
 
             .entryList {
@@ -421,7 +474,7 @@
                         <a href="mailto:william.a.troiani@gmail.com"
                             >william.a.troiani@gmail.com</a
                         >
-                        <a href="https://www.youtube.com/@WilliamTroiani"
+                        <a href="https://www.youtube.com/@obduratefleet3016"
                             >YouTube</a
                         >
                     </div>
@@ -429,19 +482,61 @@
             </header>
 
             <main>
-                <section class="card featured" id="hamartia" style="display: grid; grid-template-columns: auto 1fr; align-items: center; gap: 28px;">
+                <section class="card featured" id="revere">
+                    <div class="kicker">Drum playthrough</div>
+                    <h2>Revere</h2>
+                    <figure class="featureVideo">
+                        <div class="video">
+                            <iframe
+                                src="https://www.youtube.com/embed/YsWgdPBspsU"
+                                title="Revere: drum playthrough"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                allowfullscreen
+                            ></iframe>
+                        </div>
+                        <figcaption><a href="https://www.youtube.com/watch?v=YsWgdPBspsU">Watch the full Revere drum playthrough on YouTube</a>.</figcaption>
+                    </figure>
+                    <p class="featureCopy">
+                        I am also developing a film for <em>Revere</em> in
+                        which two characters' feelings evolve through
+                        stochastic differential equations. Their changing
+                        feelings select between four worlds: Blossoming,
+                        Inferno, Frozen Longing and Dark Devotion, while the
+                        music animates the scenery. The film is an artistic
+                        adaptation of a relationship model.
+                    </p>
+                </section>
+
+                <section class="card featured albumCard" id="hamartia">
                     <div>
                         <div class="kicker">Out now</div>
-                        <h2 style="border-bottom: none; padding-bottom: 0; margin: 4px 0 0;">Hamartia</h2>
+                        <h2><a href="https://obduratefleet.bandcamp.com/album/hamartia">Hamartia</a></h2>
                     </div>
-                    <div class="embedWrap" style="margin-top: 0; min-width: 0;">
+                    <div class="embedWrap">
                         <iframe
-                            style="height: 120px; display: block;"
+                            title="Hamartia by Obdurate on Bandcamp"
                             src="https://bandcamp.com/EmbeddedPlayer/album=4001658365/size=large/bgcol=ffffff/linkcol=0687f5/tracklist=false/artwork=small/transparent=true/"
-                            seamless
+                            loading="lazy"
                             ><a
                                 href="https://obduratefleet.bandcamp.com/album/hamartia"
                                 >Hamartia by Obdurate</a
+                            ></iframe
+                        >
+                    </div>
+                </section>
+
+                <section class="card albumCard" id="obdurate-album">
+                    <div>
+                        <div class="kicker">First album</div>
+                        <h2><a href="https://obduratefleet.bandcamp.com/album/obdurate">Obdurate</a></h2>
+                    </div>
+                    <div class="embedWrap">
+                        <iframe
+                            title="Obdurate by Obdurate on Bandcamp"
+                            src="https://bandcamp.com/EmbeddedPlayer/album=3168103766/size=large/bgcol=ffffff/linkcol=0687f5/tracklist=false/artwork=small/transparent=true/"
+                            loading="lazy"
+                            ><a href="https://obduratefleet.bandcamp.com/album/obdurate"
+                                >Obdurate by Obdurate</a
                             ></iframe
                         >
                     </div>
@@ -479,45 +574,97 @@
                 <section class="plain" id="media">
                     <h2>Video &amp; collaborations</h2>
                     <div class="videoGrid">
-                        <div class="video">
-                            <iframe
-                                src="https://www.youtube.com/embed/KrZtcGieejc"
-                                title="Obdurate: video"
-                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                                allowfullscreen
-                            ></iframe>
-                        </div>
-                        <div class="video">
-                            <iframe
-                                src="https://www.youtube.com/embed/wbXM2J4UK6M"
-                                title="Melbourne Fringe Flavours Night Market"
-                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                                allowfullscreen
-                            ></iframe>
-                        </div>
-                        <div class="video">
-                            <iframe
-                                src="https://www.youtube.com/embed/sPo8X1iXNP8"
-                                title="Dance piece collaboration with Victoria Gunning"
-                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                                allowfullscreen
-                            ></iframe>
-                        </div>
-                        <div class="video">
-                            <iframe
-                                src="https://www.youtube.com/embed/HwqCXB6FFPc"
-                                title="GoldenEye 007 speedrunner collaboration"
-                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                                allowfullscreen
-                            ></iframe>
-                        </div>
+                        <figure>
+                            <div class="video">
+                                <iframe
+                                    src="https://www.youtube.com/embed/KrZtcGieejc"
+                                    title="It's-Exhausting"
+                                    loading="lazy"
+                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                    allowfullscreen
+                                ></iframe>
+                            </div>
+                            <figcaption><a href="https://www.youtube.com/watch?v=KrZtcGieejc">It's-Exhausting</a></figcaption>
+                        </figure>
+                        <figure>
+                            <div class="video">
+                                <iframe
+                                    src="https://www.youtube.com/embed/wbXM2J4UK6M"
+                                    title="Tethering live at Melbourne Fringe Flavours Night Market"
+                                    loading="lazy"
+                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                    allowfullscreen
+                                ></iframe>
+                            </div>
+                            <figcaption><a href="https://www.youtube.com/watch?v=wbXM2J4UK6M">Tethering</a> &mdash; live at Melbourne Fringe Flavours Night Market.</figcaption>
+                        </figure>
+                        <figure>
+                            <div class="video">
+                                <iframe
+                                    src="https://www.youtube.com/embed/sPo8X1iXNP8"
+                                    title="Obdurate and Victoria Gunning: Pedagog, drums and dance"
+                                    loading="lazy"
+                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                    allowfullscreen
+                                ></iframe>
+                            </div>
+                            <figcaption><a href="https://www.youtube.com/watch?v=sPo8X1iXNP8">Pedagog</a> &mdash; drums and dance with Victoria Gunning.</figcaption>
+                        </figure>
+                        <figure>
+                            <div class="video">
+                                <iframe
+                                    src="https://www.youtube.com/embed/HwqCXB6FFPc"
+                                    title="Granulate: official music video"
+                                    loading="lazy"
+                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                    allowfullscreen
+                                ></iframe>
+                            </div>
+                            <figcaption><a href="https://www.youtube.com/watch?v=HwqCXB6FFPc">Granulate</a> &mdash; a collaboration with GoldenEye 007 speedrunners.</figcaption>
+                        </figure>
                     </div>
+                    <p style="margin-top: 14px"><strong>More performances</strong></p>
+                    <ul class="songLinks">
+                        <li><a href="https://www.youtube.com/watch?v=8LKxY0JUIaY">A Metric Based on Insects</a> <span class="small">&mdash; live</span></li>
+                        <li><a href="https://www.youtube.com/watch?v=4au7cI3iHj0">Comic Book Channel</a> <span class="small">&mdash; drum playthrough</span></li>
+                        <li><a href="https://www.youtube.com/watch?v=nkZPHTdLpbw">The Vightknigh</a> <span class="small">&mdash; lyric video</span></li>
+                    </ul>
                     <p class="small" style="margin-top: 6px">
                         More videos:
-                        <a href="https://www.youtube.com/@WilliamTroiani"
+                        <a href="https://www.youtube.com/@obduratefleet3016"
                             >YouTube channel</a
                         >.
                     </p>
+                </section>
+
+                <section class="plain" id="guests">
+                    <h2>Special guests</h2>
+                    <p>
+                        Nick Delaney contributes a bass section on <em>Tethering</em>.
+                        Brendan Sloan contributes guitar solos and vocals to
+                        <em>Wisdom</em>.
+                    </p>
+                </section>
+
+                <section class="plain" id="press">
+                    <h2>In the press</h2>
+                    <p>
+                        <a href="https://beat.com.au/obdurate-weaves-gameplay-with-prog-for-perfectionism-in-speedrunning-and-music/">Obdurate weaves gameplay with prog for Perfectionism in Speedrunning and Music</a>
+                        &mdash; <em>Beat</em>, on the meeting of music,
+                        speedrunning and performance.
+                    </p>
+                </section>
+
+                <section class="plain" id="magneck">
+                    <h2>Drumming with Magneck</h2>
+                    <p>Drum playthroughs:</p>
+                    <ul class="songLinks">
+                        <li><a href="https://www.youtube.com/watch?v=4hpHTo27klw">Abstract Life Template</a></li>
+                        <li><a href="https://www.youtube.com/watch?v=1Tuw_E-5Ab8">Birdman</a></li>
+                        <li><a href="https://www.youtube.com/watch?v=7pJXhCiDNC8">Anguish A Priori</a></li>
+                        <li><a href="https://www.youtube.com/watch?v=mSUhCe7UqRE">Future Shock</a></li>
+                        <li><a href="https://www.youtube.com/watch?v=XGSxylM2XnI">Solar Fears</a></li>
+                    </ul>
                 </section>
 
                 <section class="plain" id="performances">
