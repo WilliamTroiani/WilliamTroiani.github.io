@@ -1,7 +1,11 @@
 <!doctype html>
 <html lang="en">
     <head>
-        <!-- Google tag (gtag.js) -->
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width,initial-scale=1" />
+        <title>Obdurate — Projects by Will Troiani</title>
+        <meta name="description" content="Music, films and performance art by Will Troiani. An archive of Obdurate projects, with the writing behind the work." />
+        <link rel="stylesheet" href="css/obdurate.css" />
         <script async src="https://www.googletagmanager.com/gtag/js?id=G-GXD0DKBSYQ"></script>
         <script>
             window.dataLayer = window.dataLayer || [];
@@ -9,670 +13,205 @@
             gtag('js', new Date());
             gtag('config', 'G-GXD0DKBSYQ');
         </script>
-
-        <meta charset="utf-8" />
-        <meta name="viewport" content="width=device-width,initial-scale=1" />
-        <title>Obdurate: Will Troiani</title>
-        <meta
-            name="description"
-            content="Obdurate: progressive music performance art by Will Troiani."
-        />
-
-        <style>
-            :root {
-                --max: 980px;
-                --bg: #050b1a;
-                --bg2: #070d20;
-                --panel: rgba(255, 255, 255, 0.06);
-                --panel-2: rgba(255, 255, 255, 0.04);
-                --text: rgba(255, 255, 255, 0.92);
-                --muted: rgba(255, 255, 255, 0.66);
-                --rule: rgba(255, 255, 255, 0.12);
-                --accent: #d8b35a;
-                --accent-2: #f1d27a;
-                --shadow: 0 18px 50px rgba(0, 0, 0, 0.45);
-                --shadow2: 0 8px 22px rgba(0, 0, 0, 0.28);
-                --radius: 12px;
-
-                --serif: ui-sans-serif, system-ui, -apple-system, "Segoe UI",
-                    Roboto, Helvetica, Arial, sans-serif;
-                --mono: ui-monospace, "SF Mono", "Cascadia Code", Consolas,
-                    monospace;
-            }
-
-            * {
-                box-sizing: border-box;
-            }
-            html,
-            body {
-                margin: 0;
-                padding: 0;
-            }
-            body {
-                background: var(--bg);
-                color: var(--text);
-                font-family: var(--serif);
-                font-size: 14.5px;
-                line-height: 1.45;
-                -webkit-font-smoothing: antialiased;
-                text-rendering: optimizeLegibility;
-                position: relative;
-            }
-            body::before {
-                content: "";
-                position: fixed;
-                inset: 0;
-                z-index: -1;
-                pointer-events: none;
-                opacity: 0.18;
-                background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 320 320'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='1.4' numOctaves='1' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.5 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
-            }
-
-            a {
-                color: var(--accent-2);
-                text-decoration: none;
-            }
-            a:hover {
-                text-decoration: underline;
-                text-decoration-color: rgba(241, 210, 122, 0.7);
-            }
-
-            .wrap {
-                max-width: var(--max);
-                margin: 0 auto;
-                padding: 10px 14px 28px;
-                position: relative;
-                z-index: 1;
-            }
-
-            nav {
-                display: flex;
-                flex-wrap: wrap;
-                gap: 10px 14px;
-                align-items: center;
-                padding: 10px 10px;
-                border: 1px solid var(--rule);
-                border-radius: 999px;
-                background: rgba(11, 18, 36, 0.62);
-                backdrop-filter: blur(10px);
-                box-shadow: 0 6px 20px rgba(0, 0, 0, 0.32);
-                position: sticky;
-                top: 12px;
-                z-index: 50;
-                font-family: var(--mono);
-                font-size: 0.88rem;
-                letter-spacing: 0.02em;
-            }
-            nav a {
-                color: var(--muted);
-                padding: 8px 12px;
-                border-radius: 999px;
-            }
-            nav a[aria-current="page"] {
-                color: var(--accent-2);
-                border: 1px solid rgba(216, 179, 90, 0.32);
-                background: rgba(216, 179, 90, 0.1);
-            }
-
-            .hero {
-                display: flex;
-                align-items: center;
-                gap: 14px;
-                margin-top: 8px;
-                padding: 10px 16px;
-                border: 1px solid var(--rule);
-                border-radius: 10px;
-                background: linear-gradient(
-                    135deg,
-                    rgba(216, 179, 90, 0.1),
-                    rgba(255, 255, 255, 0.02)
-                );
-                box-shadow: var(--shadow2);
-                overflow: hidden;
-                position: relative;
-            }
-            .hero::after {
-                content: "";
-                position: absolute;
-                inset: -60px -60px auto auto;
-                width: 280px;
-                height: 280px;
-                background: radial-gradient(
-                    circle at 35% 35%,
-                    rgba(216, 179, 90, 0.18),
-                    transparent 60%
-                );
-                pointer-events: none;
-                z-index: 0;
-            }
-            .avatar {
-                width: 110px;
-                height: 110px;
-                border-radius: 10px;
-                object-fit: cover;
-                flex-shrink: 0;
-                border: 1px solid rgba(216, 179, 90, 0.32);
-                position: relative;
-                z-index: 1;
-            }
-            .heroBody {
-                flex: 1;
-                min-width: 0;
-                position: relative;
-                z-index: 1;
-            }
-            h1 {
-                margin: 0;
-                font-weight: 700;
-                font-size: 1.85rem;
-                line-height: 1.05;
-                letter-spacing: -0.02em;
-            }
-            .tagline {
-                margin: 6px 0 0;
-                color: var(--muted);
-                font-size: 0.92rem;
-                font-style: italic;
-            }
-            .metaLine {
-                display: flex;
-                flex-wrap: wrap;
-                gap: 0 14px;
-                font-size: 0.82rem;
-                color: var(--muted);
-                align-items: center;
-                margin-top: 6px;
-            }
-            .metaLine a {
-                color: var(--muted);
-            }
-            .metaLine a:hover {
-                color: var(--accent-2);
-            }
-            .metaLine .dot {
-                color: var(--rule);
-            }
-
-            main {
-                margin-top: 10px;
-            }
-            section {
-                break-inside: avoid;
-                margin: 0 0 18px;
-            }
-
-            .card {
-                border: 1px solid var(--rule);
-                background: linear-gradient(
-                    180deg,
-                    var(--panel),
-                    var(--panel-2)
-                );
-                border-radius: var(--radius);
-                box-shadow: var(--shadow2);
-                padding: 14px 16px 12px;
-            }
-            .card.featured {
-                background: linear-gradient(
-                    135deg,
-                    rgba(216, 179, 90, 0.1) 0%,
-                    rgba(11, 18, 36, 0.94) 65%
-                );
-                border-color: rgba(216, 179, 90, 0.3);
-                position: relative;
-                overflow: hidden;
-            }
-            .card.featured::after {
-                content: "";
-                position: absolute;
-                top: -60px;
-                right: -60px;
-                width: 280px;
-                height: 280px;
-                background: radial-gradient(
-                    circle at 35% 35%,
-                    rgba(216, 179, 90, 0.18),
-                    transparent 62%
-                );
-                pointer-events: none;
-                z-index: 0;
-            }
-            .card.featured > * {
-                position: relative;
-                z-index: 1;
-            }
-            .plain {
-                padding: 0 2px;
-            }
-
-            .kicker {
-                font-family: var(--mono);
-                font-size: 0.72rem;
-                letter-spacing: 0.16em;
-                text-transform: uppercase;
-                color: var(--accent-2);
-            }
-            h2 {
-                margin: 0 0 8px;
-                font-family: var(--serif);
-                font-size: 1.15rem;
-                font-weight: 700;
-                letter-spacing: -0.01em;
-                padding-bottom: 5px;
-                border-bottom: 1px solid var(--rule);
-                color: var(--text);
-            }
-            p {
-                margin: 6px 0;
-            }
-            ul {
-                margin: 6px 0;
-                padding-left: 18px;
-            }
-            li {
-                margin: 3px 0;
-                color: var(--text);
-            }
-            .muted {
-                color: var(--muted);
-            }
-            .small {
-                font-size: 0.85rem;
-                color: var(--muted);
-            }
-
-            .embedWrap {
-                margin-top: 8px;
-            }
-            .embedWrap iframe {
-                width: 100%;
-                border: 0;
-            }
-
-            .albumCard {
-                display: grid;
-                grid-template-columns: 130px minmax(0, 1fr);
-                align-items: center;
-                gap: 18px;
-            }
-            .albumCard h2 {
-                border-bottom: 0;
-                padding-bottom: 0;
-                margin: 4px 0 0;
-            }
-            .albumCard .embedWrap {
-                margin-top: 0;
-                min-width: 0;
-            }
-            .albumCard iframe {
-                height: 120px;
-                display: block;
-            }
-            .featureCopy {
-                max-width: 76ch;
-                margin: 8px 0 12px;
-            }
-            .featureVideo {
-                margin: 0;
-            }
-            figure {
-                margin: 0;
-                min-width: 0;
-            }
-            figcaption {
-                padding: 7px 0 2px;
-                font-size: 0.88rem;
-                color: var(--muted);
-            }
-
-            .videoGrid {
-                display: grid;
-                grid-template-columns: repeat(2, minmax(0, 1fr));
-                gap: 14px;
-                margin-top: 8px;
-            }
-            @media (max-width: 480px) {
-                .videoGrid {
-                    grid-template-columns: 1fr;
-                }
-                .albumCard {
-                    grid-template-columns: minmax(0, 1fr);
-                    gap: 10px;
-                }
-            }
-            .video {
-                border-radius: 8px;
-                overflow: hidden;
-                border: 1px solid var(--rule);
-                background: rgba(0, 0, 0, 0.22);
-                aspect-ratio: 16 / 9;
-                width: 100%;
-            }
-            .video iframe {
-                display: block;
-                width: 100%;
-                height: 100%;
-                border: 0;
-            }
-
-            .songLinks {
-                display: grid;
-                grid-template-columns: repeat(2, minmax(0, 1fr));
-                gap: 0 24px;
-                list-style: none;
-                padding: 0;
-            }
-            .songLinks li {
-                padding: 6px 0;
-                border-bottom: 1px solid var(--rule);
-            }
-            @media (max-width: 480px) {
-                .songLinks {
-                    grid-template-columns: minmax(0, 1fr);
-                }
-            }
-
-            .entryList {
-                list-style: none;
-                margin: 8px 0 0;
-                padding: 0;
-            }
-            .entryList > li {
-                display: grid;
-                grid-template-columns: 1fr;
-                gap: 2px 18px;
-                padding: 7px 0;
-                border-top: 1px solid var(--rule);
-            }
-            .entryList > li:first-child {
-                border-top: none;
-                padding-top: 2px;
-            }
-            @media (min-width: 720px) {
-                .entryList > li {
-                    grid-template-columns: 110px 1fr;
-                }
-            }
-            .entryDate {
-                font-family: var(--mono);
-                font-size: 0.7rem;
-                color: var(--muted);
-                text-transform: uppercase;
-                letter-spacing: 0.05em;
-                padding-top: 2px;
-                white-space: nowrap;
-            }
-            .entryBody {
-                color: var(--text);
-            }
-            .entryVenue {
-                color: var(--muted);
-                font-size: 0.88rem;
-            }
-            .entryTitle {
-                font-style: italic;
-                margin-top: 1px;
-            }
-
-            footer {
-                margin-top: 26px;
-                padding-top: 12px;
-                border-top: 1px solid var(--rule);
-                color: var(--muted);
-                font-size: 0.82rem;
-            }
-
-            @media print {
-                body {
-                    background: #fff;
-                    color: #000;
-                }
-                body::before {
-                    display: none;
-                }
-                a {
-                    color: #000;
-                    text-decoration: none;
-                }
-                .wrap {
-                    max-width: none;
-                    padding: 0;
-                }
-                nav {
-                    display: none !important;
-                }
-                .card {
-                    box-shadow: none;
-                    border-color: #ddd;
-                    background: #fff;
-                }
-            }
-        </style>
     </head>
     <body>
-        <div class="wrap">
-            <nav aria-label="Site navigation">
-                <a href="index.html">Home</a>
-                <a href="CV.pdf">CV</a>
-                <a href="Mathematics.html">Mathematics</a>
-                <a href="Obdurate.html" aria-current="page">Obdurate</a>
+        <a class="skip-link" href="#projects">Skip to projects</a>
+        <header class="site-header">
+            <nav class="site-nav" aria-label="Site navigation">
+                <a href="index.html">Home</a><a href="CV.pdf">CV</a><a href="Mathematics.html">Mathematics</a><a href="Obdurate.html" aria-current="page">Obdurate</a>
             </nav>
-
-            <header class="hero">
-                <img
-                    class="avatar"
-                    src="Me3.jpg"
-                    alt="Portrait of Will Troiani"
-                />
-                <div class="heroBody">
-                    <h1>Obdurate</h1>
-                    <div class="tagline">
-                        Progressive music performance art
-                    </div>
-                    <div class="metaLine">
-                        <span>Melbourne / lutruwita / online</span>
-                        <a href="mailto:william.a.troiani@gmail.com"
-                            >william.a.troiani@gmail.com</a
-                        >
-                        <a href="https://www.youtube.com/@obduratefleet3016"
-                            >YouTube</a
-                        >
-                    </div>
-                </div>
+            <div class="header-contact"><a href="mailto:william.a.troiani@gmail.com">Contact Will Troiani ↗</a></div>
+        </header>
+        <div class="page-shell">
+            <header class="masthead">
+                <p class="eyebrow">Will Troiani · Music &amp; performance art</p>
+                <h1>Obdurate</h1>
+                <p class="intro">Brutalism in fine art, mathematics, computer science, music, video games, and poetry. I am deadly serious that all these things are naturally connected.</p>
+                <div class="masthead-meta"><a href="#projects">Explore the work ↓</a><a href="https://obduratefleet.bandcamp.com/music">Bandcamp ↗</a><a href="https://www.youtube.com/@obduratefleet3016">YouTube ↗</a><a href="mailto:william.a.troiani@gmail.com">Contact ↗</a></div>
             </header>
-
-            <main>
-                <section class="card featured" id="revere">
-                    <div class="kicker">Featured film</div>
-                    <h2>Revere</h2>
-                    <figure class="featureVideo">
-                        <div class="video">
-                            <iframe
-                                src="https://www.youtube.com/embed/vf6b8aNGvw4"
-                                title="Revere: lyric video"
-                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                                allowfullscreen
-                            ></iframe>
+            <nav class="work-index" aria-label="Project index">
+                <p class="index-label">Selected projects<br />2021–2026</p>
+                <div class="index-links">
+                    <a href="#revere"><span>2026</span><strong>Revere</strong></a>
+                    <a href="#metric"><span>2026</span><strong>A Metric Based on Insects</strong></a>
+                    <a href="#hamartia"><span>2026</span><strong>Hamartia</strong></a>
+                    <a href="#tethering"><span>2025</span><strong>Tethering</strong></a>
+                    <a href="#granulate"><span>2025</span><strong>Granulate</strong></a>
+                    <a href="#pedagog"><span>2025</span><strong>Pedagog</strong></a>
+                    <a href="#its-exhausting"><span>2025</span><strong>It's-Exhausting</strong></a>
+                    <a href="#rigor-and-emotion"><span>2024</span><strong>The Rigour of Logic and the Fluidity of Human Emotion</strong></a>
+                    <a href="#obdurate-album"><span>2021</span><strong>Obdurate</strong></a>
+                </div>
+            </nav>
+            <main id="projects">
+                <article class="project" id="revere" aria-labelledby="revere-title">
+                    <header class="project-header">
+                        <div class="project-date"><time datetime="2026-10-13">13 October 2026</time><span class="date-note">Published</span><span class="format">Film</span></div>
+                        <div class="project-heading"><h2 id="revere-title">Revere</h2><p class="project-subtitle">From Hamartia</p></div>
+                    </header>
+                    <div class="project-body">
+                        <div class="project-media video">
+                            <iframe src="https://www.youtube.com/embed/vf6b8aNGvw4" title="Revere: lyric video" loading="eager" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
                         </div>
-                        <figcaption><a href="https://www.youtube.com/watch?v=vf6b8aNGvw4">Watch Revere on YouTube</a>.</figcaption>
-                    </figure>
-                    <p class="featureCopy">
-                        The model is adapted from Alhaji Cherif and Kamal
-                        Barley’s 2009 paper, “Stochastic Nonlinear Dynamics of
-                        Interpersonal and Romantic Relationships.” This
-                        version retains its nonlinear relationship dynamics
-                        and uses independent, constant additive noise in
-                        place of the paper’s state-dependent noise. The
-                        parameters were chosen for this film.
-                    </p>
-                </section>
-
-                <section class="card featured albumCard" id="hamartia">
-                    <div>
-                        <div class="kicker">Out now</div>
-                        <h2><a href="https://obduratefleet.bandcamp.com/album/hamartia">Hamartia</a></h2>
+                        <div class="project-copy">
+                            <blockquote><p>“two stick figures which were in love but arguing.”</p><cite>From my notes on an earlier version, September 2026.</cite></blockquote>
+                            <p>The mood of two individuals is displayed through two coupled nonlinear stochastic differential equations. Affection, withdrawal and random disturbances shape the characters’ moods.</p>
+                            <div class="project-links"><a href="https://www.youtube.com/watch?v=vf6b8aNGvw4">Watch the film ↗</a><a href="https://obduratefleet.bandcamp.com/track/revere">Listen ↗</a></div>
+                            <details class="project-notes"><summary>About the mathematical model</summary><p>The model is adapted from Alhaji Cherif and Kamal Barley’s 2009 paper, “Stochastic Nonlinear Dynamics of Interpersonal and Romantic Relationships.” This version retains its nonlinear relationship dynamics and uses independent, constant additive noise in place of the paper’s state-dependent noise. The parameters were chosen for this film.</p><p><a href="https://arxiv.org/abs/0911.0013">Read the paper ↗</a></p></details>
+                        </div>
                     </div>
-                    <div class="embedWrap">
-                        <iframe
-                            title="Hamartia by Obdurate on Bandcamp"
-                            src="https://bandcamp.com/EmbeddedPlayer/album=4001658365/size=large/bgcol=ffffff/linkcol=0687f5/tracklist=false/artwork=small/transparent=true/"
-                            loading="lazy"
-                            ><a
-                                href="https://obduratefleet.bandcamp.com/album/hamartia"
-                                >Hamartia by Obdurate</a
-                            ></iframe
-                        >
+                </article>
+                <article class="project" id="metric" aria-labelledby="metric-title">
+                    <header class="project-header">
+                        <div class="project-date"><time datetime="2026-09-18">18 September 2026</time><span class="date-note">Published</span><span class="format">Lyric film</span></div>
+                        <div class="project-heading"><h2 id="metric-title">A Metric Based on Insects</h2><p class="project-subtitle">Music from Obdurate, 2021 · Film, 2026</p></div>
+                    </header>
+                    <div class="project-body">
+                        <div class="project-media video">
+                            <iframe src="https://www.youtube.com/embed/Xu40Yb7q7Ag" title="A Metric Based on Insects: lyric video" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                        </div>
+                        <div class="project-copy">
+                            <p>One can always improve the precision of their measurements. So where does one draw the line? When one is trying to make absolute perfect analysis of that which they are deeply passionate, it is only natural to want to improve one's ability to measure. But what can you control? What can you count? What can you predict? What are the limits?</p>
+                            <p>If one knew the exact positions, momentums, and spaces between chaotic swarms of unpredictable motions, could one finally understand that which they have been trying to understand for all their life? Is it inherently insane, or admirably brave, to attempt to control and define a metric as precise as one based on insects?</p>
+                            <div class="project-links"><a href="https://www.youtube.com/watch?v=Xu40Yb7q7Ag">Watch the film ↗</a><a href="https://obduratefleet.bandcamp.com/track/a-metric-based-on-insects">Listen ↗</a><a href="2021/10/19/Will-Troiani-A-Metric-Based-on-Insects.html">Read the original text ↗</a></div>
+                            <details class="project-notes"><summary>From the original text, 2021</summary><blockquote><p>These thoughts are thought during a period of patience. This patience is demanded; it takes time to reach planets. Eventually even the cosmos provides a navigation routine.</p></blockquote><p>An excerpt from the philosophical fiction written alongside the song.</p></details>
+                        </div>
                     </div>
-                </section>
-
-                <section class="card albumCard" id="obdurate-album">
-                    <div>
-                        <div class="kicker">First album</div>
-                        <h2><a href="https://obduratefleet.bandcamp.com/album/obdurate">Obdurate</a></h2>
-                    </div>
-                    <div class="embedWrap">
-                        <iframe
-                            title="Obdurate by Obdurate on Bandcamp"
-                            src="https://bandcamp.com/EmbeddedPlayer/album=3168103766/size=large/bgcol=ffffff/linkcol=0687f5/tracklist=false/artwork=small/transparent=true/"
-                            loading="lazy"
-                            ><a href="https://obduratefleet.bandcamp.com/album/obdurate"
-                                >Obdurate by Obdurate</a
-                            ></iframe
-                        >
-                    </div>
-                </section>
-
-                <section class="plain" id="statement">
-                    <h2>Artist statement</h2>
-                    <p>
-                        The word <em>Obdurate</em> means to stubbornly refuse to
-                        change one's opinion or course of action, even when
-                        faced with reason, persuasion, or pity. Those obdurate
-                        amongst us will find this quality to be their greatest
-                        source of pride but also their greatest source of
-                        pain. Mathematics, speedrunning, wisdom - these are
-                        all obdurate persuasions. The piece obdurate holds a
-                        candle this way through life, and takes a moment to
-                        sit with natural suffering which comes with
-                        obduration.
-                    </p>
-                    <p class="muted">
-                        Orchestration: live drumming along to composed backing
-                        tracks. The video aspect shows various performance
-                        art collaborations.
-                    </p>
-                </section>
-
-                <section class="plain" id="media">
-                    <h2>Video &amp; collaborations</h2>
-                    <h3>Lyric videos</h3>
-                    <ul class="songLinks">
-                        <li><a href="https://www.youtube.com/watch?v=Xu40Yb7q7Ag">A Metric Based on Insects</a></li>
-                        <li><a href="https://www.youtube.com/watch?v=QmcJN-i8_xE">Wisdom</a> <span class="small">(featuring Brendan Sloan)</span></li>
-                        <li><a href="https://www.youtube.com/watch?v=tA8td5TbIFM">Tethering</a> <span class="small">(featuring Nick Delaney)</span></li>
-                        <li><a href="https://www.youtube.com/watch?v=OhKGXy_3fQs">Granulate</a></li>
-                        <li><a href="https://www.youtube.com/watch?v=ixLNZI0h8oI">Sonata</a></li>
-                        <li><a href="https://www.youtube.com/watch?v=oJovdb4vmP8">Klipso Island (is a Place in the Sky)</a></li>
-                        <li><a href="https://www.youtube.com/watch?v=nkZPHTdLpbw">The Vightknigh</a></li>
-                    </ul>
-                    <h3>Performances &amp; collaborations</h3>
-                    <div class="videoGrid">
-                        <figure>
-                            <div class="video">
-                                <iframe
-                                    src="https://www.youtube.com/embed/KrZtcGieejc"
-                                    title="It's-Exhausting"
-                                    loading="lazy"
-                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                                    allowfullscreen
-                                ></iframe>
+                </article>
+                <article class="project" id="hamartia" aria-labelledby="hamartia-title">
+                    <header class="project-header">
+                        <div class="project-date"><time datetime="2026-03-14">14 March 2026</time><span class="format">Album</span></div>
+                        <div class="project-heading"><h2 id="hamartia-title">Hamartia</h2><p class="project-subtitle">Seven pieces</p></div>
+                    </header>
+                    <div class="project-body">
+                        <div class="project-media album-media">
+                            <img class="album-art" src="images/obdurate/hamartia.jpg" alt="Hamartia album cover" width="700" height="700" loading="lazy" />
+                            <div class="album-player">
+                                <iframe title="Hamartia by Obdurate on Bandcamp" src="https://bandcamp.com/EmbeddedPlayer/album=4001658365/size=large/bgcol=101110/linkcol=d6b46b/tracklist=false/artwork=none/transparent=true/" loading="lazy"><a href="https://obduratefleet.bandcamp.com/album/hamartia">Hamartia by Obdurate</a></iframe>
+                                <p class="album-direct"><a href="https://obduratefleet.bandcamp.com/album/hamartia">Listen to Hamartia on Bandcamp ↗</a></p>
                             </div>
-                            <figcaption><a href="https://www.youtube.com/watch?v=KrZtcGieejc">It's-Exhausting</a></figcaption>
-                        </figure>
-                        <figure>
-                            <div class="video">
-                                <iframe
-                                    src="https://www.youtube.com/embed/wbXM2J4UK6M"
-                                    title="Tethering live at Melbourne Fringe Flavours Night Market"
-                                    loading="lazy"
-                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                                    allowfullscreen
-                                ></iframe>
-                            </div>
-                            <figcaption><a href="https://www.youtube.com/watch?v=wbXM2J4UK6M">Tethering</a>, live at Melbourne Fringe Flavours Night Market.</figcaption>
-                        </figure>
-                        <figure>
-                            <div class="video">
-                                <iframe
-                                    src="https://www.youtube.com/embed/sPo8X1iXNP8"
-                                    title="Obdurate and Victoria Gunning: Pedagog, drums and dance"
-                                    loading="lazy"
-                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                                    allowfullscreen
-                                ></iframe>
-                            </div>
-                            <figcaption><a href="https://www.youtube.com/watch?v=sPo8X1iXNP8">Pedagog</a>: drums and dance with Victoria Gunning.</figcaption>
-                        </figure>
-                        <figure>
-                            <div class="video">
-                                <iframe
-                                    src="https://www.youtube.com/embed/HwqCXB6FFPc"
-                                    title="Granulate: official music video"
-                                    loading="lazy"
-                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                                    allowfullscreen
-                                ></iframe>
-                            </div>
-                            <figcaption><a href="https://www.youtube.com/watch?v=HwqCXB6FFPc">Granulate</a>, a collaboration with GoldenEye 007 speedrunners.</figcaption>
-                        </figure>
+                        </div>
+                        <div class="project-copy">
+                            <p>Composed metal.</p>
+                            <div class="project-links"><a href="https://obduratefleet.bandcamp.com/album/hamartia">Listen to the album ↗</a></div>
+                            <div class="credits"><p>Tethering: bass section by Nick Delaney</p><p>Wisdom: guitar solos and vocals by Brendan Sloan</p><p>Mixing: Brent Quirk · Mastering: Jack the Bear</p></div>
+                            <details class="project-notes"><summary>Films from the album</summary><ul class="link-list"><li><a href="https://www.youtube.com/watch?v=tA8td5TbIFM">Tethering</a></li><li><a href="https://www.youtube.com/watch?v=OhKGXy_3fQs">Granulate</a></li><li><a href="https://www.youtube.com/watch?v=QmcJN-i8_xE">Wisdom</a><span>featuring Brendan Sloan</span></li><li><a href="https://www.youtube.com/watch?v=ixLNZI0h8oI">Sonata</a></li><li><a href="https://www.youtube.com/watch?v=vf6b8aNGvw4">Revere</a></li></ul></details>
+                        </div>
                     </div>
-                    <p style="margin-top: 14px"><strong>More performances</strong></p>
-                    <ul class="songLinks">
-                        <li><a href="https://www.youtube.com/watch?v=YsWgdPBspsU">Revere</a> <span class="small">(drum playthrough)</span></li>
-                        <li><a href="https://www.youtube.com/watch?v=8LKxY0JUIaY">A Metric Based on Insects</a> <span class="small">(live)</span></li>
-                        <li><a href="https://www.youtube.com/watch?v=4au7cI3iHj0">Comic Book Channel</a> <span class="small">(drum playthrough)</span></li>
-                    </ul>
-                    <p class="small" style="margin-top: 6px">
-                        More videos:
-                        <a href="https://www.youtube.com/@obduratefleet3016"
-                            >YouTube channel</a
-                        >.
-                    </p>
-                </section>
+                </article>
+                <article class="project" id="tethering" aria-labelledby="tethering-title">
+                    <header class="project-header">
+                        <div class="project-date"><time datetime="2025-10-01">1 October 2025</time><span class="format">Live performance</span></div>
+                        <div class="project-heading"><h2 id="tethering-title">Tethering</h2><p class="project-subtitle">Fringe Flavours · Queen Victoria Market, Melbourne</p></div>
+                    </header>
+                    <div class="project-body">
+                        <div class="project-media video">
+                            <iframe src="https://www.youtube.com/embed/wbXM2J4UK6M" title="Tethering live at Melbourne Fringe Flavours Night Market" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                        </div>
+                        <div class="project-copy">
+                            <p>I was invited to perform as a rover at the Fringe Flavours night at the Queen Victoria Market as part of the Melbourne Fringe Festival. This is me performing Tethering on that night.</p>
+                            <div class="project-links"><a href="https://www.youtube.com/watch?v=wbXM2J4UK6M">Watch the performance ↗</a></div>
 
-                <section class="plain" id="guests">
-                    <h2>Special guests</h2>
-                    <p>
-                        Nick Delaney contributes a bass section on <em>Tethering</em>.
-                        Brendan Sloan contributes guitar solos and vocals to
-                        <em>Wisdom</em>.
-                    </p>
-                </section>
+                        </div>
+                    </div>
+                </article>
+                <article class="project" id="granulate" aria-labelledby="granulate-title">
+                    <header class="project-header">
+                        <div class="project-date"><time datetime="2025-09-26">26 September 2025</time><span class="date-note">Published</span><span class="format">Performance film</span></div>
+                        <div class="project-heading"><h2 id="granulate-title">Granulate</h2><p class="project-subtitle">Perfectionism in Speedrunning and Musical Performance</p></div>
+                    </header>
+                    <div class="project-body">
+                        <div class="project-media video">
+                            <iframe src="https://www.youtube.com/embed/HwqCXB6FFPc" title="Granulate: music video featuring GoldenEye 007 speedrunners" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                        </div>
+                        <div class="project-copy">
+                            <p>Live drumming and GoldenEye 007 speedrunning. The song explains the relationship between the two. Many audience member's favourite part was witnessing Sam Scholten truly suffer when he made a mistake live on stage.</p>
+                            <blockquote><p>It's deeper than passion, it's deeper than discipline<br />It's self-actualisation</p><cite>From Granulate’s unsung text</cite></blockquote>
+                            <div class="project-links"><a href="https://www.youtube.com/watch?v=HwqCXB6FFPc">Watch the film ↗</a><a href="https://beat.com.au/obdurate-weaves-gameplay-with-prog-for-perfectionism-in-speedrunning-and-music/">Read the Beat feature ↗</a></div>
+                            <details class="project-notes"><summary>The earlier performance piece, 2024–2025</summary><p>This variant of the Obdurate performance piece features four world-class speedrunners of the 1997 video game <em>GoldenEye 007</em>, including the former world champion, for live commentary and speedruns of the game.</p><p>Published under the title <em>Perfectionism in Speedrunning and Music</em> on the earlier Obdurate page.</p><p><a href="https://www.youtube.com/watch?v=40Kr34IzZLk">Watch the earlier performance ↗</a></p></details>
+                        </div>
+                    </div>
+                </article>
+                <article class="project" id="pedagog" aria-labelledby="pedagog-title">
+                    <header class="project-header">
+                        <div class="project-date"><time datetime="2025-09-20">20 September 2025</time><span class="date-note">Published</span><span class="format">Performance film</span></div>
+                        <div class="project-heading"><h2 id="pedagog-title">Pedagog</h2><p class="project-subtitle">Drums and dance with Victoria Gunning</p></div>
+                    </header>
+                    <div class="project-body">
+                        <div class="project-media video">
+                            <iframe src="https://www.youtube.com/embed/sPo8X1iXNP8" title="Obdurate and Victoria Gunning: Pedagog, drums and dance" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                        </div>
+                        <div class="project-copy">
+                            <blockquote><p>Are those who dance necessarily not dead?<br />Why wait?</p><p>I'm moved, physically<br />I'm literally moving to the edge of the cliff</p><cite>Excerpts from Pedagog’s unsung text, 2021</cite></blockquote>
+                            <div class="project-links"><a href="https://www.youtube.com/watch?v=sPo8X1iXNP8">Watch the performance ↗</a><a href="https://obduratefleet.bandcamp.com/track/pedagog">Read the full text and listen ↗</a></div>
 
-                <section class="plain" id="press">
-                    <h2>In the press</h2>
-                    <p>
-                        <a href="https://beat.com.au/obdurate-weaves-gameplay-with-prog-for-perfectionism-in-speedrunning-and-music/">Obdurate weaves gameplay with prog for Perfectionism in Speedrunning and Music</a>
-                        (<em>Beat</em>), about music, speedrunning and
-                        performance.
-                    </p>
-                </section>
+                        </div>
+                    </div>
+                </article>
+                <article class="project" id="its-exhausting" aria-labelledby="its-exhausting-title">
+                    <header class="project-header">
+                        <div class="project-date"><time datetime="2025-07">July 2025</time><span class="date-note">Published</span><span class="format">Performance film</span></div>
+                        <div class="project-heading"><h2 id="its-exhausting-title">It's-Exhausting</h2><p class="project-subtitle">Obdurate live</p></div>
+                    </header>
+                    <div class="project-body">
+                        <div class="project-media video">
+                            <iframe src="https://www.youtube.com/embed/KrZtcGieejc" title="It's-Exhausting: Obdurate live" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                        </div>
+                        <div class="project-copy">
+                            <p>My project, Obdurate, blends live drumming, synthesizer-driven music, and video projection in a tightly composed performance that sits somewhere between a progressive music set and a theatrical experience. Each piece presents a different imagined world, with themes ranging from logic and emotion to cosmic absurdity.</p>
+                            <div class="project-links"><a href="https://www.youtube.com/watch?v=KrZtcGieejc">Watch the performance ↗</a></div>
+                            <p class="source-caption">From a description of the live project, July 2025.</p>
+                        </div>
+                    </div>
+                </article>
+                <article class="project" id="rigor-and-emotion" aria-labelledby="rigor-and-emotion-title">
+                    <header class="project-header">
+                        <div class="project-date"><time datetime="2024">2024</time><span class="format">Live performance</span></div>
+                        <div class="project-heading"><h2 id="rigor-and-emotion-title">The Rigour of Logic and the Fluidity of Human Emotion</h2><p class="project-subtitle">Club Voltaire · Melbourne Fringe Festival</p></div>
+                    </header>
+                    <div class="project-body">
+                        <figure class="project-media"><img class="performance-image" src="fringe.jpg" alt="Poster for Obdurate at the Melbourne Fringe Festival" loading="lazy" /></figure>
+                        <div class="project-copy">
+                            <p>An audio-visual synth-prog music performance featuring live drums paired with storytelling visuals and poetry, pulling you into the abstract imagination of Will Troiani.</p>
+                            <div class="project-links"><a href="https://www.youtube.com/watch?v=0_Vheo8sONQ">Watch Obdurate live ↗</a></div>
 
-                <section class="plain" id="magneck">
-                    <h2>Drumming with Magneck</h2>
-                    <p>Drum playthroughs:</p>
-                    <ul class="songLinks">
-                        <li><a href="https://www.youtube.com/watch?v=4hpHTo27klw">Abstract Life Template</a></li>
-                        <li><a href="https://www.youtube.com/watch?v=1Tuw_E-5Ab8">Birdman</a></li>
-                        <li><a href="https://www.youtube.com/watch?v=7pJXhCiDNC8">Anguish A Priori</a></li>
-                        <li><a href="https://www.youtube.com/watch?v=mSUhCe7UqRE">Future Shock</a></li>
-                        <li><a href="https://www.youtube.com/watch?v=XGSxylM2XnI">Solar Fears</a></li>
-                    </ul>
-                </section>
-
-                <section class="plain" id="performances">
-                    <h2>Past performances</h2>
-                    <ul class="entryList">
+                        </div>
+                    </div>
+                </article>
+                <article class="project" id="obdurate-album" aria-labelledby="obdurate-album-title">
+                    <header class="project-header">
+                        <div class="project-date"><time datetime="2021-01-15">15 January 2021</time><span class="format">Album</span></div>
+                        <div class="project-heading"><h2 id="obdurate-album-title">Obdurate</h2><p class="project-subtitle">The first album · Seven imagined worlds</p></div>
+                    </header>
+                    <div class="project-body">
+                        <div class="project-media album-media">
+                            <img class="album-art" src="images/obdurate/obdurate.jpg" alt="Obdurate album cover" width="700" height="700" loading="lazy" />
+                            <div class="album-player">
+                                <iframe title="Obdurate by Obdurate on Bandcamp" src="https://bandcamp.com/EmbeddedPlayer/album=3168103766/size=large/bgcol=101110/linkcol=d6b46b/tracklist=false/artwork=none/transparent=true/" loading="lazy"><a href="https://obduratefleet.bandcamp.com/album/obdurate">Obdurate by Obdurate</a></iframe>
+                                <p class="album-direct"><a href="https://obduratefleet.bandcamp.com/album/obdurate">Listen to Obdurate on Bandcamp ↗</a></p>
+                            </div>
+                        </div>
+                        <div class="project-copy">
+                            <p>“World building” is a common point of beauty between the art of progressive music and the art of video games. Inspired by this link, Obdurate features seven songs each of which defines its own world. A Metric Based on Insects, for example, follows a man lost in space who through his journey back to Earth comes to realise that he has fallen in love with the universe, but that this love is unrequited.</p>
+                            <p>Each one of these worlds has associated to it a set of “hidden lyrics” which are not audible yet are intrinsically tied to the music.</p>
+                            <div class="project-links"><a href="https://obduratefleet.bandcamp.com/album/obdurate">Listen to the album ↗</a><a href="2021/10/19/Will-Troiani-How-to-begin-writing-music.html">How to begin writing music ↗</a></div>
+                            <div class="credits"><p>Written and composed by Will Troiani</p><p>Mixed and mastered by Tom MacLean, Twelve Tone Studio</p></div>
+                            <details class="project-notes"><summary>On composing the music</summary><blockquote><p>Obdurate begins with a blank score. A grand staff, piano.</p><p>In exactly the same way, a good composer does not write metal because metal is cool, but instead a good composer allows the song to find itself, through patient listening.</p></blockquote><p>Excerpts from <em>How to begin writing music</em>, 2021.</p></details>
+                        </div>
+                    </div>
+                </article>
+                <section class="supporting" id="archive" aria-labelledby="archive-title">
+                    <h2 id="archive-title">Further listening &amp; live work</h2>
+                    <details class="archive-group"><summary>More films &amp; performances</summary>
+                        <ul class="link-list">
+                            <li><a href="https://www.youtube.com/watch?v=oJovdb4vmP8">Klipso Island (is a Place in the Sky)</a><span>lyric video</span></li>
+                            <li><a href="https://www.youtube.com/watch?v=nkZPHTdLpbw">The Vightknigh</a><span>lyric video</span></li>
+                            <li><a href="https://www.youtube.com/watch?v=YsWgdPBspsU">Revere</a><span>drum playthrough</span></li>
+                            <li><a href="https://www.youtube.com/watch?v=8LKxY0JUIaY">A Metric Based on Insects</a><span>live</span></li>
+                            <li><a href="https://www.youtube.com/watch?v=4au7cI3iHj0">Comic Book Channel</a><span>drum playthrough</span></li>
+                        </ul>
+                    </details>
+                    <details class="archive-group"><summary>Past performances</summary><ul class="link-list">
                         <li>
                             <div class="entryDate">14 Mar 2026</div>
                             <div class="entryBody">
@@ -717,23 +256,20 @@
                                 </div>
                             </div>
                         </li>
-                    </ul>
-                </section>
-
-                <section class="plain" id="writing">
-                    <h2>Notes</h2>
-                    <ul>
-                        <li>
-                            <a href="pdfs/MusicandMathematics.pdf"
-                                >Music and mathematics</a
-                            >
-                        </li>
-                    </ul>
-                </section>
-
-                <section class="plain" id="listening">
-                    <h2>Listening list</h2>
-                    <ul>
+                    </ul></details>
+                    <details class="archive-group"><summary>Drumming with Magneck</summary><ul class="link-list">
+                        <li><a href="https://www.youtube.com/watch?v=4hpHTo27klw">Abstract Life Template</a></li>
+                        <li><a href="https://www.youtube.com/watch?v=1Tuw_E-5Ab8">Birdman</a></li>
+                        <li><a href="https://www.youtube.com/watch?v=7pJXhCiDNC8">Anguish A Priori</a></li>
+                        <li><a href="https://www.youtube.com/watch?v=mSUhCe7UqRE">Future Shock</a></li>
+                        <li><a href="https://www.youtube.com/watch?v=XGSxylM2XnI">Solar Fears</a></li>
+                    </ul></details>
+                    <details class="archive-group"><summary>Writing</summary><ul class="link-list">
+                        <li><a href="2021/10/19/Will-Troiani-How-to-begin-writing-music.html">How to begin writing music</a><span>2021</span></li>
+                        <li><a href="2021/10/19/Will-Troiani-A-Metric-Based-on-Insects.html">A Metric Based on Insects</a><span>original text, 2021</span></li>
+                        <li><a href="pdfs/MusicandMathematics.pdf">Music and mathematics</a></li>
+                    </ul></details>
+                    <details class="archive-group"><summary>Listening list</summary><ul class="link-list">
                         <li><a href="https://cissnejapan.bandcamp.com/album/awake-children-under-the-moon">Cissn&eacute;: Awake children under the moon</a></li>
                         <li><a href="https://respirefamily.bandcamp.com/album/black-line">Respire: Black Line</a></li>
                         <li><a href="https://infantisland.bandcamp.com/album/obsidian-wreath">Infant Island: Obsidian Wreath</a></li>
@@ -769,37 +305,11 @@
                         <li><a href="https://virginbabylonrecords.bandcamp.com/album/decoded-sphere">Yaporigami: Decoded Sphere</a></li>
                         <li><a href="https://virginbabylonrecords.bandcamp.com/album/ode">sione: ode</a></li>
                         <li><a href="https://virginbabylonrecords.bandcamp.com/album/my-beautiful-twisted-nightmares-in-aurora-rainbow-darkness">Vampillia: my beautiful twisted nightmares in aurora rainbow darkness</a></li>
-                    </ul>
-                </section>
-
-                <section class="plain" id="contact">
-                    <h2>Contact</h2>
-                    <p>
-                        Collaborations, commissions, performance bookings:
-                        <a href="mailto:william.a.troiani@gmail.com"
-                            >william.a.troiani@gmail.com</a
-                        >.
-                    </p>
+                    </ul></details>
                 </section>
             </main>
-
-            <footer>
-                © <span id="year"></span> Will Troiani · Last updated:
-                <span id="lastUpdated"></span>
-            </footer>
+            <footer class="site-footer"><p>© <span id="year">2026</span> Will Troiani</p><a href="mailto:william.a.troiani@gmail.com">Collaborations &amp; performances ↗</a><a href="#">Back to top ↑</a></footer>
         </div>
-
-        <script>
-            (function () {
-                var y = document.getElementById("year");
-                if (y) y.textContent = String(new Date().getFullYear());
-                var el = document.getElementById("lastUpdated");
-                if (!el) return;
-                var d = new Date(document.lastModified);
-                el.textContent = isNaN(d.getTime())
-                    ? ""
-                    : d.toLocaleDateString();
-            })();
-        </script>
+        <script>document.getElementById('year').textContent = String(new Date().getFullYear());</script>
     </body>
 </html>
