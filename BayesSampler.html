@@ -411,12 +411,13 @@ input[type=range]{accent-color:var(--ink);height:20px}
 .interval-demo:fullscreen .iv-fixed-input{margin-bottom:20px;padding-bottom:20px}
 .run{margin-top:34px;padding-top:24px;background:var(--paper);border-top:1px solid #afa28a}
 #algorithm{max-width:1040px;margin:56px auto 0;padding:40px 48px 42px;background:#171e19;color:#efede6;border:1px solid #3e4a3e;border-top:3px solid #d6b46b;border-radius:9px}
+#algorithm h2{font-size:24px;line-height:1.25;font-weight:500;letter-spacing:-.025em;text-align:center;color:#d6b46b;margin:0 0 28px}
 #algorithm .code{font-family:var(--text);font-size:26px;line-height:1.8;letter-spacing:-.012em;width:max-content;max-width:100%;margin:0 auto}
 #algorithm .code>.algorithm-child{color:#e1ac92}
 #algorithm .code>.algorithm-center{color:#ddc17e}
 #algorithm .code>.algorithm-string{color:#a4cbd0}
 #algorithm+.run{margin-top:36px;border-top:0;padding-top:0}
-@media(max-width:780px){#algorithm{margin-top:32px;padding:26px 24px 28px}#algorithm .code{font-size:20px;line-height:1.9}}
+@media(max-width:780px){#algorithm{margin-top:32px;padding:26px 24px 28px}#algorithm h2{font-size:20px;margin-bottom:22px}#algorithm .code{font-size:20px;line-height:1.9}}
 @media(max-width:420px){#algorithm{padding:22px 16px 24px}#algorithm .code{font-size:17px;line-height:1.9}#algorithm .code .indent{padding-left:14px}#algorithm .code .indent2{padding-left:28px}}
 .run-view{background:var(--paper)}
 #run-view .controls button{font-family:var(--text);font-size:15px;line-height:1.25;height:36px;padding:7px 13px;border-radius:9px;color:var(--ink)}
@@ -1058,7 +1059,8 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
     </div>
   </section>
 
-  <section id="algorithm" aria-label="BayesSampler pseudocode">
+  <section id="algorithm" aria-labelledby="algorithm-title">
+    <h2 id="algorithm-title">The BayesSampler algorithm</h2>
     <div class="code" aria-label="BayesSampler pseudocode">
       <div><span class="math" data-tex="D\gets W;\quad j\gets 0">D ← W; j ← 0</span></div>
       <div>Loop over <span class="math" data-tex="t=1,2,3,\ldots">t = 1, 2, 3, …</span>:</div>
